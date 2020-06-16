@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QtGuiSetting</class>
+ <widget class="QWidget" name="QtGuiSetting">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>768</width>
+    <height>1366</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>768</width>
+    <height>1366</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>768</width>
+    <height>1366</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>21</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>QtGuiSetting</string>
+  </property>
+  <widget class="QLabel" name="ShowLabel">
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>2</y>
+     <width>764</width>
+     <height>679</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>690</y>
+     <width>380</width>
+     <height>671</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="lw_ImageList">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>690</y>
+     <width>371</width>
+     <height>521</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pB_Exit">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>1230</y>
+     <width>111</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pB_ContinueTest">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>1230</y>
+     <width>121</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>连续
+测试</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pB_Save">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>1230</y>
+     <width>121</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>onBtnGetImage()</slot>
+  <slot>onBtnGetSample()</slot>
+  <slot>onCellChanged(int,int)</slot>
+  <slot>onSaveImage()</slot>
+  <slot>onSelectTrainFile()</slot>
+  <slot>onTest()</slot>
+  <slot>onSetOCR()</slot>
+  <slot>onSetStyle()</slot>
+  <slot>onSetColor()</slot>
+  <slot>onSaveImg()</slot>
+  <slot>onAuthority()</slot>
+ </slots>
+</ui>
