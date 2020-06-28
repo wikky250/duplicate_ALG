@@ -32,7 +32,7 @@ class OffLine_Demo : public QMainWindow
 {
 	Q_OBJECT
 signals:
-	void STARTCHECK(int);
+	void STARTCHECK(int,bool);
  	void STOPCHECK();
  	void GetResult(QString letter, QString _CameraName);
  	void SendImage(Mat, QString);

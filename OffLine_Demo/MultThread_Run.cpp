@@ -108,7 +108,7 @@ MultGetThread_Run::~MultGetThread_Run()
 {
 
 }
-int MultGetThread_Run::ThreadGetImage(int indexcam = 1)//取图函数
+int MultGetThread_Run::ThreadGetImage(int indexcam = 1,bool = false)//取图函数
 {
 	if (indexcam != -1)
 	{
@@ -154,9 +154,12 @@ MultDecodeThread_Run::~MultDecodeThread_Run()
 {
 }
 
-int MultDecodeThread_Run::ThreadDecodeImage(int indexcam = -1)
+int MultDecodeThread_Run::ThreadDecodeImage(int indexcam = -1, bool b = false)
 {
-	_CheckClass->StartCheck(g_vectorCamera[m_iSelfIndex]->c_CameraSign, daily_logger);
+	if (!b)
+	{
+		_CheckClass->StartCheck(g_vectorCamera[m_iSelfIndex]->c_CameraSign, daily_logger);
+	}
 	return -1;
 }
 
@@ -210,6 +213,7 @@ void MultDecodeThread_Run::SetMultIndex(int ind)
 	bool b_doing = false;
 	i_captotal = 0;
 	timecheck = 0;
+	index_pos = 0;
 	QDateTime current_time = QDateTime::currentDateTime();
 
 	ngdir_str = AppPath + "/SaveImage/LocalFile/" + QString::number(current_time.date().year()) + "_" + QString::number(current_time.date().month()) + "_" + QString::number(current_time.date().day()) + "_" + QString::number(current_time.time().hour()) + "_" + QString::number(current_time.time().minute()) + "_" + QString::number(current_time.time().second()) + "/NG/";
@@ -369,41 +373,10 @@ void MultSummaryThread_Run::ThreadSummary(QString str, int pos, int timeincircle
 // 		return;
 // 	}
 	//第一个为赋值
-	return;
-	if (0 == timeincircle % g_PhotoTimes)
+	if (g_PhotoTimes == 1)
 	{
 		m_qslResultEachCamera[pos] = str.split(",");
-	}
-	else
-	{
-		//若算法检测为error，则覆盖m_qslResultEachCamera对应值
-		QStringList tem = str.split(",");
-		for (int i = 0; i < tem.size(); i++)
-		{
-			if (tem[i] != "Good"&&i<m_qslResultEachCamera[pos].size())
-			{
-				m_qslResultEachCamera[pos][i] = tem[i];
-			}
-		}
-		if (0 == (timeincircle + 1) % g_PhotoTimes)
-		{
-			b_eachalreadyfinish[pos] = TRUE;
-		}
-	}
-	if (0 == (timeincircle + 1) % g_PhotoTimes)
-	{
-		bool _fini = TRUE;
-		for (int i = 0; i < m_icamcount; i++)
-		{
-			if (b_eachalreadyfinish[i] == FALSE)
-			{
-				_fini = FALSE;
-			}
-		}
-		if (!_fini)
-		{
-			return;
-		}
+		b_eachalreadyfinish[pos] = TRUE;
 		unsigned int result[4];
 		result[0] = 0; result[1] = 0;
 		result[2] = 0; result[3] = 0;
@@ -450,6 +423,90 @@ void MultSummaryThread_Run::ThreadSummary(QString str, int pos, int timeincircle
 #endif
 		m_qslResultTOTALCamera.clear();
 		b_eachalreadyfinish[pos] = false;
+	}
+	else
+	{
+		if (0 == timeincircle % g_PhotoTimes)
+		{
+			m_qslResultEachCamera[pos] = str.split(",");
+		}
+		else
+		{
+			//若算法检测为error，则覆盖m_qslResultEachCamera对应值
+			QStringList tem = str.split(",");
+			for (int i = 0; i < tem.size(); i++)
+			{
+				if (tem[i] != "Good"&&i < m_qslResultEachCamera[pos].size())
+				{
+					m_qslResultEachCamera[pos][i] = tem[i];
+				}
+			}
+			if (0 == (timeincircle + 1) % g_PhotoTimes)
+			{
+				b_eachalreadyfinish[pos] = TRUE;
+			}
+		}
+		if (0 == (timeincircle + 1) % g_PhotoTimes)
+		{
+			bool _fini = TRUE;
+			for (int i = 0; i < m_icamcount; i++)
+			{
+				if (b_eachalreadyfinish[i] == FALSE)
+				{
+					_fini = FALSE;
+				}
+			}
+			if (!_fini)
+			{
+				return;
+			}
+			unsigned int result[4];
+			result[0] = 0; result[1] = 0;
+			result[2] = 0; result[3] = 0;
+
+			for (int i = 0; i < m_iResultAllList; i++)
+			{
+				int z = 0;
+				for (; z < m_qslResultEachCamera[i].size(); z++)
+				{
+					if (m_qslResultEachCamera[i][z] != "Good")
+					{
+						if (i < 8)
+							result[0] |= 1 << i;
+						else if (i < 16)
+							result[1] |= 1 << (i - 8);
+						else if (i < 24)
+							result[2] |= 1 << (i - 16);
+						else if (i < 32)
+							result[3] |= 1 << (i - 24);
+					}
+					m_qslResultTOTALCamera.push_back(m_qslResultEachCamera[i][z]);
+				}
+				if (z == 0)
+				{
+					for (; z < MAX_CAPSULECOUNT; z++)
+					{
+						int xy = i * 6 + z;
+						if (xy < 8)
+							result[0] |= 1 << xy;
+						else if (xy < 16)
+							result[1] |= 1 << (xy - 8);
+						else if (xy < 24)
+							result[2] |= 1 << (xy - 16);
+						else if (xy < 32)
+							result[3] |= 1 << (xy - 24);
+						m_qslResultTOTALCamera.push_back("NULL");
+					}
+				}
+				m_qslResultEachCamera[i].clear();
+			}
+			emit SUMMARYRESULTINCIRCLE(m_qslResultTOTALCamera);
+#ifdef PLCCONNECT
+			g_SocketPLC->SetResult(0, result);
+#endif
+			m_qslResultTOTALCamera.clear();
+			b_eachalreadyfinish[pos] = false;
+		}
 	}
 	QueryPerformanceCounter(&litmpend);
 	dfTim += (double)(litmpend.QuadPart - litmpst.QuadPart) / freq.QuadPart * 1000;

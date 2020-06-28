@@ -561,6 +561,7 @@ void CInterCHeck::TESTSETSHOW(void *showlabel)
 {
 	HTuple hv_WindowID;
 	open_window(((QLabel*)showlabel)->y(), ((QLabel*)showlabel)->x(), ((QLabel*)showlabel)->width(), ((QLabel*)showlabel)->height(), (long)((QWidget*)((QLabel*)showlabel)->parent())->winId(), "", "", &hv_WindowID);
+	//set_check("father");
 	m_ShowLabel.push_back(hv_WindowID);
 }
 
@@ -590,207 +591,236 @@ bool CInterCHeck::OtherBeforeCheck(Mat imgpackage)
 	}
 	imgpackage.copyTo(MatToShow);
 	imgpackage.copyTo(LastImage);
+	total_check++;
 }
 
 bool CInterCHeck::OtherAfterCheck()
 {
 	//imageCallBack(ui, m_iShowPos, MatToShow, total_check);
-	total_check++;
 	return true;
 }
 
-bool CInterCHeck::RealCheck()
+bool CInterCHeck::RealCheck(QString &result)
 {
-	// Local iconic variables 
-	Hobject  ho_EmptyObjectWidth, ho_EmptyObjectHeight;
-	Hobject  ho_EmptyObject_Inner, ho_EmptyObject_Leaking, ho_Rectangle6;
-	Hobject  ho_Image, ho_Image1, ho_Image2, ho_Image3, ho_ImageResult1;
-	Hobject  ho_ImageResult2, ho_ImageResult3, ho_Region, ho_RegionFillUp;
-	Hobject  ho_ConnectedRegions, ho_SelectedRegions3, ho_SortedRegions;
-	Hobject  ho_SortedRegions2, ho_RegionErosion2, ho_ObjectSelected1;
-	Hobject  ho_RegionErosion4, ho_ImageReduced4, ho_Region2;
-	Hobject  ho_RegionOpening1, ho_RegionErosion3, ho_ImageReduced3;
-	Hobject  ho_Regions, ho_RegionOpening, ho_RegionTrans1, ho_RegionDifference2;
-	Hobject  ho_Rectangle5;
-
-
-	// Local control variables 
-	HTuple  hv_ImageFiles, hv_Index, hv_Width, hv_Height;
-	HTuple  hv_Index1, hv_Error_Index, hv_ExpDefaultCtrlDummyVar;
-	HTuple  hv_Length1, hv_Length2, hv_Number2, hv_Number4;
-	HTuple  hv_Index5, hv_b_shouldBreak, hv_Index2, hv_b_eachW;
-	HTuple  hv_b_eachH, hv_b_eachLeak, hv_b_eachInner, hv_Area5;
-	HTuple  hv_Row14, hv_Column14, hv_Row24, hv_Column24, hv_outH;
-	HTuple  hv_outW, hv_Row13, hv_Column13, hv_Row23, hv_Column23;
-	HTuple  hv_w, hv_h, hv_cc, hv_ch, hv_s, hv_Area_W, hv_Area_H;
-	HTuple  hv_Area_Inner, hv_Area_Leaking, hv_Indices;
-
-
-	get_image_size(m_hoLiveImage, &hv_Width, &hv_Height);
-	set_part(m_ShowLabel[total_check%circle_times], 0, 0, hv_Height - 1, hv_Width - 1);
-	//宽度检测
-	gen_empty_obj(&ho_EmptyObjectWidth);
-	//高度检测
-	gen_empty_obj(&ho_EmptyObjectHeight);
-	gen_empty_obj(&ho_EmptyObject_Inner);
-	gen_empty_obj(&ho_EmptyObject_Leaking);
-	//Image Acquisition 01: Do something
-	for (hv_Index1 = 0; hv_Index1 <= 1; hv_Index1 += 1)
+	try
 	{
-		if (0 != (hv_Index1 == 0))
-		{
-			hv_Error_Index = HTuple();
-		}
-		gen_rectangle1(&ho_Rectangle6, (hv_Height / 2)*hv_Index1, 0, (hv_Height / 2)*(hv_Index1 + 1),
-			hv_Width);
-		reduce_domain(m_hoLiveImage, ho_Rectangle6, &ho_Image);
-		decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
-		trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2,
-			&ho_ImageResult3, "hsv");
-		threshold(ho_Image1, &ho_Region, 135, 255);
-		fill_up(ho_Region, &ho_RegionFillUp);
-		connection(ho_RegionFillUp, &ho_ConnectedRegions);
-		select_shape(ho_ConnectedRegions, &ho_SelectedRegions3, "area", "and", 13000,
-			99999);
-		sort_region(ho_SelectedRegions3, &ho_SortedRegions, "character", "true", "row");
-		smallest_rectangle2(ho_SelectedRegions3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar,
-			&hv_ExpDefaultCtrlDummyVar, &hv_Length1, &hv_Length2);
-		count_obj(ho_SortedRegions, &hv_Number2);
+		// Local iconic variables 
+		Hobject  ho_EmptyObjectWidth, ho_EmptyObjectHeight;
+		Hobject  ho_EmptyObject_Inner, ho_EmptyObject_Leaking, ho_Rectangle6;
+		Hobject  ho_Image, ho_Image1, ho_Image2, ho_Image3, ho_ImageResult1;
+		Hobject  ho_ImageResult2, ho_ImageResult3, ho_Region, ho_RegionFillUp;
+		Hobject  ho_ConnectedRegions, ho_SelectedRegions3, ho_SortedRegions;
+		Hobject  ho_SortedRegions2, ho_RegionErosion2, ho_ObjectSelected1;
+		Hobject  ho_RegionErosion4, ho_ImageReduced4, ho_Region2;
+		Hobject  ho_RegionOpening1, ho_RegionErosion3, ho_ImageReduced3;
+		Hobject  ho_Regions, ho_RegionOpening, ho_RegionTrans1, ho_RegionDifference2;
+		Hobject  ho_Rectangle5;
 
-		sort_region(ho_SelectedRegions3, &ho_SortedRegions2, "character", "true", "row");
-		erosion_circle(ho_SortedRegions2, &ho_RegionErosion2, 5.5);
-		count_obj(ho_RegionErosion2, &hv_Number4);
+
+		// Local control variables 
+		HTuple  hv_ImageFiles, hv_Index, hv_Width, hv_Height;
+		HTuple  hv_Index1, hv_Error_Index, hv_ExpDefaultCtrlDummyVar;
+		HTuple  hv_Length1, hv_Length2, hv_Number2, hv_Number4;
+		HTuple  hv_Index5, hv_b_shouldBreak, hv_Index2, hv_b_eachW;
+		HTuple  hv_b_eachH, hv_b_eachLeak, hv_b_eachInner, hv_Area5;
+		HTuple  hv_Row14, hv_Column14, hv_Row24, hv_Column24, hv_outH;
+		HTuple  hv_outW, hv_Row13, hv_Column13, hv_Row23, hv_Column23;
+		HTuple  hv_w, hv_h, hv_cc, hv_ch, hv_s, hv_Area_W, hv_Area_H;
+		HTuple  hv_Area_Inner, hv_Area_Leaking, hv_Indices;
+
+
+		get_image_size(m_hoLiveImage, &hv_Width, &hv_Height);
+		//宽度检测
+		gen_empty_obj(&ho_EmptyObjectWidth);
+		//高度检测
+		gen_empty_obj(&ho_EmptyObjectHeight);
+		gen_empty_obj(&ho_EmptyObject_Inner);
+		gen_empty_obj(&ho_EmptyObject_Leaking);
+		if (total_check<circle_times)
 		{
-			HTuple end_val34 = hv_Number4;
-			HTuple step_val34 = 1;
-			for (hv_Index5 = 1; hv_Index5.Continue(end_val34, step_val34); hv_Index5 += step_val34)
+			set_part(m_ShowLabel[total_check%circle_times], 0, 0, hv_Height - 1, hv_Width - 1);
+		}
+		//Image Acquisition 01: Do something
+		for (hv_Index1 = 0; hv_Index1 <= 1; hv_Index1 += 1)
+		{
+			if (0 != (hv_Index1 == 0))
 			{
-				hv_b_shouldBreak = 0;
-				if (0 != (hv_Index1 != 0))
+				hv_Error_Index = HTuple();
+			}
+			gen_rectangle1(&ho_Rectangle6, (hv_Height / 2)*hv_Index1, 0, (hv_Height / 2)*(hv_Index1 + 1),
+				hv_Width);
+			reduce_domain(m_hoLiveImage, ho_Rectangle6, &ho_Image);
+			decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
+			trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2,
+				&ho_ImageResult3, "hsv");
+			threshold(ho_Image1, &ho_Region, 128, 255);
+			fill_up(ho_Region, &ho_RegionFillUp);
+			connection(ho_RegionFillUp, &ho_ConnectedRegions);
+			select_shape(ho_ConnectedRegions, &ho_SelectedRegions3, "area", "and", 13000,
+				99999);
+			sort_region(ho_SelectedRegions3, &ho_SortedRegions, "character", "true", "row");
+			smallest_rectangle2(ho_SelectedRegions3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar,
+				&hv_ExpDefaultCtrlDummyVar, &hv_Length1, &hv_Length2);
+			count_obj(ho_SortedRegions, &hv_Number2);
+			sort_region(ho_SelectedRegions3, &ho_SortedRegions2, "character", "true", "row");
+			erosion_circle(ho_SortedRegions2, &ho_RegionErosion2, 5.5);
+			count_obj(ho_RegionErosion2, &hv_Number4);
+			{
+				HTuple end_val33 = hv_Number4;
+				HTuple step_val33 = 1;
+				for (hv_Index5 = 1; hv_Index5.Continue(end_val33, step_val33); hv_Index5 += step_val33)
 				{
+					hv_b_shouldBreak = 0;
+					if (0 != (hv_Index1 != 0))
 					{
-						HTuple end_val37 = (hv_Error_Index.Num()) - 1;
-						HTuple step_val37 = 1;
-						for (hv_Index2 = 0; hv_Index2.Continue(end_val37, step_val37); hv_Index2 += step_val37)
 						{
-							if (0 != ((hv_Error_Index.Select(hv_Index2)) == hv_Index5))
+							HTuple end_val36 = (hv_Error_Index.Num()) - 1;
+							HTuple step_val36 = 1;
+							for (hv_Index2 = 0; hv_Index2.Continue(end_val36, step_val36); hv_Index2 += step_val36)
 							{
-								hv_b_shouldBreak = 1;
-								break;
+								if (0 != ((hv_Error_Index.Select(hv_Index2)) == hv_Index5))
+								{
+									hv_b_shouldBreak = 1;
+									break;
+								}
 							}
 						}
 					}
-				}
-				if (0 != (hv_b_shouldBreak == 1))
-				{
-					continue;
-				}
-				hv_b_eachW = 0;
-				hv_b_eachH = 0;
-				hv_b_eachLeak = 0;
-				hv_b_eachInner = 0;
-				select_obj(ho_SortedRegions2, &ho_ObjectSelected1, hv_Index5);
-				smallest_rectangle2(ho_ObjectSelected1, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar,
-					&hv_ExpDefaultCtrlDummyVar, &hv_Length1, &hv_Length2);
-				if (0 != (hv_Length2 > 41))
-				{
-					union2(ho_EmptyObjectWidth, ho_ObjectSelected1, &ho_EmptyObjectWidth);
-					hv_b_eachW = 1;
-				}
-				if (0 != (hv_Length1 > 110))
-				{
-					union2(ho_EmptyObjectHeight, ho_ObjectSelected1, &ho_EmptyObjectHeight);
-					hv_b_eachH = 1;
-				}
-				erosion_circle(ho_ObjectSelected1, &ho_RegionErosion4, 3.5);
-				reduce_domain(ho_Image1, ho_RegionErosion4, &ho_ImageReduced4);
-				threshold(ho_ImageReduced4, &ho_Region2, 0, 180);
-				opening_circle(ho_Region2, &ho_RegionOpening1, 0.5);
-				area_center(ho_RegionOpening1, &hv_Area5, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-				if (0 != (hv_Area5.Num()))
-				{
-					if (0 != (hv_Area5 > 0))
+					if (0 != (hv_b_shouldBreak == 1))
 					{
-						concat_obj(ho_EmptyObject_Leaking, ho_RegionOpening1, &ho_EmptyObject_Leaking
-						);
-						concat_obj(ho_EmptyObject_Leaking, ho_ObjectSelected1, &ho_EmptyObject_Leaking
-						);
-						hv_b_eachLeak = 1;
+						continue;
+					}
+					hv_b_eachW = 0;
+					hv_b_eachH = 0;
+					hv_b_eachLeak = 0;
+					hv_b_eachInner = 0;
+					select_obj(ho_SortedRegions2, &ho_ObjectSelected1, hv_Index5);
+
+					smallest_rectangle2(ho_ObjectSelected1, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar,
+						&hv_ExpDefaultCtrlDummyVar, &hv_Length1, &hv_Length2);
+					if (0 != (hv_Length2 > 41))
+					{
+						union2(ho_EmptyObjectWidth, ho_ObjectSelected1, &ho_EmptyObjectWidth);
+						hv_b_eachW = 1;
+					}
+					if (0 != (hv_Length1 > 110))
+					{
+						union2(ho_EmptyObjectHeight, ho_ObjectSelected1, &ho_EmptyObjectHeight);
+						hv_b_eachH = 1;
+					}
+					erosion_circle(ho_ObjectSelected1, &ho_RegionErosion4, 5.5);
+					reduce_domain(ho_Image1, ho_RegionErosion4, &ho_ImageReduced4);
+					threshold(ho_ImageReduced4, &ho_Region2, 0, 180);
+					opening_circle(ho_Region2, &ho_RegionOpening1, 0.5);
+					area_center(ho_RegionOpening1, &hv_Area5, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+					if (0 != (hv_Area5.Num()))
+					{
+						if (0 != (hv_Area5 > 0))
+						{
+							concat_obj(ho_EmptyObject_Leaking, ho_RegionOpening1, &ho_EmptyObject_Leaking
+							);
+							concat_obj(ho_EmptyObject_Leaking, ho_ObjectSelected1, &ho_EmptyObject_Leaking
+							);
+							hv_b_eachLeak = 1;
+						}
+					}
+
+					//检测内部弯折缺陷需要腐蚀特定值 3.5
+					erosion_circle(ho_ObjectSelected1, &ho_RegionErosion3, 3.5);
+					reduce_domain(ho_ImageResult2, ho_RegionErosion3, &ho_ImageReduced3);
+					threshold(ho_ImageReduced3, &ho_Regions, 0, 150);
+					opening_circle(ho_Regions, &ho_RegionOpening, 1.5);
+					smallest_rectangle1(ho_RegionOpening, &hv_Row14, &hv_Column14, &hv_Row24,
+						&hv_Column24);
+					hv_outH = hv_Row24 - hv_Row14;
+					hv_outW = hv_Column24 - hv_Column14;
+					shape_trans(ho_RegionOpening, &ho_RegionTrans1, "convex");
+					difference(ho_RegionTrans1, ho_RegionOpening, &ho_RegionDifference2);
+					inner_rectangle1(ho_RegionDifference2, &hv_Row13, &hv_Column13, &hv_Row23,
+						&hv_Column23);
+					gen_rectangle1(&ho_Rectangle5, hv_Row13, hv_Column13, hv_Row23, hv_Column23);
+					hv_w = hv_Column23 - hv_Column13;
+					hv_h = hv_Row23 - hv_Row13;
+					hv_cc = hv_Column13 + (hv_w / 2);
+					hv_ch = hv_Row13 + (hv_h / 2);
+					hv_s = (hv_outH / 5) * 3;
+					if (0 != (hv_h < ((hv_outH / 10) * 6)))
+					{
+						//union2 (EmptyObject_Inner, Rectangle5, EmptyObject_Inner)
+						//union2 (EmptyObject_Inner, ObjectSelected4, EmptyObject_Inner)
+						//b_eachInner := 1
+					}
+					if (0 != (HTuple(HTuple(hv_b_eachW.Or(hv_b_eachH)).Or(hv_b_eachLeak)).Or(hv_b_eachInner)))
+					{
+						hv_Error_Index = hv_Error_Index.Concat(hv_Index5);
 					}
 				}
-
-				//检测内部弯折缺陷需要腐蚀特定值 3.5
-				erosion_circle(ho_ObjectSelected1, &ho_RegionErosion3, 3.5);
-				reduce_domain(ho_ImageResult2, ho_RegionErosion3, &ho_ImageReduced3);
-				threshold(ho_ImageReduced3, &ho_Regions, 0, 150);
-				opening_circle(ho_Regions, &ho_RegionOpening, 1.5);
-				smallest_rectangle1(ho_RegionOpening, &hv_Row14, &hv_Column14, &hv_Row24,
-					&hv_Column24);
-				hv_outH = hv_Row24 - hv_Row14;
-				hv_outW = hv_Column24 - hv_Column14;
-				shape_trans(ho_RegionOpening, &ho_RegionTrans1, "convex");
-				difference(ho_RegionTrans1, ho_RegionOpening, &ho_RegionDifference2);
-				inner_rectangle1(ho_RegionDifference2, &hv_Row13, &hv_Column13, &hv_Row23,
-					&hv_Column23);
-				gen_rectangle1(&ho_Rectangle5, hv_Row13, hv_Column13, hv_Row23, hv_Column23);
-				hv_w = hv_Column23 - hv_Column13;
-				hv_h = hv_Row23 - hv_Row13;
-				hv_cc = hv_Column13 + (hv_w / 2);
-				hv_ch = hv_Row13 + (hv_h / 2);
-				hv_s = (hv_outH / 5) * 3;
-				if (0 != (hv_h < ((hv_outH / 10) * 6)))
-				{
-					//union2 (EmptyObject_Inner, Rectangle5, EmptyObject_Inner)
-					//union2 (EmptyObject_Inner, ObjectSelected4, EmptyObject_Inner)
-					//b_eachInner := 1
-				}
-
-				if (0 != (HTuple(HTuple(hv_b_eachW.Or(hv_b_eachH)).Or(hv_b_eachInner)).Or(hv_b_eachLeak)))
-				{
-					hv_Error_Index = hv_Error_Index.Concat(hv_Index5);
-				}
 			}
+
+			area_center(ho_EmptyObject_Inner, &hv_Area_Inner, &hv_ExpDefaultCtrlDummyVar,
+				&hv_ExpDefaultCtrlDummyVar);
+			area_center(ho_EmptyObject_Leaking, &hv_Area_Leaking, &hv_ExpDefaultCtrlDummyVar,
+				&hv_ExpDefaultCtrlDummyVar);
+		}
+		if (0 != ((hv_Error_Index.Num()) > 0))
+		{
+			disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
+			set_draw(m_ShowLabel[total_check%circle_times], "margin");
+			set_line_width(m_ShowLabel[total_check%circle_times], 5);
+			set_color(m_ShowLabel[total_check%circle_times], "blue");
+			set_tposition(m_ShowLabel[total_check%circle_times], 24, 20);
+			write_string(m_ShowLabel[total_check%circle_times], "宽度异常");
+			disp_obj(ho_EmptyObjectWidth, m_ShowLabel[total_check%circle_times]);
+			set_color(m_ShowLabel[total_check%circle_times], "yellow");
+			set_tposition(m_ShowLabel[total_check%circle_times], 64, 20);
+			write_string(m_ShowLabel[total_check%circle_times], "高度异常");
+			disp_obj(ho_EmptyObjectHeight, m_ShowLabel[total_check%circle_times]);
+			disp_obj(ho_EmptyObjectWidth, m_ShowLabel[total_check%circle_times]);
+			set_color(m_ShowLabel[total_check%circle_times], "cyan");
+			set_tposition(m_ShowLabel[total_check%circle_times], 104, 20);
+			write_string(m_ShowLabel[total_check%circle_times], "胶囊内部异常");
+			disp_obj(ho_EmptyObject_Inner, m_ShowLabel[total_check%circle_times]);
+			set_color(m_ShowLabel[total_check%circle_times], "white");
+			set_tposition(m_ShowLabel[total_check%circle_times], 144, 20);
+			write_string(m_ShowLabel[total_check%circle_times], "胶囊内杂质");
+			disp_obj(ho_EmptyObject_Leaking, m_ShowLabel[total_check%circle_times]);
+			tuple_sort(hv_Error_Index, &hv_Error_Index);
+			//set_colored(m_ShowLabel[total_check%circle_times], 12);
+			QStringList qslre;
+			qslre << "Good" << "Good" << "Good" << "Good" << "Good" << "Good";
+			for (int z = 0;z < hv_Error_Index.Num()-1;z++)
+			{
+				qslre[hv_Error_Index[z].I()] = "ERROR";
+			}
+			result = qslre.join(",");
+		}
+		else
+		{
+			disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 		}
 
 	}
-
-	area_center(ho_EmptyObjectWidth, &hv_Area_W, _, _);
-	area_center(ho_EmptyObjectHeight, &hv_Area_H, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-
-	area_center(ho_EmptyObject_Inner, &hv_Area_Inner, &hv_ExpDefaultCtrlDummyVar,
-		&hv_ExpDefaultCtrlDummyVar);
-	area_center(ho_EmptyObject_Leaking, &hv_Area_Leaking, &hv_ExpDefaultCtrlDummyVar,
-		&hv_ExpDefaultCtrlDummyVar);
-
-
-	if (0 != (HTuple(HTuple(HTuple(hv_Area_W > 0).Or(hv_Area_H > 0)).Or(hv_Area_Inner.Num())).Or(hv_Area_Leaking.Num())))
+	catch (HException &e)
 	{
 		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
-		set_draw(m_ShowLabel[total_check%circle_times], "margin");
-		set_line_width(m_ShowLabel[total_check%circle_times], 5);
-		set_color(m_ShowLabel[total_check%circle_times], "blue");
-		set_tposition(3600, 24, 20);
-		write_string(3600, "宽度异常");
-		disp_obj(ho_EmptyObjectWidth, m_ShowLabel[total_check%circle_times]);
-		set_color(m_ShowLabel[total_check%circle_times], "yellow");
-		set_tposition(3600, 64, 20);
-		write_string(3600, "高度异常");
-		disp_obj(ho_EmptyObjectHeight, m_ShowLabel[total_check%circle_times]);
-		disp_obj(ho_EmptyObjectWidth, m_ShowLabel[total_check%circle_times]);
-		set_color(m_ShowLabel[total_check%circle_times], "cyan");
-		set_tposition(3600, 104, 20);
-		write_string(3600, "胶囊内部异常");
-		disp_obj(ho_EmptyObject_Inner, m_ShowLabel[total_check%circle_times]);
-		set_color(m_ShowLabel[total_check%circle_times], "white");
-		set_tposition(3600, 144, 20);
-		write_string(3600, "胶囊内杂质");
-		disp_obj(ho_EmptyObject_Leaking, m_ShowLabel[total_check%circle_times]);
-		tuple_sort(hv_Error_Index, &hv_Indices);
-		set_colored(m_ShowLabel[total_check%circle_times], 12);
+		set_color(m_ShowLabel[total_check%circle_times], "red");
+		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
+		write_string(m_ShowLabel[total_check%circle_times], e.message);
 	}
-	else
+	catch (Exception e)
 	{
 		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
+		set_color(m_ShowLabel[total_check%circle_times], "red");
+		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
+		write_string(m_ShowLabel[total_check%circle_times], e.what());
+	}
+	catch (...)
+	{
+		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
+		set_color(m_ShowLabel[total_check%circle_times], "red");
+		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
+		write_string(m_ShowLabel[total_check%circle_times], "Other Error without catch");
+
 	}
 
 	//disp_image(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);

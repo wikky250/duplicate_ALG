@@ -100,7 +100,7 @@ public:
 	virtual void SetCloseCallBack(CallbackClose callbackfun);
 	bool OtherBeforeCheck(Mat);
 	bool OtherAfterCheck();
-	bool RealCheck();
+	bool RealCheck(QString&);
 	public slots:
 	void EndCheck();
 	bool LoadCheckParam(CHECKPARAM *checkparam);

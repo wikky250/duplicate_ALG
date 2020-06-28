@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QT_FrontCheckClass", "QT_FrontCheckClass\QT_FrontCheckClass.vcxproj", "{D86D59EE-D0F1-488A-894C-2B28A80AB60B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OffLine_Demo", "OffLine_Demo\OffLine_Demo.vcxproj", "{F196FFF4-947E-4FB7-A2B6-9AFE9A7D2E5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D86D59EE-D0F1-488A-894C-2B28A80AB60B} = {D86D59EE-D0F1-488A-894C-2B28A80AB60B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

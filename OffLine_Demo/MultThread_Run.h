@@ -52,7 +52,7 @@ public:
 	MultGetThread_Run(QObject *parent);
 	~MultGetThread_Run();
 public slots:
-	int ThreadGetImage(int);
+	int ThreadGetImage(int,bool);
 public:
 	void SetMultIndex(int);
 	void SetDirectShowDlg(void*);
@@ -82,7 +82,7 @@ public:
 	CBaseCheckAlg *_CheckClass;
 
 public slots:
-	int ThreadDecodeImage(int);
+	int ThreadDecodeImage(int, bool);
 	int ThreadDecodeImageMat(Mat);
 public:
 	void SetMultIndex(int);

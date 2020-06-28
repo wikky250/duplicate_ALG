@@ -514,11 +514,11 @@ bool OffLine_Demo::InitPicList()
 	bool flag = false;
 	for (int i = 0; i < g_iCameraTotal; i++)
 	{
-		flag = QObject::connect(this, SIGNAL(STARTCHECK(int)), m_MultGetThread[i], SLOT(ThreadGetImage(int)), Qt::QueuedConnection);
+		flag = QObject::connect(this, SIGNAL(STARTCHECK(int, bool)), m_MultGetThread[i], SLOT(ThreadGetImage(int, bool)), Qt::QueuedConnection);
 		m_MultGetThread[i]->SetMultIndex(i);
 		m_MultGetThread[i]->moveToThread(QTH_MultGetThread[i]);
 		QTH_MultGetThread[i]->start();
-		//flag = QObject::connect(this, SIGNAL(STARTCHECK(int)), m_MultDecodeThread[i], SLOT(ThreadDecodeImage(int)), Qt::QueuedConnection);
+		flag = QObject::connect(this, SIGNAL(STARTCHECK(int, bool)), m_MultDecodeThread[i], SLOT(ThreadDecodeImage(int, bool)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultGetThread[i], SIGNAL(GETONEIMAGEMAT(Mat)), m_MultDecodeThread[i], SLOT(ThreadDecodeImageMat(Mat)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(SAVESIGNAL(Mat,QString)), m_MultSaveThread, SLOT(ThreadSave(Mat,QString)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(OUTRESULTSUMMARY(QString, int, int)), m_MultSummaryThread, SLOT(ThreadSummary(QString, int, int)), Qt::QueuedConnection);
@@ -628,7 +628,7 @@ void OffLine_Demo::onStartCheck(bool b)
 		int s = ui.lw_ImageList->currentRow();
 		if (s > 1)
 		{
-			emit STARTCHECK(-1);
+			emit STARTCHECK(-1,0);
 		}
 		if(s==-1)
 		{
@@ -720,7 +720,7 @@ void OffLine_Demo::onSelectImageList(QListWidgetItem *item, QListWidgetItem *it)
 
 	{
 		strcpy(g_vectorCamera[0]->file_path, pathselect.toLocal8Bit());
-		emit(STARTCHECK(-1));
+		emit(STARTCHECK(-1,0));
 	}
 }
 
@@ -776,7 +776,7 @@ void OffLine_Demo::onDoubleImageList(QListWidgetItem *item)
 	else
 	{
 		strcpy(g_vectorCamera[0]->file_path, pathselect.toLocal8Bit());
-		emit(STARTCHECK(-1));
+		emit(STARTCHECK(-1,1));
 	}
 }
 

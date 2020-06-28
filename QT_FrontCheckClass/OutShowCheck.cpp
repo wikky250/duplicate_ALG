@@ -73,7 +73,7 @@ bool COutShowCheck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
 {
 	SecretBase->OtherAfterCheck();
 	SecretBase->Check(imgpackage, checkparam, str);
-	bool b = SecretBase->RealCheck();
+	bool b = SecretBase->RealCheck(str);
 	SecretBase->OtherBeforeCheck(imgpackage);
 	return b;
 }
