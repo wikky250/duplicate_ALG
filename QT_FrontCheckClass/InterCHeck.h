@@ -14,7 +14,7 @@ class CInterCHeck :public QObject,
 {
 	Q_OBJECT
 
-signals :
+signals:
 	void StartUSBKEY(void* handle);
 private:
 	int saveImageindex;
@@ -39,7 +39,10 @@ private:
 	//日志logger
 	std::shared_ptr<spd::logger> daily_logger;
 
-
+	uchar* dataR = NULL;
+	uchar* dataG = NULL;
+	uchar* dataB = NULL;
+	Mat imgchannel[3];
 private:
 #pragma region 算法相关参数
 private:
@@ -51,7 +54,7 @@ private:
 	int total_OKSave;
 
 	Mat MatToShow, LastImage;
-	Mat grey,temp;
+	Mat grey, temp;
 
 	//H9::InspectProcessor proc;
 	Mat m_SaveImg;
@@ -60,6 +63,8 @@ private:
 	vector<HTuple> m_ShowLabel;
 	Hobject m_hoLiveImage;
 	int ComputerBestLabes(std::vector<float> data, double &dsts);
+	Hobject Mat2Hobject(Mat & image);
+	Mat Hobject2Mat(Hobject Hobj);
 #pragma endregion 算法相关参数
 
 
@@ -101,7 +106,7 @@ public:
 	bool OtherBeforeCheck(Mat);
 	bool OtherAfterCheck();
 	bool RealCheck(QString&);
-	public slots:
+public slots:
 	void EndCheck();
 	bool LoadCheckParam(CHECKPARAM *checkparam);
 	bool SaveCheckParam(CHECKPARAM *checkparam);
