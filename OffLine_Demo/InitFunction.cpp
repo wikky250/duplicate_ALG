@@ -16,7 +16,7 @@ InitFunction::~InitFunction()
 int InitFunction::ReadConfig()
 {
 	CAMERASTRUCT* tempcamera = new CAMERASTRUCT();
-	strcpy_s(tempcamera->c_CameraName, "LocalPath");
+	strcpy_s(tempcamera->c_CameraName, "LocalFile");
 	strcpy(tempcamera->file_path, (char*)(AppPath.toStdString().c_str()));
 	g_vectorCamera.push_back(tempcamera);
 	return 1;

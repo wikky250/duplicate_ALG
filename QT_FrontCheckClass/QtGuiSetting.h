@@ -17,6 +17,14 @@ signals:
 	void ShouldSaveParam(CHECKPARAM*);
 	void CloseGetSample();
 	void SignShowImage(int, Mat, int);
+private:
+	uchar* dataR = NULL;
+	uchar* dataG = NULL;
+	uchar* dataB = NULL;
+	Mat imgchannel[3];
+	Hobject Mat2Hobject(Mat & image);
+	Mat Hobject2Mat(Hobject Hobj);
+	int m_WND =-1;
 public:
 	QtGuiSetting(QWidget *parent = Q_NULLPTR,void* AlgPointer = nullptr);
 	void mousePressEvent(QMouseEvent * p);
@@ -70,6 +78,7 @@ private:
 	QString m_sImageListPath;
 	QString m_currentImagePath; //the current Item of the current Image checking
 	QTimer *m_timerReadList;
+	QTimer *clickedtimer;
 	bool isImage(QFileInfo& info);
 	bool containImages(QDir&);
 	void initImageLS(QString str);
@@ -81,6 +90,10 @@ public slots:
 	void onShowFps(int i);
 	void onCellChanged(int, int);
 	void onSelectTrainFile();
+
+
+	void onClickedImage(QListWidgetItem *);
+	void onSingleClicked();
 	void onSelectImageList(QListWidgetItem *);
 	void SLOTShowImage(int, Mat img, int);
 	//
@@ -89,4 +102,6 @@ public slots:
 
 	//
 	void onSaveParam();
+	//自动测量值
+	void onAutoDetest();
 };

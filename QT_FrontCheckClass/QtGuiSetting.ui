@@ -58,6 +58,11 @@
      <height>671</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>21</pointsize>
+    </font>
+   </property>
   </widget>
   <widget class="QListWidget" name="lw_ImageList">
    <property name="geometry">
@@ -68,14 +73,19 @@
      <height>521</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>21</pointsize>
+    </font>
+   </property>
   </widget>
   <widget class="QPushButton" name="pB_Exit">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>1230</y>
-     <width>111</width>
-     <height>91</height>
+     <x>670</x>
+     <y>1220</y>
+     <width>91</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="text">
@@ -86,14 +96,13 @@
    <property name="geometry">
     <rect>
      <x>390</x>
-     <y>1230</y>
-     <width>121</width>
-     <height>91</height>
+     <y>1220</y>
+     <width>71</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="text">
-    <string>连续
-测试</string>
+    <string>测试</string>
    </property>
    <property name="checkable">
     <bool>true</bool>
@@ -105,14 +114,27 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>1230</y>
-     <width>121</width>
-     <height>91</height>
+     <x>470</x>
+     <y>1220</y>
+     <width>91</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="text">
     <string>保存</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pB_Calibration">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>1220</y>
+     <width>91</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>建模</string>
    </property>
   </widget>
  </widget>

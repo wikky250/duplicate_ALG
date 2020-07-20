@@ -33,13 +33,17 @@ struct CHECKPARAM
 	int i_CheckPosNo;
 	char c_OperateCore[20];
 	//////////////////////////////////////////////////////////////////////////
-	int i_tempThread;
-	int i_CapsuleCount;
+	int i_BandThread = -1;
+	int i_Low_LimitOut = -1;
+	int	i_High_LimitOut = -1;
+	int	i_Low_LimitIn = -1;
+	int	i_High_LimitIn = -1;
+	int i_Innerthread = -1;
+
+
 	//////////////////////////////////////////////////////////////////////////
 	CHECKPARAM()
 	{
-		i_tempThread = -1;
-		i_CapsuleCount = -1;
 	}
 	~CHECKPARAM()
 	{

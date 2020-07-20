@@ -4,11 +4,6 @@
 #include "QtGuiSetting.h"
 //#include "InspectProcessor.h"
 
-#ifndef __APPLE__
-#include "cpp/HalconCpp.h"
-#pragma comment(lib,"halconcpp10.lib")
-using namespace Halcon;
-#endif
 class CInterCHeck :public QObject,
 	public CBaseCheckAlg
 {
@@ -105,7 +100,7 @@ public:
 	virtual void SetCloseCallBack(CallbackClose callbackfun);
 	bool OtherBeforeCheck(Mat);
 	bool OtherAfterCheck();
-	bool RealCheck(QString&);
+	bool RealCheck(QString&, CHECKPARAM *,int);
 public slots:
 	void EndCheck();
 	bool LoadCheckParam(CHECKPARAM *checkparam);

@@ -639,7 +639,7 @@ void OffLine_Demo::onStartCheck(bool b)
 			QObject::connect(times_listImg, SIGNAL(timeout()), this, SLOT(ImgAutoDown()));
 
 			connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
-			times_listImg->start(1000);
+			times_listImg->start(100);
 		}
 		if (s>1)
 		{
@@ -906,11 +906,29 @@ void OffLine_Demo::onCameraSet()
 {
 	//相机参数设置
 	ui.Button_Start->setChecked(false);
-	QtCameraSet m_DlgCameraSet;
-	m_DlgCameraSet.exec();
-	for (int i=0;i<g_CheckClass.size();i++)
+	if (g_CheckClass.size()==1)
 	{
-		g_CheckClass[i]->SetShowCallBack(this, ShowCallBack);	//与QtGUISetting的line44 对应，需要将回调函数注册回当前窗体 
+		if (g_CheckClass[0]->ShowParamDlg(this, true) == 1)//参数值改了时为1
+		{
+			//拷回原来的目录👇👇👇
+			int ret = showMsgBox(QMessageBox::Information, "模板参数修改", "默认模板参数已修改\n是否保存？", "是", "否");
+			if (ret == QMessageBox::No)//不保存
+			{
+				return;
+			}
+			else//保存
+			{
+				QSettings readDefaultModel(AppPath + "\\ModelFile\\ProgramSet.ini", QSettings::IniFormat);
+				QString defaultModel = readDefaultModel.value("ProgramSetting/DefaultModel", "testA").toString();
+				QString modelFilePath = AppPath + "/ModelFile/" + defaultModel;//默认模板源目录
+				QString defaultModelFilePath = AppPath + "/DefaultModel";//默认模板目录，开系统有，关系统删
+				copyDirectoryFiles(defaultModelFilePath, modelFilePath, true);//算法改后拷回源目录
+				//levelOut = new WindowOut;
+				//levelOut->getString(QString::fromLocal8Bit("默认模板参数已保存！"), 2000);
+				//levelOut->show();
+			}
+
+		}
 	}
 }
 

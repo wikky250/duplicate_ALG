@@ -29,6 +29,7 @@ public:
     QPushButton *pB_Exit;
     QPushButton *pB_ContinueTest;
     QPushButton *pB_Save;
+    QPushButton *pB_Calibration;
 
     void setupUi(QWidget *QtGuiSetting)
     {
@@ -48,20 +49,25 @@ public:
         tableWidget = new QTableWidget(QtGuiSetting);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
         tableWidget->setGeometry(QRect(2, 690, 380, 671));
+        tableWidget->setFont(font);
         lw_ImageList = new QListWidget(QtGuiSetting);
         lw_ImageList->setObjectName(QString::fromUtf8("lw_ImageList"));
         lw_ImageList->setGeometry(QRect(390, 690, 371, 521));
+        lw_ImageList->setFont(font);
         pB_Exit = new QPushButton(QtGuiSetting);
         pB_Exit->setObjectName(QString::fromUtf8("pB_Exit"));
-        pB_Exit->setGeometry(QRect(650, 1230, 111, 91));
+        pB_Exit->setGeometry(QRect(670, 1220, 91, 71));
         pB_ContinueTest = new QPushButton(QtGuiSetting);
         pB_ContinueTest->setObjectName(QString::fromUtf8("pB_ContinueTest"));
-        pB_ContinueTest->setGeometry(QRect(390, 1230, 121, 91));
+        pB_ContinueTest->setGeometry(QRect(390, 1220, 71, 71));
         pB_ContinueTest->setCheckable(true);
         pB_Save = new QPushButton(QtGuiSetting);
         pB_Save->setObjectName(QString::fromUtf8("pB_Save"));
         pB_Save->setEnabled(false);
-        pB_Save->setGeometry(QRect(520, 1230, 121, 91));
+        pB_Save->setGeometry(QRect(470, 1220, 91, 71));
+        pB_Calibration = new QPushButton(QtGuiSetting);
+        pB_Calibration->setObjectName(QString::fromUtf8("pB_Calibration"));
+        pB_Calibration->setGeometry(QRect(570, 1220, 91, 71));
 
         retranslateUi(QtGuiSetting);
 
@@ -73,9 +79,9 @@ public:
         QtGuiSetting->setWindowTitle(QCoreApplication::translate("QtGuiSetting", "QtGuiSetting", nullptr));
         ShowLabel->setText(QString());
         pB_Exit->setText(QCoreApplication::translate("QtGuiSetting", "\351\200\200\345\207\272", nullptr));
-        pB_ContinueTest->setText(QCoreApplication::translate("QtGuiSetting", "\350\277\236\347\273\255\n"
-"\346\265\213\350\257\225", nullptr));
+        pB_ContinueTest->setText(QCoreApplication::translate("QtGuiSetting", "\346\265\213\350\257\225", nullptr));
         pB_Save->setText(QCoreApplication::translate("QtGuiSetting", "\344\277\235\345\255\230", nullptr));
+        pB_Calibration->setText(QCoreApplication::translate("QtGuiSetting", "\345\273\272\346\250\241", nullptr));
     } // retranslateUi
 
 };

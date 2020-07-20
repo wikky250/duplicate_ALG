@@ -14,6 +14,11 @@
 #pragma endregion QT
 
 
+#ifndef __APPLE__
+#include "cpp/HalconCpp.h"
+#pragma comment(lib,"halconcpp10.lib")
+using namespace Halcon;
+#endif
 struct ListStruct
 {
 	double iresult;
