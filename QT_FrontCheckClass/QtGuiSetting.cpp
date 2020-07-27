@@ -345,106 +345,6 @@ Mat QtGuiSetting::Hobject2Mat(Hobject Hobj)
 }
 void QtGuiSetting::onAutoDetest()
 {
-	// Local iconic variables 
-	Hobject ho_Image = Mat2Hobject(m_MOriginal);
-	Hobject  ho_Image1, ho_Image2, ho_Image3;
-	Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
-	Hobject  ho_Region, ho_RegionOpening, ho_Region_Cap, ho_ConnectedRegions;
-	Hobject  ho_SelectedRegions, ho_Region_OCR, ho_Regionx, ho_Region_1st;
-	Hobject  ho_Regionsx, ho_Regions_2nd, ho_ObjectsConcat, ho_RegionIntersection;
-	Hobject  ho_RegionClosing, ho_ConnectedRegions1, ho_SelectedRegions1;
-	Hobject  ho_Region_Inner, ho_RegionUnion, ho_RegionDifference;
-	Hobject  ho_RegionUnion1, ho_Region_Out;
-
-
-	// Local control variables 
-	HTuple  hv_ImageFiles, hv_Index, hv_Width, hv_Height;
-	HTuple  hv_Row1, hv_Column1, hv_Row2, hv_Column2, hv_Height_Cap;
-	HTuple  hv_Height_CapMin, hv_Height_CapMax, hv_Row1_Min;
-	HTuple  hv_Row2_Max, hv_Row11, hv_Column11, hv_Row21, hv_Column21;
-	HTuple  hv_Height_In, hv_Height_InMin, hv_Height_InMax;
-	HTuple  hv_Row12, hv_Column12, hv_Row22, hv_Column22, hv_Height_Out;
-	HTuple  hv_Height_OutMin, hv_Height_OutMax;
-	get_image_size(ho_Image, &hv_Width, &hv_Height);
-	decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
-	trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2,
-		&ho_ImageResult3, "hsv");
-
-	threshold(ho_ImageResult3, &ho_Region, 100, 255);
-	opening_circle(ho_Region, &ho_RegionOpening, 3.5);
-	union1(ho_RegionOpening, &ho_Region_Cap);
-
-
-	connection(ho_Region_Cap, &ho_ConnectedRegions);
-	select_shape(ho_ConnectedRegions, &ho_SelectedRegions, "height", "and", 100,
-		99999);
-	smallest_rectangle1(ho_SelectedRegions, &hv_Row1, &hv_Column1, &hv_Row2, &hv_Column2);
-	hv_Height_Cap = hv_Row2 - hv_Row1;
-	tuple_min(hv_Height_Cap, &hv_Height_CapMin);
-	tuple_max(hv_Height_Cap, &hv_Height_CapMax);
-	hv_Height_CapMin = hv_Height_CapMin - 10;
-	hv_Height_CapMax += 10;
-
-
-	//字符部分
-	threshold(ho_Image1, &ho_Region_OCR, 0, 140);
-	//双色第一部分
-	threshold(ho_ImageResult2, &ho_Regionx, 0, 70);
-	opening_circle(ho_Regionx, &ho_Region_1st, 1.5);
-	//双色第二部分
-	threshold(ho_Image1, &ho_Regionsx, 55, 120);
-	opening_circle(ho_Regionsx, &ho_Regions_2nd, 1.5);
-
-	concat_obj(ho_Region_1st, ho_Regions_2nd, &ho_ObjectsConcat);
-	intersection(ho_ObjectsConcat, ho_SelectedRegions, &ho_RegionIntersection);
-	closing_circle(ho_RegionIntersection, &ho_RegionClosing, 3.5);
-	connection(ho_RegionClosing, &ho_ConnectedRegions1);
-	select_shape(ho_ConnectedRegions1, &ho_SelectedRegions1, "height", "and", (hv_Height_CapMin / 2) - 20,
-		(hv_Height_CapMax / 2) + 20);
-
-
-	tuple_min(hv_Row1, &hv_Row1_Min);
-	tuple_max(hv_Row2, &hv_Row2_Max);
-	select_shape(ho_SelectedRegions1, &ho_Region_Inner, "row", "and", hv_Row1_Min + (hv_Height_CapMin / 2),
-		hv_Row2_Max - (hv_Height_CapMin / 2));
-	fill_up(ho_Region_Inner, &ho_Region_Inner);
-	smallest_rectangle1(ho_Region_Inner, &hv_Row11, &hv_Column11, &hv_Row21, &hv_Column21);
-	hv_Height_In = hv_Row21 - hv_Row11;
-	tuple_min(hv_Height_In, &hv_Height_InMin);
-	tuple_max(hv_Height_In, &hv_Height_InMax);
-
-	_checkparam.i_Low_LimitIn = hv_Height_InMin[0].I() - 5;
-	_checkparam.i_High_LimitIn = hv_Height_InMax[0].I() + 5;
-	union1(ho_Region_Inner, &ho_RegionUnion);
-	difference(ho_SelectedRegions1, ho_RegionUnion, &ho_RegionDifference);
-	union1(ho_RegionDifference, &ho_RegionUnion1);
-	connection(ho_RegionUnion1, &ho_Region_Out);
-	fill_up(ho_Region_Out, &ho_Region_Out);
-	smallest_rectangle1(ho_Region_Out, &hv_Row12, &hv_Column12, &hv_Row22, &hv_Column22);
-	hv_Height_Out = hv_Row22 - hv_Row12;
-	tuple_min(hv_Height_Out, &hv_Height_OutMin);
-	tuple_max(hv_Height_Out, &hv_Height_OutMax);
-
-	_checkparam.i_Low_LimitOut = hv_Height_OutMin[0].I() - 5;
-	_checkparam.i_High_LimitOut = hv_Height_OutMax[0].I() + 5;
-
-	set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
-	disp_obj(ho_Image, m_WND);
-	set_tposition(m_WND, 100, 100);
-	set_color(m_WND, "white");
-	set_draw(m_WND, "margin");
-	set_line_width(m_WND, 5);
-	set_color(m_WND, "cyan");
-	disp_obj(ho_Region_Out, m_WND);
-	set_tposition(m_WND, 50, 10);
-	write_string(m_WND, HTuple("外部区域高度上下限") + " " + hv_Height_OutMin + " " + hv_Height_OutMax);
-	set_color(m_WND, "blue");
-	disp_obj(ho_Region_Inner, m_WND);
-	set_tposition(m_WND, 70, 10);
-	write_string(m_WND, HTuple("内部区域高度上下限") + " " + hv_Height_InMin + " " + hv_Height_InMax);
-	SetParam(_checkparam);
-	m_bChanged = true;
-	ui.pB_Save->setEnabled(false);
 }
 
 void QtGuiSetting::SetParam(CHECKPARAM param)
@@ -460,7 +360,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		ui.tableWidget->insertRow(rowindex);
 		QTableWidgetItem* item = new QTableWidgetItem();
 
-		item->setText(QString::fromLocal8Bit("通道阈值"));
+		item->setText(QString::fromLocal8Bit("边缘胶囊阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -471,7 +371,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("R通道阈值"));
+		item->setText(QString::fromLocal8Bit("边缘胶囊阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		QSlider* hsd = new QSlider(Qt::Horizontal);
@@ -511,57 +411,14 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("外部阈值低"));
+		item->setText(QString::fromLocal8Bit("中心胶囊阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_Low_LimitOut));
+		item->setText(QString::number(_checkparam.i_MiddleThread));
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
 
-		rowindex = ui.tableWidget->rowCount();
-		ui.tableWidget->insertRow(rowindex);
-		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("外部阈值高"));
-		item->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowindex, 0, item);
-		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_High_LimitOut));
-		item->setTextAlignment(Qt::AlignRight);
-		ui.tableWidget->setItem(rowindex, 1, item);
-
-		rowindex = ui.tableWidget->rowCount();
-		ui.tableWidget->insertRow(rowindex);
-		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("内部阈值低"));
-		item->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowindex, 0, item);
-		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_Low_LimitIn));
-		item->setTextAlignment(Qt::AlignRight);
-		ui.tableWidget->setItem(rowindex, 1, item);
-
-		rowindex = ui.tableWidget->rowCount();
-		ui.tableWidget->insertRow(rowindex);
-		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("内部阈值高"));
-		item->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowindex, 0, item);
-		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_High_LimitIn));
-		item->setTextAlignment(Qt::AlignRight);
-		ui.tableWidget->setItem(rowindex, 1, item);
-
-		rowindex = ui.tableWidget->rowCount();
-		ui.tableWidget->insertRow(rowindex);
-		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("漏粉阈值"));
-		item->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowindex, 0, item);
-		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_Innerthread));
-		item->setTextAlignment(Qt::AlignRight);
-		ui.tableWidget->setItem(rowindex, 1, item);
 
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
@@ -572,7 +429,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		hsd = new QSlider(Qt::Horizontal);
 		hsd->setMinimum(0);
 		hsd->setMaximum(255);
-		hsd->setValue(_checkparam.i_Innerthread);
+		hsd->setValue(_checkparam.i_MiddleThread);
 		hsd->setStyleSheet("  \
      QSlider::add-page:Horizontal\
      {     \
@@ -601,8 +458,52 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		connect(hsd, &QSlider::valueChanged, [=]() {
 			ui.tableWidget->item(rowindex - 1, 1)->setText(QString::number(hsd->value()));
 		});//利用lambda表达式可用
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("上部轮廓下限"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_UPBoundary));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("下部轮廓上限"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_UPBoundary));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+		
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("漏粉判定区域"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_LeakingRadios));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("漏粉判定阈值"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_LeakingThread));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
 		//////////////////////////////////////////////////////////////////////////
 	}
+
 	ui.tableWidget->blockSignals(false);
 }
 
@@ -610,44 +511,55 @@ void QtGuiSetting::onCellChanged(int r, int c)
 {
 	try
 	{
+		c = 1;//防止键盘table
 		QString texts = ui.tableWidget->item(r, c)->text();
 		Mat MatToShow(m_MOriginal);
 
 		// Local iconic variables 
-		Hobject  ho_Image1, ho_Image2, ho_Image3;
+		Hobject  ho_EmptyRegion_Out, ho_EmptyRegion_Top;
+		Hobject  ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP, ho_EmptyRegion_Intensity;
+		Hobject  ho_Image1, ho_Image2, ho_Image3, ho_ImageResult;
 		Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
-		Hobject  ho_Region, ho_RegionOpening, ho_Region_Cap, ho_Region_OCR;
-		Hobject  ho_Regionx, ho_Region_1st, ho_Regionsx, ho_Regions_2nd;
-		Hobject  ho_EmptyObject_Area, ho_EmptyObjectWidth, ho_EmptyObjectHeight;
-		Hobject  ho_EmptyObject_Inner, ho_EmptyObject_Leaking, ho_EmptyObject_Other;
-		Hobject  ho_Rectangle, ho_RegionIntersection, ho_ConnectedRegions;
-		Hobject  ho_SelectedRegions, ho_RegionIntersection1, ho_ConnectedRegions1;
-		Hobject  ho_SelectedRegions1, ho_RegionTrans_Out_1st, ho_Rectangle2;
-		Hobject  ho_RegionIntersection2, ho_ConnectedRegions2, ho_SelectedRegions2;
-		Hobject  ho_RegionTrans_Out_2nd, ho_Rectangle3, ho_RegionTrans;
-		Hobject  ho_RegionFillUp, ho_Region_CapOut, ho_Rectangle1;
-		Hobject  ho_RegionIntersection3, ho_RegionClosing3, ho_RegionOpening2;
-		Hobject  ho_ImageReduced, ho_Regions, ho_RegionDifference;
-		Hobject  ho_ImageMin, ho_ImageSub, ho_RegionClosing, ho_RegionOpening1, ho_ConnectedRegions3;
-		Hobject  ho_SelectedRegions3, ho_RegionUnion1;
+		Hobject  ho_ImageMax2, ho_ImageSub2, ho_Regions, ho_Region;
+		Hobject  ho_RegionOpening2, ho_Regionx, ho_Region_1st, ho_Regionsx;
+		Hobject  ho_Regions_2nd, ho_Rectangle, ho_RegionIntersection6;
+		Hobject  ho_RegionFillUp, ho_RegionOpening7, ho_ConnectedRegions3;
+		Hobject  ho_SelectedRegions4, ho_RegionIntersection11, ho_ConnectedRegions5;
+		Hobject  ho_SelectedRegions6, ho_RegionIntersection12, ho_ConnectedRegions6;
+		Hobject  ho_SelectedRegions7, ho_RegionErosion7, ho_RegionIntersection10;
+		Hobject  ho_RegionOpening11, ho_RegionIntersection5, ho_ConnectedRegions;
+		Hobject  ho_SelectedRegions, ho_RegionOpening8, ho_RegionTrans2;
+		Hobject  ho_RegionIntersection, ho_RegionErosion, ho_ImageReduced;
+		Hobject  ho_ImageMax, ho_ImageSub, ho_RegionErosion3, ho_RegionIntersection3;
+		Hobject  ho_RegionOpening5, ho_Rectangle2, ho_RegionIntersection7;
+		Hobject  ho_ConnectedRegions4, ho_SelectedRegions5, ho_RegionOpening9;
+		Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
+		Hobject  ho_RegionErosion5, ho_ImageReduced2, ho_ImageMax3;
+		Hobject  ho_ImageSub3, ho_RegionErosion6, ho_RegionIntersection9;
+		Hobject  ho_RegionOpening10;
 
 
 		// Local control variables 
-		HTuple  hv_ImageFiles, hv_Index, hv_Width, hv_Height;
-		HTuple  hv_b_Width, hv_b_Height, hv_b_Inner, hv_b_Leaking;
-		HTuple  hv_b_Other, hv_Low_LimitOut, hv_High_LimitOut, hv_Low_LimitIn;
-		HTuple  hv_High_LimitIn, hv_Co_Index, hv_b_Skip, hv_Ro_Index;
-		HTuple  hv_R_s, hv_C_s, hv_Row13, hv_Column13, hv_Row23, hv_Area1;
-		HTuple  hv_Column23, hv_tmp_H, hv_Center_R, hv_Row11, hv_Column11;
-		HTuple  hv_Row21, hv_Column21, hv_Cent_R, hv_High_Limit;
-		HTuple  hv_Low_Limit, hv_Row12, hv_Column12, hv_Row22, hv_Column22;
-		HTuple  hv_Row1, hv_Column1, hv_Row2, hv_Column2, hv_Area;
-		HTuple  hv_ExpDefaultCtrlDummyVar, hv_BandThread, hv_InnerThread;
+		HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
+		HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
+		HTuple  hv_Indices, hv_C_s, hv_R_s, hv_R_sEnd, hv_Area9;
+		HTuple  hv_Row13, hv_Column13, hv_Row1, hv_Column1, hv_Row2;
+		HTuple  hv_Column2, hv_Height_CAP, hv_Row14, hv_Column14;
+		HTuple  hv_Row23, hv_Column23, hv_H1, hv_Row15, hv_Column15;
+		HTuple  hv_Row24, hv_Column24, hv_H2, hv_h, hv_Area8, hv_Row10;
+		HTuple  hv_Column10, hv_Row11, hv_Column11, hv_Row21, hv_Column21;
+		HTuple  hv_Mean, hv_Deviation, hv_Area5, hv_Row7, hv_Column7;
+		HTuple  hv_Row12, hv_Column12, hv_Row22, hv_Column22, hv_Mean2;
+		HTuple  hv_Deviation2, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
+		HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
+		HTuple  hv_Area, hv_Row, hv_Column, hv_Max1, hv_Max;
 		if (m_MOriginal.empty())
 		{
 			return;
 		}
 		Hobject ho_Image = Mat2Hobject(m_MOriginal);
+		decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
+		trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
 		get_image_size(ho_Image, &hv_Width, &hv_Height);
 		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
 		switch (r)
@@ -655,67 +567,63 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		case 0:
 		{
 			_checkparam.i_BandThread = texts.toInt();
-			decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
-			trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
-			threshold(ho_ImageResult3, &ho_Region, _checkparam.i_BandThread, 255);
+			threshold(ho_ImageResult3, &ho_RegionOpening2, _checkparam.i_BandThread, 255);
+			opening_circle(ho_RegionOpening2, &ho_RegionOpening2, 2.5);
+			fill_up(ho_RegionOpening2, &ho_RegionOpening2);
+			opening_circle(ho_RegionOpening2, &ho_RegionOpening2, 10.5);
+
 			disp_obj(ho_Image, m_WND);
 			set_draw(m_WND, "fill");
 			set_color(m_WND, "red");
-			disp_obj(ho_Region, m_WND);
+			disp_obj(ho_RegionOpening2, m_WND);
 
 			break;
 		}
 		case 2:
 		{
-			_checkparam.i_Low_LimitOut = texts.toInt();
-			break;
-		}
-		case 3:
-		{
-			_checkparam.i_High_LimitOut = texts.toInt();
+			_checkparam.i_MiddleThread = texts.toInt();
+			threshold(ho_ImageResult3, &ho_Region, _checkparam.i_MiddleThread, 255);
+			opening_circle(ho_Region, &ho_Region, 3.5);
+			disp_obj(ho_Image, m_WND);
+			set_draw(m_WND, "fill");
+			set_color(m_WND, "red");
+			disp_obj(ho_Region, m_WND);
 			break;
 		}
 		case 4:
-		{
-			_checkparam.i_Low_LimitIn = texts.toInt();
-			break;
-		}
 		case 5:
 		{
-			_checkparam.i_High_LimitIn = texts.toInt();
-			break;
-		}
-		case 6:
-			_checkparam.i_Innerthread = texts.toInt();
-			get_image_size(ho_Image, &hv_Width, &hv_Height);
-			decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
-			trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2,
-				&ho_ImageResult3, "hsv");
 
-			threshold(ho_ImageResult3, &ho_Region, _checkparam.i_BandThread, 255);
-
-			union1(ho_Region, &ho_Region_Cap);
-			fill_up(ho_Region_Cap, &ho_Region_Cap);
-			opening_circle(ho_Region_Cap, &ho_Region_Cap, 30.5);
-			erosion_circle(ho_Region_Cap, &ho_Region_Cap, 3.5);
-
-			union1(ho_Region_Cap, &ho_Region_CapOut);
-			reduce_domain(ho_Image3, ho_Region_CapOut, &ho_ImageReduced);
-			gray_dilation_rect(ho_ImageReduced, &ho_ImageMin, 5, 5);
-			sub_image(ho_ImageMin, ho_ImageReduced, &ho_ImageSub, 1, 0);
-			threshold(ho_ImageSub, &ho_Regions, _checkparam.i_Innerthread, 255);
-			closing_circle(ho_Regions, &ho_RegionClosing, 1.5);
-			opening_circle(ho_RegionClosing, &ho_RegionOpening1, 1.5);
-			connection(ho_RegionOpening1, &ho_ConnectedRegions3);
-			union1(ho_ConnectedRegions3, &ho_RegionUnion1);
+			_checkparam.i_UPBoundary = ui.tableWidget->item(4, c)->text().toInt();
+			_checkparam.i_DOWNBoundary = ui.tableWidget->item(5, c)->text().toInt();
+			get_image_pointer1(ho_Image, _, _, &hv_Width, &hv_Height);
+			hv_R_s = 0;
+			HTuple hv_R_sEnd  = _checkparam.i_UPBoundary;
+			hv_C_s = 0;
+			gen_rectangle1(&ho_Rectangle, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
+			hv_R_s = hv_Height - _checkparam.i_DOWNBoundary;
+			hv_R_sEnd = hv_Height;
+			gen_rectangle1(&ho_Rectangle2, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
 			disp_obj(ho_Image, m_WND);
 			set_draw(m_WND, "margin");
-			set_color(m_WND, "cyan");
-			disp_obj(ho_Region_CapOut, m_WND);
-			set_draw(m_WND, "fill");
 			set_color(m_WND, "red");
-			disp_obj(ho_RegionUnion1, m_WND);
-			break;
+			disp_obj(ho_Rectangle, m_WND);
+			disp_obj(ho_Rectangle2, m_WND);
+		}
+		case 6:
+		case 7:
+		{
+			_checkparam.i_LeakingRadios = ui.tableWidget->item(6, c)->text().toInt();
+			_checkparam.i_LeakingThread = ui.tableWidget->item(7, c)->text().toInt();
+			gray_dilation_rect(ho_Image3, &ho_ImageMax2, _checkparam.i_LeakingRadios, _checkparam.i_LeakingRadios);
+			sub_image(ho_ImageMax2, ho_Image3, &ho_ImageSub2, 1, 0);
+			threshold(ho_ImageSub2, &ho_Regions, _checkparam.i_LeakingThread, 255);
+			closing_circle(ho_Regions, &ho_Regions, 1.5);
+			disp_obj(ho_Image, m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			disp_obj(ho_Regions, m_WND);
+		}
 		}
 	}
 	catch (HException &e)

@@ -34,12 +34,11 @@ struct CHECKPARAM
 	char c_OperateCore[20];
 	//////////////////////////////////////////////////////////////////////////
 	int i_BandThread = -1;
-	int i_Low_LimitOut = -1;
-	int	i_High_LimitOut = -1;
-	int	i_Low_LimitIn = -1;
-	int	i_High_LimitIn = -1;
-	int i_Innerthread = -1;
-
+	int i_MiddleThread = -1;
+	int i_UPBoundary = -1;
+	int i_DOWNBoundary = -1;
+	int i_LeakingRadios = -1;
+	int i_LeakingThread = -1;
 
 	//////////////////////////////////////////////////////////////////////////
 	CHECKPARAM()
