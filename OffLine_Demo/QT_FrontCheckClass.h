@@ -33,13 +33,16 @@ struct CHECKPARAM
 	int i_CheckPosNo;
 	char c_OperateCore[20];
 	//////////////////////////////////////////////////////////////////////////
-	int i_tempThread;
-	int i_CapsuleCount;
+	int i_BandThread = -1;
+	int i_MiddleThread = -1;
+	int i_UPBoundary = -1;
+	int i_DOWNBoundary = -1;
+	int i_LeakingRadios = -1;
+	int i_LeakingThread = -1;
+
 	//////////////////////////////////////////////////////////////////////////
 	CHECKPARAM()
 	{
-		i_tempThread = -1;
-		i_CapsuleCount = -1;
 	}
 	~CHECKPARAM()
 	{
@@ -134,10 +137,10 @@ public:
 	virtual int InitWindow(int pos, HANDLE _LEDhandle, void* _auhandle) = 0;
 	//virtual int ReturnWindow(CWnd **hwnd, RECT &rect, CWnd **hwnd2, RECT &rect2) = 0;
 	virtual int GetCheckPosNo() = 0;
-	virtual void StartCheck(QString camerasign,  std::shared_ptr<spd::logger> daily_logger) = 0;
+	virtual void StartCheck(QString camerasign,  std::shared_ptr<spd::logger> daily_logger,int w,int h) = 0;
 	virtual void StopCheck() = 0;
 	virtual QString GetResult() = 0;
-	virtual bool Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str) = 0;
+	virtual int Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str) = 0;
 	virtual void ShowResult(QVector<double*> &result) = 0;
 	virtual void BeatStart(void) = 0;
 	virtual void BeatEnd(void) = 0;

@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_QtGuiSetting_t {
-    QByteArrayData data[32];
-    char stringdata0[360];
+    QByteArrayData data[35];
+    char stringdata0[404];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -58,12 +58,15 @@ QT_MOC_LITERAL(22, 224, 9), // "onShowFps"
 QT_MOC_LITERAL(23, 234, 1), // "i"
 QT_MOC_LITERAL(24, 236, 13), // "onCellChanged"
 QT_MOC_LITERAL(25, 250, 17), // "onSelectTrainFile"
-QT_MOC_LITERAL(26, 268, 17), // "onSelectImageList"
-QT_MOC_LITERAL(27, 286, 16), // "QListWidgetItem*"
-QT_MOC_LITERAL(28, 303, 13), // "SLOTShowImage"
-QT_MOC_LITERAL(29, 317, 14), // "onContinueTest"
-QT_MOC_LITERAL(30, 332, 15), // "onTimerReadList"
-QT_MOC_LITERAL(31, 348, 11) // "onSaveParam"
+QT_MOC_LITERAL(26, 268, 14), // "onClickedImage"
+QT_MOC_LITERAL(27, 283, 16), // "QListWidgetItem*"
+QT_MOC_LITERAL(28, 300, 15), // "onSingleClicked"
+QT_MOC_LITERAL(29, 316, 17), // "onSelectImageList"
+QT_MOC_LITERAL(30, 334, 13), // "SLOTShowImage"
+QT_MOC_LITERAL(31, 348, 14), // "onContinueTest"
+QT_MOC_LITERAL(32, 363, 15), // "onTimerReadList"
+QT_MOC_LITERAL(33, 379, 11), // "onSaveParam"
+QT_MOC_LITERAL(34, 391, 12) // "onAutoDetest"
 
     },
     "QtGuiSetting\0StartGetsss\0\0str\0"
@@ -73,10 +76,11 @@ QT_MOC_LITERAL(31, 348, 11) // "onSaveParam"
     "SignShowImage\0Mat\0closeEvent\0QCloseEvent*\0"
     "onBtnGetImage\0onBtnGetSample\0onShowImage\0"
     "Mat*\0img\0onShowFps\0i\0onCellChanged\0"
-    "onSelectTrainFile\0onSelectImageList\0"
-    "QListWidgetItem*\0SLOTShowImage\0"
+    "onSelectTrainFile\0onClickedImage\0"
+    "QListWidgetItem*\0onSingleClicked\0"
+    "onSelectImageList\0SLOTShowImage\0"
     "onContinueTest\0onTimerReadList\0"
-    "onSaveParam"
+    "onSaveParam\0onAutoDetest"
 };
 #undef QT_MOC_LITERAL
 
@@ -86,7 +90,7 @@ static const uint qt_meta_data_QtGuiSetting[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      19,   14, // methods
+      22,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -94,27 +98,30 @@ static const uint qt_meta_data_QtGuiSetting[] = {
        7,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  109,    2, 0x06 /* Public */,
-       4,    2,  112,    2, 0x06 /* Public */,
-       7,    1,  117,    2, 0x06 /* Public */,
-       9,    1,  120,    2, 0x06 /* Public */,
-      11,    1,  123,    2, 0x06 /* Public */,
-      12,    0,  126,    2, 0x06 /* Public */,
-      13,    3,  127,    2, 0x06 /* Public */,
+       1,    1,  124,    2, 0x06 /* Public */,
+       4,    2,  127,    2, 0x06 /* Public */,
+       7,    1,  132,    2, 0x06 /* Public */,
+       9,    1,  135,    2, 0x06 /* Public */,
+      11,    1,  138,    2, 0x06 /* Public */,
+      12,    0,  141,    2, 0x06 /* Public */,
+      13,    3,  142,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      15,    1,  134,    2, 0x0a /* Public */,
-      17,    0,  137,    2, 0x0a /* Public */,
-      18,    0,  138,    2, 0x0a /* Public */,
-      19,    1,  139,    2, 0x0a /* Public */,
-      22,    1,  142,    2, 0x0a /* Public */,
-      24,    2,  145,    2, 0x0a /* Public */,
-      25,    0,  150,    2, 0x0a /* Public */,
-      26,    1,  151,    2, 0x0a /* Public */,
-      28,    3,  154,    2, 0x0a /* Public */,
-      29,    1,  161,    2, 0x0a /* Public */,
-      30,    0,  164,    2, 0x0a /* Public */,
-      31,    0,  165,    2, 0x0a /* Public */,
+      15,    1,  149,    2, 0x0a /* Public */,
+      17,    0,  152,    2, 0x0a /* Public */,
+      18,    0,  153,    2, 0x0a /* Public */,
+      19,    1,  154,    2, 0x0a /* Public */,
+      22,    1,  157,    2, 0x0a /* Public */,
+      24,    2,  160,    2, 0x0a /* Public */,
+      25,    0,  165,    2, 0x0a /* Public */,
+      26,    1,  166,    2, 0x0a /* Public */,
+      28,    0,  169,    2, 0x0a /* Public */,
+      29,    1,  170,    2, 0x0a /* Public */,
+      30,    3,  173,    2, 0x0a /* Public */,
+      31,    1,  180,    2, 0x0a /* Public */,
+      32,    0,  183,    2, 0x0a /* Public */,
+      33,    0,  184,    2, 0x0a /* Public */,
+      34,    0,  185,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -134,8 +141,11 @@ static const uint qt_meta_data_QtGuiSetting[] = {
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 27,    2,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 27,    2,
     QMetaType::Void, QMetaType::Int, 0x80000000 | 14, QMetaType::Int,    2,   21,    2,
     QMetaType::Void, QMetaType::Bool,    2,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -162,11 +172,14 @@ void QtGuiSetting::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 11: _t->onShowFps((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 12: _t->onCellChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 13: _t->onSelectTrainFile(); break;
-        case 14: _t->onSelectImageList((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
-        case 15: _t->SLOTShowImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< Mat(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
-        case 16: _t->onContinueTest((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 17: _t->onTimerReadList(); break;
-        case 18: _t->onSaveParam(); break;
+        case 14: _t->onClickedImage((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
+        case 15: _t->onSingleClicked(); break;
+        case 16: _t->onSelectImageList((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
+        case 17: _t->SLOTShowImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< Mat(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 18: _t->onContinueTest((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 19: _t->onTimerReadList(); break;
+        case 20: _t->onSaveParam(); break;
+        case 21: _t->onAutoDetest(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -263,13 +276,13 @@ int QtGuiSetting::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 19)
+        if (_id < 22)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 22;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 19)
+        if (_id < 22)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 22;
     }
     return _id;
 }

@@ -13,7 +13,7 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	QString cameraname = checkparam->c_CameraName;
 	//读取检测参数配置
 	//////////////////////////////////////////////////////////////////////////
-	checkparam->i_BandThread = configIniRead.value("/" + cameraname + "/BandThread", "100").toInt();
+	checkparam->i_BandThread = configIniRead.value("/" + cameraname + "/BandThread", "90").toInt();
 	checkparam->i_MiddleThread = configIniRead.value("/" + cameraname + "/MiddleThread", "90").toInt();
 	checkparam->i_UPBoundary = configIniRead.value("/" + cameraname + "/UPBoundary", "150").toInt();
 	checkparam->i_DOWNBoundary = configIniRead.value("/" + cameraname + "/DOWNBoundary", "150").toInt();
@@ -162,7 +162,7 @@ int CInterCHeck::GetCheckPosNo()
 	return 0;
 }
 
-void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger, int w ,int h)
+void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger)
 {
 	if (_daily_logger != nullptr)
 	{
@@ -175,18 +175,6 @@ void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _d
 	optin.insert(pair<string, string>("detectors", (AppPath + "/DefaultModel/detectors.yaml").toLocal8Bit()));
 
 	circle_times = m_ShowLabel.size();
-	if (dataR == NULL&&w!=0 && h != 0)
-	{
-		dataR = new uchar[w*h];
-	}
-	if (dataG == NULL && w != 0 && h != 0)
-	{
-		dataG = new uchar[w*h];
-	}
-	if (dataB == NULL && w != 0 && h != 0)
-	{
-		dataB = new uchar[w*h];
-	}
 	//int ret = pillCheck_init(0);
 	//proc.Initialize(optin);
 }
@@ -246,18 +234,6 @@ Hobject CInterCHeck::Mat2Hobject(Mat& image)
 	Hobject Hobj = Hobject();
 	int hgt = image.rows;
 	int wid = image.cols;
-	if (dataR == NULL && wid != 0 && hgt != 0)
-	{
-		dataR = new uchar[wid*hgt];
-	}
-	if (dataG == NULL && wid != 0 && hgt != 0)
-	{
-		dataG = new uchar[wid*hgt];
-	}
-	if (dataB == NULL && wid != 0 && hgt != 0)
-	{
-		dataB = new uchar[wid*hgt];
-	}
 	int i;
 	//	CV_8UC3
 	if (image.type() == CV_8UC3)
@@ -266,6 +242,18 @@ Hobject CInterCHeck::Mat2Hobject(Mat& image)
 		Mat imgB = imgchannel[0];
 		Mat imgG = imgchannel[1];
 		Mat imgR = imgchannel[2];
+		if (dataR == NULL)
+		{
+			dataR = new uchar[hgt*wid];
+		}
+		if (dataG == NULL)
+		{
+			dataG = new uchar[hgt*wid];
+		}
+		if (dataB == NULL)
+		{
+			dataB = new uchar[hgt*wid];
+		}
 		for (i = 0; i < hgt; i++)
 		{
 			memcpy(dataR + wid * i, imgR.data + imgR.step*i, wid);
@@ -328,7 +316,7 @@ Mat CInterCHeck::Hobject2Mat(Hobject Hobj)
 	}
 	return Image;
 }
-int CInterCHeck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
+bool CInterCHeck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
 {
 	bool _bresult = TRUE;
 	try
@@ -354,7 +342,7 @@ int CInterCHeck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
 		daily_logger->critical(e.message);
 		return _bresult;
 	}
-	return -1;
+	return _bresult;
 }
 
 void CInterCHeck::ShowResult(QVector<double*>& result)
@@ -421,40 +409,45 @@ bool CInterCHeck::OtherAfterCheck()
 	return true;
 }
 
-int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1)
+bool CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1)
 {
-	int i_error = 0,i_null = 0;
+	bool re = true;
 	try
 	{
 		// Local iconic variables 
 		QStringList qslre;
-		// 
-		// 		if (b_test)
-		// 		{
-		// 			if ((total_check / circle_times) % 2 == 0)
-		// 				qslre << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR";
-		// 			else
-		// 				qslre << "Good" << "Good" << "Good" << "Good" << "Good" << "Good";
-		// 			result = qslre.join(",");
-		// 			return -1;
-		// 		}
+// 
+// 		if (b_test)
+// 		{
+// 			if ((total_check / circle_times) % 2 == 0)
+// 				qslre << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR";
+// 			else
+// 				qslre << "Good" << "Good" << "Good" << "Good" << "Good" << "Good";
+// 			result = qslre.join(",");
+// 			return -1;
+// 		}
+
 
 
 		qslre << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR";
 		result = qslre.join(",");
 
 		// Local iconic variables 
-		Hobject  ho_Image1, ho_Image2, ho_Image3;
+  // Local iconic variables 
+		Hobject  ho_Image, ho_Image1, ho_Image2, ho_Image3;
 		Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
-		Hobject  ho_ImageSub2, ho_EmptyRegion_Out, ho_EmptyRegion_OCR;
-		Hobject  ho_EmptyRegion_Top, ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP;
-		Hobject  ho_EmptyRegion_Intensity, ho_ImageMax2, ho_Regions;
-		Hobject  ho_Regions_Leak, ho_Region, ho_RegionOpening2, ho_RegionOpening;
-		Hobject  ho_ConnectedRegions2, ho_SelectedRegions1, ho_RegionOpening_CAPOOT;
-		Hobject  ho_ImageReduced, ho_ImageMax, ho_ImageSub, ho_Region1;
-		Hobject  ho_RegionClosing, ho_Regions_Convex, ho_Regionx;
-		Hobject  ho_Region_1st, ho_Regionsx, ho_Regions_2nd, ho_Region_OCR;
-		Hobject  ho_Rectangle, ho_RegionIntersection5, ho_ConnectedRegions;
+		Hobject  ho_RankImage, ho_ImageMean, ho_ImageSub2;
+		Hobject  ho_Regionss, ho_Regions_LeakTOP, ho_EmptyRegion_Out;
+		Hobject  ho_EmptyRegion_OCR, ho_EmptyRegion_Top, ho_EmptyRegion_Inner;
+		Hobject  ho_EmptyRegion_TopUP, ho_EmptyRegion_Intensity;
+		Hobject  ho_ImageMax2, ho_Regions, ho_Regions_Leak, ho_Region;
+		Hobject  ho_RegionOpening2, ho_Regionx, ho_Region_1st, ho_Regionsx;
+		Hobject  ho_Regions_2nd, ho_Region_OCR, ho_Rectangle, ho_RegionIntersection6;
+		Hobject  ho_RegionFillUp, ho_RegionOpening7, ho_ConnectedRegions3;
+		Hobject  ho_SelectedRegions4, ho_RegionIntersection11, ho_ConnectedRegions5;
+		Hobject  ho_SelectedRegions6, ho_RegionIntersection12, ho_ConnectedRegions6;
+		Hobject  ho_SelectedRegions7, ho_RegionErosion7, ho_RegionIntersection10;
+		Hobject  ho_RegionOpening11, ho_RegionIntersection5, ho_ConnectedRegions;
 		Hobject  ho_SelectedRegions, ho_RegionOpening8, ho_RegionTrans2;
 		Hobject  ho_RegionIntersection, ho_RegionErosion, ho_RegionIntersection4;
 		Hobject  ho_Regions_LeakTOPError, ho_RegionErosion3, ho_RegionIntersection3;
@@ -468,13 +461,17 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
 		HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
-		HTuple  hv_Indices, hv_C_s, hv_R_s, hv_R_sEnd, hv_Row11;
-		HTuple  hv_Column11, hv_Row21, hv_Column21, hv_Area4, hv_Row3;
-		HTuple  hv_Column3, hv_Area5, hv_Row7, hv_Column7, hv_Row12;
-		HTuple  hv_Column12, hv_Row22, hv_Column22, hv_Area6, hv_Row6;
-		HTuple  hv_Column6, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
-		HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
-		HTuple  hv_Area, hv_Row, hv_Column, hv_Area8;
+		HTuple  hv_Indices, hv_C_s, hv_R_s, hv_R_sEnd, hv_Area9;
+		HTuple  hv_Row13, hv_Column13, hv_Row1, hv_Column1, hv_Row2;
+		HTuple  hv_Column2, hv_Height_CAP, hv_Row14, hv_Column14;
+		HTuple  hv_Row23, hv_Column23, hv_H1, hv_Row15, hv_Column15;
+		HTuple  hv_Row24, hv_Column24, hv_H2, hv_Area8, hv_Row10;
+		HTuple  hv_Column10, hv_Row11, hv_Column11, hv_Row21, hv_Column21;
+		HTuple  hv_Area4, hv_Row3, hv_Column3, hv_Area5, hv_Row7;
+		HTuple  hv_Column7, hv_Row12, hv_Column12, hv_Row22, hv_Column22;
+		HTuple  hv_Area6, hv_Row6, hv_Column6, hv_Area7, hv_Row9;
+		HTuple  hv_Column9, hv_Area2, hv_Row4, hv_Column4, hv_Area3;
+		HTuple  hv_Row5, hv_Column5, hv_Area, hv_Row, hv_Column;
 
 
 		HTuple hv_BandThread, hv_MiddleThread, hv_UPBoundary, hv_DOWNBoundary;
@@ -498,16 +495,12 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			hv_LeakingRadios = m_checkparam.i_LeakingRadios;
 		}
 		get_image_pointer1(m_hoLiveImage, &hv_Pointer, &hv_Type, &hv_Width, &hv_Height);
-		decompose3(m_hoLiveImage, &ho_Image1, &ho_Image2, &ho_Image3);
-		trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2,
-			&ho_ImageResult3, "hsv");
 
-
+		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 		if (total_check < circle_times)
 		{
 			set_part(m_ShowLabel[total_check%circle_times], 0, 0, hv_Height - 1, hv_Width - 1);
 		}
-		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 		gen_empty_region(&ho_EmptyRegion_Out);
 		gen_empty_region(&ho_EmptyRegion_Top);
 		gen_empty_region(&ho_EmptyRegion_Inner);
@@ -515,183 +508,244 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		gen_empty_region(&ho_EmptyRegion_Intensity);
 		hv_Tuple_Error = HTuple();
 		//Image Acquisition 01: Do something
-		gray_dilation_rect(ho_Image3, &ho_ImageMax2, 5, 5);
+		decompose3(m_hoLiveImage, &ho_Image1, &ho_Image2, &ho_Image3);
+
+		if ((total_check%circle_times == 0))
+		{
+			copy_obj(ho_Image3, &ho_MotionImages, 1, 1);
+		}
+		else
+		{
+			append_channel(ho_MotionImages, ho_Image3, &ho_MotionImages);
+		}
+
+		if (((total_check + 1) % circle_times == 0))
+		{
+			rank_n(ho_MotionImages, &ho_RankImage, 1);
+			mean_n(ho_MotionImages, &ho_ImageMean);
+			sub_image(ho_ImageMean, ho_RankImage, &ho_ImageSub2, 1, 0);
+			//mean_image (ImageSub2, ImageMean1, 3, 3)
+			threshold(ho_ImageSub2, &ho_Regionss, 10, 255);
+			opening_circle(ho_Regionss, &ho_Regions_LeakTOP, 1.5);
+
+		}
+		trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2,
+			&ho_ImageResult3, "hsv");
+
+		gray_dilation_rect(ho_Image3, &ho_ImageMax2, hv_LeakingRadios, hv_LeakingRadios);
 		sub_image(ho_ImageMax2, ho_Image3, &ho_ImageSub2, 1, 0);
-		threshold(ho_ImageSub2, &ho_Regions, 70, 255);
-		closing_circle(ho_Regions, &ho_Regions_Leak, 1.5);
+		threshold(ho_ImageSub2, &ho_Regions, hv_LeakingThread, 255);
+		closing_circle(ho_Regions, &ho_Regions, 1.5);
 
-
-
-
-
-		threshold(ho_Image3, &ho_Region, 100, 255);
+		threshold(ho_ImageResult3, &ho_Region, 90, 255);
 		opening_circle(ho_Region, &ho_Region, 3.5);
 
-		threshold(ho_Image3, &ho_RegionOpening2, hv_BandThread, 255);
+		threshold(ho_Image3, &ho_RegionOpening2, 70, 255);
+		opening_circle(ho_RegionOpening2, &ho_RegionOpening2, 2.5);
 		fill_up(ho_RegionOpening2, &ho_RegionOpening2);
 		closing_circle(ho_RegionOpening2, &ho_RegionOpening2, 3.5);
-		opening_circle(ho_RegionOpening2, &ho_RegionOpening, 30.5);
-		connection(ho_RegionOpening, &ho_ConnectedRegions2);
-		select_shape(ho_ConnectedRegions2, &ho_SelectedRegions1, "area", "and", 10000,
-			99999);
-		union1(ho_SelectedRegions1, &ho_RegionOpening_CAPOOT);
-		reduce_domain(ho_Image3, ho_RegionOpening_CAPOOT, &ho_ImageReduced);
-		gray_dilation_rect(ho_ImageReduced, &ho_ImageMax, 5, 5);
-		sub_image(ho_ImageMax, ho_ImageReduced, &ho_ImageSub, 1, 0);
-		threshold(ho_ImageSub, &ho_Region1, 25, 255);
-		closing_circle(ho_Region1, &ho_RegionClosing, 1.5);
-		opening_circle(ho_RegionClosing, &ho_Regions_Convex, 1.5);
+		opening_circle(ho_RegionOpening2, &ho_RegionOpening2, 10.5);
 
 		//双色第一部分
 		threshold(ho_ImageResult2, &ho_Regionx, 0, 80);
 		opening_circle(ho_Regionx, &ho_Region_1st, 1.5);
 		//双色第二部分
-		threshold(ho_ImageResult1, &ho_Regionsx, 122, 254);
+		threshold(ho_ImageResult1, &ho_Regionsx, 122, 255);
 		opening_circle(ho_Regionsx, &ho_Regions_2nd, 1.5);
-
-		//ocr部分
-		threshold(ho_Image1, &ho_Region_OCR, 0, 120);
 
 
 		for (hv_Co_Index = 1; hv_Co_Index <= 6; hv_Co_Index += 1)
 		{
-			tuple_find(hv_Tuple_Error, hv_Co_Index, &hv_Indices);
-			if (0 != (HTuple(hv_Indices != -1).And((hv_Indices.Num()) != 0)))
-			{
-				continue;
-			}
-
-
-
 			hv_C_s = ((hv_Width / 6)*(hv_Co_Index - 1)) - 10;
 
-
-
-			//if ((Index+1)%3==0)
-
-
-
-
-			hv_R_s = 0;
-			hv_R_sEnd = hv_Height / 2;
+			hv_R_s = 330;
+			hv_R_sEnd = 700;
 			gen_rectangle1(&ho_Rectangle, hv_R_s, hv_C_s, hv_R_sEnd, ((hv_Width / 6)*hv_Co_Index) + 10);
-			intersection(ho_RegionOpening_CAPOOT, ho_Rectangle, &ho_RegionIntersection5
-			);
-			area_center(ho_RegionIntersection5, &hv_Area8, _, _);
+			intersection(ho_Region, ho_Rectangle, &ho_RegionIntersection6);
+			fill_up(ho_RegionIntersection6, &ho_RegionFillUp);
+			opening_circle(ho_RegionFillUp, &ho_RegionOpening7, 15.5);
+			connection(ho_RegionOpening7, &ho_ConnectedRegions3);
+			select_shape_std(ho_ConnectedRegions3, &ho_SelectedRegions4, "max_area", 70);
+			area_center(ho_SelectedRegions4, &hv_Area9, _, __);
 
-			if (0 != (HTuple(hv_Area8 == 0).Or((hv_Area8.Num()) == 0)))
+			if (0 != (hv_Area9 == 0))
 			{
-				//concat_obj(ho_EmptyRegion_Intensity, ho_RegionIntersection4, &ho_EmptyRegion_Intensity);
 				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
-				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("NULL");
-				i_null++;
+				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("DNulAs");
 				continue;
 			}
-			connection(ho_RegionIntersection5, &ho_ConnectedRegions);
-			select_shape_std(ho_ConnectedRegions, &ho_SelectedRegions, "max_area", 70);
-			opening_circle(ho_SelectedRegions, &ho_RegionOpening8, 10.5);
-			shape_trans(ho_RegionOpening8, &ho_RegionTrans2, "convex");
-			smallest_rectangle1(ho_RegionTrans2, &hv_Row11, &hv_Column11, &hv_Row21,
-				&hv_Column21);
-			gen_rectangle1(&ho_Rectangle, hv_Row11, hv_Column11, ((hv_Row21 - hv_Row11)*0.3) + hv_Row11,
-				hv_Column21);
-
-			intersection(ho_RegionTrans2, ho_Rectangle, &ho_RegionIntersection);
-			erosion_circle(ho_RegionIntersection, &ho_RegionErosion, 7.5);
-			union2(ho_EmptyRegion_Out, ho_RegionErosion, &ho_EmptyRegion_Out);
-
-
-
-
-			intersection(ho_Regions_Convex, ho_RegionErosion, &ho_RegionIntersection4
-			);
-			opening_circle(ho_RegionIntersection4, &ho_Regions_LeakTOPError, 1.5);
-			area_center(ho_RegionIntersection4, &hv_Area4, &hv_Row3, &hv_Column3);
-			if (0 != (hv_Area4 > 10))
+			if (0 != (HTuple(hv_Area9 > 0).And(hv_Area9 < 5000)))
 			{
-				union2(ho_EmptyRegion_Intensity, ho_RegionIntersection4, &ho_EmptyRegion_Intensity
+				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+				concat_obj(ho_EmptyRegion_Top, ho_SelectedRegions4, &ho_EmptyRegion_Top);
+				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("DNulAs");
+				continue;
+			}
+			union2(ho_EmptyRegion_Out, ho_SelectedRegions4, &ho_EmptyRegion_Out);
+			smallest_rectangle1(ho_SelectedRegions4, &hv_Row1, &hv_Column1, &hv_Row2, &hv_Column2);
+			hv_Height_CAP = hv_Row2 - hv_Row1;
+			if (0 != (HTuple(hv_Height_CAP < 155).Or(hv_Height_CAP > 170)))
+			{
+				concat_obj(ho_EmptyRegion_Top, ho_SelectedRegions4, &ho_EmptyRegion_Top);
+				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("LengthALL");
+				continue;
+			}
+
+			intersection(ho_SelectedRegions4, ho_Region_1st, &ho_RegionIntersection11);
+			opening_circle(ho_RegionIntersection11, &ho_RegionIntersection11, 1.5);
+			closing_circle(ho_RegionIntersection11, &ho_RegionIntersection11, 30.5);
+			connection(ho_RegionIntersection11, &ho_ConnectedRegions5);
+			select_shape_std(ho_ConnectedRegions5, &ho_SelectedRegions6, "max_area", 70);
+
+			smallest_rectangle1(ho_SelectedRegions6, &hv_Row14, &hv_Column14, &hv_Row23,
+				&hv_Column23);
+			hv_H1 = hv_Row23 - hv_Row14;
+			intersection(ho_SelectedRegions4, ho_Regions_2nd, &ho_RegionIntersection12);
+			opening_circle(ho_RegionIntersection12, &ho_RegionIntersection12, 1.5);
+			connection(ho_RegionIntersection12, &ho_ConnectedRegions6);
+			select_shape_std(ho_ConnectedRegions6, &ho_SelectedRegions7, "max_area", 70);
+			smallest_rectangle1(ho_SelectedRegions7, &hv_Row15, &hv_Column15, &hv_Row24,
+				&hv_Column24);
+			hv_H2 = hv_Row24 - hv_Row15;
+			if (0 != (HTuple(hv_H1 < (74 - 8)).Or(hv_H1 > (74 + 8))))
+			{
+
+				concat_obj(ho_EmptyRegion_Top, ho_SelectedRegions6, &ho_EmptyRegion_Top);
+				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+				continue;
+			}
+
+			if (0 != (HTuple(hv_H2 < (80 - 8)).Or(hv_H2 > (80 + 8))))
+			{
+				concat_obj(ho_EmptyRegion_Top, ho_SelectedRegions7, &ho_EmptyRegion_Top);
+				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+				continue;
+			}
+
+
+
+			erosion_circle(ho_SelectedRegions4, &ho_RegionErosion7, 3.5);
+			intersection(ho_RegionErosion7, ho_Regions, &ho_RegionIntersection10);
+			opening_circle(ho_RegionIntersection10, &ho_RegionOpening11, 1.5);
+			area_center(ho_RegionOpening11, &hv_Area8, &hv_Row10, &hv_Column10);
+			if (0 != (hv_Area8 > 0))
+			{
+				union2(ho_EmptyRegion_Inner, ho_RegionOpening11, &ho_EmptyRegion_Inner);
+				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("impurity");
+				continue;
+			}
+
+			if (((total_check + 1) % circle_times == 0))
+			{
+
+				hv_R_s = 0;
+				hv_R_sEnd = 150;
+				gen_rectangle1(&ho_Rectangle, hv_R_s, hv_C_s, hv_R_sEnd, ((hv_Width / 6)*hv_Co_Index) + 10);
+				intersection(ho_RegionOpening2, ho_Rectangle, &ho_RegionIntersection5);
+				connection(ho_RegionIntersection5, &ho_ConnectedRegions);
+				select_shape_std(ho_ConnectedRegions, &ho_SelectedRegions, "max_area", 70);
+				opening_circle(ho_SelectedRegions, &ho_RegionOpening8, 10.5);
+				shape_trans(ho_RegionOpening8, &ho_RegionTrans2, "convex");
+				smallest_rectangle1(ho_RegionTrans2, &hv_Row11, &hv_Column11, &hv_Row21,
+					&hv_Column21);
+				gen_rectangle1(&ho_Rectangle, ((hv_Row21 - hv_Row11)*0.7) + hv_Row11, hv_Column11,
+					hv_Row21, hv_Column21);
+
+				intersection(ho_RegionTrans2, ho_Rectangle, &ho_RegionIntersection);
+				erosion_circle(ho_RegionIntersection, &ho_RegionErosion, 3.5);
+				union2(ho_EmptyRegion_Out, ho_RegionErosion, &ho_EmptyRegion_Out);
+
+
+
+
+				intersection(ho_Regions_LeakTOP, ho_RegionErosion, &ho_RegionIntersection4
 				);
-				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
-				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("sunkenTOP_LA");
-				i_error++;
-				continue;
-			}
+				opening_circle(ho_RegionIntersection4, &ho_Regions_LeakTOPError, 2.5);
+				area_center(ho_Regions_LeakTOPError, &hv_Area4, &hv_Row3, &hv_Column3);
+				if (0 != (hv_Area4 > 10))
+				{
+					concat_obj(ho_EmptyRegion_Intensity, ho_RegionIntersection4, &ho_EmptyRegion_Intensity
+					);
+					hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+					qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("sunkenTOP_LA");
+					continue;
+				}
+				erosion_circle(ho_RegionIntersection, &ho_RegionErosion3, 5.5);
+				//union2 (EmptyRegion_Out, RegionErosion3, EmptyRegion_Out)
+				intersection(ho_RegionErosion3, ho_Regions, &ho_RegionIntersection3);
+				opening_circle(ho_RegionIntersection3, &ho_RegionOpening5, 1.5);
+				area_center(ho_RegionOpening5, &hv_Area5, &hv_Row7, &hv_Column7);
+				if (0 != (hv_Area5 > 0))
+				{
+					union2(ho_EmptyRegion_Inner, ho_RegionOpening5, &ho_EmptyRegion_Inner);
+					hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+					qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("impurityTOP_LA");
+					continue;
+				}
 
-			erosion_circle(ho_RegionIntersection, &ho_RegionErosion3, 5.5);
-			intersection(ho_RegionErosion3, ho_Regions_Leak, &ho_RegionIntersection3);
-			opening_circle(ho_RegionIntersection3, &ho_RegionOpening5, 1.5);
-			area_center(ho_RegionOpening5, &hv_Area5, &hv_Row7, &hv_Column7);
-			if (0 != (hv_Area5 > 0))
-			{
-				union2(ho_EmptyRegion_Inner, ho_RegionOpening5, &ho_EmptyRegion_Inner);
-				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
-				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("impurityTOP_LA");
-				i_error++;
-				continue;
-			}
-
-			hv_R_s = hv_Height / 2;
-			hv_R_sEnd = hv_Height;
-			gen_rectangle1(&ho_Rectangle2, hv_R_s, hv_C_s, hv_R_sEnd, ((hv_Width / 6)*hv_Co_Index) + 10);
-			intersection(ho_RegionOpening_CAPOOT, ho_Rectangle2, &ho_RegionIntersection7
-			);
-			connection(ho_RegionIntersection7, &ho_ConnectedRegions4);
-			select_shape_std(ho_ConnectedRegions4, &ho_SelectedRegions5, "max_area",
-				70);
-			fill_up(ho_SelectedRegions5, &ho_SelectedRegions5);
-			opening_circle(ho_SelectedRegions5, &ho_RegionOpening9, 10.5);
-			shape_trans(ho_RegionOpening9, &ho_RegionTrans3, "convex");
-			smallest_rectangle1(ho_RegionTrans3, &hv_Row12, &hv_Column12, &hv_Row22,
-				&hv_Column22);
-			gen_rectangle1(&ho_Rectangle1, ((hv_Row22 - hv_Row12)*0.7) + hv_Row12, hv_Column12,
-				hv_Row22, hv_Column22);
-
-			intersection(ho_RegionTrans3, ho_Rectangle1, &ho_RegionIntersection8);
-			erosion_circle(ho_RegionIntersection8, &ho_RegionErosion1, 7.5);
-			union2(ho_EmptyRegion_Out, ho_RegionErosion1, &ho_EmptyRegion_Out);
+				hv_R_s = hv_Height - 150;
+				hv_R_sEnd = hv_Height;
+				gen_rectangle1(&ho_Rectangle2, hv_R_s, hv_C_s, hv_R_sEnd, ((hv_Width / 6)*hv_Co_Index) + 10);
+				intersection(ho_RegionOpening2, ho_Rectangle2, &ho_RegionIntersection7);
+				connection(ho_RegionIntersection7, &ho_ConnectedRegions4);
+				select_shape_std(ho_ConnectedRegions4, &ho_SelectedRegions5, "max_area",
+					70);
+				fill_up(ho_SelectedRegions5, &ho_SelectedRegions5);
+				opening_circle(ho_SelectedRegions5, &ho_RegionOpening9, 10.5);
+				shape_trans(ho_RegionOpening9, &ho_RegionTrans3, "convex");
+				smallest_rectangle1(ho_RegionTrans3, &hv_Row12, &hv_Column12, &hv_Row22,
+					&hv_Column22);
+				gen_rectangle1(&ho_Rectangle1, hv_Row12, hv_Column12, ((hv_Row22 - hv_Row12)*0.3) + hv_Row12,
+					hv_Column22);
 
 
-			intersection(ho_Regions_Convex, ho_RegionErosion1, &ho_RegionIntersection2
-			);
-			opening_circle(ho_RegionIntersection2, &ho_Regions_LeakTOPError2, 1.5);
-			area_center(ho_RegionIntersection2, &hv_Area6, &hv_Row6, &hv_Column6);
-			if (0 != (hv_Area6 > 10))
-			{
-				union2(ho_EmptyRegion_Intensity, ho_RegionIntersection2, &ho_EmptyRegion_Intensity
+				intersection(ho_RegionTrans3, ho_Rectangle1, &ho_RegionIntersection8);
+				erosion_circle(ho_RegionIntersection8, &ho_RegionErosion1, 1.5);
+				union2(ho_EmptyRegion_Out, ho_RegionErosion1, &ho_EmptyRegion_Out);
+
+
+				intersection(ho_Regions_LeakTOP, ho_RegionErosion1, &ho_RegionIntersection2
 				);
-				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
-				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("sunkenDown_LA");
-				i_error++;
-				continue;
-			}
-			erosion_circle(ho_RegionIntersection8, &ho_RegionErosion6, 3.5);
-			//union2 (EmptyRegion_Out, RegionErosion6, EmptyRegion_Out)
-			intersection(ho_RegionErosion6, ho_Regions, &ho_RegionIntersection9);
-			opening_circle(ho_RegionIntersection9, &ho_RegionOpening10, 1.5);
-			area_center(ho_RegionOpening10, &hv_Area7, &hv_Row9, &hv_Column9);
-			if (0 != (hv_Area7 > 0))
-			{
-				union2(ho_EmptyRegion_Inner, ho_RegionOpening10, &ho_EmptyRegion_Inner);
-				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
-				qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("impurityDown_LA");
-				i_error++;
-				continue;
+				opening_circle(ho_RegionIntersection2, &ho_Regions_LeakTOPError2, 2.5);
+				area_center(ho_Regions_LeakTOPError2, &hv_Area6, &hv_Row6, &hv_Column6);
+				if (0 != (hv_Area6 > 10))
+				{
+					concat_obj(ho_EmptyRegion_Intensity, ho_RegionIntersection2, &ho_EmptyRegion_Intensity
+					);
+					hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+					qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("sunkenDown_LA");
+					continue;
+				}
+				erosion_circle(ho_RegionIntersection8, &ho_RegionErosion6, 3.5);
+				//union2 (EmptyRegion_Out, RegionErosion6, EmptyRegion_Out)
+				intersection(ho_RegionErosion6, ho_Regions, &ho_RegionIntersection9);
+				opening_circle(ho_RegionIntersection9, &ho_RegionOpening10, 1.5);
+				area_center(ho_RegionOpening10, &hv_Area7, &hv_Row9, &hv_Column9);
+				if (0 != (hv_Area7 > 0))
+				{
+					union2(ho_EmptyRegion_Inner, ho_RegionOpening10, &ho_EmptyRegion_Inner);
+					hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+					qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("impurityDown_LA");
+					continue;
+				}
 			}
 			qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("Good");
 		}
 		result = qslre.join(",");
 		if (Wnd == -1)
 		{
-			// 			if (((total_check + 1) % circle_times == 0))
-			// 			{
-			// 				disp_obj(ho_ImageSub3, m_ShowLabel[total_check%circle_times]);
-			// 				disp_obj(ho_Regions_LeakTOP, m_ShowLabel[total_check%circle_times]);
-			// 				set_tposition(m_ShowLabel[total_check%circle_times], 10, 10);
-			// 				set_color(m_ShowLabel[total_check%circle_times], "gold");
-			// 				write_string(m_ShowLabel[total_check%circle_times], "运行");
-			// 			}
-			// 
-			// 			else
+// 			if (((total_check + 1) % circle_times == 0))
+// 			{
+// 				disp_obj(ho_ImageSub3, m_ShowLabel[total_check%circle_times]);
+// 				disp_obj(ho_Regions_LeakTOP, m_ShowLabel[total_check%circle_times]);
+// 				set_tposition(m_ShowLabel[total_check%circle_times], 10, 10);
+// 				set_color(m_ShowLabel[total_check%circle_times], "gold");
+// 				write_string(m_ShowLabel[total_check%circle_times], "运行");
+// 			}
+// 
+// 			else
 			{
 
 				disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
@@ -778,9 +832,5 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 	}
 
 	//disp_image(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
-	if (i_null == 6)
-	{
-		return -1;
-	}
-	return i_error;
+	return false;
 }

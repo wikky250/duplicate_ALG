@@ -120,4 +120,5 @@ public slots:
 	void onDoubleImageList(QListWidgetItem *);
 	void ImgAutoDown();
 	void SetEvertDlg();
+	void RESULTERRORCOUNTSLOT(int);
 };

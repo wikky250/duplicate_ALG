@@ -21,10 +21,10 @@ public:
 	virtual int InitWindow(int pos, HANDLE _LEDhandle, void* _auhandle);
 	//virtual int ReturnWindow(CWnd **hwnd, RECT &rect, CWnd **hwnd2, RECT &rect2);
 	virtual int GetCheckPosNo();
-	virtual void StartCheck(QString camerasign, std::shared_ptr<spd::logger> daily_logger);
+	virtual void StartCheck(QString camerasign, std::shared_ptr<spd::logger> daily_logger,int w,int h);
 	virtual void StopCheck();
 	virtual QString GetResult();
-	virtual bool Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str);
+	virtual int Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str);
 	virtual void ShowResult(QVector<double*> &result);
 	virtual void BeatStart(void);
 	virtual void BeatEnd(void);

@@ -53,7 +53,7 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	connect(this, SIGNAL(SignShowImage(int, Mat, int)), this, SLOT(SLOTShowImage(int, Mat, int)));
 	connect(ui.pB_Calibration, SIGNAL(clicked()), this, SLOT(onAutoDetest()));
 	p_Parent = AlgPointer;
-	((CInterCHeck*)p_Parent)->StartCheck("", nullptr);
+	((CInterCHeck*)p_Parent)->StartCheck("", nullptr,m_MOriginal.cols,m_MOriginal.rows);
 	((CInterCHeck*)p_Parent)->SetShowCallBack(this, ShowCallBack);
 
 
@@ -516,27 +516,25 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		Mat MatToShow(m_MOriginal);
 
 		// Local iconic variables 
-		Hobject  ho_EmptyRegion_Out, ho_EmptyRegion_Top;
-		Hobject  ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP, ho_EmptyRegion_Intensity;
-		Hobject  ho_Image1, ho_Image2, ho_Image3, ho_ImageResult;
+		Hobject  ho_Image1, ho_Image2, ho_Image3;
 		Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
-		Hobject  ho_ImageMax2, ho_ImageSub2, ho_Regions, ho_Region;
-		Hobject  ho_RegionOpening2, ho_Regionx, ho_Region_1st, ho_Regionsx;
-		Hobject  ho_Regions_2nd, ho_Rectangle, ho_RegionIntersection6;
-		Hobject  ho_RegionFillUp, ho_RegionOpening7, ho_ConnectedRegions3;
-		Hobject  ho_SelectedRegions4, ho_RegionIntersection11, ho_ConnectedRegions5;
-		Hobject  ho_SelectedRegions6, ho_RegionIntersection12, ho_ConnectedRegions6;
-		Hobject  ho_SelectedRegions7, ho_RegionErosion7, ho_RegionIntersection10;
-		Hobject  ho_RegionOpening11, ho_RegionIntersection5, ho_ConnectedRegions;
+		Hobject  ho_ImageSub2, ho_EmptyRegion_Out, ho_EmptyRegion_OCR;
+		Hobject  ho_EmptyRegion_Top, ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP;
+		Hobject  ho_EmptyRegion_Intensity, ho_ImageMax2, ho_Regions;
+		Hobject  ho_Regions_Leak, ho_Region, ho_RegionOpening2, ho_RegionOpening;
+		Hobject  ho_ConnectedRegions2, ho_SelectedRegions1, ho_RegionOpening_CAPOOT;
+		Hobject  ho_ImageReduced, ho_ImageMax, ho_ImageSub, ho_Region1;
+		Hobject  ho_RegionClosing, ho_Regions_Convex, ho_Regionx;
+		Hobject  ho_Region_1st, ho_Regionsx, ho_Regions_2nd, ho_Region_OCR;
+		Hobject  ho_Rectangle, ho_RegionIntersection5, ho_ConnectedRegions;
 		Hobject  ho_SelectedRegions, ho_RegionOpening8, ho_RegionTrans2;
-		Hobject  ho_RegionIntersection, ho_RegionErosion, ho_ImageReduced;
-		Hobject  ho_ImageMax, ho_ImageSub, ho_RegionErosion3, ho_RegionIntersection3;
+		Hobject  ho_RegionIntersection, ho_RegionErosion, ho_RegionIntersection4;
+		Hobject  ho_Regions_LeakTOPError, ho_RegionErosion3, ho_RegionIntersection3;
 		Hobject  ho_RegionOpening5, ho_Rectangle2, ho_RegionIntersection7;
 		Hobject  ho_ConnectedRegions4, ho_SelectedRegions5, ho_RegionOpening9;
 		Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
-		Hobject  ho_RegionErosion5, ho_ImageReduced2, ho_ImageMax3;
-		Hobject  ho_ImageSub3, ho_RegionErosion6, ho_RegionIntersection9;
-		Hobject  ho_RegionOpening10;
+		Hobject  ho_RegionErosion1, ho_RegionIntersection2, ho_Regions_LeakTOPError2;
+		Hobject  ho_RegionErosion6, ho_RegionIntersection9, ho_RegionOpening10;
 
 
 		// Local control variables 
@@ -567,63 +565,65 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		case 0:
 		{
 			_checkparam.i_BandThread = texts.toInt();
-			threshold(ho_ImageResult3, &ho_RegionOpening2, _checkparam.i_BandThread, 255);
-			opening_circle(ho_RegionOpening2, &ho_RegionOpening2, 2.5);
+			threshold(ho_Image3, &ho_RegionOpening2, _checkparam.i_BandThread, 255);
 			fill_up(ho_RegionOpening2, &ho_RegionOpening2);
-			opening_circle(ho_RegionOpening2, &ho_RegionOpening2, 10.5);
-
+			closing_circle(ho_RegionOpening2, &ho_RegionOpening2, 3.5);
+			opening_circle(ho_RegionOpening2, &ho_RegionOpening, 30.5);
+			connection(ho_RegionOpening, &ho_ConnectedRegions2);
+			select_shape(ho_ConnectedRegions2, &ho_SelectedRegions1, "area", "and", 10000,
+				99999);
+			union1(ho_SelectedRegions1, &ho_RegionOpening_CAPOOT);
 			disp_obj(ho_Image, m_WND);
 			set_draw(m_WND, "fill");
 			set_color(m_WND, "red");
-			disp_obj(ho_RegionOpening2, m_WND);
-
+			disp_obj(ho_RegionOpening_CAPOOT, m_WND);
 			break;
 		}
-		case 2:
-		{
-			_checkparam.i_MiddleThread = texts.toInt();
-			threshold(ho_ImageResult3, &ho_Region, _checkparam.i_MiddleThread, 255);
-			opening_circle(ho_Region, &ho_Region, 3.5);
-			disp_obj(ho_Image, m_WND);
-			set_draw(m_WND, "fill");
-			set_color(m_WND, "red");
-			disp_obj(ho_Region, m_WND);
-			break;
-		}
-		case 4:
-		case 5:
-		{
-
-			_checkparam.i_UPBoundary = ui.tableWidget->item(4, c)->text().toInt();
-			_checkparam.i_DOWNBoundary = ui.tableWidget->item(5, c)->text().toInt();
-			get_image_pointer1(ho_Image, _, _, &hv_Width, &hv_Height);
-			hv_R_s = 0;
-			HTuple hv_R_sEnd  = _checkparam.i_UPBoundary;
-			hv_C_s = 0;
-			gen_rectangle1(&ho_Rectangle, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
-			hv_R_s = hv_Height - _checkparam.i_DOWNBoundary;
-			hv_R_sEnd = hv_Height;
-			gen_rectangle1(&ho_Rectangle2, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
-			disp_obj(ho_Image, m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			disp_obj(ho_Rectangle, m_WND);
-			disp_obj(ho_Rectangle2, m_WND);
-		}
-		case 6:
-		case 7:
-		{
-			_checkparam.i_LeakingRadios = ui.tableWidget->item(6, c)->text().toInt();
-			_checkparam.i_LeakingThread = ui.tableWidget->item(7, c)->text().toInt();
-			gray_dilation_rect(ho_Image3, &ho_ImageMax2, _checkparam.i_LeakingRadios, _checkparam.i_LeakingRadios);
-			sub_image(ho_ImageMax2, ho_Image3, &ho_ImageSub2, 1, 0);
-			threshold(ho_ImageSub2, &ho_Regions, _checkparam.i_LeakingThread, 255);
-			closing_circle(ho_Regions, &ho_Regions, 1.5);
-			disp_obj(ho_Image, m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			disp_obj(ho_Regions, m_WND);
-		}
+// 		case 2:
+// 		{
+// 			_checkparam.i_MiddleThread = texts.toInt();
+// 			threshold(ho_ImageResult3, &ho_Region, _checkparam.i_MiddleThread, 255);
+// 			opening_circle(ho_Region, &ho_Region, 3.5);
+// 			disp_obj(ho_Image, m_WND);
+// 			set_draw(m_WND, "fill");
+// 			set_color(m_WND, "red");
+// 			disp_obj(ho_Region, m_WND);
+// 			break;
+// 		}
+// 		case 4:
+// 		case 5:
+// 		{
+// 
+// 			_checkparam.i_UPBoundary = ui.tableWidget->item(4, c)->text().toInt();
+// 			_checkparam.i_DOWNBoundary = ui.tableWidget->item(5, c)->text().toInt();
+// 			get_image_pointer1(ho_Image, _, _, &hv_Width, &hv_Height);
+// 			hv_R_s = 0;
+// 			HTuple hv_R_sEnd  = _checkparam.i_UPBoundary;
+// 			hv_C_s = 0;
+// 			gen_rectangle1(&ho_Rectangle, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
+// 			hv_R_s = hv_Height - _checkparam.i_DOWNBoundary;
+// 			hv_R_sEnd = hv_Height;
+// 			gen_rectangle1(&ho_Rectangle2, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
+// 			disp_obj(ho_Image, m_WND);
+// 			set_draw(m_WND, "margin");
+// 			set_color(m_WND, "red");
+// 			disp_obj(ho_Rectangle, m_WND);
+// 			disp_obj(ho_Rectangle2, m_WND);
+// 		}
+// 		case 6:
+// 		case 7:
+// 		{
+// 			_checkparam.i_LeakingRadios = ui.tableWidget->item(6, c)->text().toInt();
+// 			_checkparam.i_LeakingThread = ui.tableWidget->item(7, c)->text().toInt();
+// 			gray_dilation_rect(ho_Image3, &ho_ImageMax2, _checkparam.i_LeakingRadios, _checkparam.i_LeakingRadios);
+// 			sub_image(ho_ImageMax2, ho_Image3, &ho_ImageSub2, 1, 0);
+// 			threshold(ho_ImageSub2, &ho_Regions, _checkparam.i_LeakingThread, 255);
+// 			closing_circle(ho_Regions, &ho_Regions, 1.5);
+// 			disp_obj(ho_Image, m_WND);
+// 			set_draw(m_WND, "margin");
+// 			set_color(m_WND, "red");
+// 			disp_obj(ho_Regions, m_WND);
+// 		}
 		}
 	}
 	catch (HException &e)

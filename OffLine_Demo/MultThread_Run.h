@@ -66,6 +66,7 @@ class MultDecodeThread_Run : public QObject
 signals:
 	void SAVESIGNAL(Mat, QString);
 	void OUTRESULTSUMMARY(QString, int, int);
+	void RESULTERRORCOUNT(int);
 private:
 	int m_iSelfIndex;
 	uint m_iResult;	//单次检测结果，最大不超过八个

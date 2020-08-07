@@ -83,7 +83,7 @@ void SetTriggerSoft(int i)
 	//将当前功能设置到设备中
 	m_objFeatureControlPtr->GetEnumFeature("TriggerMode")->SetValue("Off");
 	m_objFeatureControlPtr->GetEnumFeature("AcquisitionFrameRateMode")->SetValue("On");\
-	m_objFeatureControlPtr->GetFloatFeature("AcquisitionFrameRate")->SetValue(g_vectorCamera[i]->i_LineRateHZ);
+		m_objFeatureControlPtr->GetFloatFeature("AcquisitionFrameRate")->SetValue(g_vectorCamera[i]->i_LineRateHZ);
 #endif
 }
 
@@ -108,7 +108,7 @@ MultGetThread_Run::~MultGetThread_Run()
 {
 
 }
-int MultGetThread_Run::ThreadGetImage(int indexcam = 1,bool = false)//取图函数
+int MultGetThread_Run::ThreadGetImage(int indexcam = 1, bool = false)//取图函数
 {
 	if (indexcam != -1)
 	{
@@ -158,7 +158,7 @@ int MultDecodeThread_Run::ThreadDecodeImage(int indexcam = -1, bool b = false)
 {
 	if (!b)
 	{
-		_CheckClass->StartCheck(g_vectorCamera[m_iSelfIndex]->c_CameraSign, daily_logger);
+		_CheckClass->StartCheck(g_vectorCamera[m_iSelfIndex]->c_CameraSign, daily_logger,0,0);
 	}
 	return -1;
 }
@@ -166,32 +166,8 @@ int MultDecodeThread_Run::ThreadDecodeImage(int indexcam = -1, bool b = false)
 int MultDecodeThread_Run::ThreadDecodeImageMat(Mat img)
 {
 	QString str;
-	bool results = _CheckClass->Check(img,nullptr, str);
-	if (0 != i_SaveLoop)
-	{
-		QString pathsave;
-		if (results)
-		{
-			if (m_iSaveOKorNG == 0 || m_iSaveOKorNG == 1)
-			{
-				int isname = i_SaveLoop==-1? timecheck: timecheck % i_SaveLoop;
-				pathsave = okdir_str + QString::number(isname) + ".tif";
-			}
-		}
-		else
-		{
-			if (m_iSaveOKorNG == 0 || m_iSaveOKorNG == -1)
-			{
-				int isname = i_SaveLoop == -1 ? timecheck : timecheck % i_SaveLoop;
-				pathsave = ngdir_str + QString::number(isname) + ".tif";
-
-			}
-		}
-		if (pathsave.length()>0)
-		{
-			emit SAVESIGNAL(img, pathsave);
-		}
-	}
+	int results = _CheckClass->Check(img, nullptr, str);
+	emit RESULTERRORCOUNT(results);
 	emit OUTRESULTSUMMARY(str, index_pos, timecheck);
 	timecheck++;
 	return 0;
@@ -206,7 +182,7 @@ void MultDecodeThread_Run::SetMultIndex(int ind)
 	int pi = 0;
 	if (nullptr == _CheckClass)
 	{
-		return ;
+		return;
 	}
 	m_iSaveOKorNG = 1;
 	i_SaveLoop = -1;
@@ -232,7 +208,7 @@ void MultDecodeThread_Run::SetMultIndex(int ind)
 		bool res = dirs.mkpath(okdir_str);
 	}
 	dirs.setNameFilters(filter);
-	return ;
+	return;
 }
 
 
@@ -287,7 +263,7 @@ bool sortcamera(CAMERASTRUCT *a, CAMERASTRUCT *b)//排序方法
 void Dammy::DammyInit()//Dammy类唯一槽函数，执行所有初始化操作
 {
 	QDateTime current_time = QDateTime::currentDateTime();
-	QString StrCurrentTime = current_time.toString("hh:mm:ss:zzz");	
+	QString StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
 	InitFunction*Camera_Func = new InitFunction(this);//初始化相机
 	Camera_Func->StartModel = true;
 	Camera_Func->GetAllCamera();//包含ReadConfig(); read333
@@ -351,9 +327,9 @@ MultSummaryThread_Run::MultSummaryThread_Run(QObject * parent, int _camcount)
 	}
 	for (int i = 0; i < m_iResultAllList; i++)
 	{
-		for (int z=0;z<g_vectorCamera.size();z++)
+		for (int z = 0;z < g_vectorCamera.size();z++)
 		{
-			if (i ==g_vectorCamera[z]->i_RealLocatPos)
+			if (i == g_vectorCamera[z]->i_RealLocatPos)
 			{
 				b_eachalreadyfinish[i] = FALSE;
 				break;
@@ -368,11 +344,11 @@ MultSummaryThread_Run::~MultSummaryThread_Run()
 
 void MultSummaryThread_Run::ThreadSummary(QString str, int pos, int timeincircle)
 {
-// 	if (pos >= m_icamcount|| str =="")
-// 	{
-// 		return;
-// 	}
-	//第一个为赋值
+	// 	if (pos >= m_icamcount|| str =="")
+	// 	{
+	// 		return;
+	// 	}
+		//第一个为赋值
 	if (g_PhotoTimes == 1)
 	{
 		m_qslResultEachCamera[pos] = str.split(",");

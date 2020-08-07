@@ -146,7 +146,7 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 	IpAddress = 10.86.50.210	//PLC IP
 	port = 5000					//PLC端口
 	********************/
-	
+	connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
 
 }
 
@@ -255,7 +255,7 @@ bool OffLine_Demo::LoadImportantValue()
 	port = 5000					//PLC端口
 	********************/
 	QSettings configIniRead(AppPath + "\\ModelFile\\ProgramSet.ini", QSettings::IniFormat);//读取ini文件
-	g_PhotoTimes = 1;//第二个数是默认数值，如果不存在就用默认数值，下同
+	g_PhotoTimes = 3;//第二个数是默认数值，如果不存在就用默认数值，下同
 	MAX_CAPSULECOUNT = configIniRead.value("ProgramSetting/MAX_CAPSULECOUNT", 0).toInt();
 
 
@@ -403,13 +403,13 @@ bool OffLine_Demo::InitCheckClass()
 	int cou = g_vectorCamera.size();//配对的相机参数
 	for (int i = 0; i < cou; i++)
 	{
-		for (int z = 0;z< g_PhotoTimes;z++)
+		for (int z = 0;z< 1;z++)
 		{
 			QLabel *label = new QLabel();
 			label->setObjectName(QString::fromUtf8("LabelShow") + QString::number(i)+"_"+QString::number(z));
 			label->setFrameShape(QFrame::Box);
 			label->setLineWidth(1);
-			ui.gridLayout->addWidget(label, i, z, 1, 1);
+			ui.gridLayout->addWidget(label, z/2, z%2, 1, 1);
 		}
 	}
 
@@ -520,6 +520,7 @@ bool OffLine_Demo::InitPicList()
 		QTH_MultGetThread[i]->start();
 		flag = QObject::connect(this, SIGNAL(STARTCHECK(int, bool)), m_MultDecodeThread[i], SLOT(ThreadDecodeImage(int, bool)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultGetThread[i], SIGNAL(GETONEIMAGEMAT(Mat)), m_MultDecodeThread[i], SLOT(ThreadDecodeImageMat(Mat)), Qt::QueuedConnection);
+		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(RESULTERRORCOUNT(int)), this, SLOT(RESULTERRORCOUNTSLOT(int)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(SAVESIGNAL(Mat,QString)), m_MultSaveThread, SLOT(ThreadSave(Mat,QString)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(OUTRESULTSUMMARY(QString, int, int)), m_MultSummaryThread, SLOT(ThreadSummary(QString, int, int)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultSummaryThread, SIGNAL(SUMMARYRESULTINCIRCLE(QStringList)), this, SLOT(SlotShowResult(QStringList)), Qt::QueuedConnection);
@@ -638,7 +639,7 @@ void OffLine_Demo::onStartCheck(bool b)
 			}
 			QObject::connect(times_listImg, SIGNAL(timeout()), this, SLOT(ImgAutoDown()));
 
-			connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
+			//connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
 			times_listImg->start(100);
 		}
 		if (s>1)
@@ -649,8 +650,8 @@ void OffLine_Demo::onStartCheck(bool b)
 			}
 			QObject::connect(times_listImg, SIGNAL(timeout()), this, SLOT(ImgAutoDown()));
 
-			connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
-			times_listImg->start(1000);
+			//connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
+			times_listImg->start(100);
 		}
  		QThread::msleep(500);
  		current_time = QDateTime::currentDateTime();
@@ -816,13 +817,21 @@ void OffLine_Demo::SetEvertDlg()
 				g_CheckClass[i]->TESTSETSHOW(lb);
 			}
 		}
-		g_CheckClass[i]->StartCheck(g_vectorCamera[i]->c_CameraName, daily_logger);
+		g_CheckClass[i]->StartCheck(g_vectorCamera[i]->c_CameraName, daily_logger,0,0);
 	}
 	if (timerResize != nullptr)
 	{
 		timerResize->stop();
 		delete timerResize;
 		timerResize = nullptr;
+	}
+}
+
+void OffLine_Demo::RESULTERRORCOUNTSLOT(int i)
+{
+	if ((i==0&&ui.checkBox_OK->isChecked())||(i != 0 && ui.checkBox_NG->isChecked()))
+	{
+		onStopCheck();
 	}
 }
 
@@ -862,9 +871,11 @@ bool OffLine_Demo::containImages(QDir& dir)
 void OffLine_Demo::initImageLS(QString str)
 {
 	QDir dir(str);
+	ui.lw_ImageList->blockSignals(true);
 	ui.lw_ImageList->clear();
 	ui.lw_ImageList->addItem(".");
 	ui.lw_ImageList->addItem("..");
+	ui.lw_ImageList->setSortingEnabled(true);
 	foreach(QFileInfo mfi, dir.entryInfoList(QDir::Dirs | QDir::Files, QDir::Time))
 	{
 
@@ -880,6 +891,7 @@ void OffLine_Demo::initImageLS(QString str)
 		if (mfi.isFile() && isImage(mfi))
 			ui.lw_ImageList->addItem(mfi.fileName());
 	}
+	ui.lw_ImageList->blockSignals(false);
 }
 void OffLine_Demo::onStopCheck()
 {
@@ -890,7 +902,7 @@ void OffLine_Demo::onStopCheck()
 		delete times_listImg;
 		times_listImg = nullptr;
 	}
-	disconnect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
+	//disconnect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
 	ui.Button_Start->setText(QString::fromLocal8Bit("开始"));
 }
 

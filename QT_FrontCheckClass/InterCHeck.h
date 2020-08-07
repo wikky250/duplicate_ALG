@@ -57,6 +57,7 @@ private:
 
 	vector<HTuple> m_ShowLabel;
 	Hobject m_hoLiveImage;
+	Hobject ho_MotionImages;
 	int ComputerBestLabes(std::vector<float> data, double &dsts);
 	Hobject Mat2Hobject(Mat & image);
 	Mat Hobject2Mat(Hobject Hobj);
@@ -82,10 +83,10 @@ public:
 	virtual int InitWindow(int pos, HANDLE _LEDhandle, void* _auhandle);
 	//virtual int ReturnWindow(CWnd **hwnd, RECT &rect, CWnd **hwnd2, RECT &rect2);
 	virtual int GetCheckPosNo();
-	virtual void StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger);
+	virtual void StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger,int w ,int h);
 	virtual void StopCheck();
 	virtual QString GetResult();
-	virtual bool Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str);
+	virtual int Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str);
 	virtual void ShowResult(QVector<double*> &result);
 	virtual void BeatStart(void);
 	virtual void BeatEnd(void);
@@ -100,7 +101,7 @@ public:
 	virtual void SetCloseCallBack(CallbackClose callbackfun);
 	bool OtherBeforeCheck(Mat);
 	bool OtherAfterCheck();
-	bool RealCheck(QString&, CHECKPARAM *,int);
+	int RealCheck(QString&, CHECKPARAM *,int);
 public slots:
 	void EndCheck();
 	bool LoadCheckParam(CHECKPARAM *checkparam);

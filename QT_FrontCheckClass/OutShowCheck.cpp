@@ -54,9 +54,9 @@ int COutShowCheck::GetCheckPosNo()
 	return SecretBase->GetCheckPosNo();
 }
 
-void COutShowCheck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> daily_logger)
+void COutShowCheck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> daily_logger,int w,int h)
 {
-	SecretBase->StartCheck(camerasign, daily_logger);
+	SecretBase->StartCheck(camerasign, daily_logger, w ,h);
 }
 
 void COutShowCheck::StopCheck()
@@ -69,11 +69,11 @@ QString COutShowCheck::GetResult()
 	return SecretBase->GetResult();
 }
 
-bool COutShowCheck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
+int COutShowCheck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
 {
 	SecretBase->OtherAfterCheck();
 	SecretBase->Check(imgpackage, checkparam, str);
-	bool b = SecretBase->RealCheck(str, checkparam,-1);
+	int b = SecretBase->RealCheck(str, checkparam,-1);
 	SecretBase->OtherBeforeCheck(imgpackage);
 	return b;
 }
