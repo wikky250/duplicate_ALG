@@ -1,12 +1,11 @@
 #include "QtGuiSetting.h"
 #include "InterCHeck.h"
-
+#include <QtWidgets/QComboBox>
 typedef void*   UI_MONITOR;
 void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
 	((QtGuiSetting*)ui)->emit SignShowImage(pos, img, times);
 }
-
 QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	: QDialog(parent)
 {
@@ -28,7 +27,6 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 	ui.tableWidget->viewport()->installEventFilter(this);
 	ui.tableWidget->verticalHeader()->setDefaultSectionSize(35);//默认行高20
-
 	pp = parent;
 	ui.ShowLabel->setMouseTracking(true);
 	HTuple hv_WindowID;
@@ -55,10 +53,7 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	p_Parent = AlgPointer;
 	((CInterCHeck*)p_Parent)->StartCheck("", nullptr,m_MOriginal.cols,m_MOriginal.rows);
 	((CInterCHeck*)p_Parent)->SetShowCallBack(this, ShowCallBack);
-
-
 	QObject::connect(ui.tableWidget, SIGNAL(cellChanged(int, int)), this, SLOT(onCellChanged(int, int)));
-
 }
 void QtGuiSetting::mouseReleaseEvent(QMouseEvent *p)
 {
@@ -107,6 +102,12 @@ void QtGuiSetting::mousePressEvent(QMouseEvent *p)
 {
 	if (ui.ShowLabel->geometry().contains(this->mapFromGlobal(QCursor::pos())) && p->button() == Qt::LeftButton)
 	{
+		HTuple hv_Width, hv_Height;
+		Hobject ho_Image = Mat2Hobject(m_MOriginal);
+		get_image_size(ho_Image, &hv_Width, &hv_Height);
+		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
+		disp_obj(ho_Image, m_WND);
+		return;
 		QRect rec = ui.ShowLabel->geometry();
 		m_PointOriginal = p->pos();
 		m_PointOriginal.setX(m_PointOriginal.x() - rec.x() - ui.ShowLabel->frameWidth());
@@ -115,7 +116,6 @@ void QtGuiSetting::mousePressEvent(QMouseEvent *p)
 	}
 	return;
 }
-
 void QtGuiSetting::mouseMoveEvent(QMouseEvent *p)
 {
 	QPoint poi = QCursor::pos();
@@ -161,15 +161,11 @@ void QtGuiSetting::mouseMoveEvent(QMouseEvent *p)
 	}
 	else
 		setCursor(Qt::ArrowCursor);
-
 	return;
 }
 QtGuiSetting::~QtGuiSetting()
 {
 }
-
-
-
 void QtGuiSetting::SLOTShowImage(int pos, Mat img, int times)
 {
 	int zz = ui.ShowLabel->frameWidth();
@@ -189,7 +185,6 @@ void QtGuiSetting::SLOTShowImage(int pos, Mat img, int times)
 	QImage disImage = QImage((const unsigned char*)(imgsend.data), imgsend.cols, imgsend.rows, imgsend.step, QImage::Format_RGB888);
 	ui.ShowLabel->setPixmap(QPixmap::fromImage(disImage));
 }
-
 void QtGuiSetting::onContinueTest(bool b)
 {
 	if (b)
@@ -209,10 +204,8 @@ void QtGuiSetting::onContinueTest(bool b)
 			delete m_timerReadList;
 			m_timerReadList = nullptr;
 		}
-
 	}
 }
-
 void QtGuiSetting::onTimerReadList()
 {
 	if (ui.lw_ImageList->count() < 3)
@@ -239,9 +232,7 @@ void QtGuiSetting::onTimerReadList()
 		ui.lw_ImageList->setCurrentRow(index_list + 1);
 		onSelectImageList(ui.lw_ImageList->currentItem());
 	}
-
 }
-
 void QtGuiSetting::onSaveParam()
 {
 	if (m_bChanged)
@@ -254,7 +245,6 @@ void QtGuiSetting::onSaveParam()
 		}
 	}
 }
-
 Hobject QtGuiSetting::Mat2Hobject(Mat& image)
 {
 	Hobject Hobj = Hobject();
@@ -268,7 +258,6 @@ Hobject QtGuiSetting::Mat2Hobject(Mat& image)
 		Mat imgB = imgchannel[0];
 		Mat imgG = imgchannel[1];
 		Mat imgR = imgchannel[2];
-
 		if (dataR == NULL)
 		{
 			dataR = new uchar[hgt*wid];
@@ -288,7 +277,6 @@ Hobject QtGuiSetting::Mat2Hobject(Mat& image)
 			memcpy(dataB + wid * i, imgB.data + imgB.step*i, wid);
 		}
 		gen_image3(&Hobj, "byte", wid, hgt, (Hlong)dataR, (Hlong)dataG, (Hlong)dataB);
-
 	}
 	//	CV_8UCU1
 	else if (image.type() == CV_8UC1)
@@ -346,7 +334,89 @@ Mat QtGuiSetting::Hobject2Mat(Hobject Hobj)
 void QtGuiSetting::onAutoDetest()
 {
 }
-
+void QtGuiSetting::onSelectImageChannel(int channels)
+{
+	QComboBox* obj = qobject_cast<QComboBox*>(sender());//判断是哪个按钮触发了槽函数
+	// Local iconic variables 
+	Hobject  ho_Image1, ho_Image2, ho_Image3;
+	Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
+	Hobject  ho_ImageSub2, ho_EmptyRegion_Out, ho_EmptyRegion_OCR;
+	Hobject  ho_EmptyRegion_Top, ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP;
+	Hobject  ho_EmptyRegion_Intensity, ho_ImageMax2, ho_Regions;
+	Hobject  ho_Regions_Leak, ho_Region, ho_RegionOpening2, ho_RegionOpening;
+	Hobject  ho_ConnectedRegions2, ho_SelectedRegions1, ho_RegionOpening_CAPOOT;
+	Hobject  ho_ImageReduced, ho_ImageMax, ho_ImageSub, ho_Region1;
+	Hobject  ho_RegionClosing, ho_Regions_Convex, ho_Regionx;
+	Hobject  ho_Region_1st, ho_Regionsx, ho_Regions_2nd, ho_Region_OCR;
+	Hobject  ho_Rectangle, ho_RegionIntersection5, ho_ConnectedRegions;
+	Hobject  ho_SelectedRegions, ho_RegionOpening8, ho_RegionTrans2;
+	Hobject  ho_RegionIntersection, ho_RegionErosion, ho_RegionIntersection4;
+	Hobject  ho_Regions_LeakTOPError, ho_RegionErosion3, ho_RegionIntersection3;
+	Hobject  ho_RegionOpening5, ho_Rectangle2, ho_RegionIntersection7;
+	Hobject  ho_ConnectedRegions4, ho_SelectedRegions5, ho_RegionOpening9;
+	Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
+	Hobject  ho_RegionErosion1, ho_RegionIntersection2, ho_Regions_LeakTOPError2;
+	Hobject  ho_RegionErosion6, ho_RegionIntersection9, ho_RegionOpening10;
+	// Local control variables 
+	HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
+	HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
+	HTuple  hv_Indices, hv_C_s, hv_R_s, hv_R_sEnd, hv_Area9;
+	HTuple  hv_Row13, hv_Column13, hv_Row1, hv_Column1, hv_Row2;
+	HTuple  hv_Column2, hv_Height_CAP, hv_Row14, hv_Column14;
+	HTuple  hv_Row23, hv_Column23, hv_H1, hv_Row15, hv_Column15;
+	HTuple  hv_Row24, hv_Column24, hv_H2, hv_h, hv_Area8, hv_Row10;
+	HTuple  hv_Column10, hv_Row11, hv_Column11, hv_Row21, hv_Column21;
+	HTuple  hv_Mean, hv_Deviation, hv_Area5, hv_Row7, hv_Column7;
+	HTuple  hv_Row12, hv_Column12, hv_Row22, hv_Column22, hv_Mean2;
+	HTuple  hv_Deviation2, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
+	HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
+	HTuple  hv_Area, hv_Row, hv_Column, hv_Max1, hv_Max;
+	if (m_MOriginal.empty())
+	{
+		return;
+	}
+	Hobject ho_Image = Mat2Hobject(m_MOriginal);
+	decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
+	trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
+	get_image_size(ho_Image, &hv_Width, &hv_Height);
+	set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
+	if (obj->objectName() =="BandChannel")
+	{
+		_checkparam.i_BandChannel = channels;
+	}
+	if (obj->objectName() == "1stChannel")
+	{
+		_checkparam.i_1stChannel = channels;
+	}
+	if (obj->objectName() == "2ndChannel")
+	{
+		_checkparam.i_2ndChannel = channels;
+	}
+	switch (channels)
+	{
+	case 0:
+		disp_obj(ho_Image1, m_WND);
+		break;
+	case 1:
+		disp_obj(ho_Image2, m_WND);
+		break;
+	case 2:
+		disp_obj(ho_Image3, m_WND);
+		break;
+	case 3:
+		disp_obj(ho_ImageResult1, m_WND);
+		break;
+	case 4:
+		disp_obj(ho_ImageResult2, m_WND);
+		break;
+	case 5:
+		disp_obj(ho_ImageResult3, m_WND);
+		break;
+	default:
+		break;
+	}
+	m_bChanged = true;
+}
 void QtGuiSetting::SetParam(CHECKPARAM param)
 {
 	_checkparam = param;
@@ -355,26 +425,43 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 	ui.tableWidget->clearContents();
 	ui.tableWidget->setRowCount(0);
 	int rowindex = ui.tableWidget->rowCount();
+	QTableWidgetItem* item;
+	QStringList stlist;
+	QComboBox *box;
+	QSlider* hsd;
 	if (0 == rowindex)
 	{
+		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
-		QTableWidgetItem* item = new QTableWidgetItem();
-
-		item->setText(QString::fromLocal8Bit("边缘胶囊阈值"));
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("胶囊外轮廓通道"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		stlist.clear();
+		stlist << "R" << "G" << "B" << "H" << "S" << "V";
+		box = new QComboBox();
+		box->setObjectName("BandChannel");
+		box->addItems(stlist);
+		box->setCurrentIndex(_checkparam.i_BandChannel);
+		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
+		ui.tableWidget->setCellWidget(rowindex, 1, box);
+		rowindex = ui.tableWidget->rowCount();
+		item = new QTableWidgetItem();
+		ui.tableWidget->insertRow(rowindex);
+		item->setText(QString::fromLocal8Bit("胶囊外轮廓阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
 		item->setText(QString::number(_checkparam.i_BandThread));
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
-
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("边缘胶囊阈值"));
+		item->setText(QString::fromLocal8Bit("胶囊外轮廓阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
-		QSlider* hsd = new QSlider(Qt::Horizontal);
+		hsd = new QSlider(Qt::Horizontal);
 		hsd->setMinimum(0);
 		hsd->setMaximum(255);
 		hsd->setValue(_checkparam.i_BandThread);
@@ -406,30 +493,40 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		connect(hsd, &QSlider::valueChanged, [=]() {
 			ui.tableWidget->item(rowindex - 1, 1)->setText(QString::number(hsd->value()));
 		});//利用lambda表达式可用
-
-
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("中心胶囊阈值"));
+		item->setText(QString::fromLocal8Bit("1st轮廓通道"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		stlist.clear();
+		stlist << "R" << "G" << "B" << "H" << "S" << "V";
+		box = new QComboBox();
+		box->setObjectName("1stChannel");
+		box->addItems(stlist);
+		box->setCurrentIndex(_checkparam.i_1stChannel);
+		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
+		ui.tableWidget->setCellWidget(rowindex, 1, box);
+		rowindex = ui.tableWidget->rowCount();
+		item = new QTableWidgetItem();
+		ui.tableWidget->insertRow(rowindex);
+		item->setText(QString::fromLocal8Bit("1st轮廓阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_MiddleThread));
+		item->setText(QString::number(_checkparam.i_1stThread));
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
-
-
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("漏粉阈值"));
+		item->setText(QString::fromLocal8Bit("1st轮廓阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		hsd = new QSlider(Qt::Horizontal);
 		hsd->setMinimum(0);
 		hsd->setMaximum(255);
-		hsd->setValue(_checkparam.i_MiddleThread);
+		hsd->setValue(_checkparam.i_1stThread);
 		hsd->setStyleSheet("  \
      QSlider::add-page:Horizontal\
      {     \
@@ -458,55 +555,133 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		connect(hsd, &QSlider::valueChanged, [=]() {
 			ui.tableWidget->item(rowindex - 1, 1)->setText(QString::number(hsd->value()));
 		});//利用lambda表达式可用
-
+		ui.tableWidget->setCellWidget(rowindex, 1, hsd);
+		connect(hsd, &QSlider::valueChanged, [=]() {
+			ui.tableWidget->item(rowindex - 1, 1)->setText(QString::number(hsd->value()));
+		});//利用lambda表达式可用
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("上部轮廓下限"));
+		item->setText(QString::fromLocal8Bit("1st轮廓通道"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		stlist.clear();
+		stlist << "R" << "G" << "B" << "H" << "S" << "V";
+		box = new QComboBox();
+		box->setObjectName("2ndThread");
+		box->addItems(stlist);
+		box->setCurrentIndex(_checkparam.i_2ndChannel);
+		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
+		ui.tableWidget->setCellWidget(rowindex, 1, box);
+		rowindex = ui.tableWidget->rowCount();
+		item = new QTableWidgetItem();
+		ui.tableWidget->insertRow(rowindex);
+		item->setText(QString::fromLocal8Bit("1st轮廓阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_UPBoundary));
+		item->setText(QString::number(_checkparam.i_2ndThread));
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("下部轮廓上限"));
+		item->setText(QString::fromLocal8Bit("1st轮廓阈值"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		hsd = new QSlider(Qt::Horizontal);
+		hsd->setMinimum(0);
+		hsd->setMaximum(255);
+		hsd->setValue(_checkparam.i_2ndThread);
+		hsd->setStyleSheet("  \
+     QSlider::add-page:Horizontal\
+     {     \
+        background-color: rgb(87, 97, 106);\
+        height:4px;\
+     }\
+     QSlider::sub-page:Horizontal \
+    {\
+        background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(7,208,255, 255), stop:1 rgba(7,208,255, 255));\
+        height:4px;\
+     }\
+    QSlider::groove:Horizontal \
+    {\
+        background:transparent;\
+        height:6px;\
+    }\
+    QSlider::handle:Horizontal \
+    {\
+        height: 25px;\
+        width:35px;\
+        border-image: url(./ico/btn.png);\
+        margin: -15 0px; \
+    }\
+    ");
+		ui.tableWidget->setCellWidget(rowindex, 1, hsd);
+		connect(hsd, &QSlider::valueChanged, [=]() {
+			ui.tableWidget->item(rowindex - 1, 1)->setText(QString::number(hsd->value()));
+		});//利用lambda表达式可用
+		rowindex = ui.tableWidget->rowCount();
+		item = new QTableWidgetItem();
+		ui.tableWidget->insertRow(rowindex);
+		item->setText(QString::fromLocal8Bit("凹陷检测阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_UPBoundary));
+		item->setText(QString::number(_checkparam.i_ConvexThread));
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
-		
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("漏粉判定区域"));
+		item->setText(QString::fromLocal8Bit("凹陷检测阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
-		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_LeakingRadios));
-		item->setTextAlignment(Qt::AlignRight);
-		ui.tableWidget->setItem(rowindex, 1, item);
-
-		rowindex = ui.tableWidget->rowCount();
-		ui.tableWidget->insertRow(rowindex);
-		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("漏粉判定阈值"));
-		item->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowindex, 0, item);
-		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_LeakingThread));
-		item->setTextAlignment(Qt::AlignRight);
-		ui.tableWidget->setItem(rowindex, 1, item);
-		//////////////////////////////////////////////////////////////////////////
+		hsd = new QSlider(Qt::Horizontal);
+		hsd->setMinimum(0);
+		hsd->setMaximum(255);
+		hsd->setValue(_checkparam.i_ConvexThread);
+		hsd->setStyleSheet("  \
+     QSlider::add-page:Horizontal\
+     {     \
+        background-color: rgb(87, 97, 106);\
+        height:4px;\
+     }\
+     QSlider::sub-page:Horizontal \
+    {\
+        background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(7,208,255, 255), stop:1 rgba(7,208,255, 255));\
+        height:4px;\
+     }\
+    QSlider::groove:Horizontal \
+    {\
+        background:transparent;\
+        height:6px;\
+    }\
+    QSlider::handle:Horizontal \
+    {\
+        height: 25px;\
+        width:35px;\
+        border-image: url(./ico/btn.png);\
+        margin: -15 0px; \
+    }\
+    ");
+		ui.tableWidget->setCellWidget(rowindex, 1, hsd);
+		connect(hsd, &QSlider::valueChanged, [=]() {
+			ui.tableWidget->item(rowindex - 1, 1)->setText(QString::number(hsd->value()));
+		});//利用lambda表达式可用
 	}
-
+	rowindex = ui.tableWidget->rowCount();
+	item = new QTableWidgetItem();
+	ui.tableWidget->insertRow(rowindex);
+	item->setText(QString::fromLocal8Bit("凹陷检测半径"));
+	item->setTextAlignment(Qt::AlignCenter);
+	ui.tableWidget->setItem(rowindex, 0, item);
+	item = new QTableWidgetItem();
+	item->setText(QString::number(_checkparam.i_ConvexOpenCore));
+	item->setTextAlignment(Qt::AlignRight);
+	ui.tableWidget->setItem(rowindex, 1, item);
 	ui.tableWidget->blockSignals(false);
 }
-
 void QtGuiSetting::onCellChanged(int r, int c)
 {
 	try
@@ -514,7 +689,6 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		c = 1;//防止键盘table
 		QString texts = ui.tableWidget->item(r, c)->text();
 		Mat MatToShow(m_MOriginal);
-
 		// Local iconic variables 
 		Hobject  ho_Image1, ho_Image2, ho_Image3;
 		Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
@@ -535,8 +709,6 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
 		Hobject  ho_RegionErosion1, ho_RegionIntersection2, ho_Regions_LeakTOPError2;
 		Hobject  ho_RegionErosion6, ho_RegionIntersection9, ho_RegionOpening10;
-
-
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
 		HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
@@ -551,21 +723,24 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		HTuple  hv_Deviation2, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
 		HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
 		HTuple  hv_Area, hv_Row, hv_Column, hv_Max1, hv_Max;
+		Hobject ho_ImageChannel[6];
 		if (m_MOriginal.empty())
 		{
 			return;
 		}
 		Hobject ho_Image = Mat2Hobject(m_MOriginal);
-		decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
-		trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
+		decompose3(ho_Image, &ho_ImageChannel[0], &ho_ImageChannel[1], &ho_ImageChannel[2]);
+		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2],
+			&ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
 		get_image_size(ho_Image, &hv_Width, &hv_Height);
 		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
 		switch (r)
 		{
-		case 0:
+		case 1:
 		{
 			_checkparam.i_BandThread = texts.toInt();
-			threshold(ho_Image3, &ho_RegionOpening2, _checkparam.i_BandThread, 255);
+			int channels = ((QComboBox*)(ui.tableWidget->cellWidget(0, 1)))->currentIndex();
+			threshold(ho_ImageChannel[channels], &ho_RegionOpening2, _checkparam.i_BandThread, 255);
 			fill_up(ho_RegionOpening2, &ho_RegionOpening2);
 			closing_circle(ho_RegionOpening2, &ho_RegionOpening2, 3.5);
 			opening_circle(ho_RegionOpening2, &ho_RegionOpening, 30.5);
@@ -573,57 +748,38 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			select_shape(ho_ConnectedRegions2, &ho_SelectedRegions1, "area", "and", 10000,
 				99999);
 			union1(ho_SelectedRegions1, &ho_RegionOpening_CAPOOT);
-			disp_obj(ho_Image, m_WND);
+			disp_obj(ho_ImageChannel[channels], m_WND);
 			set_draw(m_WND, "fill");
 			set_color(m_WND, "red");
 			disp_obj(ho_RegionOpening_CAPOOT, m_WND);
 			break;
 		}
-// 		case 2:
-// 		{
-// 			_checkparam.i_MiddleThread = texts.toInt();
-// 			threshold(ho_ImageResult3, &ho_Region, _checkparam.i_MiddleThread, 255);
-// 			opening_circle(ho_Region, &ho_Region, 3.5);
-// 			disp_obj(ho_Image, m_WND);
-// 			set_draw(m_WND, "fill");
-// 			set_color(m_WND, "red");
-// 			disp_obj(ho_Region, m_WND);
-// 			break;
-// 		}
-// 		case 4:
-// 		case 5:
-// 		{
-// 
-// 			_checkparam.i_UPBoundary = ui.tableWidget->item(4, c)->text().toInt();
-// 			_checkparam.i_DOWNBoundary = ui.tableWidget->item(5, c)->text().toInt();
-// 			get_image_pointer1(ho_Image, _, _, &hv_Width, &hv_Height);
-// 			hv_R_s = 0;
-// 			HTuple hv_R_sEnd  = _checkparam.i_UPBoundary;
-// 			hv_C_s = 0;
-// 			gen_rectangle1(&ho_Rectangle, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
-// 			hv_R_s = hv_Height - _checkparam.i_DOWNBoundary;
-// 			hv_R_sEnd = hv_Height;
-// 			gen_rectangle1(&ho_Rectangle2, hv_R_s, hv_C_s, hv_R_sEnd, hv_Width);
-// 			disp_obj(ho_Image, m_WND);
-// 			set_draw(m_WND, "margin");
-// 			set_color(m_WND, "red");
-// 			disp_obj(ho_Rectangle, m_WND);
-// 			disp_obj(ho_Rectangle2, m_WND);
-// 		}
-// 		case 6:
-// 		case 7:
-// 		{
-// 			_checkparam.i_LeakingRadios = ui.tableWidget->item(6, c)->text().toInt();
-// 			_checkparam.i_LeakingThread = ui.tableWidget->item(7, c)->text().toInt();
-// 			gray_dilation_rect(ho_Image3, &ho_ImageMax2, _checkparam.i_LeakingRadios, _checkparam.i_LeakingRadios);
-// 			sub_image(ho_ImageMax2, ho_Image3, &ho_ImageSub2, 1, 0);
-// 			threshold(ho_ImageSub2, &ho_Regions, _checkparam.i_LeakingThread, 255);
-// 			closing_circle(ho_Regions, &ho_Regions, 1.5);
-// 			disp_obj(ho_Image, m_WND);
-// 			set_draw(m_WND, "margin");
-// 			set_color(m_WND, "red");
-// 			disp_obj(ho_Regions, m_WND);
-// 		}
+		case 4:
+		{
+			//双色第一部分
+			_checkparam.i_1stThread = texts.toInt();
+			int channels = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
+			threshold(ho_ImageChannel[channels], &ho_Regionx, _checkparam.i_1stThread,255);
+			opening_circle(ho_Regionx, &ho_Region_1st, 1.5);
+			disp_obj(ho_ImageChannel[channels], m_WND);
+			set_draw(m_WND, "fill");
+			set_color(m_WND, "red");
+			disp_obj(ho_Region_1st, m_WND);
+			break;
+		}
+		case 7:
+		{
+			//双色第一部分
+			_checkparam.i_2ndThread = texts.toInt();
+			int channels = ((QComboBox*)(ui.tableWidget->cellWidget(6, 1)))->currentIndex();
+			threshold(ho_ImageChannel[channels], &ho_Regionsx, _checkparam.i_2ndThread, 255);
+			opening_circle(ho_Regionsx, &ho_Regions_2nd, 1.5);
+			disp_obj(ho_ImageChannel[channels], m_WND);
+			set_draw(m_WND, "fill");
+			set_color(m_WND, "red");
+			disp_obj(ho_Regions_2nd, m_WND);
+			break;
+		}
 		}
 	}
 	catch (HException &e)
@@ -643,33 +799,27 @@ void QtGuiSetting::SetModelMat(Mat tempgray)
 		return;
 	}
 }
-
 bool QtGuiSetting::isImage(QFileInfo& info)
 {
 	QString filename = info.fileName();
 	if (filename == "." || filename == "..")
 		return false;
-
 	if (filename.contains("def") || filename.contains(".csv"))
 		return false;
-
 	return filename.contains(".bmp") || filename.contains(".BMP") ||
 		filename.contains(".jpg") || filename.contains(".JPG") ||
 		filename.contains(".jpeg") || filename.contains(".JPEG") ||
 		filename.contains(".png") || filename.contains(".PNG") ||
 		filename.contains(".tif") || filename.contains(".TIF");
 }
-
 bool QtGuiSetting::containImages(QDir& dir)
 {
 	foreach(QFileInfo entry, dir.entryInfoList(QDir::Dirs | QDir::Files)) {
 		QString filename = entry.fileName();
 		if (filename == "." || filename == "..")
 			continue;
-
 		if (entry.isDir() && containImages(QDir(entry.absoluteFilePath())))
 			return true;
-
 		if (entry.isFile() && isImage(entry))
 			return true;
 	}
@@ -683,25 +833,20 @@ void QtGuiSetting::initImageLS(QString str)
 	ui.lw_ImageList->addItem("..");
 	foreach(QFileInfo mfi, dir.entryInfoList(QDir::Dirs | QDir::Files, QDir::Time))
 	{
-
 		if (mfi.fileName() == "." || mfi.fileName() == "..")
 			continue;
-
 		if (mfi.isDir()) {
 			if (containImages(QDir(mfi.absoluteFilePath())))
 				ui.lw_ImageList->addItem(mfi.fileName());
 			continue;
 		}
-
 		if (mfi.isFile() && isImage(mfi))
 			ui.lw_ImageList->addItem(mfi.fileName());
 	}
 }
-
 void QtGuiSetting::closeEvent(QCloseEvent *)
 {
 	close_window(HTuple(m_WND));
-
 	if (m_bChanged)
 	{
 		if (QMessageBox::Save == QMessageBox::question(this, QString::fromLocal8Bit("参数已修改"), QString::fromLocal8Bit("是否保存？"), QMessageBox::Save, QMessageBox::No))
@@ -712,7 +857,6 @@ void QtGuiSetting::closeEvent(QCloseEvent *)
 		ui.pB_Save->setEnabled(false);
 	}
 }
-
 void QtGuiSetting::onBtnGetImage()
 {
 	return;
@@ -725,7 +869,6 @@ void QtGuiSetting::onBtnGetSample()
 {
 	return;
 }
-
 void QtGuiSetting::onShowImage(Mat* tempgray)
 {
 	try
@@ -746,19 +889,14 @@ void QtGuiSetting::onShowImage(Mat* tempgray)
 	}
 	return;
 }
-
 void QtGuiSetting::onShowFps(int i)
 {
 }
-
 extern bool compColx(const Rect &a, const Rect &b);
-
 extern bool compColy(const Rect &a, const Rect &b);
-
 void QtGuiSetting::onSelectTrainFile()
 {
 }
-
 void QtGuiSetting::onClickedImage(QListWidgetItem *item)
 {
 	if (nullptr == clickedtimer)
@@ -835,8 +973,6 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
 		initImageLS(m_sImageListPath);
 		return;
 	}
-
-
 	QString pathselect;
 	pathselect = m_sImageListPath + "/" + sSelectItem;
 	m_currentImagePath = pathselect;
@@ -859,7 +995,6 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
 		}
 	}
 }
-
 int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str)//全是中文
 {
 	if (QString::fromLocal8Bit(button2Str) == "")
@@ -877,6 +1012,4 @@ int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const
 		msg.setWindowIcon(QIcon("./dr.ico"));
 		return msg.exec();
 	}
-
-
 }

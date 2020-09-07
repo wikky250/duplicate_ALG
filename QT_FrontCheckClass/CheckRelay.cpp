@@ -1,6 +1,5 @@
 #pragma once
 #include "CheckRelay.h"
-
 #ifdef WIN32
 int gettimeofday(struct timeval *tp, void *tzp)
 {
@@ -21,7 +20,6 @@ int gettimeofday(struct timeval *tp, void *tzp)
 	return (0);
 }
 #endif
-
 bool sortResult(ListStruct a, ListStruct b)
 {
 	int x = a.iminx;

@@ -1,7 +1,5 @@
 #pragma once
-
 #pragma region MyRegion
-
 #include "opencv.hpp"
 #include "highgui.hpp"
 #include <memory.h>

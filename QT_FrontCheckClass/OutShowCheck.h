@@ -31,13 +31,11 @@ public:
 	virtual void* GetEncryptHandle();
 	virtual void EnableShow(bool);
 	virtual void TESTSETSHOW(void*);
-
 	typedef void(*CallbackText)(UI_MONITOR ui, char* i_result);
 	virtual void SetResultCallBack(UI_MONITOR ui, CallbackText callbackfun);
 	typedef void(*CallbackImage)(UI_MONITOR ui, int pos, Mat img, int times);
 	virtual void SetShowCallBack(UI_MONITOR ui,CallbackImage callbackfun);
 	typedef void(*CallbackClose)();
 	virtual void SetCloseCallBack(CallbackClose callbackfun);
-
 };
 

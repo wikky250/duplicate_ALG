@@ -1,5 +1,4 @@
 #pragma once
-
 //#define TESTINCOMPUTER
 #include <QVector>
 #include <QSettings>
@@ -8,24 +7,15 @@
 #include <QThread>
 #include <QMessageBox>
 #include <QGraphicsScene>
-
-
-
 typedef void*   UI_MONITOR;
 #include "OpencvRelay.h"
-
-
 #include "QT_FrontCheckClass_global.h"
-
-
 #define WM_USER_CLOSE			WM_USER+10009	//¹Ø±Õ
-
 #ifdef MATUREAPPROACH_EXPORTS
 #define MATUREAPPROACH_API  __declspec(dllexport)
 #else
 #define MATUREAPPROACH_API __declspec(dllimport)
 #endif
-
 struct CHECKPARAM
 {
 	int i_TypeOfCamera;
@@ -33,23 +23,22 @@ struct CHECKPARAM
 	int i_CheckPosNo;
 	char c_OperateCore[20];
 	//////////////////////////////////////////////////////////////////////////
+	int i_BandChannel = -1;
 	int i_BandThread = -1;
-	int i_MiddleThread = -1;
-	int i_UPBoundary = -1;
-	int i_DOWNBoundary = -1;
-	int i_LeakingRadios = -1;
-	int i_LeakingThread = -1;
-
+	int i_ConvexThread = -1;
+	double i_ConvexOpenCore = -1.0;
+	int i_1stChannel = -1;
+	int i_1stThread = -1;
+	int i_2ndChannel = -1;
+	int i_2ndThread = -1;
 	//////////////////////////////////////////////////////////////////////////
 	CHECKPARAM()
 	{
 	}
 	~CHECKPARAM()
 	{
-
 	}
 };
-
 struct IMAGEPACKAGE
 {
 	int i_timeCheck;
@@ -64,7 +53,6 @@ struct IMAGEPACKAGE
 	int rows;
 	int columns;
 	double d_dx;
-
 	IMAGEPACKAGE(IMAGEPACKAGE* img)
 	{
 		st = img->st;
@@ -120,7 +108,6 @@ struct pDataLength
 	{
 	}
 };
-
 class CBaseCheckAlg:public QObject
 {
 	Q_OBJECT
@@ -157,11 +144,5 @@ public:
 	typedef void(*CallbackClose)();
 	virtual void SetCloseCallBack(CallbackClose callbackfun) = 0;
 };
-
-
-
-
-
-
 extern "C" QT_FrontCheckClass_EXPORT CBaseCheckAlg* APIENTRY CreateExportObj(bool b_init);
 extern "C" QT_FrontCheckClass_EXPORT void APIENTRY DestroyExportObj(CBaseCheckAlg* pExport);

@@ -1,7 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by QT_FRONTCheckClass.rc
-
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

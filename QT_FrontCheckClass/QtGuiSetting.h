@@ -27,13 +27,7 @@ private:
 	int m_WND =-1;
 public:
 	QtGuiSetting(QWidget *parent = Q_NULLPTR,void* AlgPointer = nullptr);
-	void mousePressEvent(QMouseEvent * p);
-	void mouseReleaseEvent(QMouseEvent * p);
-	void mouseMoveEvent(QMouseEvent * p);
-	bool eventFilter(QObject *watched, QEvent *event);
-	void resizeEvent(QResizeEvent *event);
 	int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str);//全是中文
-
 	~QtGuiSetting();
 	//////////////////////////////////////////////////////////////////////////
 		//算法相关
@@ -56,7 +50,6 @@ private:
 	QString m_strTrainFile;
 	//鼠标左键坐标
 	bool m_bButton;
-
 	QPoint m_LabelOriginal;
 	QPoint m_PointOriginal;
 	QPoint m_PointFinale;
@@ -84,14 +77,17 @@ private:
 	void initImageLS(QString str);
 public slots:
 	void closeEvent(QCloseEvent *);
+	void mousePressEvent(QMouseEvent *);
+	void mouseReleaseEvent(QMouseEvent * p);
+	void mouseMoveEvent(QMouseEvent * p);
+	bool eventFilter(QObject *watched, QEvent *event);
+	void resizeEvent(QResizeEvent *event);
 	void onBtnGetImage();
 	void onBtnGetSample();
 	void onShowImage(Mat *img);
 	void onShowFps(int i);
 	void onCellChanged(int, int);
 	void onSelectTrainFile();
-
-
 	void onClickedImage(QListWidgetItem *);
 	void onSingleClicked();
 	void onSelectImageList(QListWidgetItem *);
@@ -99,9 +95,9 @@ public slots:
 	//
 	void onContinueTest(bool);
 	void onTimerReadList();
-
 	//
 	void onSaveParam();
 	//自动测量值
 	void onAutoDetest();
+	void onSelectImageChannel(int);
 };

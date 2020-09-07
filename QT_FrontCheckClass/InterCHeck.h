@@ -3,12 +3,10 @@
 #include "CheckRelay.h"
 #include "QtGuiSetting.h"
 //#include "InspectProcessor.h"
-
 class CInterCHeck :public QObject,
 	public CBaseCheckAlg
 {
 	Q_OBJECT
-
 signals:
 	void StartUSBKEY(void* handle);
 private:
@@ -33,7 +31,6 @@ private:
 	bool m_bchangedparam;
 	//日志logger
 	std::shared_ptr<spd::logger> daily_logger;
-
 	uchar* dataR = NULL;
 	uchar* dataG = NULL;
 	uchar* dataB = NULL;
@@ -47,14 +44,11 @@ private:
 	int total_check;
 	int total_NGSave;
 	int total_OKSave;
-
 	Mat MatToShow, LastImage;
 	Mat grey, temp;
-
 	//H9::InspectProcessor proc;
 	Mat m_SaveImg;
 	vector<vector<float>> m_CenterModel;
-
 	vector<HTuple> m_ShowLabel;
 	Hobject m_hoLiveImage;
 	Hobject ho_MotionImages;
@@ -62,9 +56,6 @@ private:
 	Hobject Mat2Hobject(Mat & image);
 	Mat Hobject2Mat(Hobject Hobj);
 #pragma endregion 算法相关参数
-
-
-
 public:
 	CInterCHeck(bool b_test);
 	~CInterCHeck();

@@ -2,10 +2,6 @@
 #include <QMessageBox>
 //#include "image.h"
 QString AppPath;
-
-
-
-
 bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 {
 	QSettings configIniRead(AppPath + "\\DefaultModel\\CheckParam.ini", QSettings::IniFormat);
@@ -14,15 +10,16 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	//读取检测参数配置
 	//////////////////////////////////////////////////////////////////////////
 	checkparam->i_BandThread = configIniRead.value("/" + cameraname + "/BandThread", "100").toInt();
-	checkparam->i_MiddleThread = configIniRead.value("/" + cameraname + "/MiddleThread", "90").toInt();
-	checkparam->i_UPBoundary = configIniRead.value("/" + cameraname + "/UPBoundary", "150").toInt();
-	checkparam->i_DOWNBoundary = configIniRead.value("/" + cameraname + "/DOWNBoundary", "150").toInt();
-	checkparam->i_LeakingRadios = configIniRead.value("/" + cameraname + "/LeakingRadios", "5").toInt();
-	checkparam->i_LeakingThread = configIniRead.value("/" + cameraname + "/LeakingThread", "70").toInt();
+	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "2").toInt();
+	checkparam->i_ConvexThread = configIniRead.value("/" + cameraname + "/ConvexThread", "25").toInt();
+	checkparam->i_ConvexOpenCore = configIniRead.value("/" + cameraname + "/ConvexOpenCore", "15").toInt() / 10.0;
+	checkparam->i_1stChannel = configIniRead.value("/" + cameraname + "/1stChannel", "1").toInt();
+	checkparam->i_1stThread = configIniRead.value("/" + cameraname + "/1stThread", "80").toInt();
+	checkparam->i_2ndChannel = configIniRead.value("/" + cameraname + "/2ndChannel", "3").toInt();
+	checkparam->i_2ndThread = configIniRead.value("/" + cameraname + "/2ndThread", "120").toInt();
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
-
 bool CInterCHeck::SaveCheckParam(CHECKPARAM * checkparam)
 {
 	m_bchangedparam = true;
@@ -34,11 +31,11 @@ bool CInterCHeck::SaveCheckParam(CHECKPARAM * checkparam)
 	//写入检测参数配置
 	//////////////////////////////////////////////////////////////////////////
 	configIniRead.setValue("/" + cameraname + "/BandThread", checkparam->i_BandThread);
-	configIniRead.setValue("/" + cameraname + "/MiddleThread", checkparam->i_MiddleThread);
-	configIniRead.setValue("/" + cameraname + "/UPBoundary", checkparam->i_UPBoundary);
-	configIniRead.setValue("/" + cameraname + "/DOWNBoundary", checkparam->i_DOWNBoundary);
-	configIniRead.setValue("/" + cameraname + "/LeakingRadios", checkparam->i_LeakingRadios);
-	configIniRead.setValue("/" + cameraname + "/LeakingThread", checkparam->i_LeakingThread);
+	configIniRead.setValue("/" + cameraname + "/BandChannel", checkparam->i_BandChannel);
+	configIniRead.setValue("/" + cameraname + "/1stChannel", checkparam->i_1stChannel);
+	configIniRead.setValue("/" + cameraname + "/1stThread", checkparam->i_1stThread);
+	configIniRead.setValue("/" + cameraname + "/2ndChannel", checkparam->i_2ndChannel);
+	configIniRead.setValue("/" + cameraname + "/2ndThread", checkparam->i_2ndThread);
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -65,8 +62,6 @@ CInterCHeck::CInterCHeck(bool b_test)
 	{
 	}
 }
-
-
 CInterCHeck::~CInterCHeck()
 {
 	delete[]dataR;
@@ -86,17 +81,14 @@ void CInterCHeck::Release()
 {
 	delete this;
 }
-
 char * CInterCHeck::GetCameraName(void)
 {
 	return m_checkparam.c_CameraName;
 }
-
 char * CInterCHeck::GetAlgName(void)
 {
 	return c_AlgName;
 }
-
 int CInterCHeck::ShowParamDlg(QWidget * parent, bool b_showornot)
 {
 	QtGuiSetting *setdlg = new QtGuiSetting(nullptr, this);
@@ -113,7 +105,6 @@ int CInterCHeck::ShowParamDlg(QWidget * parent, bool b_showornot)
 	}
 	return -1;
 }
-
 int CInterCHeck::SetParam(int _typeofcamera, char * _cameraName)
 {
 	m_checkparam.i_TypeOfCamera = _typeofcamera;
@@ -121,12 +112,10 @@ int CInterCHeck::SetParam(int _typeofcamera, char * _cameraName)
 	LoadCheckParam(&m_checkparam);
 	return 0;
 }
-
 int CInterCHeck::ReturnParam(int * _typeofcamera, char & _cameraName)
 {
 	return 0;
 }
-
 int CInterCHeck::InitWindow(int pos, HANDLE _LEDhandle, void* _auhandle)
 {
 	if (_LEDhandle != NULL)
@@ -156,13 +145,11 @@ int CInterCHeck::InitWindow(int pos, HANDLE _LEDhandle, void* _auhandle)
 	m_iShowPos = pos;
 	return 0;
 }
-
 int CInterCHeck::GetCheckPosNo()
 {
 	return 0;
 }
-
-void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger, int w ,int h)
+void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger, int w, int h)
 {
 	if (_daily_logger != nullptr)
 	{
@@ -173,9 +160,8 @@ void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _d
 	optin.insert(pair<string, string>("conf", (AppPath + "/DefaultModel/conf_inspect.yaml").toLocal8Bit()));
 	optin.insert(pair<string, string>("parameter", (AppPath + "/DefaultModel/params.yaml").toLocal8Bit()));
 	optin.insert(pair<string, string>("detectors", (AppPath + "/DefaultModel/detectors.yaml").toLocal8Bit()));
-
 	circle_times = m_ShowLabel.size();
-	if (dataR == NULL&&w!=0 && h != 0)
+	if (dataR == NULL && w != 0 && h != 0)
 	{
 		dataR = new uchar[w*h];
 	}
@@ -190,11 +176,9 @@ void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _d
 	//int ret = pillCheck_init(0);
 	//proc.Initialize(optin);
 }
-
 void CInterCHeck::StopCheck()
 {
 }
-
 QString CInterCHeck::GetResult()
 {
 	return QString();
@@ -212,18 +196,13 @@ inline T norm_L2_Sqr(const T* a, const T* b, int n)
 int CInterCHeck::ComputerBestLabes(std::vector<float> data, double &dsts)
 {
 	int k_best = -1;
-
 	const int K = m_CenterModel.size();
 	const int dims = m_CenterModel[0].size();
-
 	const std::vector<float> sample = data;
-
 	double min_dist = std::numeric_limits<double>::max(); // DBL_MAX
-
 	for (int k = 0; k < K; ++k) {
 		const std::vector<float> center = m_CenterModel[k];
 		const double dist = norm_L2_Sqr(sample.data(), center.data(), dims);
-
 		if (min_dist > dist) {
 			min_dist = dist;
 			k_best = k;
@@ -236,7 +215,6 @@ bool compColx(const Rect &a, const Rect &b)
 {
 	return a.x < b.x;
 }
-
 bool compColy(const Rect &a, const Rect &b)
 {
 	return a.y < b.y;
@@ -273,7 +251,6 @@ Hobject CInterCHeck::Mat2Hobject(Mat& image)
 			memcpy(dataB + wid * i, imgB.data + imgB.step*i, wid);
 		}
 		gen_image3(&Hobj, "byte", wid, hgt, (Hlong)dataR, (Hlong)dataG, (Hlong)dataB);
-
 	}
 	//	CV_8UCU1
 	else if (image.type() == CV_8UC1)
@@ -337,10 +314,8 @@ int CInterCHeck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
 		{
 			m_checkparam = *checkparam;
 		}
-
 		QString strwarning;
 		m_hoLiveImage = Mat2Hobject(imgpackage);
-
 	}
 	catch (cv::Exception& e)
 	{
@@ -356,28 +331,22 @@ int CInterCHeck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
 	}
 	return -1;
 }
-
 void CInterCHeck::ShowResult(QVector<double*>& result)
 {
 }
-
 void CInterCHeck::BeatStart(void)
 {
 }
-
 void CInterCHeck::BeatEnd(void)
 {
 }
-
 void * CInterCHeck::GetEncryptHandle()
 {
 	return nullptr;
 }
-
 void CInterCHeck::EnableShow(bool b)
 {
 }
-
 void CInterCHeck::TESTSETSHOW(void *showlabel)
 {
 	HTuple hv_WindowID;
@@ -385,25 +354,21 @@ void CInterCHeck::TESTSETSHOW(void *showlabel)
 	//set_check("father");
 	m_ShowLabel.push_back(hv_WindowID);
 }
-
 void CInterCHeck::SetResultCallBack(UI_MONITOR uis, CallbackText callbackfun)
 {
 	if (ui == nullptr)
 		ui = uis;
 	textCallback = callbackfun;
 }
-
 void CInterCHeck::SetShowCallBack(UI_MONITOR uis, CallbackImage callbackfun)
 {
 	ui = uis;
 	imageCallBack = callbackfun;
 }
-
 void CInterCHeck::SetCloseCallBack(CallbackClose callbackfun)
 {
 	CloseCallBack = callbackfun;
 }
-
 bool CInterCHeck::OtherBeforeCheck(Mat imgpackage)
 {
 	if (CloseCallBack == nullptr)
@@ -414,16 +379,15 @@ bool CInterCHeck::OtherBeforeCheck(Mat imgpackage)
 	imgpackage.copyTo(LastImage);
 	total_check++;
 }
-
 bool CInterCHeck::OtherAfterCheck()
 {
 	//imageCallBack(ui, m_iShowPos, MatToShow, total_check);
 	return true;
 }
-
 int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1)
 {
-	int i_error = 0,i_null = 0;
+	int i_error = 0, i_null = 0;
+	//return -1;
 	try
 	{
 		// Local iconic variables 
@@ -438,12 +402,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		// 			result = qslre.join(",");
 		// 			return -1;
 		// 		}
-
-
 		qslre << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR";
 		result = qslre.join(",");
-
 		// Local iconic variables 
+		Hobject ho_ImageChannel[6];
 		Hobject  ho_Image1, ho_Image2, ho_Image3;
 		Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
 		Hobject  ho_ImageSub2, ho_EmptyRegion_Out, ho_EmptyRegion_OCR;
@@ -463,8 +425,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
 		Hobject  ho_RegionErosion1, ho_RegionIntersection2, ho_Regions_LeakTOPError2;
 		Hobject  ho_RegionErosion6, ho_RegionIntersection9, ho_RegionOpening10;
-
-
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
 		HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
@@ -474,35 +434,38 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		HTuple  hv_Column12, hv_Row22, hv_Column22, hv_Area6, hv_Row6;
 		HTuple  hv_Column6, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
 		HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
-		HTuple  hv_Area, hv_Row, hv_Column, hv_Area8;
-
-
+		HTuple  hv_Area, hv_Row, hv_Column, hv_Area8, hv_Min, hv_Max, hv_Range;
 		HTuple hv_BandThread, hv_MiddleThread, hv_UPBoundary, hv_DOWNBoundary;
 		HTuple hv_LeakingThread, hv_LeakingRadios;
+		int _iBandChannel, _i1stChannel, _i1stThread, _i2ndChannnel, _i2ndThread;
+		int	_iConvexThread;
+		double _iConvexOpenCore;
 		if (nullptr != checkparam)
 		{
 			hv_BandThread = checkparam->i_BandThread;
-			hv_MiddleThread = checkparam->i_MiddleThread;
-			hv_UPBoundary = checkparam->i_UPBoundary;
-			hv_DOWNBoundary = checkparam->i_DOWNBoundary;
-			hv_LeakingRadios = checkparam->i_LeakingRadios;
-			hv_LeakingThread = checkparam->i_LeakingThread;
+			_iBandChannel = checkparam->i_BandChannel;
+			_iConvexThread = checkparam->i_ConvexThread;
+			_iConvexOpenCore = checkparam->i_ConvexOpenCore;
+			_i1stChannel = checkparam->i_1stChannel;
+			_i1stThread = checkparam->i_1stThread;
+			_i2ndChannnel = checkparam->i_2ndChannel;
+			_i2ndThread = checkparam->i_2ndThread;
 		}
 		else
 		{
 			hv_BandThread = m_checkparam.i_BandThread;
-			hv_MiddleThread = m_checkparam.i_MiddleThread;
-			hv_UPBoundary = m_checkparam.i_UPBoundary;
-			hv_DOWNBoundary = m_checkparam.i_DOWNBoundary;
-			hv_LeakingThread = m_checkparam.i_LeakingThread;
-			hv_LeakingRadios = m_checkparam.i_LeakingRadios;
+			_iBandChannel = m_checkparam.i_BandChannel;
+			_iConvexThread = m_checkparam.i_ConvexThread;
+			_iConvexOpenCore = m_checkparam.i_ConvexOpenCore;
+			_i1stChannel = m_checkparam.i_1stChannel;
+			_i1stThread = m_checkparam.i_1stThread;
+			_i2ndChannnel = m_checkparam.i_2ndChannel;
+			_i2ndThread = m_checkparam.i_2ndThread;
 		}
 		get_image_pointer1(m_hoLiveImage, &hv_Pointer, &hv_Type, &hv_Width, &hv_Height);
-		decompose3(m_hoLiveImage, &ho_Image1, &ho_Image2, &ho_Image3);
-		trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2,
-			&ho_ImageResult3, "hsv");
-
-
+		decompose3(m_hoLiveImage, &ho_ImageChannel[0], &ho_ImageChannel[1], &ho_ImageChannel[2]);
+		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2],
+			&ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
 		if (total_check < circle_times)
 		{
 			set_part(m_ShowLabel[total_check%circle_times], 0, 0, hv_Height - 1, hv_Width - 1);
@@ -515,19 +478,13 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		gen_empty_region(&ho_EmptyRegion_Intensity);
 		hv_Tuple_Error = HTuple();
 		//Image Acquisition 01: Do something
-		gray_dilation_rect(ho_Image3, &ho_ImageMax2, 5, 5);
-		sub_image(ho_ImageMax2, ho_Image3, &ho_ImageSub2, 1, 0);
+		gray_dilation_rect(ho_ImageChannel[2], &ho_ImageMax2, 5, 5);
+		sub_image(ho_ImageMax2, ho_ImageChannel[2], &ho_ImageSub2, 1, 0);
 		threshold(ho_ImageSub2, &ho_Regions, 70, 255);
 		closing_circle(ho_Regions, &ho_Regions_Leak, 1.5);
-
-
-
-
-
-		threshold(ho_Image3, &ho_Region, 100, 255);
+		threshold(ho_ImageChannel[2], &ho_Region, 100, 255);
 		opening_circle(ho_Region, &ho_Region, 3.5);
-
-		threshold(ho_Image3, &ho_RegionOpening2, hv_BandThread, 255);
+		threshold(ho_ImageChannel[_iBandChannel], &ho_RegionOpening2, hv_BandThread, 255);
 		fill_up(ho_RegionOpening2, &ho_RegionOpening2);
 		closing_circle(ho_RegionOpening2, &ho_RegionOpening2, 3.5);
 		opening_circle(ho_RegionOpening2, &ho_RegionOpening, 30.5);
@@ -535,24 +492,20 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		select_shape(ho_ConnectedRegions2, &ho_SelectedRegions1, "area", "and", 10000,
 			99999);
 		union1(ho_SelectedRegions1, &ho_RegionOpening_CAPOOT);
-		reduce_domain(ho_Image3, ho_RegionOpening_CAPOOT, &ho_ImageReduced);
+		reduce_domain(ho_ImageChannel[2], ho_RegionOpening_CAPOOT, &ho_ImageReduced);
 		gray_dilation_rect(ho_ImageReduced, &ho_ImageMax, 5, 5);
 		sub_image(ho_ImageMax, ho_ImageReduced, &ho_ImageSub, 1, 0);
-		threshold(ho_ImageSub, &ho_Region1, 25, 255);
+		threshold(ho_ImageSub, &ho_Region1, _iConvexThread, 255);
 		closing_circle(ho_Region1, &ho_RegionClosing, 1.5);
-		opening_circle(ho_RegionClosing, &ho_Regions_Convex, 1.5);
-
+		opening_circle(ho_RegionClosing, &ho_Regions_Convex, _iConvexOpenCore);
 		//双色第一部分
-		threshold(ho_ImageResult2, &ho_Regionx, 0, 80);
+		threshold(ho_ImageChannel[_i1stChannel], &ho_Regionx, _i1stThread, 255);
 		opening_circle(ho_Regionx, &ho_Region_1st, 1.5);
-		//双色第二部分
-		threshold(ho_ImageResult1, &ho_Regionsx, 122, 254);
+		//双色第二部分^
+		threshold(ho_ImageChannel[_i2ndChannnel], &ho_Regionsx, _i2ndThread, 254);
 		opening_circle(ho_Regionsx, &ho_Regions_2nd, 1.5);
-
 		//ocr部分
-		threshold(ho_Image1, &ho_Region_OCR, 0, 120);
-
-
+		threshold(ho_ImageChannel[0], &ho_Region_OCR, 0, 120);
 		for (hv_Co_Index = 1; hv_Co_Index <= 6; hv_Co_Index += 1)
 		{
 			tuple_find(hv_Tuple_Error, hv_Co_Index, &hv_Indices);
@@ -560,26 +513,16 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			{
 				continue;
 			}
-
-
-
 			hv_C_s = ((hv_Width / 6)*(hv_Co_Index - 1)) - 10;
-
-
-
 			//if ((Index+1)%3==0)
-
-
-
-
 			hv_R_s = 0;
 			hv_R_sEnd = hv_Height / 2;
 			gen_rectangle1(&ho_Rectangle, hv_R_s, hv_C_s, hv_R_sEnd, ((hv_Width / 6)*hv_Co_Index) + 10);
+			min_max_gray(ho_Rectangle, ho_ImageChannel[5], 0, &hv_Min, &hv_Max, &hv_Range);
 			intersection(ho_RegionOpening_CAPOOT, ho_Rectangle, &ho_RegionIntersection5
 			);
 			area_center(ho_RegionIntersection5, &hv_Area8, _, _);
-
-			if (0 != (HTuple(hv_Area8 == 0).Or((hv_Area8.Num()) == 0)))
+			if (0 != (hv_Max < 200))
 			{
 				//concat_obj(ho_EmptyRegion_Intensity, ho_RegionIntersection4, &ho_EmptyRegion_Intensity);
 				hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
@@ -587,22 +530,27 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				i_null++;
 				continue;
 			}
+			else
+			{
+				if (0 != (HTuple(hv_Area8 == 0).Or((hv_Area8.Num()) == 0)))
+				{
+					hv_Tuple_Error = hv_Tuple_Error.Concat(hv_Co_Index);
+					qslre[5 - (hv_Co_Index[0].I() - 1)] = QString::fromLocal8Bit("YS");
+					i_error++;
+					continue;
+				}
+			}
 			connection(ho_RegionIntersection5, &ho_ConnectedRegions);
 			select_shape_std(ho_ConnectedRegions, &ho_SelectedRegions, "max_area", 70);
 			opening_circle(ho_SelectedRegions, &ho_RegionOpening8, 10.5);
 			shape_trans(ho_RegionOpening8, &ho_RegionTrans2, "convex");
 			smallest_rectangle1(ho_RegionTrans2, &hv_Row11, &hv_Column11, &hv_Row21,
 				&hv_Column21);
-			gen_rectangle1(&ho_Rectangle, hv_Row11, hv_Column11, ((hv_Row21 - hv_Row11)*0.3) + hv_Row11,
+			gen_rectangle1(&ho_Rectangle, hv_Row11, hv_Column11, ((hv_Row21 - hv_Row11)*0.2) + hv_Row11,
 				hv_Column21);
-
 			intersection(ho_RegionTrans2, ho_Rectangle, &ho_RegionIntersection);
 			erosion_circle(ho_RegionIntersection, &ho_RegionErosion, 7.5);
 			union2(ho_EmptyRegion_Out, ho_RegionErosion, &ho_EmptyRegion_Out);
-
-
-
-
 			intersection(ho_Regions_Convex, ho_RegionErosion, &ho_RegionIntersection4
 			);
 			opening_circle(ho_RegionIntersection4, &ho_Regions_LeakTOPError, 1.5);
@@ -616,7 +564,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				i_error++;
 				continue;
 			}
-
 			erosion_circle(ho_RegionIntersection, &ho_RegionErosion3, 5.5);
 			intersection(ho_RegionErosion3, ho_Regions_Leak, &ho_RegionIntersection3);
 			opening_circle(ho_RegionIntersection3, &ho_RegionOpening5, 1.5);
@@ -629,7 +576,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				i_error++;
 				continue;
 			}
-
 			hv_R_s = hv_Height / 2;
 			hv_R_sEnd = hv_Height;
 			gen_rectangle1(&ho_Rectangle2, hv_R_s, hv_C_s, hv_R_sEnd, ((hv_Width / 6)*hv_Co_Index) + 10);
@@ -643,14 +589,11 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			shape_trans(ho_RegionOpening9, &ho_RegionTrans3, "convex");
 			smallest_rectangle1(ho_RegionTrans3, &hv_Row12, &hv_Column12, &hv_Row22,
 				&hv_Column22);
-			gen_rectangle1(&ho_Rectangle1, ((hv_Row22 - hv_Row12)*0.7) + hv_Row12, hv_Column12,
+			gen_rectangle1(&ho_Rectangle1, ((hv_Row22 - hv_Row12)*0.8) + hv_Row12, hv_Column12,
 				hv_Row22, hv_Column22);
-
 			intersection(ho_RegionTrans3, ho_Rectangle1, &ho_RegionIntersection8);
 			erosion_circle(ho_RegionIntersection8, &ho_RegionErosion1, 7.5);
 			union2(ho_EmptyRegion_Out, ho_RegionErosion1, &ho_EmptyRegion_Out);
-
-
 			intersection(ho_Regions_Convex, ho_RegionErosion1, &ho_RegionIntersection2
 			);
 			opening_circle(ho_RegionIntersection2, &ho_Regions_LeakTOPError2, 1.5);
@@ -666,7 +609,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			}
 			erosion_circle(ho_RegionIntersection8, &ho_RegionErosion6, 3.5);
 			//union2 (EmptyRegion_Out, RegionErosion6, EmptyRegion_Out)
-			intersection(ho_RegionErosion6, ho_Regions, &ho_RegionIntersection9);
+			intersection(ho_RegionErosion6, ho_Regions_Leak, &ho_RegionIntersection9);
 			opening_circle(ho_RegionIntersection9, &ho_RegionOpening10, 1.5);
 			area_center(ho_RegionOpening10, &hv_Area7, &hv_Row9, &hv_Column9);
 			if (0 != (hv_Area7 > 0))
@@ -693,7 +636,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			// 
 			// 			else
 			{
-
 				disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 				set_tposition(m_ShowLabel[total_check%circle_times], 10, 10);
 				set_color(m_ShowLabel[total_check%circle_times], "gold");
@@ -701,13 +643,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				area_center(ho_EmptyRegion_Intensity, &hv_Area2, &hv_Row4, &hv_Column4);
 				area_center(ho_EmptyRegion_Inner, &hv_Area3, &hv_Row5, &hv_Column5);
 				area_center(ho_EmptyRegion_Top, &hv_Area, &hv_Row, &hv_Column);
-
-
 				set_line_width(m_ShowLabel[total_check%circle_times], 1);
 				set_draw(m_ShowLabel[total_check%circle_times], "margin");
 				set_color(m_ShowLabel[total_check%circle_times], "green");
 				disp_obj(ho_EmptyRegion_Out, m_ShowLabel[total_check%circle_times]);
-
 				//disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 				set_tposition(m_ShowLabel[total_check%circle_times], 30, 10);
 				write_string(m_ShowLabel[total_check%circle_times], hv_Tuple_Error);
@@ -774,9 +713,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		set_color(m_ShowLabel[total_check%circle_times], "red");
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
 		write_string(m_ShowLabel[total_check%circle_times], "Other Error without catch");
-
 	}
-
 	//disp_image(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 	if (i_null == 6)
 	{
