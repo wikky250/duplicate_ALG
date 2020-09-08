@@ -1,19 +1,6 @@
 ﻿#pragma once
 #include "AllRelayHead.h"
 #include <QObject>
-class Dammy : public QWidget
-{
-	Q_OBJECT
-		signals :
-	void InitSingle(QString str);//初始化信号
-private:
-	QObject* _parent;
-public:
-	Dammy(QObject *parent);
-	~Dammy();
-	public slots:
-	void DammyInit();//公共槽函数
-};
 class MultInit_Run : public QObject
 {
 	Q_OBJECT
@@ -23,10 +10,9 @@ class MultInit_Run : public QObject
 	void PlaySoundPath(QString str);//声音路径信号
 private:
 	QObject* _parent;//一个对象
-	Dammy* _dammy;//初始化所有东西的类Dammy
-	QThread *dammy_th;//一个多线程
+	void* _pa;//一个对象
 public:
-	MultInit_Run(QObject *parent);
+	MultInit_Run(QObject *parent,void* p);
 	~MultInit_Run();
 	public slots:
 	int ThreadInit();//线程初始化，用于发送👆👆👆初始化信号给Dammy类对象，return -1；

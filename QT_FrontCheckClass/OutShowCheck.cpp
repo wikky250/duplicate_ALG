@@ -2,7 +2,7 @@
 COutShowCheck::COutShowCheck(bool b_init)
 {
 	SecretBase = new CInterCHeck(b_init);
-	bool b = QObject::connect(SecretBase, SIGNAL(SHOWIMGPOSTOTALS(int, Mat, int)), this, SLOT(sendmessagetoOUT(int, Mat, int)));
+	//bool b = QObject::connect(SecretBase, SIGNAL(SHOWIMGPOSTOTALS(int, Mat, int)), this, SLOT(sendmessagetoOUT(int, Mat, int)));
 }
 COutShowCheck::~COutShowCheck()
 {
@@ -54,8 +54,8 @@ QString COutShowCheck::GetResult()
 }
 int COutShowCheck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
 {
-	SecretBase->OtherAfterCheck();
 	SecretBase->Check(imgpackage, checkparam, str);
+	SecretBase->OtherAfterCheck();
 	int b = SecretBase->RealCheck(str, checkparam,-1);
 	SecretBase->OtherBeforeCheck(imgpackage);
 	return b;

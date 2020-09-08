@@ -14,6 +14,10 @@ namespace spd = spdlog;
 #pragma comment(lib,"opencv_imgcodecs347d.lib")
 #pragma comment(lib,"opencv_imgproc347d.lib")
 #else
+#pragma comment(lib,"opencv_core347.lib")
+#pragma comment(lib,"opencv_highgui347.lib")
+#pragma comment(lib,"opencv_imgcodecs347.lib")
+#pragma comment(lib,"opencv_imgproc347.lib")
 #endif
 using namespace cv;
 #pragma endregion

@@ -85,6 +85,7 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 	Camera_Func = nullptr;//包含bool GetAllCamera();int ReadConfig();
 	m_bStarting = false;//是否在检测标识符
 	m_SLabelStatue = "";//标记是否在检测
+	connect(this, SIGNAL(INITCHECKCLASSSIGNAL()), this, SLOT(InitCheckClassSLOT())); //信号在InitCheckClass()中
 	times_listImg = nullptr;
 	current_time = QDateTime::currentDateTime();
 	QString logpath = AppPath + "/logs/MainDLG_daily_" 
@@ -95,7 +96,7 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 		+ QString::number(current_time.time().minute())+".txt";//eg:MainDLG_daily_2020_2_29_23_47.txt
 	daily_logger = spd::basic_logger_mt("daily_logger", logpath.toStdString());//标准logger格式，每行信息头名称为daily_logger
 	daily_logger->flush_on(spd::level::trace);//初始化一次
-	m_MultInit = new MultInit_Run(this);//对多线程初始化的类
+	m_MultInit = new MultInit_Run(nullptr,this);//对多线程初始化的类
 	bool flag = QObject::connect(this, SIGNAL(StartInitSingle()), m_MultInit, SLOT(ThreadInit()));//window启动时执行一线程的初始化   read111
 	QTH_Init = new QThread();//新线程
 	m_MultInit->moveToThread(QTH_Init);//将槽函数放到新线程中去执行
@@ -255,7 +256,7 @@ bool OffLine_Demo::LoadImportantValue()
 	port = 5000					//PLC端口
 	********************/
 	QSettings configIniRead(AppPath + "\\ModelFile\\ProgramSet.ini", QSettings::IniFormat);//读取ini文件
-	g_PhotoTimes = 3;//第二个数是默认数值，如果不存在就用默认数值，下同
+	g_PhotoTimes = 1;//第二个数是默认数值，如果不存在就用默认数值，下同
 	MAX_CAPSULECOUNT = configIniRead.value("ProgramSetting/MAX_CAPSULECOUNT", 0).toInt();
 
 
@@ -399,7 +400,11 @@ int OffLine_Demo::LoadAlgorithmDLL()
 
 bool OffLine_Demo::InitCheckClass()
 {
-
+	emit INITCHECKCLASSSIGNAL();
+	return false;
+}
+bool OffLine_Demo::InitCheckClassSLOT()
+{
 	int cou = g_vectorCamera.size();//配对的相机参数
 	for (int i = 0; i < cou; i++)
 	{
@@ -462,6 +467,8 @@ bool OffLine_Demo::InitCheckClass()
 		timerResize->start(1000);
 	}
 
+	g_iCameraTotal = g_CheckClass.size();
+	InitPicList();
 	return false;
 }
 

@@ -215,23 +215,13 @@ void MultDecodeThread_Run::SetMultIndex(int ind)
 #pragma endregion
 
 #pragma region MultInit_Run
-MultInit_Run::MultInit_Run(QObject * parent)
+MultInit_Run::MultInit_Run(QObject * parent,void*p)
 {
-	_dammy = new Dammy(parent);//初始化所有的类，下面放入一个线程中
-	dammy_th = new QThread();
-	QObject::connect(this, SIGNAL(StartsSingle()), _dammy, SLOT(DammyInit()));//????????read222
-	_dammy->moveToThread(dammy_th);
-	dammy_th->start();
+	_pa = p;
 }
 
 MultInit_Run::~MultInit_Run()
 {
-	if (dammy_th != nullptr)
-	{
-		dammy_th->quit();
-		dammy_th->wait();
-		delete dammy_th;//上面三句让所含的多线程对象进程结束，并删除
-	}
 }
 
 int MultInit_Run::CloseTh()
@@ -240,27 +230,6 @@ int MultInit_Run::CloseTh()
 }
 
 int MultInit_Run::ThreadInit()
-{
-	emit StartsSingle();
-	return -1;//发射-1
-}
-
-Dammy::Dammy(QObject * parent)
-{
-	_parent = parent;
-}
-
-Dammy::~Dammy()
-{
-}
-
-bool sortcamera(CAMERASTRUCT *a, CAMERASTRUCT *b)//排序方法
-{
-	QString x = a->c_CameraSign;
-	QString y = b->c_CameraSign;
-	return x.mid(3).toInt() < y.mid(3).toInt();
-}
-void Dammy::DammyInit()//Dammy类唯一槽函数，执行所有初始化操作
 {
 	QDateTime current_time = QDateTime::currentDateTime();
 	QString StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
@@ -273,24 +242,23 @@ void Dammy::DammyInit()//Dammy类唯一槽函数，执行所有初始化操作
 	current_time = QDateTime::currentDateTime();
 	StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
 	QThread::msleep(200);
-	((OffLine_Demo*)_parent)->LoadAlgorithmDLL();//加载算法
+	((OffLine_Demo*)_pa)->LoadAlgorithmDLL();//加载算法
 	daily_logger->info("LoadAlgorithmDLL Finished");
 	current_time = QDateTime::currentDateTime();
 	StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
 	QThread::msleep(200);
-	((OffLine_Demo*)_parent)->InitCheckClass();
+	((OffLine_Demo*)_pa)->InitCheckClass();
 	daily_logger->info("InitCheckClass Finished");
-	g_iCameraTotal = g_CheckClass.size();
 	current_time = QDateTime::currentDateTime();
 	StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
 	QThread::msleep(200);
-	((OffLine_Demo*)_parent)->InitPicList();//初始化图像列表
-	daily_logger->info("InitPicList Finished");
-	current_time = QDateTime::currentDateTime();
-	StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
-	QThread::msleep(200);
-	((OffLine_Demo*)_parent)->FinishInitOther();//其他初始化
-	delete this;//删掉以后，所在线程随之销毁，就不在了,也就是说专门开了一个线程用来初始化，初始化完成后该线程伴随对象而销毁
+// 	((OffLine_Demo*)_pa)->InitPicList();//初始化图像列表
+// 	daily_logger->info("InitPicList Finished");
+// 	current_time = QDateTime::currentDateTime();
+// 	StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
+// 	QThread::msleep(200);
+	((OffLine_Demo*)_pa)->FinishInitOther();//其他初始化
+	return -1;//发射-1
 }
 #pragma endregion
 

@@ -42,6 +42,7 @@ signals:
 	void QTCLOSEALLLED();
 	//DLL显示在主线程显示图像
 	void SignShowImage(int pos, Mat img, int checktimes);
+	void INITCHECKCLASSSIGNAL();
 protected:
 	QTimer *timer;
 	QTimer *timerResize = nullptr;
@@ -121,4 +122,6 @@ public slots:
 	void ImgAutoDown();
 	void SetEvertDlg();
 	void RESULTERRORCOUNTSLOT(int);
+	//分配每个相机的算法
+	bool InitCheckClassSLOT();
 };

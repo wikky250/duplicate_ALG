@@ -2,6 +2,7 @@
 #include "QT_FRONTCheckClass.h"
 #include "CheckRelay.h"
 #include "QtGuiSetting.h"
+#pragma execution_character_set("utf-8")
 //#include "InspectProcessor.h"
 class CInterCHeck :public QObject,
 	public CBaseCheckAlg
