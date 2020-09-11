@@ -25,86 +25,13 @@ struct CHECKPARAM
 	//////////////////////////////////////////////////////////////////////////
 	int i_BandChannel = -1;
 	int i_BandThread = -1;
-	int i_ConvexThread = -1;
-	double i_ConvexOpenCore = -1.0;
-	int i_1stChannel = -1;
-	int i_1stThread = -1;
-	int i_2ndChannel = -1;
-	int i_2ndThread = -1;
+	int i_PillChannel1 = -1;
+	int i_PillThread1 = -1;
 	//////////////////////////////////////////////////////////////////////////
 	CHECKPARAM()
 	{
 	}
 	~CHECKPARAM()
-	{
-	}
-};
-struct IMAGEPACKAGE
-{
-	int i_timeCheck;
-	int i_imgWidth;
-	int i_imgHeight;
-	int i_imgChannel;
-	int i_indexofpos;
-	LARGE_INTEGER st;
-	SYSTEMTIME sttime;
-	bool b_OKORNG;
-	uchar* p_bufferIMG;
-	int rows;
-	int columns;
-	double d_dx;
-	IMAGEPACKAGE(IMAGEPACKAGE* img)
-	{
-		st = img->st;
-		sttime = img->sttime;
-		i_timeCheck = img->i_timeCheck;
-		i_imgWidth = img->i_imgWidth;
-		i_imgHeight = img->i_imgHeight;
-		i_imgChannel = img->i_imgChannel;
-		p_bufferIMG = new uchar[i_imgChannel*i_imgHeight*i_imgWidth];
-		memcpy(p_bufferIMG, img->p_bufferIMG, i_imgChannel*i_imgHeight*i_imgWidth);
-		rows = 6709;
-		columns = -1;
-		d_dx = 0.0;
-		b_OKORNG = img->b_OKORNG;
-		i_indexofpos = -1;
-	}
-	IMAGEPACKAGE()
-	{
-		st = { 0 };
-		sttime = { 0 };
-		i_timeCheck = -1;
-		i_imgWidth = -1;
-		i_imgHeight = -1;
-		i_imgChannel = -1;
-		p_bufferIMG = NULL;
-		rows = 6709;
-		columns = -1;
-		d_dx = 0.0;
-		b_OKORNG = false;
-	}
-	~IMAGEPACKAGE()
-	{
-	}
-};
-struct pDataLength
-{
-	double* pData;
-	double dmean;
-	double ddeviation;
-	int Length;
-	int lcols;
-	int rcols;
-	pDataLength()
-	{
-		pData = NULL;
-		Length = 0;
-		dmean = 0.0;
-		ddeviation = 0.0;
-		lcols = 0;
-		rcols = 0;
-	}
-	~pDataLength()
 	{
 	}
 };

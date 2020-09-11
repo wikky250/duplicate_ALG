@@ -9,14 +9,10 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	QString cameraname = checkparam->c_CameraName;
 	//读取检测参数配置
 	//////////////////////////////////////////////////////////////////////////
-	checkparam->i_BandThread = configIniRead.value("/" + cameraname + "/BandThread", "100").toInt();
-	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "2").toInt();
-	checkparam->i_ConvexThread = configIniRead.value("/" + cameraname + "/ConvexThread", "25").toInt();
-	checkparam->i_ConvexOpenCore = configIniRead.value("/" + cameraname + "/ConvexOpenCore", "15").toInt() / 10.0;
-	checkparam->i_1stChannel = configIniRead.value("/" + cameraname + "/1stChannel", "1").toInt();
-	checkparam->i_1stThread = configIniRead.value("/" + cameraname + "/1stThread", "80").toInt();
-	checkparam->i_2ndChannel = configIniRead.value("/" + cameraname + "/2ndChannel", "3").toInt();
-	checkparam->i_2ndThread = configIniRead.value("/" + cameraname + "/2ndThread", "120").toInt();
+	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "5").toInt();
+	checkparam->i_BandThread = configIniRead.value("/" + cameraname + "/BandThread", "128").toInt();
+	checkparam->i_PillChannel1 = configIniRead.value("/" + cameraname + "/PillChannel1", "4").toInt();
+	checkparam->i_PillThread1 = configIniRead.value("/" + cameraname + "/PillThread1", "30").toInt();
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -30,12 +26,10 @@ bool CInterCHeck::SaveCheckParam(CHECKPARAM * checkparam)
 	strcpy(checkparam->c_OperateCore, configIniRead.value("/" + cameraname + "/OperateCore", "NoRead").toString().toStdString().c_str());
 	//写入检测参数配置
 	//////////////////////////////////////////////////////////////////////////
-	configIniRead.setValue("/" + cameraname + "/BandThread", checkparam->i_BandThread);
 	configIniRead.setValue("/" + cameraname + "/BandChannel", checkparam->i_BandChannel);
-	configIniRead.setValue("/" + cameraname + "/1stChannel", checkparam->i_1stChannel);
-	configIniRead.setValue("/" + cameraname + "/1stThread", checkparam->i_1stThread);
-	configIniRead.setValue("/" + cameraname + "/2ndChannel", checkparam->i_2ndChannel);
-	configIniRead.setValue("/" + cameraname + "/2ndThread", checkparam->i_2ndThread);
+	configIniRead.setValue("/" + cameraname + "/BandThread", checkparam->i_BandThread);
+	configIniRead.setValue("/" + cameraname + "/PillChannel1", checkparam->i_PillChannel1);
+	configIniRead.setValue("/" + cameraname + "/PillThread1", checkparam->i_PillThread1);
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -397,23 +391,24 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 	//return -1;
 	try
 	{
+		int _BandChannel = -1, _BandThread = -1, _PillChannel1 = -1, _PillThread1 = -1;
+		if (nullptr!=checkparam)
+		{
+			_BandChannel = checkparam->i_BandChannel;
+			_BandThread = checkparam->i_BandThread;
+			_PillChannel1 = checkparam->i_PillChannel1;
+			_PillThread1 = checkparam->i_PillThread1;
+		}
+		else
+		{
+			_BandChannel = m_checkparam.i_BandChannel;
+			_BandThread = m_checkparam.i_BandThread;
+			_PillChannel1 = m_checkparam.i_PillChannel1;
+			_PillThread1 = m_checkparam.i_PillThread1;
+		}
 		// Local iconic variables 
-		QStringList qslre;
-		// 
-		// 		if (b_test)
-		// 		{
-		// 			if ((total_check / circle_times) % 2 == 0)
-		// 				qslre << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR" << "DERROR";
-		// 			else
-		// 				qslre << "Good" << "Good" << "Good" << "Good" << "Good" << "Good";
-		// 			result = qslre.join(",");
-		// 			return -1;
-		// 		}
-		qslre << "DERROR";
-		result = qslre.join(",");
+		result = "DERROR";
 		// Local iconic variables 
-		Hobject  ho_Image1, ho_Image2, ho_Image3;
-		Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
 		Hobject  ho_ImageMax, ho_ImageSub, ho_ImageMin, ho_ImageSub1;
 		Hobject  ho_Region, ho_Regions_black, ho_Regions1, ho_RegionOpening1;
 		Hobject  ho_RegionClosing2, ho_RegionBand, ho_Regions2, ho_RegionOpening2;
@@ -427,7 +422,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_RegionDifference2, ho_PillRegion, ho_ObjectSelected;
 		Hobject  ho_RegionOpening5, ho_RegionTrans, ho_RegionDifference;
 		Hobject  ho_RegionOpening6, ho_RegionIntersection, ho_RegionOpening7;
-		Hobject  ho_RegionUnion1;
+		Hobject  ho_RegionUnion1, ho_RegionFillUp1, ho_ConnectedRegions2;
 
 
 		// Local control variables 
@@ -437,48 +432,57 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 
-		decompose3(m_hoLiveImage, &ho_Image1, &ho_Image2, &ho_Image3);
-		trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
-		gray_dilation_rect(ho_Image2, &ho_ImageMax, 5, 5);
-		sub_image(ho_ImageMax, ho_Image2, &ho_ImageSub, 1, 0);
+
+		decompose3(m_hoLiveImage, &ho_ImageChannel[0], &ho_ImageChannel[1], &ho_ImageChannel[2]);
+		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
+		gray_dilation_rect(ho_ImageChannel[1], &ho_ImageMax, 5, 5);
+		sub_image(ho_ImageMax, ho_ImageChannel[1], &ho_ImageSub, 1, 0);
 		gray_erosion_rect(ho_ImageSub, &ho_ImageMin, 11, 11);
 		sub_image(ho_ImageSub, ho_ImageMin, &ho_ImageSub1, 1, 0);
 		threshold(ho_ImageSub1, &ho_Region, 30, 255);
-		closing_circle(ho_Region, &ho_Regions_black, 5.5);
-		threshold(ho_ImageResult3, &ho_Regions1, 128, 255);
+		closing_circle(ho_Region, &ho_Regions_black, 5.5); 
+
+
+
+
+		threshold(ho_ImageChannel[_BandChannel], &ho_Regions1, _BandThread, 255);
 		opening_circle(ho_Regions1, &ho_RegionOpening1, 3.5);
-		closing_circle(ho_RegionOpening1, &ho_RegionClosing2, 50.5);
-		fill_up(ho_RegionClosing2, &ho_RegionBand);
+		closing_circle(ho_RegionOpening1, &ho_RegionClosing2, 20.5);
+		fill_up(ho_RegionClosing2, &ho_RegionFillUp1);
+		connection(ho_RegionFillUp1, &ho_ConnectedRegions2);
+		select_shape_std(ho_ConnectedRegions2, &ho_RegionBand, "max_area", 70);
 		area_center(ho_RegionBand, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != (hv_Area < 1340000))
 		{
 			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
 			set_draw(m_ShowLabel[0], "margin");
+			set_color(m_ShowLabel[0], "red");
 			set_line_width(m_ShowLabel[0], 6);
 			disp_obj(ho_RegionBand, m_ShowLabel[0]);
 			set_tposition(m_ShowLabel[0], 10, 10);
-			result = "铝膜版面错误";
+			result = QString::fromLocal8Bit("铝膜版面错误");
 			write_string(m_ShowLabel[0], "铝膜版面错误");
 			return -1;
 			// stop(); only in hdevelop
 		}
-		threshold(ho_ImageResult2, &ho_Regions2, 87, 255);
+		threshold(ho_ImageChannel[4], &ho_Regions2, 87, 255);
 		opening_circle(ho_Regions2, &ho_RegionOpening2, 3.5);
 		area_center(ho_RegionOpening2, &hv_Area1, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != (hv_Area1 > 1000))
 		{
 			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-			set_draw(m_ShowLabel[0], "fill");
+			set_draw(m_ShowLabel[0], "margin");
+			set_color(m_ShowLabel[0], "red");
 			disp_obj(ho_RegionOpening2, m_ShowLabel[0]);
 			set_tposition(m_ShowLabel[0], 10, 10);
-			result = "铝膜接缝异常";
+			result = QString::fromLocal8Bit("铝膜接缝异常");
 			write_string(m_ShowLabel[0], "铝膜接缝异常");
-			return -1;
+			return 1;
 			// stop(); only in hdevelop
 		}
 		erosion_circle(ho_RegionBand, &ho_RegionBandErosion, 3.5);
-		reduce_domain(ho_ImageResult2, ho_RegionBandErosion, &ho_ImageReduced);
-		threshold(ho_ImageReduced, &ho_Regions, 30, 255);
+		reduce_domain(ho_ImageChannel[_PillChannel1], ho_RegionBandErosion, &ho_ImageReduced);
+		threshold(ho_ImageReduced, &ho_Regions, _PillThread1, 255);
 		fill_up(ho_Regions, &ho_RegionFillUp);
 		opening_circle(ho_RegionFillUp, &ho_RegionOpening, 3.5);
 		connection(ho_RegionOpening, &ho_ConnectedRegions);
@@ -488,30 +492,32 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		if (0 != (hv_Number != 18))
 		{
 			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-			set_draw(m_ShowLabel[0], "fill");
+			set_draw(m_ShowLabel[0], "margin");
+			set_color(m_ShowLabel[0], "red");
 			disp_obj(ho_SelectedRegions, m_ShowLabel[0]);
 			set_tposition(m_ShowLabel[0], 10, 10);
-			result = "药剂个数错误";
+			result = QString::fromLocal8Bit("药剂个数错误");
 			write_string(m_ShowLabel[0], "药剂个数错误");
-			return -1;
+			return 1;
 			// stop(); only in hdevelop
 		}
 		union1(ho_SelectedRegions, &ho_RegionUnion);
 		dilation_circle(ho_RegionUnion, &ho_RegionDilation, 3.5);
 		difference(ho_RegionBandErosion, ho_RegionDilation, &ho_RegionDifference1);
-		reduce_domain(ho_Image3, ho_RegionDifference1, &ho_ImageReduced1);
+		reduce_domain(ho_ImageChannel[2], ho_RegionDifference1, &ho_ImageReduced1);
 		threshold(ho_ImageReduced1, &ho_Regions3, 0, 160);
 		opening_circle(ho_Regions3, &ho_RegionOpening3, 2.5);
 		area_center(ho_RegionOpening3, &hv_Area2, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != hv_Area2)
 		{
 			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-			set_draw(m_ShowLabel[0], "fill");
+			set_draw(m_ShowLabel[0], "margin");
+			set_color(m_ShowLabel[0], "red");
 			disp_obj(ho_RegionOpening3, m_ShowLabel[0]);
 			set_tposition(m_ShowLabel[0], 10, 10);
-			result = "版面异常";
+			result = QString::fromLocal8Bit("版面异常");
 			write_string(m_ShowLabel[0], "版面异常");
-			return -1;
+			return 1;
 			// stop(); only in hdevelop
 		}
 		gray_erosion_rect(ho_ImageReduced1, &ho_ImageMin1, 11, 11);
@@ -532,12 +538,13 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			if (0 != (hv_Area4 > 50))
 			{
 				disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-				set_draw(m_ShowLabel[0], "fill");
+				set_draw(m_ShowLabel[0], "margin");
+				set_color(m_ShowLabel[0], "red");
 				disp_obj(ho_RegionDifference2, m_ShowLabel[0]);
 				set_tposition(3600, 10, 10);
-				result = "版面异常2";
+				result = QString::fromLocal8Bit("版面异常2");
 				write_string(3600, "版面异常2");
-				return -1;
+				return 1;
 			}
 		}
 		sort_region(ho_SelectedRegions, &ho_PillRegion, "character", "true", "row");
@@ -563,17 +570,19 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				if (0 != (hv_Area3 > 0))
 				{
 					disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-					set_draw(m_ShowLabel[0], "fill");
+					set_draw(m_ShowLabel[0], "margin");
+					set_color(m_ShowLabel[0], "red");
 					disp_obj(ho_RegionUnion1, m_ShowLabel[0]);
 					set_tposition(m_ShowLabel[0], 10, 10);
-					result = "片剂内部异常";
+					result = QString::fromLocal8Bit("片剂内部异常");
 					write_string(m_ShowLabel[0], "片剂内部异常");
-					return -1;
+					return 1;
 				}
 			}
 		}
 		disp_obj(m_hoLiveImage, m_ShowLabel[0]);
 		result = "Good";
+		return 0;
 		if (Wnd == -1)
 		{
 		}
@@ -602,10 +611,4 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
 		write_string(m_ShowLabel[total_check%circle_times], "Other Error without catch");
 	}
-	//disp_image(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
-	if (i_null == 6)
-	{
-		return -1;
-	}
-	return 0;
 }

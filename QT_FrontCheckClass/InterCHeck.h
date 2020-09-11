@@ -2,7 +2,6 @@
 #include "QT_FRONTCheckClass.h"
 #include "CheckRelay.h"
 #include "QtGuiSetting.h"
-#pragma execution_character_set("utf-8")
 //#include "InspectProcessor.h"
 class CInterCHeck :public QObject,
 	public CBaseCheckAlg
@@ -51,6 +50,7 @@ private:
 	Mat m_SaveImg;
 	vector<vector<float>> m_CenterModel;
 	vector<HTuple> m_ShowLabel;
+	Hobject ho_ImageChannel[6];
 	Hobject m_hoLiveImage;
 	Hobject ho_MotionImages;
 	int ComputerBestLabes(std::vector<float> data, double &dsts);
