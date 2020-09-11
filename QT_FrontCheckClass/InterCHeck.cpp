@@ -454,14 +454,14 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		area_center(ho_RegionBand, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != (hv_Area < 1340000))
 		{
-			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-			set_draw(m_ShowLabel[0], "margin");
-			set_color(m_ShowLabel[0], "red");
-			set_line_width(m_ShowLabel[0], 6);
-			disp_obj(ho_RegionBand, m_ShowLabel[0]);
-			set_tposition(m_ShowLabel[0], 10, 10);
+			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
+			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
+			set_line_width(Wnd==-1?m_ShowLabel[0]:Wnd, 6);
+			disp_obj(ho_RegionBand, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
 			result = QString::fromLocal8Bit("铝膜版面错误");
-			write_string(m_ShowLabel[0], "铝膜版面错误");
+			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "铝膜版面错误");
 			return -1;
 			// stop(); only in hdevelop
 		}
@@ -470,13 +470,13 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		area_center(ho_RegionOpening2, &hv_Area1, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != (hv_Area1 > 1000))
 		{
-			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-			set_draw(m_ShowLabel[0], "margin");
-			set_color(m_ShowLabel[0], "red");
-			disp_obj(ho_RegionOpening2, m_ShowLabel[0]);
-			set_tposition(m_ShowLabel[0], 10, 10);
+			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
+			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
+			disp_obj(ho_RegionOpening2, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
 			result = QString::fromLocal8Bit("铝膜接缝异常");
-			write_string(m_ShowLabel[0], "铝膜接缝异常");
+			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "铝膜接缝异常");
 			return 1;
 			// stop(); only in hdevelop
 		}
@@ -491,13 +491,13 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		count_obj(ho_SelectedRegions, &hv_Number);
 		if (0 != (hv_Number != 18))
 		{
-			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-			set_draw(m_ShowLabel[0], "margin");
-			set_color(m_ShowLabel[0], "red");
-			disp_obj(ho_SelectedRegions, m_ShowLabel[0]);
-			set_tposition(m_ShowLabel[0], 10, 10);
+			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
+			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
+			disp_obj(ho_SelectedRegions, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
 			result = QString::fromLocal8Bit("药剂个数错误");
-			write_string(m_ShowLabel[0], "药剂个数错误");
+			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "药剂个数错误");
 			return 1;
 			// stop(); only in hdevelop
 		}
@@ -510,13 +510,13 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		area_center(ho_RegionOpening3, &hv_Area2, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != hv_Area2)
 		{
-			disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-			set_draw(m_ShowLabel[0], "margin");
-			set_color(m_ShowLabel[0], "red");
-			disp_obj(ho_RegionOpening3, m_ShowLabel[0]);
-			set_tposition(m_ShowLabel[0], 10, 10);
+			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
+			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
+			disp_obj(ho_RegionOpening3, Wnd==-1?m_ShowLabel[0]:Wnd);
+			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
 			result = QString::fromLocal8Bit("版面异常");
-			write_string(m_ShowLabel[0], "版面异常");
+			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "版面异常");
 			return 1;
 			// stop(); only in hdevelop
 		}
@@ -537,10 +537,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		{
 			if (0 != (hv_Area4 > 50))
 			{
-				disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-				set_draw(m_ShowLabel[0], "margin");
-				set_color(m_ShowLabel[0], "red");
-				disp_obj(ho_RegionDifference2, m_ShowLabel[0]);
+				disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
+				set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
+				set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
+				disp_obj(ho_RegionDifference2, Wnd==-1?m_ShowLabel[0]:Wnd);
 				set_tposition(3600, 10, 10);
 				result = QString::fromLocal8Bit("版面异常2");
 				write_string(3600, "版面异常2");
@@ -569,18 +569,18 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				area_center(ho_RegionUnion1, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 				if (0 != (hv_Area3 > 0))
 				{
-					disp_obj(m_hoLiveImage, m_ShowLabel[0]);
-					set_draw(m_ShowLabel[0], "margin");
-					set_color(m_ShowLabel[0], "red");
-					disp_obj(ho_RegionUnion1, m_ShowLabel[0]);
-					set_tposition(m_ShowLabel[0], 10, 10);
+					disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
+					set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
+					set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
+					disp_obj(ho_RegionUnion1, Wnd==-1?m_ShowLabel[0]:Wnd);
+					set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
 					result = QString::fromLocal8Bit("片剂内部异常");
-					write_string(m_ShowLabel[0], "片剂内部异常");
+					write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "片剂内部异常");
 					return 1;
 				}
 			}
 		}
-		disp_obj(m_hoLiveImage, m_ShowLabel[0]);
+		disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
 		result = "Good";
 		return 0;
 		if (Wnd == -1)

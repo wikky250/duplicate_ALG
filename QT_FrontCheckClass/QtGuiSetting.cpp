@@ -823,7 +823,7 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
 	QString sSelectItem = item->text();
 	if (sSelectItem == "."&&m_timerReadList == nullptr)
 	{
-		QString newPath = m_sImageListPath.left(m_sImageListPath.indexOf("/") + 1);
+		QString newPath = m_sImageListPath.left(m_sImageListPath.indexOf("/")+1);
 		m_sImageListPath = newPath;
 		initImageLS(m_sImageListPath);
 		return;
@@ -856,7 +856,7 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
 	}
 	else
 	{
-		m_MOriginal = imread(m_currentImagePath.toStdString().c_str());
+		m_MOriginal = imread(std::string(m_currentImagePath.toLocal8Bit()));
 		if (m_MOriginal.rows > 0)
 		{
 			uint m_iResult;	//单次检测结果，最大不超过八个 
