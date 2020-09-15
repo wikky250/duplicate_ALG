@@ -791,7 +791,7 @@ void OffLine_Demo::onDoubleImageList(QListWidgetItem *item)
 	if (!file.isFile())
 	{
 		m_sImageListPath = pathselect;
-		initImageLS(m_sImageListPath);
+		initImageLS(m_sImageListPath+"/");
 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
 	}
 	else
