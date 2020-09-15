@@ -3,7 +3,7 @@
 //日志工具
 std::shared_ptr<spd::logger> daily_logger;
 //操作员名称
-QString g_QSUserName="hanlinzhineng_123_nengzhilinhan_321";
+QString g_QSUserName = "hanlinzhineng_123_nengzhilinhan_321";
 int g_IUserLevel;
 //exe运行path
 QString AppPath;
@@ -72,7 +72,7 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 	case 1:strcpy(dest, "工程师"); break;
 	case 2:strcpy(dest, "操作员"); break;
 	case 3:strcpy(dest, "质检员"); break;
-		default:break;
+	default:break;
 
 	}
 
@@ -88,15 +88,15 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 	connect(this, SIGNAL(INITCHECKCLASSSIGNAL()), this, SLOT(InitCheckClassSLOT())); //信号在InitCheckClass()中
 	times_listImg = nullptr;
 	current_time = QDateTime::currentDateTime();
-	QString logpath = AppPath + "/logs/MainDLG_daily_" 
+	QString logpath = AppPath + "/logs/MainDLG_daily_"
 		+ QString::number(current_time.date().year()) + "_"
 		+ QString::number(current_time.date().month()) + "_"
 		+ QString::number(current_time.date().day()) + "_"
-		+ QString::number(current_time.time().hour()) + "_"		 
-		+ QString::number(current_time.time().minute())+".txt";//eg:MainDLG_daily_2020_2_29_23_47.txt
+		+ QString::number(current_time.time().hour()) + "_"
+		+ QString::number(current_time.time().minute()) + ".txt";//eg:MainDLG_daily_2020_2_29_23_47.txt
 	daily_logger = spd::basic_logger_mt("daily_logger", logpath.toStdString());//标准logger格式，每行信息头名称为daily_logger
 	daily_logger->flush_on(spd::level::trace);//初始化一次
-	m_MultInit = new MultInit_Run(nullptr,this);//对多线程初始化的类
+	m_MultInit = new MultInit_Run(nullptr, this);//对多线程初始化的类
 	bool flag = QObject::connect(this, SIGNAL(StartInitSingle()), m_MultInit, SLOT(ThreadInit()));//window启动时执行一线程的初始化   read111
 	QTH_Init = new QThread();//新线程
 	m_MultInit->moveToThread(QTH_Init);//将槽函数放到新线程中去执行
@@ -118,7 +118,7 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 	fo.setPointSize(18);
 	ui.tableWidget_Result->setFont(fo);//设置tableWidget字体
 	QStringList title;
-	title << QString::fromLocal8Bit("ErrorType")<< QString::fromLocal8Bit("错误类型") << QString::fromLocal8Bit("错误数量");
+	title << QString::fromLocal8Bit("ErrorType") << QString::fromLocal8Bit("错误类型") << QString::fromLocal8Bit("错误数量");
 	ui.tableWidget_Result->setColumnCount(3);//3列
 	ui.tableWidget_Result->setHorizontalHeaderLabels(title);//加表头
 	ui.tableWidget_Result->setColumnHidden(0, true);//隐藏ErrorType列
@@ -136,7 +136,9 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 	ui.tableWidget_Result->setItem(z, 0, new QTableWidgetItem(QString::fromLocal8Bit("Good")));//第0列，已隐藏
 	ui.tableWidget_Result->setItem(z, 1, new QTableWidgetItem(QString::fromLocal8Bit("合格数")));//第1列
 	ui.tableWidget_Result->setItem(z, 2, new QTableWidgetItem(QString::number(0)));//第2列
-
+	QFont fon = ui.lw_ImageList->font();
+	fon.setPixelSize(20);
+	ui.lw_ImageList->setFont(fon);
 	connect(ui.lw_ImageList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onDoubleImageList(QListWidgetItem *)));
 	LoadImportantValue();
 	/*******************eg：
@@ -276,14 +278,14 @@ bool OffLine_Demo::LoadImportantValue()
 	}
 
 	QDir finder(AppPath + "/DefaultModel");//finder为AppPath位置，找DefaultModel文件夹
-	if(!finder.exists())//如果没有上述文件夹
+	if (!finder.exists())//如果没有上述文件夹
 	{
 		copyDirectoryFiles(modelfile, AppPath + "/DefaultModel", true);//默认模板的东西拷入DefaultModel中
-		g_qModelName=configIniRead.value("ProgramSetting/LastModel", g_qModelName).toString();//写当前模板全局变量 此时不是读
+		g_qModelName = configIniRead.value("ProgramSetting/LastModel", g_qModelName).toString();//写当前模板全局变量 此时不是读
 	}
 	else//如果有这个文件夹
 	{
-		if(QMessageBox::No == showMsgBox(QMessageBox::Critical,"警告","上次程序未能正常关闭,是否使用上次模板继续？","是","否"))
+		if (QMessageBox::No == showMsgBox(QMessageBox::Critical, "警告", "上次程序未能正常关闭,是否使用上次模板继续？", "是", "否"))
 		{
 			copyDirectoryFiles(modelfile, AppPath + "/DefaultModel", true);
 			g_qModelName = configIniRead.value("ProgramSetting/DefaultModel", g_qModelName).toString();//写当前模板全局变量 此时不是读
@@ -408,13 +410,13 @@ bool OffLine_Demo::InitCheckClassSLOT()
 	int cou = g_vectorCamera.size();//配对的相机参数
 	for (int i = 0; i < cou; i++)
 	{
-		for (int z = 0;z< 1;z++)
+		for (int z = 0;z < 1;z++)
 		{
 			QLabel *label = new QLabel();
-			label->setObjectName(QString::fromUtf8("LabelShow") + QString::number(i)+"_"+QString::number(z));
+			label->setObjectName(QString::fromUtf8("LabelShow") + QString::number(i) + "_" + QString::number(z));
 			label->setFrameShape(QFrame::Box);
 			label->setLineWidth(1);
-			ui.gridLayout->addWidget(label, z/2, z%2, 1, 1);
+			ui.gridLayout->addWidget(label, z / 2, z % 2, 1, 1);
 		}
 	}
 
@@ -492,7 +494,7 @@ bool OffLine_Demo::InitPicList()
 	{
 		QTH_MultDecodeThread.push_back(new QThread);
 	}
-	m_MultSaveThread = new MultSaveThread_Run(nullptr,g_vectorCamera.size());
+	m_MultSaveThread = new MultSaveThread_Run(nullptr, g_vectorCamera.size());
 	QTH_MultSaveThread = new QThread();
 	m_MultSaveThread->moveToThread(QTH_MultSaveThread);
 	QTH_MultSaveThread->start();
@@ -528,7 +530,7 @@ bool OffLine_Demo::InitPicList()
 		flag = QObject::connect(this, SIGNAL(STARTCHECK(int, bool)), m_MultDecodeThread[i], SLOT(ThreadDecodeImage(int, bool)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultGetThread[i], SIGNAL(GETONEIMAGEMAT(Mat)), m_MultDecodeThread[i], SLOT(ThreadDecodeImageMat(Mat)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(RESULTERRORCOUNT(int)), this, SLOT(RESULTERRORCOUNTSLOT(int)), Qt::QueuedConnection);
-		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(SAVESIGNAL(Mat,QString)), m_MultSaveThread, SLOT(ThreadSave(Mat,QString)), Qt::QueuedConnection);
+		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(SAVESIGNAL(Mat, QString)), m_MultSaveThread, SLOT(ThreadSave(Mat, QString)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultDecodeThread[i], SIGNAL(OUTRESULTSUMMARY(QString, int, int)), m_MultSummaryThread, SLOT(ThreadSummary(QString, int, int)), Qt::QueuedConnection);
 		flag = QObject::connect(m_MultSummaryThread, SIGNAL(SUMMARYRESULTINCIRCLE(QStringList)), this, SLOT(SlotShowResult(QStringList)), Qt::QueuedConnection);
 		m_MultDecodeThread[i]->SetMultIndex(i);
@@ -579,7 +581,7 @@ bool OffLine_Demo::SlotShowResult(QStringList strlist)
 			if (ui.tableWidget_Result->item(z, 0)->text() == strlist[i])
 			{
 				int xx = ui.tableWidget_Result->item(z, 2)->text().toInt();
-				ui.tableWidget_Result->item(z, 2)->setText(QString::number(ui.tableWidget_Result->item(z, 2)->text().toInt()+1));
+				ui.tableWidget_Result->item(z, 2)->setText(QString::number(ui.tableWidget_Result->item(z, 2)->text().toInt() + 1));
 				Dir.setValue("Result/" + strlist[i], QString::number(ui.tableWidget_Result->item(z, 2)->text().toInt()));
 				break;
 			}
@@ -606,50 +608,39 @@ void OffLine_Demo::onStartCheck(bool b)
 {
 	if (b)
 	{
- 		if (m_MultInit != nullptr)
- 		{
- 			delete m_MultInit;
- 			m_MultInit = nullptr;
- 		}
- 
- 		if (QTH_Init != nullptr)
- 		{
- 			QTH_Init->quit();
- 			QTH_Init->wait();//释放对象锁
- 			delete QTH_Init;
- 			QTH_Init = nullptr;
- 		}
- 
- 		QThread::msleep(200);
- 		daily_logger->info("Start Checking! Connect Camera {}", g_iCameraTotal);
- 		//判断有无相机加载
- 		if (g_iCameraTotal == 0)
- 		{
+		if (m_MultInit != nullptr)
+		{
+			delete m_MultInit;
+			m_MultInit = nullptr;
+		}
+
+		if (QTH_Init != nullptr)
+		{
+			QTH_Init->quit();
+			QTH_Init->wait();//释放对象锁
+			delete QTH_Init;
+			QTH_Init = nullptr;
+		}
+
+		QThread::msleep(200);
+		daily_logger->info("Start Checking! Connect Camera {}", g_iCameraTotal);
+		//判断有无相机加载
+		if (g_iCameraTotal == 0)
+		{
 			//levelOut = new WindowOut;
 			//levelOut->getString(QString::fromLocal8Bit("警告！未初始化本地文件！"), 2000);
 			//levelOut->show();
- 			return;
- 		}
- 		ui.Button_Start->setText(QString::fromLocal8Bit("停止"));
- 		g_current_time = QDateTime::currentDateTime();
-		memset(m_Result, 0, 30*sizeof(char));
+			return;
+		}
+		ui.Button_Start->setText(QString::fromLocal8Bit("停止"));
+		g_current_time = QDateTime::currentDateTime();
+		memset(m_Result, 0, 30 * sizeof(char));
 		int s = ui.lw_ImageList->currentRow();
-		if (s > 1)
-		{
-			emit STARTCHECK(-1,0);
-		}
-		if(s==-1)
-		{
-			if (times_listImg ==nullptr)
-			{
-				times_listImg = new QTimer();
-			}
-			QObject::connect(times_listImg, SIGNAL(timeout()), this, SLOT(ImgAutoDown()));
-
-			//connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
-			times_listImg->start(100);
-		}
-		if (s>1)
+// 		if (s > 1)
+// 		{
+// 			emit STARTCHECK(-1, 0);
+// 		}
+		if (s == -1)
 		{
 			if (times_listImg == nullptr)
 			{
@@ -658,11 +649,22 @@ void OffLine_Demo::onStartCheck(bool b)
 			QObject::connect(times_listImg, SIGNAL(timeout()), this, SLOT(ImgAutoDown()));
 
 			//connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
-			times_listImg->start(100);
+			times_listImg->start(10);
 		}
- 		QThread::msleep(500);
- 		current_time = QDateTime::currentDateTime();
- 		QString	StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
+		if (s > 1)
+		{
+			if (times_listImg == nullptr)
+			{
+				times_listImg = new QTimer();
+			}
+			QObject::connect(times_listImg, SIGNAL(timeout()), this, SLOT(ImgAutoDown()));
+
+			//connect(ui.lw_ImageList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *, QListWidgetItem *)));
+			times_listImg->start(10);
+		}
+		QThread::msleep(500);
+		current_time = QDateTime::currentDateTime();
+		QString	StrCurrentTime = current_time.toString("hh:mm:ss:zzz");
 		m_IniResultPath = AppPath + "/logs/Result_"//结果文件路径,每次开始的时候创建一个
 			+ QString::number(current_time.date().year()) + "_"
 			+ QString::number(current_time.date().month()) + "_"
@@ -685,33 +687,33 @@ void OffLine_Demo::onSelectImageList(QListWidgetItem *item, QListWidgetItem *it)
 {
 	//&&m_timerReadList==nullptr 防止进入深一层目录
 	QString sSelectItem = item->text();
-// 	if (sSelectItem == ".")
-// 	{
-// 		QString newPath = m_sImageListPath.left(m_sImageListPath.indexOf("/") + 1);
-// 		m_sImageListPath = newPath;
-// 		initImageLS(m_sImageListPath);
-// 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
-// 		return;
-// 	}
-// 	if (sSelectItem == "..")
-// 	{
-// 		QString newPath = m_sImageListPath.left(m_sImageListPath.lastIndexOf("/"));
-// 		//exe所在的根目录
-// 		if (newPath.length() > 2)
-// 		{
-// 			// only allow user to access the data in dataPath
-// 			m_sImageListPath = newPath;
-// 		}
-// 		if (newPath.length() == 2)
-// 		{
-// 			// only allow user to access the data in dataPath
-// 			m_sImageListPath = newPath + "/";
-// 		}
-// 		initImageLS(m_sImageListPath);
-// 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
-// 		return;
-// 	}
-// 
+	// 	if (sSelectItem == ".")
+	// 	{
+	// 		QString newPath = m_sImageListPath.left(m_sImageListPath.indexOf("/") + 1);
+	// 		m_sImageListPath = newPath;
+	// 		initImageLS(m_sImageListPath);
+	// 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
+	// 		return;
+	// 	}
+	// 	if (sSelectItem == "..")
+	// 	{
+	// 		QString newPath = m_sImageListPath.left(m_sImageListPath.lastIndexOf("/"));
+	// 		//exe所在的根目录
+	// 		if (newPath.length() > 2)
+	// 		{
+	// 			// only allow user to access the data in dataPath
+	// 			m_sImageListPath = newPath;
+	// 		}
+	// 		if (newPath.length() == 2)
+	// 		{
+	// 			// only allow user to access the data in dataPath
+	// 			m_sImageListPath = newPath + "/";
+	// 		}
+	// 		initImageLS(m_sImageListPath);
+	// 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
+	// 		return;
+	// 	}
+	// 
 
 	QString pathselect;
 	int x = m_sImageListPath.lastIndexOf('/');
@@ -728,7 +730,7 @@ void OffLine_Demo::onSelectImageList(QListWidgetItem *item, QListWidgetItem *it)
 
 	{
 		strcpy(g_vectorCamera[0]->file_path, pathselect.toLocal8Bit());
-		emit(STARTCHECK(-1,0));
+		emit(STARTCHECK(-1, 0));
 	}
 }
 
@@ -738,26 +740,30 @@ void OffLine_Demo::onDoubleImageList(QListWidgetItem *item)
 	QString sSelectItem = item->text();
 	if (sSelectItem == ".")
 	{
-		QString newPath = m_sImageListPath.left(m_sImageListPath.indexOf("/") + 1);
-		m_sImageListPath = newPath;
-		initImageLS(m_sImageListPath);
+		m_sImageListPath = "";
+		initImageLS(sSelectItem);
 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
 		return;
 	}
 	if (sSelectItem == "..")
 	{
 		QString newPath = m_sImageListPath.left(m_sImageListPath.lastIndexOf("/"));
-		//exe所在的根目录
-		if (newPath.length() > 2)
+		if (m_sImageListPath.split("/").size()<2)
+		{
+			// only allow user to access the data in dataPath
+			m_sImageListPath = ".";
+		}
+		else//exe所在的根目录
+			if (newPath.length() >= 2)
 		{
 			// only allow user to access the data in dataPath
 			m_sImageListPath = newPath;
 		}
-		if (newPath.length() == 2)
-		{
-			// only allow user to access the data in dataPath
-			m_sImageListPath = newPath + "/";
-		}
+// 		if (newPath.length() == 2)
+// 		{
+// 			// only allow user to access the data in dataPath
+// 			m_sImageListPath = ".";
+// 		}
 		initImageLS(m_sImageListPath);
 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
 		return;
@@ -766,13 +772,20 @@ void OffLine_Demo::onDoubleImageList(QListWidgetItem *item)
 
 	QString pathselect;
 	int x = m_sImageListPath.lastIndexOf('/');
-	if (m_sImageListPath.lastIndexOf('/') == m_sImageListPath.length() - 1)
+	if (m_sImageListPath == ".")
 	{
-		pathselect = m_sImageListPath + sSelectItem;
+		pathselect = sSelectItem;
 	}
 	else
 	{
-		pathselect = m_sImageListPath + "/" + sSelectItem;
+		if (m_sImageListPath.lastIndexOf('/') == m_sImageListPath.length() - 1)
+		{
+			pathselect = m_sImageListPath + sSelectItem;
+		}
+		else
+		{
+			pathselect = m_sImageListPath + "/" + sSelectItem;
+		}
 	}
 	QFileInfo file(pathselect);
 	if (!file.isFile())
@@ -784,22 +797,22 @@ void OffLine_Demo::onDoubleImageList(QListWidgetItem *item)
 	else
 	{
 		strcpy(g_vectorCamera[0]->file_path, pathselect.toLocal8Bit());
-		emit(STARTCHECK(-1,1));
+		emit(STARTCHECK(-1, 1));
 	}
 }
 
 void OffLine_Demo::ImgAutoDown()
 {
 	int x = ui.lw_ImageList->currentRow();
-	if (x<2)
+	if (x < 2)
 	{
 		ui.lw_ImageList->setCurrentRow(2);
 	}
 	else
 	{
 		int  z = ui.lw_ImageList->count();
-		x+=1;
-		if (x!=ui.lw_ImageList->count())
+		x += 1;
+		if (x != ui.lw_ImageList->count())
 		{
 			ui.lw_ImageList->setCurrentRow(x);
 		}
@@ -824,7 +837,7 @@ void OffLine_Demo::SetEvertDlg()
 				g_CheckClass[i]->TESTSETSHOW(lb);
 			}
 		}
-		g_CheckClass[i]->StartCheck(g_vectorCamera[i]->c_CameraName, daily_logger,0,0);
+		g_CheckClass[i]->StartCheck(g_vectorCamera[i]->c_CameraName, daily_logger, 0, 0);
 	}
 	if (timerResize != nullptr)
 	{
@@ -836,7 +849,7 @@ void OffLine_Demo::SetEvertDlg()
 
 void OffLine_Demo::RESULTERRORCOUNTSLOT(int i)
 {
-	if ((i==0&&ui.checkBox_OK->isChecked())||(i != 0 && ui.checkBox_NG->isChecked()))
+	if ((i == 0 && ui.checkBox_OK->isChecked()) || (i != 0 && ui.checkBox_NG->isChecked()))
 	{
 		onStopCheck();
 	}
@@ -877,9 +890,40 @@ bool OffLine_Demo::containImages(QDir& dir)
 
 void OffLine_Demo::initImageLS(QString str)
 {
-	QDir dir(str);
 	ui.lw_ImageList->blockSignals(true);
 	ui.lw_ImageList->clear();
+	if (str == ".")
+	{
+		BOOL fResult;
+		// 遍历磁盘
+		for (wchar_t d = 'A'; d <= 'Z'; d++)
+		{
+			TCHAR szTemp[3] = { d, ':', '\0' };
+			// 获取磁盘类型
+			UINT uType = GetDriveTypeW(szTemp);
+			// DRIVE_UNKNOWN  无法确定驱动器类型。
+			// DRIVE_NO_ROOT_DIR 根路径无效; 例如，指定路径上没有安装卷。
+			// DRIVE_REMOVABLE 驱动器有可移动介质; 例如，软盘驱动器，拇指驱动器或闪存卡读卡器。
+			// DRIVE_FIXED 驱动器有固定的媒体; 例如，硬盘驱动器或闪存驱动器。
+			// DRIVE_REMOTE 该驱动器是远程（网络）驱动器。
+			// DRIVE_CDROM 该驱动器是一个CD-ROM驱动器。
+			// DRIVE_RAMDISK 驱动器是RAM磁盘。
+			switch (uType)
+			{
+			case DRIVE_FIXED:
+			{
+				ui.lw_ImageList->addItem(QString(d) + ":");
+			}
+			default:
+			{
+				continue;
+			}
+			}
+		}
+		ui.lw_ImageList->blockSignals(false);
+		return;
+	}
+	QDir dir(str);
 	ui.lw_ImageList->addItem(".");
 	ui.lw_ImageList->addItem("..");
 	ui.lw_ImageList->setSortingEnabled(true);
@@ -903,7 +947,7 @@ void OffLine_Demo::initImageLS(QString str)
 void OffLine_Demo::onStopCheck()
 {
 	//if Connect Basler camera just stop grabbing 
-	if (nullptr!= times_listImg)
+	if (nullptr != times_listImg)
 	{
 		times_listImg->stop();
 		delete times_listImg;
@@ -925,7 +969,7 @@ void OffLine_Demo::onCameraSet()
 {
 	//相机参数设置
 	ui.Button_Start->setChecked(false);
-	if (g_CheckClass.size()==1)
+	if (g_CheckClass.size() == 1)
 	{
 		if (g_CheckClass[0]->ShowParamDlg(this, true) == 1)//参数值改了时为1
 		{
@@ -951,7 +995,7 @@ void OffLine_Demo::onCameraSet()
 	}
 }
 
-int OffLine_Demo::showMsgBox(QMessageBox::Icon icon,const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str)//全是中文
+int OffLine_Demo::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str)//全是中文
 {
 	if (QString::fromLocal8Bit(button2Str) == "")
 	{
