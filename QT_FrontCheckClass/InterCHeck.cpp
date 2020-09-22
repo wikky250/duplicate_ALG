@@ -388,199 +388,327 @@ bool CInterCHeck::OtherAfterCheck()
 int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1)
 {
 	int i_error = 0, i_null = 0;
-	//return -1;
 	try
 	{
-		int _BandChannel = -1, _BandThread = -1, _PillChannel1 = -1, _PillThread1 = -1;
-		if (nullptr!=checkparam)
-		{
-			_BandChannel = checkparam->i_BandChannel;
-			_BandThread = checkparam->i_BandThread;
-			_PillChannel1 = checkparam->i_PillChannel1;
-			_PillThread1 = checkparam->i_PillThread1;
-		}
-		else
-		{
-			_BandChannel = m_checkparam.i_BandChannel;
-			_BandThread = m_checkparam.i_BandThread;
-			_PillChannel1 = m_checkparam.i_PillChannel1;
-			_PillThread1 = m_checkparam.i_PillThread1;
-		}
-		// Local iconic variables 
-		result = "DERROR";
-		// Local iconic variables 
-		Hobject  ho_ImageMax, ho_ImageSub, ho_ImageMin, ho_ImageSub1;
-		Hobject  ho_Region, ho_Regions_black, ho_Regions1, ho_RegionOpening1;
-		Hobject  ho_RegionClosing2, ho_RegionBand, ho_Regions2, ho_RegionOpening2;
-		Hobject  ho_RegionBandErosion, ho_ImageReduced, ho_Regions;
-		Hobject  ho_RegionFillUp, ho_RegionOpening, ho_ConnectedRegions;
-		Hobject  ho_SelectedRegions, ho_RegionUnion, ho_RegionDilation;
-		Hobject  ho_RegionDifference1, ho_ImageReduced1, ho_Regions3;
-		Hobject  ho_RegionOpening3, ho_ImageMin1, ho_ImageSub2, ho_Regions4;
-		Hobject  ho_ConnectedRegions1, ho_RegionTrans1, ho_SelectedRegions1;
-		Hobject  ho_RegionUnion3, ho_RegionUnion2, ho_RegionDilation1;
-		Hobject  ho_RegionDifference2, ho_PillRegion, ho_ObjectSelected;
-		Hobject  ho_RegionOpening5, ho_RegionTrans, ho_RegionDifference;
-		Hobject  ho_RegionOpening6, ho_RegionIntersection, ho_RegionOpening7;
-		Hobject  ho_RegionUnion1, ho_RegionFillUp1, ho_ConnectedRegions2;
+		Hobject  ho_Image, ho_R, ho_G, ho_B, ho_H, ho_S;
+		Hobject  ho_V, ho_Region, ho_RegionFillUp, ho_ConnectedRegions;
+		Hobject  ho_SelectedRegions, ho_RegionBand, ho_BandErosion;
+		Hobject  ho_ImageSub2, ho_ImageReduced, ho_Region1, ho_RegionFillUp1;
+		Hobject  ho_RegionOpening, ho_ConnectedRegions1, ho_RegionClosing4;
+		Hobject  ho_PillRegions, ho_PillDilation, ho_RegionDifference1;
+		Hobject  ho_ImageReduced1, ho_Region3, ho_RegionOpening2;
+		Hobject  ho_RegionFillUp2, ho_ConnectedRegions5, ho_RegionSeam;
+		Hobject  ho_RegionTrans3, ho_RegionUnion1, ho_Rectangle;
+		Hobject  ho_RegionDifference, ho_RegionErosion, ho_ImageMax;
+		Hobject  ho_ImageSub, ho_Region2, ho_RegionOpening1, ho_RegionIntersection;
+		Hobject  ho_ConnectedRegions3, ho_RegionTrans, ho_SelectedRegions2;
+		Hobject  ho_RegionData, ho_RegionUnion, ho_RegionClosing;
+		Hobject  ho_ConnectedRegions4, ho_SelectedRegions3, ho_Region4;
+		Hobject  ho_ConnectedRegions6, ho_RegionClosing1, ho_RegionOpening3;
+		Hobject  ho_SelectedRegions4, ho_RegionIntersection1, ho_RegionLeft;
+		Hobject  ho_ImageReduced2, ho_ImageMax1, ho_ImageSub1, ho_ImageReduced3;
+		Hobject  ho_Region5, ho_RegionFillUp3, ho_RegionClosing2;
+		Hobject  ho_RegionOpening4, ho_ConnectedRegions7, ho_RegionTrans1;
+		Hobject  ho_SelectedRegions5, ho_BandStrange, ho_PillInter;
+		Hobject  ho_PillImage, ho_ImageMax2, ho_ImageSub3, ho_Region6;
+		Hobject  ho_RegionOpening6, ho_RegionClosing3, ho_ConnectedRegions9;
+		Hobject  ho_SelectedRegions6, ho_ConnectedRegions8, ho_SortedRegions;
+		Hobject  ho_RegionOpening5, ho_ObjectSelected, ho_Circle;
+		Hobject  ho_RegionDifference2, ho_RegionOpening7, ho_RegionErosion2;
+		Hobject  ho_RegionIntersection3, ho_RegionTrans4;
 
 
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Area, hv_ExpDefaultCtrlDummyVar;
-		HTuple  hv_Area1, hv_Number, hv_Area2, hv_Area4, hv_Row;
-		HTuple  hv_Column, hv_m_bEach, hv_Index1, hv_Area3;
+		HTuple  hv_Number, hv_Area1, hv_Row, hv_Column, hv_Phi;
+		HTuple  hv_Length1, hv_Length2, hv_Number1, hv_Row1, hv_Column1;
+		HTuple  hv_Phi1, hv_Length11, hv_Length21, hv_Area2, hv_Area3;
+		HTuple  hv_Index1, hv_Row2, hv_Column2, hv_Radius, hv_Area4;
+		HTuple  hv_Area5, hv_Number2;
+
+		//read_image(&ho_Image, hv_ImageFiles.Select(hv_Index));
+		//Image Acquisition 01: Do something
+		//**转换颜色空间：R,G,B,H,S,V
 
 
-
-
+		//ho_ImageChannel的0,1,2,3,4,5分别对应R,G,B,H,S,V
+		//m_hoLiveImage为传入的原图
 		decompose3(m_hoLiveImage, &ho_ImageChannel[0], &ho_ImageChannel[1], &ho_ImageChannel[2]);
 		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
-		gray_dilation_rect(ho_ImageChannel[1], &ho_ImageMax, 5, 5);
-		sub_image(ho_ImageMax, ho_ImageChannel[1], &ho_ImageSub, 1, 0);
-		gray_erosion_rect(ho_ImageSub, &ho_ImageMin, 11, 11);
-		sub_image(ho_ImageSub, ho_ImageMin, &ho_ImageSub1, 1, 0);
-		threshold(ho_ImageSub1, &ho_Region, 30, 255);
-		closing_circle(ho_Region, &ho_Regions_black, 5.5); 
+		//decompose3(ho_Image, &ho_R, &ho_G, &ho_B);
+		//trans_from_rgb(ho_R, ho_G, ho_B, &ho_H, &ho_S, &ho_V, "hsv");
 
+		//**找到整体药版区域
+		threshold(ho_ImageChannel[0], &ho_Region, 120, 255);
+		fill_up(ho_Region, &ho_RegionFillUp);
+		connection(ho_RegionFillUp, &ho_ConnectedRegions);
+		select_shape_std(ho_ConnectedRegions, &ho_SelectedRegions, "max_area", 70);
+		shape_trans(ho_SelectedRegions, &ho_RegionBand, "convex");
 
-
-
-		threshold(ho_ImageChannel[_BandChannel], &ho_Regions1, _BandThread, 255);
-		opening_circle(ho_Regions1, &ho_RegionOpening1, 3.5);
-		closing_circle(ho_RegionOpening1, &ho_RegionClosing2, 20.5);
-		fill_up(ho_RegionClosing2, &ho_RegionFillUp1);
-		connection(ho_RegionFillUp1, &ho_ConnectedRegions2);
-		select_shape_std(ho_ConnectedRegions2, &ho_RegionBand, "max_area", 70);
+		//***版面错误
 		area_center(ho_RegionBand, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-		if (0 != (hv_Area < 1340000))
+		if (0 != (hv_Area < 1360000))
 		{
-			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
-			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
-			set_line_width(Wnd==-1?m_ShowLabel[0]:Wnd, 6);
-			disp_obj(ho_RegionBand, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
-			result = QString::fromLocal8Bit("铝膜版面错误");
-			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "铝膜版面错误");
-			return -1;
-			// stop(); only in hdevelop
-		}
-		threshold(ho_ImageChannel[4], &ho_Regions2, 87, 255);
-		opening_circle(ho_Regions2, &ho_RegionOpening2, 3.5);
-		area_center(ho_RegionOpening2, &hv_Area1, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-		if (0 != (hv_Area1 > 1000))
-		{
-			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
-			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
-			disp_obj(ho_RegionOpening2, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
-			result = QString::fromLocal8Bit("铝膜接缝异常");
-			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "铝膜接缝异常");
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 6);
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+			disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+			result = QString::fromLocal8Bit("铝模版面错误");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "铝模版面错误");
 			return 1;
 			// stop(); only in hdevelop
+			//continue
 		}
-		erosion_circle(ho_RegionBand, &ho_RegionBandErosion, 3.5);
-		reduce_domain(ho_ImageChannel[_PillChannel1], ho_RegionBandErosion, &ho_ImageReduced);
-		threshold(ho_ImageReduced, &ho_Regions, _PillThread1, 255);
-		fill_up(ho_Regions, &ho_RegionFillUp);
-		opening_circle(ho_RegionFillUp, &ho_RegionOpening, 3.5);
-		connection(ho_RegionOpening, &ho_ConnectedRegions);
-		select_shape(ho_ConnectedRegions, &ho_SelectedRegions, "area", "and", 16500,
-			99999);
-		count_obj(ho_SelectedRegions, &hv_Number);
+
+		//**药剂数量
+		erosion_circle(ho_RegionBand, &ho_BandErosion, 7.5);
+		sub_image(ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageSub2, 1, 0);
+		reduce_domain(ho_ImageSub2, ho_BandErosion, &ho_ImageReduced);
+		threshold(ho_ImageReduced, &ho_Region1, 25, 255);
+		fill_up(ho_Region1, &ho_RegionFillUp1);
+		opening_circle(ho_RegionFillUp1, &ho_RegionOpening, 3.5);
+		connection(ho_RegionOpening, &ho_ConnectedRegions1);
+		closing_circle(ho_ConnectedRegions1, &ho_RegionClosing4, 3.5);
+		select_shape(ho_RegionClosing4, &ho_PillRegions, (HTuple("area").Append("circularity")),
+			"and", (HTuple(16500).Append(0.8)), (HTuple(22500).Append(1.0)));
+		//shape_trans (PillRegions, PillRegions, 'convex')
+		count_obj(ho_PillRegions, &hv_Number);
 		if (0 != (hv_Number != 18))
 		{
-			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
-			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
-			disp_obj(ho_SelectedRegions, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
-			result = QString::fromLocal8Bit("药剂个数错误");
-			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "药剂个数错误");
+
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+
+			disp_obj(ho_PillRegions, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+			result = QString::fromLocal8Bit("药剂数量错误");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "药剂数量错误");
 			return 1;
 			// stop(); only in hdevelop
+			//continue
 		}
-		union1(ho_SelectedRegions, &ho_RegionUnion);
-		dilation_circle(ho_RegionUnion, &ho_RegionDilation, 3.5);
-		difference(ho_RegionBandErosion, ho_RegionDilation, &ho_RegionDifference1);
-		reduce_domain(ho_ImageChannel[2], ho_RegionDifference1, &ho_ImageReduced1);
-		threshold(ho_ImageReduced1, &ho_Regions3, 0, 160);
-		opening_circle(ho_Regions3, &ho_RegionOpening3, 2.5);
-		area_center(ho_RegionOpening3, &hv_Area2, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-		if (0 != hv_Area2)
+
+		//**去除药剂区域
+
+		dilation_circle(ho_PillRegions, &ho_PillDilation, 15.5);
+		shape_trans(ho_PillDilation, &ho_RegionTrans4, "convex");
+		difference(ho_BandErosion, ho_RegionTrans4, &ho_RegionDifference1);
+
+		//**铝模接缝异常
+		reduce_domain(ho_ImageChannel[3], ho_RegionDifference1, &ho_ImageReduced1);
+		threshold(ho_ImageReduced1, &ho_Region3, 230, 255);
+		opening_circle(ho_Region3, &ho_RegionOpening2, 1.5);
+		fill_up(ho_RegionOpening2, &ho_RegionFillUp2);
+		connection(ho_RegionFillUp2, &ho_ConnectedRegions5);
+		select_shape_std(ho_ConnectedRegions5, &ho_RegionSeam, "max_area", 70);
+		area_center(ho_RegionSeam, &hv_Area1, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+		if (0 != (hv_Area1 > 10000))
 		{
-			disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
-			set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
-			disp_obj(ho_RegionOpening3, Wnd==-1?m_ShowLabel[0]:Wnd);
-			set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
+
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+
+			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 4);
+
+			disp_obj(ho_RegionSeam, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+			result = QString::fromLocal8Bit("铝模接缝异常");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "铝模接缝异常");
+			return 1;
+			// stop(); only in hdevelop
+			//continue
+		}
+
+		//**喷印日期
+		shape_trans(ho_PillRegions, &ho_RegionTrans3, "convex");
+		union1(ho_RegionTrans3, &ho_RegionUnion1);
+		smallest_rectangle2(ho_RegionUnion1, &hv_Row, &hv_Column, &hv_Phi, &hv_Length1,
+			&hv_Length2);
+		gen_rectangle2(&ho_Rectangle, hv_Row, hv_Column, hv_Phi, hv_Length1, hv_Length2 + 500);
+		difference(ho_RegionBand, ho_Rectangle, &ho_RegionDifference);
+		//connection (RegionDifference, ConnectedRegions2)
+
+		//select_shape_std (ConnectedRegions2, SelectedRegions1, 'max_area', 70)
+		erosion_circle(ho_RegionDifference, &ho_RegionErosion, 15);
+		gray_dilation_rect(ho_ImageChannel[1], &ho_ImageMax, 7, 7);
+		sub_image(ho_ImageMax, ho_ImageChannel[1], &ho_ImageSub, 1, 0);
+		threshold(ho_ImageSub, &ho_Region2, 10, 255);
+		opening_circle(ho_Region2, &ho_RegionOpening1, 2);
+		intersection(ho_RegionErosion, ho_RegionOpening1, &ho_RegionIntersection);
+		connection(ho_RegionIntersection, &ho_ConnectedRegions3);
+		shape_trans(ho_ConnectedRegions3, &ho_RegionTrans, "convex");
+		select_shape(ho_RegionTrans, &ho_SelectedRegions2, "area", "and", 200, 99999);
+		count_obj(ho_SelectedRegions2, &hv_Number1);
+		if (0 != (hv_Number1 == 0))
+		{
+
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+			result = QString::fromLocal8Bit("无喷印日期");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "无喷印日期");
+			return 1;
+			gen_empty_obj(&ho_RegionData);
+			// stop(); only in hdevelop
+			//continue
+		}
+		else
+		{
+			union1(ho_SelectedRegions2, &ho_RegionUnion);
+			closing_rectangle1(ho_RegionUnion, &ho_RegionClosing, 1, 100);
+			connection(ho_RegionClosing, &ho_ConnectedRegions4);
+			select_shape_std(ho_ConnectedRegions4, &ho_SelectedRegions3, "max_area", 70);
+			smallest_rectangle2(ho_SelectedRegions3, &hv_Row1, &hv_Column1, &hv_Phi1, &hv_Length11,
+				&hv_Length21);
+			gen_rectangle2(&ho_RegionData, hv_Row1, hv_Column1, hv_Phi1, hv_Length11, hv_Length21);
+		}
+
+
+		//**压合缺陷
+		threshold(ho_ImageChannel[5], &ho_Region4, 190, 255);
+		connection(ho_Region4, &ho_ConnectedRegions6);
+		closing_circle(ho_ConnectedRegions6, &ho_RegionClosing1, 10);
+		opening_circle(ho_RegionClosing1, &ho_RegionOpening3, 7.5);
+		select_shape(ho_RegionOpening3, &ho_SelectedRegions4, "area", "and", 1500, 99999);
+		intersection(ho_RegionDifference1, ho_SelectedRegions4, &ho_RegionIntersection1
+		);
+		area_center(ho_RegionIntersection1, &hv_Area2, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+		if (0 != (hv_Area2 > 5000))
+		{
+
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+
+			disp_obj(ho_RegionIntersection1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+			result = QString::fromLocal8Bit("压合缺陷");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "压合缺陷");
+			return 1;
+			// stop(); only in hdevelop
+			//continue
+		}
+		//***去除药剂区域和日期去区域
+		difference(ho_RegionDifference1, ho_RegionData, &ho_RegionLeft);
+
+		//***版面异常
+		reduce_domain(ho_ImageChannel[2], ho_RegionLeft, &ho_ImageReduced2);
+		gray_dilation_rect(ho_ImageReduced2, &ho_ImageMax1, 7, 7);
+		sub_image(ho_ImageMax1, ho_ImageReduced2, &ho_ImageSub1, 1, 0);
+		reduce_domain(ho_ImageSub1, ho_BandErosion, &ho_ImageReduced3);
+		threshold(ho_ImageReduced3, &ho_Region5, 40, 255);
+		fill_up(ho_Region5, &ho_RegionFillUp3);
+		closing_circle(ho_RegionFillUp3, &ho_RegionClosing2, 3.5);
+		opening_circle(ho_RegionClosing2, &ho_RegionOpening4, 2.5);
+		connection(ho_RegionOpening4, &ho_ConnectedRegions7);
+		shape_trans(ho_ConnectedRegions7, &ho_RegionTrans1, "convex");
+		select_shape(ho_RegionTrans1, &ho_SelectedRegions5, "area", "and", 50, 99999);
+		union1(ho_SelectedRegions5, &ho_BandStrange);
+		area_center(ho_BandStrange, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+		if (0 != (hv_Area3.Num()))
+		{
+
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+
+			disp_obj(ho_BandStrange, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
 			result = QString::fromLocal8Bit("版面异常");
-			write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "版面异常");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "版面异常");
 			return 1;
 			// stop(); only in hdevelop
+			//continue
 		}
-		gray_erosion_rect(ho_ImageReduced1, &ho_ImageMin1, 11, 11);
-		sub_image(ho_ImageReduced1, ho_ImageMin1, &ho_ImageSub2, 1, 0);
-		threshold(ho_ImageSub2, &ho_Regions4, 70, 255);
-		connection(ho_Regions4, &ho_ConnectedRegions1);
-		shape_trans(ho_ConnectedRegions1, &ho_RegionTrans1, "convex");
-		select_shape(ho_RegionTrans1, &ho_SelectedRegions1, "area", "and", 30, 999);
-		union1(ho_SelectedRegions1, &ho_RegionUnion3);
 
-		union1(ho_SelectedRegions, &ho_RegionUnion2);
-		dilation_circle(ho_RegionUnion2, &ho_RegionDilation1, 25.5);
-		difference(ho_RegionUnion3, ho_RegionDilation1, &ho_RegionDifference2);
 
-		area_center(ho_RegionDifference2, &hv_Area4, &hv_Row, &hv_Column);
-		if (0 != (hv_Area4.Num()))
+		//**片剂内部异常
+		gen_empty_obj(&ho_PillInter);
+		union1(ho_PillRegions, &ho_PillRegions);
+		reduce_domain(ho_ImageChannel[1], ho_PillRegions, &ho_PillImage);
+		//texture_laws (PillImage, ImageTexture, 'le', 3, 5)
+		gray_dilation_rect(ho_PillImage, &ho_ImageMax2, 5, 5);
+		sub_image(ho_ImageMax2, ho_PillImage, &ho_ImageSub3, 1, 0);
+		threshold(ho_ImageSub3, &ho_Region6, 10, 255);
+		opening_circle(ho_Region6, &ho_RegionOpening6, 1);
+		closing_circle(ho_RegionOpening6, &ho_RegionClosing3, 3.5);
+		connection(ho_RegionClosing3, &ho_ConnectedRegions9);
+		select_shape(ho_ConnectedRegions9, &ho_SelectedRegions6, "area", "and", 50, 99999);
+
+
+		connection(ho_PillRegions, &ho_ConnectedRegions8);
+		sort_region(ho_ConnectedRegions8, &ho_SortedRegions, "character", "true", "row");
+		opening_circle(ho_SortedRegions, &ho_RegionOpening5, 5);
 		{
-			if (0 != (hv_Area4 > 50))
+			HTuple end_val183 = hv_Number;
+			HTuple step_val183 = 1;
+			for (hv_Index1 = 1; hv_Index1.Continue(end_val183, step_val183); hv_Index1 += step_val183)
 			{
-				disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
-				set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
-				set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
-				disp_obj(ho_RegionDifference2, Wnd==-1?m_ShowLabel[0]:Wnd);
-				set_tposition(3600, 10, 10);
-				result = QString::fromLocal8Bit("版面异常2");
-				write_string(3600, "版面异常2");
-				return 1;
-			}
-		}
-		sort_region(ho_SelectedRegions, &ho_PillRegion, "character", "true", "row");
-		hv_m_bEach = 1;
-		{
-			HTuple end_val93 = hv_Number;
-			HTuple step_val93 = 1;
-			for (hv_Index1 = 1; hv_Index1.Continue(end_val93, step_val93); hv_Index1 += step_val93)
-			{
-				//if (m_bEach==0)
-				  //break
-				//endif
-				select_obj(ho_PillRegion, &ho_ObjectSelected, hv_Index1);
-				opening_circle(ho_ObjectSelected, &ho_RegionOpening5, 3.5);
-				shape_trans(ho_RegionOpening5, &ho_RegionTrans, "convex");
-				difference(ho_RegionTrans, ho_RegionOpening5, &ho_RegionDifference);
-				opening_circle(ho_RegionDifference, &ho_RegionOpening6, 2.5);
-				intersection(ho_Regions_black, ho_RegionTrans, &ho_RegionIntersection);
-				opening_circle(ho_RegionIntersection, &ho_RegionOpening7, 1.5);
-				union2(ho_RegionOpening6, ho_RegionOpening7, &ho_RegionUnion1);
-				//opening_circle (RegionUnion1, RegionOpening4, 1.5)
-				area_center(ho_RegionUnion1, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-				if (0 != (hv_Area3 > 0))
+				select_obj(ho_RegionOpening5, &ho_ObjectSelected, hv_Index1);
+				//shape_trans (ObjectSelected, RegionTrans2, 'convex')
+				//*         erosion_circle (RegionTrans2, RegionErosion1, 10)
+				//*         intersection (RegionErosion1, SelectedRegions6, RegionIntersection2)
+				smallest_circle(ho_ObjectSelected, &hv_Row2, &hv_Column2, &hv_Radius);
+				gen_circle(&ho_Circle, hv_Row2, hv_Column2, hv_Radius - 3);
+				difference(ho_Circle, ho_ObjectSelected, &ho_RegionDifference2);
+				opening_circle(ho_RegionDifference2, &ho_RegionOpening7, 2.5);
+				area_center(ho_RegionOpening7, &hv_Area4, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+				erosion_circle(ho_ObjectSelected, &ho_RegionErosion2, 7.5);
+				intersection(ho_RegionErosion2, ho_SelectedRegions6, &ho_RegionIntersection3
+				);
+				area_center(ho_RegionIntersection3, &hv_Area5, &hv_ExpDefaultCtrlDummyVar,
+					&hv_ExpDefaultCtrlDummyVar);
+				if (0 != (hv_Area5 > 20))
 				{
-					disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
-					set_draw(Wnd==-1?m_ShowLabel[0]:Wnd, "margin");
-					set_color(Wnd==-1?m_ShowLabel[0]:Wnd, "red");
-					disp_obj(ho_RegionUnion1, Wnd==-1?m_ShowLabel[0]:Wnd);
-					set_tposition(Wnd==-1?m_ShowLabel[0]:Wnd, 10, 10);
-					result = QString::fromLocal8Bit("片剂内部异常");
-					write_string(Wnd==-1?m_ShowLabel[0]:Wnd, "片剂内部异常");
-					return 1;
+					concat_obj(ho_PillInter, ho_RegionIntersection3, &ho_PillInter);
+				}
+				if (0 != (hv_Area4 > 50))
+				{
+					concat_obj(ho_PillInter, ho_RegionOpening7, &ho_PillInter);
 				}
 			}
 		}
-		disp_obj(m_hoLiveImage, Wnd==-1?m_ShowLabel[0]:Wnd);
+		//union2 (SelectedRegions6, PillInter, PillInter)
+		count_obj(ho_PillInter, &hv_Number2);
+		if (0 != (hv_Number2 != 0))
+		{
+
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+
+			disp_obj(ho_PillInter, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+			result = QString::fromLocal8Bit("片剂内部错误");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "片剂内部错误");
+			return 1;
+			// stop(); only in hdevelop
+			//continue
+		}
+		disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+		set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "blue");
+		set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
+		disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		disp_obj(ho_PillRegions, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		disp_obj(ho_RegionData, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+		//disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 		result = "Good";
 		return 0;
 		if (Wnd == -1)
@@ -611,4 +739,5 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
 		write_string(m_ShowLabel[total_check%circle_times], "Other Error without catch");
 	}
+
 }
