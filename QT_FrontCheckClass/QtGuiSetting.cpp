@@ -1,6 +1,7 @@
 #include "QtGuiSetting.h"
 #include "InterCHeck.h"
 #include <QtWidgets/QComboBox>
+#include <QDesktopWidget>
 typedef void*   UI_MONITOR;
 void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
@@ -54,6 +55,15 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	((CInterCHeck*)p_Parent)->StartCheck("", nullptr,m_MOriginal.cols,m_MOriginal.rows);
 	((CInterCHeck*)p_Parent)->SetShowCallBack(this, ShowCallBack);
 	QObject::connect(ui.tableWidget, SIGNAL(cellChanged(int, int)), this, SLOT(onCellChanged(int, int)));
+	QDesktopWidget *dwsktopwidget = QApplication::desktop();
+	QRect deskrect = dwsktopwidget->availableGeometry();
+	QRect screenrect = dwsktopwidget->screenGeometry();
+	if (deskrect.height() < 1366)
+	{
+		this->resize(768*2+5, 1366/2);
+		ui.groupBox->move(ui.ShowLabel->pos().x() + ui.ShowLabel->width() + 2, ui.ShowLabel->pos().y());
+		//ui.lw_ImageList->move(ui.tableWidget->pos().x() + ui.tableWidget->width() + 2, ui.tableWidget->pos().y());
+	}
 }
 void QtGuiSetting::mouseReleaseEvent(QMouseEvent *p)
 {

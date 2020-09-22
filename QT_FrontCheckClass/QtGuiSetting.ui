@@ -13,18 +13,6 @@
     <height>1366</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>768</width>
-    <height>1366</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>768</width>
-    <height>1366</height>
-   </size>
-  </property>
   <property name="font">
    <font>
     <pointsize>21</pointsize>
@@ -49,93 +37,76 @@
     <string/>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
+  <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>2</x>
+     <x>0</x>
      <y>690</y>
-     <width>380</width>
-     <height>671</height>
+     <width>761</width>
+     <height>661</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>21</pointsize>
-    </font>
+   <property name="title">
+    <string/>
    </property>
-  </widget>
-  <widget class="QListWidget" name="lw_ImageList">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>690</y>
-     <width>371</width>
-     <height>521</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>21</pointsize>
-    </font>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pB_Exit">
-   <property name="geometry">
-    <rect>
-     <x>670</x>
-     <y>1220</y>
-     <width>91</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>退出</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pB_ContinueTest">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>1220</y>
-     <width>71</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>测试</string>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pB_Save">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>1220</y>
-     <width>91</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>保存</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pB_Calibration">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>1220</y>
-     <width>91</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>建模</string>
-   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="2">
+       <widget class="QPushButton" name="pB_Save">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>保存</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QPushButton" name="pB_Calibration">
+        <property name="text">
+         <string>建模</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" rowspan="2">
+       <widget class="QTableWidget" name="tableWidget">
+        <property name="font">
+         <font>
+          <pointsize>21</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QPushButton" name="pB_Exit">
+        <property name="text">
+         <string>退出</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="4">
+       <widget class="QListWidget" name="lw_ImageList">
+        <property name="font">
+         <font>
+          <pointsize>21</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="pB_ContinueTest">
+        <property name="text">
+         <string>测试</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
