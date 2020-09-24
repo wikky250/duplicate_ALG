@@ -415,9 +415,9 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_SelectedRegions6, ho_ConnectedRegions8, ho_SortedRegions;
 		Hobject  ho_RegionOpening5, ho_ObjectSelected, ho_Circle;
 		Hobject  ho_RegionDifference2, ho_RegionOpening7, ho_RegionErosion2;
-		Hobject  ho_RegionIntersection3, ho_RegionTrans4,ho_RegionFillUp4;
-		Hobject  ho_ImageReduced4, ho_Region7, ho_RegionOpening8;
-		Hobject  ho_PillDilation1, ho_PillDilation2;
+		Hobject  ho_RegionIntersection3, ho_RegionTrans4,ho_RegionFillUp4, ho_RegionDilation;
+		Hobject  ho_ImageReduced4, ho_Region7, ho_RegionOpening8, ho_RegionDynThresh;
+		Hobject  ho_PillDilation1, ho_PillDilation2, ho_ImageMax3, ho_RegionErosion3;
 
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Area, hv_ExpDefaultCtrlDummyVar;
@@ -496,7 +496,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//**È¥³ýÒ©¼ÁÇøÓò
 
-		dilation_circle(ho_PillRegions, &ho_PillDilation, 10.5);
+		dilation_circle(ho_PillRegions, &ho_PillDilation, 25.5);
 		shape_trans(ho_PillDilation, &ho_RegionTrans4, "convex");
 		difference(ho_BandErosion, ho_RegionTrans4, &ho_RegionDifference1);
 
@@ -573,9 +573,11 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			gen_rectangle2(&ho_RegionData, hv_Row1, hv_Column1, hv_Phi1, hv_Length11, hv_Length21);
 			//ÅçÓ¡ÈÕÆÚÈ±ÏÝ
 			reduce_domain(ho_ImageChannel[5], ho_RegionData, &ho_ImageReduced4);
-			local_threshold(ho_ImageReduced4, &ho_Region7, "adapted_std_deviation", "dark",
-				"range", 40);
-			fill_up(ho_Region7, &ho_RegionFillUp4);
+			/*local_threshold(ho_ImageReduced4, &ho_Region7, "adapted_std_deviation", "dark",
+				"range", 40);*/
+			gray_dilation_rect(ho_ImageReduced4, &ho_ImageMax3, 11, 11);
+			dyn_threshold(ho_ImageReduced4, ho_ImageMax3, &ho_RegionDynThresh, 45, "dark");
+			fill_up(ho_RegionDynThresh, &ho_RegionFillUp4);
 			opening_circle(ho_RegionFillUp4, &ho_RegionOpening8, 3.5);
 			area_center(ho_RegionOpening8, &hv_Area6, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 			if (0 != (hv_Area6 > 100))
@@ -585,7 +587,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 				disp_obj(ho_RegionOpening8, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-				result = QString::fromLocal8Bit("ÈÕÆÚÈ±ÏÝ");
+				result = QString::fromLocal8Bit("ÅçÓ¡ÈÕÆÚÈ±ÏÝ");
 				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "ÅçÓ¡ÈÕÆÚÈ±ÏÝ");
 				return 1;
 			}
@@ -658,16 +660,19 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//**Æ¬¼ÁÄÚ²¿Òì³£
 		gen_empty_obj(&ho_PillInter);
-		//union1(ho_PillRegions, &ho_PillRegions);
-		//reduce_domain(ho_ImageChannel[1], ho_PillRegions, &ho_PillImage);
-		//texture_laws (PillImage, ImageTexture, 'le', 3, 5)
-		shape_trans(ho_PillDilation, &ho_PillDilation1, "convex");
+		//dilation_circle (PillDilation, PillDilation1, 10)
+		erosion_circle(ho_PillDilation, &ho_RegionErosion3, 10.5);
+		shape_trans(ho_RegionErosion3, &ho_PillDilation1, "convex");
 		union1(ho_PillDilation1, &ho_PillDilation2);
+		//union1 (PillRegions, PillRegions)
 		reduce_domain(ho_ImageChannel[1], ho_PillDilation2, &ho_PillImage);
+		//texture_laws (PillImage, ImageTexture, 'le', 3, 5)
+
 		gray_dilation_rect(ho_PillImage, &ho_ImageMax2, 5, 5);
 		sub_image(ho_ImageMax2, ho_PillImage, &ho_ImageSub3, 1, 0);
 		threshold(ho_ImageSub3, &ho_Region6, 25, 255);
-		opening_circle(ho_Region6, &ho_RegionOpening6, 1.5);
+		//fill_up (Region6, RegionFillUp5)
+		opening_circle(ho_Region6, &ho_RegionOpening6, 1);
 		closing_circle(ho_RegionOpening6, &ho_RegionClosing3, 3.5);
 		connection(ho_RegionClosing3, &ho_ConnectedRegions9);
 		select_shape(ho_ConnectedRegions9, &ho_SelectedRegions6, "area", "and", 50, 99999);
@@ -683,19 +688,19 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			{
 				select_obj(ho_RegionOpening5, &ho_ObjectSelected, hv_Index1);
 				//shape_trans (ObjectSelected, RegionTrans2, 'convex')
-				//*         erosion_circle (RegionTrans2, RegionErosion1, 10)
-				//*         intersection (RegionErosion1, SelectedRegions6, RegionIntersection2)
+				//erosion_circle (RegionTrans2, RegionErosion1, 10)
+				//intersection (RegionErosion1, SelectedRegions6, RegionIntersection2)
 				smallest_circle(ho_ObjectSelected, &hv_Row2, &hv_Column2, &hv_Radius);
 				gen_circle(&ho_Circle, hv_Row2, hv_Column2, hv_Radius - 3);
 				difference(ho_Circle, ho_ObjectSelected, &ho_RegionDifference2);
 				opening_circle(ho_RegionDifference2, &ho_RegionOpening7, 2.5);
 				area_center(ho_RegionOpening7, &hv_Area4, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-				erosion_circle(ho_ObjectSelected, &ho_RegionErosion2, 7.5);
-				intersection(ho_RegionErosion2, ho_SelectedRegions6, &ho_RegionIntersection3
+				dilation_circle(ho_Circle, &ho_RegionDilation, 5.5);
+				intersection(ho_RegionDilation, ho_SelectedRegions6, &ho_RegionIntersection3
 				);
 				area_center(ho_RegionIntersection3, &hv_Area5, &hv_ExpDefaultCtrlDummyVar,
 					&hv_ExpDefaultCtrlDummyVar);
-				if (0 != (hv_Area5 > 20))
+				if (0 != (hv_Area5 > 40))
 				{
 					concat_obj(ho_PillInter, ho_RegionIntersection3, &ho_PillInter);
 				}
