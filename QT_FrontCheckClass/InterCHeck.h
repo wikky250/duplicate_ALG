@@ -1,6 +1,5 @@
 #pragma once
 #include "QT_FRONTCheckClass.h"
-#include "CheckRelay.h"
 #include "QtGuiSetting.h"
 //#include "InspectProcessor.h"
 class CInterCHeck :public QObject,
@@ -78,7 +77,7 @@ public:
 	virtual void StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger,int w ,int h);
 	virtual void StopCheck();
 	virtual QString GetResult();
-	virtual int Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str);
+	virtual int Check(Mat imgpackage, void *checkparam, QString &str);
 	virtual void ShowResult(QVector<double*> &result);
 	virtual void BeatStart(void);
 	virtual void BeatEnd(void);

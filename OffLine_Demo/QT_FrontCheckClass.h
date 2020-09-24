@@ -140,7 +140,7 @@ public:
 	virtual void StartCheck(QString camerasign,  std::shared_ptr<spd::logger> daily_logger,int w,int h) = 0;
 	virtual void StopCheck() = 0;
 	virtual QString GetResult() = 0;
-	virtual int Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str) = 0;
+	virtual int Check(Mat imgpackage, void *checkparam, QString &str) = 0;
 	virtual void ShowResult(QVector<double*> &result) = 0;
 	virtual void BeatStart(void) = 0;
 	virtual void BeatEnd(void) = 0;
