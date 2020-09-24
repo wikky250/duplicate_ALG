@@ -11,30 +11,18 @@ typedef void*   UI_MONITOR;
 #include "OpencvRelay.h"
 #include "QT_FrontCheckClass_global.h"
 #define WM_USER_CLOSE			WM_USER+10009	//¹Ø±Õ
-#ifdef MATUREAPPROACH_EXPORTS
-#define MATUREAPPROACH_API  __declspec(dllexport)
-#else
-#define MATUREAPPROACH_API __declspec(dllimport)
+
+
+#ifndef BUILD_STATIC
+# if defined(QT_FrontCheckClass_LIB)
+#  define QT_FrontCheckClass_EXPORT Q_DECL_EXPORT
+# else
+#  define QT_FrontCheckClass_EXPORT Q_DECL_IMPORT
+# endif
+#else 
+# define QT_FrontCheckClass_EXPORT
 #endif
-struct CHECKPARAM
-{
-	int i_TypeOfCamera;
-	char c_CameraName[20];
-	int i_CheckPosNo;
-	char c_OperateCore[20];
-	//////////////////////////////////////////////////////////////////////////
-	int i_BandChannel = -1;
-	int i_BandThread = -1;
-	int i_PillChannel1 = -1;
-	int i_PillThread1 = -1;
-	//////////////////////////////////////////////////////////////////////////
-	CHECKPARAM()
-	{
-	}
-	~CHECKPARAM()
-	{
-	}
-};
+
 class CBaseCheckAlg:public QObject
 {
 	Q_OBJECT
@@ -54,7 +42,7 @@ public:
 	virtual void StartCheck(QString camerasign,  std::shared_ptr<spd::logger> daily_logger,int w,int h) = 0;
 	virtual void StopCheck() = 0;
 	virtual QString GetResult() = 0;
-	virtual int Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str) = 0;
+	virtual int Check(Mat imgpackage, void *checkparam, QString &str) = 0;
 	virtual void ShowResult(QVector<double*> &result) = 0;
 	virtual void BeatStart(void) = 0;
 	virtual void BeatEnd(void) = 0;

@@ -37,3 +37,24 @@ int gettimeofday(struct timeval *tp, void *tzp);
 #endif
 #pragma endregion TimeCount
 using namespace std;
+
+
+struct CHECKPARAM
+{
+	int i_TypeOfCamera;
+	char c_CameraName[20];
+	int i_CheckPosNo;
+	char c_OperateCore[20];
+	//////////////////////////////////////////////////////////////////////////
+	int i_BandChannel = -1;
+	int i_BandThread = -1;
+	int i_PillChannel1 = -1;
+	int i_PillThread1 = -1;
+	//////////////////////////////////////////////////////////////////////////
+	CHECKPARAM()
+	{
+	}
+	~CHECKPARAM()
+	{
+	}
+};

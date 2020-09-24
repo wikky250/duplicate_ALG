@@ -299,14 +299,14 @@ Mat CInterCHeck::Hobject2Mat(Hobject Hobj)
 	}
 	return Image;
 }
-int CInterCHeck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
+int CInterCHeck::Check(Mat imgpackage, void *checkparam, QString &str)
 {
 	bool _bresult = TRUE;
 	try
 	{
 		if (checkparam != nullptr)
 		{
-			m_checkparam = *checkparam;
+			m_checkparam = *(CHECKPARAM*)checkparam;
 		}
 		QString strwarning;
 		m_hoLiveImage = Mat2Hobject(imgpackage);

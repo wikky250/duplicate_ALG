@@ -52,11 +52,11 @@ QString COutShowCheck::GetResult()
 {
 	return SecretBase->GetResult();
 }
-int COutShowCheck::Check(Mat imgpackage, CHECKPARAM *checkparam, QString &str)
+int COutShowCheck::Check(Mat imgpackage, void *checkparam, QString &str)
 {
 	SecretBase->Check(imgpackage, checkparam, str);
 	SecretBase->OtherAfterCheck();
-	int b = SecretBase->RealCheck(str, checkparam,-1);
+	int b = SecretBase->RealCheck(str, (CHECKPARAM*)checkparam,-1);
 	SecretBase->OtherBeforeCheck(imgpackage);
 	return b;
 }
