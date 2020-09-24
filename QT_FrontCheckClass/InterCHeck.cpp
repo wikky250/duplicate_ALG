@@ -415,8 +415,9 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_SelectedRegions6, ho_ConnectedRegions8, ho_SortedRegions;
 		Hobject  ho_RegionOpening5, ho_ObjectSelected, ho_Circle;
 		Hobject  ho_RegionDifference2, ho_RegionOpening7, ho_RegionErosion2;
-		Hobject  ho_RegionIntersection3, ho_RegionTrans4;
-
+		Hobject  ho_RegionIntersection3, ho_RegionTrans4,ho_RegionFillUp4;
+		Hobject  ho_ImageReduced4, ho_Region7, ho_RegionOpening8;
+		Hobject  ho_PillDilation1, ho_PillDilation2;
 
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Area, hv_ExpDefaultCtrlDummyVar;
@@ -424,7 +425,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		HTuple  hv_Length1, hv_Length2, hv_Number1, hv_Row1, hv_Column1;
 		HTuple  hv_Phi1, hv_Length11, hv_Length21, hv_Area2, hv_Area3;
 		HTuple  hv_Index1, hv_Row2, hv_Column2, hv_Radius, hv_Area4;
-		HTuple  hv_Area5, hv_Number2;
+		HTuple  hv_Area5, hv_Number2, hv_Area6;
 
 		//read_image(&ho_Image, hv_ImageFiles.Select(hv_Index));
 		//Image Acquisition 01: Do something
@@ -495,7 +496,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//**去除药剂区域
 
-		dilation_circle(ho_PillRegions, &ho_PillDilation, 15.5);
+		dilation_circle(ho_PillRegions, &ho_PillDilation, 10.5);
 		shape_trans(ho_PillDilation, &ho_RegionTrans4, "convex");
 		difference(ho_BandErosion, ho_RegionTrans4, &ho_RegionDifference1);
 
@@ -570,6 +571,26 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			smallest_rectangle2(ho_SelectedRegions3, &hv_Row1, &hv_Column1, &hv_Phi1, &hv_Length11,
 				&hv_Length21);
 			gen_rectangle2(&ho_RegionData, hv_Row1, hv_Column1, hv_Phi1, hv_Length11, hv_Length21);
+			//喷印日期缺陷
+			reduce_domain(ho_ImageChannel[5], ho_RegionData, &ho_ImageReduced4);
+			local_threshold(ho_ImageReduced4, &ho_Region7, "adapted_std_deviation", "dark",
+				"range", 40);
+			fill_up(ho_Region7, &ho_RegionFillUp4);
+			opening_circle(ho_RegionFillUp4, &ho_RegionOpening8, 3.5);
+			area_center(ho_RegionOpening8, &hv_Area6, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+			if (0 != (hv_Area6 > 100))
+			{
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(ho_RegionOpening8, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+				result = QString::fromLocal8Bit("日期缺陷");
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "喷印日期缺陷");
+				return 1;
+			}
+
+
 		}
 
 
@@ -613,7 +634,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		opening_circle(ho_RegionClosing2, &ho_RegionOpening4, 2.5);
 		connection(ho_RegionOpening4, &ho_ConnectedRegions7);
 		shape_trans(ho_ConnectedRegions7, &ho_RegionTrans1, "convex");
-		select_shape(ho_RegionTrans1, &ho_SelectedRegions5, "area", "and", 50, 99999);
+		select_shape(ho_RegionTrans1, &ho_SelectedRegions5, "area", "and", 100, 99999);
 		union1(ho_SelectedRegions5, &ho_BandStrange);
 		area_center(ho_BandStrange, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != (hv_Area3.Num()))
@@ -637,13 +658,16 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//**片剂内部异常
 		gen_empty_obj(&ho_PillInter);
-		union1(ho_PillRegions, &ho_PillRegions);
-		reduce_domain(ho_ImageChannel[1], ho_PillRegions, &ho_PillImage);
+		//union1(ho_PillRegions, &ho_PillRegions);
+		//reduce_domain(ho_ImageChannel[1], ho_PillRegions, &ho_PillImage);
 		//texture_laws (PillImage, ImageTexture, 'le', 3, 5)
+		shape_trans(ho_PillDilation, &ho_PillDilation1, "convex");
+		union1(ho_PillDilation1, &ho_PillDilation2);
+		reduce_domain(ho_ImageChannel[1], ho_PillDilation2, &ho_PillImage);
 		gray_dilation_rect(ho_PillImage, &ho_ImageMax2, 5, 5);
 		sub_image(ho_ImageMax2, ho_PillImage, &ho_ImageSub3, 1, 0);
-		threshold(ho_ImageSub3, &ho_Region6, 10, 255);
-		opening_circle(ho_Region6, &ho_RegionOpening6, 1);
+		threshold(ho_ImageSub3, &ho_Region6, 25, 255);
+		opening_circle(ho_Region6, &ho_RegionOpening6, 1.5);
 		closing_circle(ho_RegionOpening6, &ho_RegionClosing3, 3.5);
 		connection(ho_RegionClosing3, &ho_ConnectedRegions9);
 		select_shape(ho_ConnectedRegions9, &ho_SelectedRegions6, "area", "and", 50, 99999);
