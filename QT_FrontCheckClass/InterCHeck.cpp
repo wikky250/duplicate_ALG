@@ -9,10 +9,12 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	QString cameraname = checkparam->c_CameraName;
 	//读取检测参数配置
 	//////////////////////////////////////////////////////////////////////////
-	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "5").toInt();
-	checkparam->i_BandThread = configIniRead.value("/" + cameraname + "/BandThread", "128").toInt();
-	checkparam->i_PillChannel1 = configIniRead.value("/" + cameraname + "/PillChannel1", "4").toInt();
-	checkparam->i_PillThread1 = configIniRead.value("/" + cameraname + "/PillThread1", "30").toInt();
+	checkparam->i_BandArea = configIniRead.value("/" + cameraname + "/BandArea", "1370000").toInt();
+	checkparam->i_BandException1_Area = configIniRead.value("/" + cameraname + "/BandException1_Area", "300").toInt();
+	checkparam->i_BandException2_Value = configIniRead.value("/" + cameraname + "/BandException2_Value", "110").toInt();
+	checkparam->i_BandException3_Area = configIniRead.value("/" + cameraname + "/BandException3_Area", "50").toInt();
+	checkparam->i_InterException_Area = configIniRead.value("/" + cameraname + "/InterException_Area", "50").toInt();
+	checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1").toDouble();
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -26,10 +28,12 @@ bool CInterCHeck::SaveCheckParam(CHECKPARAM * checkparam)
 	strcpy(checkparam->c_OperateCore, configIniRead.value("/" + cameraname + "/OperateCore", "NoRead").toString().toStdString().c_str());
 	//写入检测参数配置
 	//////////////////////////////////////////////////////////////////////////
-	configIniRead.setValue("/" + cameraname + "/BandChannel", checkparam->i_BandChannel);
-	configIniRead.setValue("/" + cameraname + "/BandThread", checkparam->i_BandThread);
-	configIniRead.setValue("/" + cameraname + "/PillChannel1", checkparam->i_PillChannel1);
-	configIniRead.setValue("/" + cameraname + "/PillThread1", checkparam->i_PillThread1);
+	configIniRead.setValue("/" + cameraname + "/BandArea", checkparam->i_BandArea);
+	configIniRead.setValue("/" + cameraname + "/BandException1_Area", checkparam->i_BandException1_Area);
+	configIniRead.setValue("/" + cameraname + "/BandException2_Value", checkparam->i_BandException2_Value);
+	configIniRead.setValue("/" + cameraname + "/BandException3_Area", checkparam->i_BandException3_Area);
+	configIniRead.setValue("/" + cameraname + "/InterException_Area", checkparam->i_InterException_Area);
+	configIniRead.setValue("/" + cameraname + "/InterException_Open", checkparam->d_InterException_Open);
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -395,9 +399,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_SelectedRegions, ho_RegionBand, ho_BandErosion;
 		Hobject  ho_ImageSub2, ho_ImageReduced, ho_Region1, ho_RegionFillUp1;
 		Hobject  ho_RegionOpening, ho_ConnectedRegions1, ho_RegionClosing4;
-		Hobject  ho_PillRegions, ho_ImageReduced6, ho_Regions, ho_RegionOpening10;
-		Hobject  ho_ConnectedRegions11, ho_SelectedRegions8, ho_RegionClosing5;
-		Hobject  ho_Circle1, ho_PillDilation, ho_RegionDifference1;
+		Hobject  ho_PillRegions, ho_PillDilation, ho_RegionDifference1;
 		Hobject  ho_ImageReduced1, ho_Region3, ho_RegionOpening2;
 		Hobject  ho_RegionFillUp2, ho_ConnectedRegions5, ho_RegionSeam;
 		Hobject  ho_RegionTrans3, ho_RegionUnion1, ho_Rectangle;
@@ -413,25 +415,32 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_ImageMean, ho_ImageMax4, ho_ImageSub4, ho_Region8;
 		Hobject  ho_RegionIntersection6, ho_RegionFillUp6, ho_RegionOpening11;
 		Hobject  ho_ConnectedRegions10, ho_SelectedRegions7, ho_Region9;
-		Hobject  ho_RegionDifference3, ho_RegionIntersection7, ho_RegionClosing6;
+		Hobject  ho_Circle2, ho_RegionDifference3, ho_RegionIntersection7;
+		Hobject  ho_RegionClosing6, ho_ImageReduced2, ho_ImageMax1;
+		Hobject  ho_ImageSub1, ho_ImageReduced3, ho_Region5, ho_RegionFillUp3;
+		Hobject  ho_RegionClosing2, ho_RegionOpening4, ho_ConnectedRegions7;
+		Hobject  ho_RegionTrans1, ho_SelectedRegions5, ho_BandStrange;
 		Hobject  ho_PillInter, ho_PillDilation1, ho_RegionErosion3;
 		Hobject  ho_PillDilation2, ho_PillImage, ho_ImageMax2, ho_ImageSub3;
 		Hobject  ho_Region6, ho_RegionOpening6, ho_RegionClosing3;
 		Hobject  ho_ConnectedRegions9, ho_SelectedRegions6, ho_ConnectedRegions8;
 		Hobject  ho_SortedRegions, ho_RegionOpening5, ho_ObjectSelected;
 		Hobject  ho_Circle, ho_RegionDifference2, ho_RegionOpening7;
-		Hobject  ho_RegionDilation, ho_RegionIntersection3, ho_RegionTrans4;
+		Hobject  ho_RegionDilation, ho_RegionIntersection3;
 
 
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Area, hv_ExpDefaultCtrlDummyVar;
-		HTuple  hv_Number, hv_Row3, hv_Column3, hv_Radius1, hv_Area1;
+		HTuple  hv_Number, hv_Row5, hv_Column5, hv_Radius3, hv_Area1;
 		HTuple  hv_Row, hv_Column, hv_Phi, hv_Length1, hv_Length2;
 		HTuple  hv_Number1, hv_Row1, hv_Column1, hv_Phi1, hv_Length11;
-		HTuple  hv_Length21, hv_Area6, hv_Area2, hv_Area7, hv_Area8;
-		HTuple  hv_Index1, hv_Row2, hv_Column2, hv_Radius, hv_Area4;
-		HTuple  hv_Area5, hv_Number2;
+		HTuple  hv_Length21, hv_Area6, hv_Area2, hv_Area7, hv_Row4;
+		HTuple  hv_Column4, hv_Radius2, hv_Area8, hv_Area3, hv_Index1;
+		HTuple  hv_Row2, hv_Column2, hv_Radius, hv_Area4, hv_Area5;
+		HTuple  hv_Number2;
 
+
+		
 		//read_image(&ho_Image, hv_ImageFiles.Select(hv_Index));
 		//Image Acquisition 01: Do something
 		//**转换颜色空间：R,G,B,H,S,V
@@ -453,7 +462,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//***版面错误
 		area_center(ho_RegionBand, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-		if (0 != (hv_Area < 1375000))
+		if (0 != (hv_Area < m_checkparam.i_BandArea ))
 		{
 			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
@@ -500,18 +509,21 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		}
 
 		//**去除药剂区域
-		reduce_domain(ho_ImageChannel[2], ho_BandErosion, &ho_ImageReduced6);
-		threshold(ho_ImageReduced6, &ho_Regions, 0, 150);
-		opening_circle(ho_Regions, &ho_RegionOpening10, 3.5);
-		connection(ho_RegionOpening10, &ho_ConnectedRegions11);
-		select_shape(ho_ConnectedRegions11, &ho_SelectedRegions8, "area", "and", 15000,
-			99999);
-		closing_circle(ho_SelectedRegions8, &ho_RegionClosing5, 30.5);
-		smallest_circle(ho_RegionClosing5, &hv_Row3, &hv_Column3, &hv_Radius1);
-		gen_circle(&ho_Circle1, hv_Row3, hv_Column3, (hv_Radius1 / hv_Radius1) * 110);
-		union1(ho_Circle1, &ho_PillDilation);
+
+		//reduce_domain(ho_ImageChannel[2], ho_BandErosion, &ho_ImageReduced6);
+		//threshold(ho_ImageReduced6, &ho_Regions, 0, 150);
+		//opening_circle(ho_Regions, &ho_RegionOpening10, 3.5);
+		//connection(ho_RegionOpening10, &ho_ConnectedRegions11);
+		//select_shape(ho_ConnectedRegions11, &ho_SelectedRegions8, "area", "and", 15000,
+		//	99999);
+		//closing_circle(ho_SelectedRegions8, &ho_RegionClosing5, 30.5);
+		//smallest_circle(ho_RegionClosing5, &hv_Row3, &hv_Column3, &hv_Radius1);
+		//gen_circle(&ho_Circle1, hv_Row3, hv_Column3, (hv_Radius1 / hv_Radius1) * 110);
+		//union1(ho_Circle1, &ho_PillDilation);
 		//dilation_circle(ho_PillRegions, &ho_PillDilation, 25.5);
 		//shape_trans(ho_PillDilation, &ho_RegionTrans4, "convex");
+		smallest_circle(ho_PillRegions, &hv_Row5, &hv_Column5, &hv_Radius3);
+		gen_circle(&ho_PillDilation, hv_Row5, hv_Column5, (hv_Radius3 / hv_Radius3) * 110);
 		difference(ho_BandErosion, ho_PillDilation, &ho_RegionDifference1);
 
 		//**铝模接缝异常
@@ -641,19 +653,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		difference(ho_RegionDifference1, ho_RegionData, &ho_RegionLeft);
 
 		//***版面异常1
-		//reduce_domain(ho_ImageChannel[2], ho_RegionLeft, &ho_ImageReduced2);
-		//gray_dilation_rect(ho_ImageReduced2, &ho_ImageMax1, 7, 7);
-		//sub_image(ho_ImageMax1, ho_ImageReduced2, &ho_ImageSub1, 1, 0);
-		//reduce_domain(ho_ImageSub1, ho_BandErosion, &ho_ImageReduced3);
-		//threshold(ho_ImageReduced3, &ho_Region5, 40, 255);
-		//fill_up(ho_Region5, &ho_RegionFillUp3);
-		//closing_circle(ho_RegionFillUp3, &ho_RegionClosing2, 3.5);
-		//opening_circle(ho_RegionClosing2, &ho_RegionOpening4, 2.5);
-		//connection(ho_RegionOpening4, &ho_ConnectedRegions7);
-		//shape_trans(ho_ConnectedRegions7, &ho_RegionTrans1, "convex");
-		//select_shape(ho_RegionTrans1, &ho_SelectedRegions5, "area", "and", 100, 99999);
-		//union1(ho_SelectedRegions5, &ho_BandStrange);
-		//area_center(ho_BandStrange, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+
 		mean_image(ho_ImageChannel[5], &ho_ImageMean, 11, 11);
 		gray_dilation_rect(ho_ImageMean, &ho_ImageMax4, 15, 15);
 		sub_image(ho_ImageMax4, ho_ImageMean, &ho_ImageSub4, 1, 0);
@@ -662,10 +662,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		fill_up(ho_RegionIntersection6, &ho_RegionFillUp6);
 		//opening_circle (Region8, RegionOpening9, 3.5)
 		//*     intersection (RegionOpening9, RegionLeft, RegionIntersection5)
-		opening_circle(ho_RegionFillUp6, &ho_RegionOpening11, 5.5);
+		opening_circle(ho_RegionFillUp6, &ho_RegionOpening11, 3.5);
 		connection(ho_RegionOpening11, &ho_ConnectedRegions10);
 		select_shape(ho_ConnectedRegions10, &ho_SelectedRegions7, (HTuple("contlength").Append("area")),
-			"and", (HTuple(20).Append(200)), (HTuple(5000).Append(99999)));
+			"and", (HTuple(20).Append(m_checkparam.i_BandException1_Area)), (HTuple(5000).Append(99999)));
 		area_center(ho_SelectedRegions7, &hv_Area7, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (0 != (hv_Area7.Num()))
 		{
@@ -683,7 +683,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		}
 
 		//**版面异常2
-		threshold(ho_ImageChannel[1], &ho_Region9, 0, 110);
+		threshold(ho_ImageChannel[1], &ho_Region9, 0, m_checkparam.i_BandException2_Value);
 		difference(ho_PillDilation, ho_PillRegions, &ho_RegionDifference3);
 		intersection(ho_Region9, ho_RegionDifference3, &ho_RegionIntersection7);
 		closing_circle(ho_RegionIntersection7, &ho_RegionClosing6, 3.5);
@@ -699,6 +699,36 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "版面异常2");
 			return 1;
 		}
+
+
+		//***版面异常3
+		reduce_domain(ho_ImageChannel[2], ho_RegionLeft, &ho_ImageReduced2);
+		gray_dilation_rect(ho_ImageReduced2, &ho_ImageMax1, 7, 7);
+		sub_image(ho_ImageMax1, ho_ImageReduced2, &ho_ImageSub1, 1, 0);
+		reduce_domain(ho_ImageSub1, ho_BandErosion, &ho_ImageReduced3);
+		threshold(ho_ImageReduced3, &ho_Region5, 40, 255);
+		fill_up(ho_Region5, &ho_RegionFillUp3);
+		closing_circle(ho_RegionFillUp3, &ho_RegionClosing2, 3.5);
+		opening_circle(ho_RegionClosing2, &ho_RegionOpening4, 2.5);
+		connection(ho_RegionOpening4, &ho_ConnectedRegions7);
+		shape_trans(ho_ConnectedRegions7, &ho_RegionTrans1, "convex");
+		select_shape(ho_RegionTrans1, &ho_SelectedRegions5, "area", "and", m_checkparam.i_BandException3_Area, 99999);
+		union1(ho_SelectedRegions5, &ho_BandStrange);
+		area_center(ho_BandStrange, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+		if (0 != (hv_Area3.Num()))
+		{
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+			disp_obj(ho_BandStrange, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
+			result = QString::fromLocal8Bit("版面异常3");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "版面异常3");
+			return 1;
+			// stop(); only in hdevelop
+		}
+
+
 		//**片剂内部异常
 		gen_empty_obj(&ho_PillInter);
 		//dilation_circle (PillDilation, PillDilation1, 10)
@@ -713,10 +743,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		sub_image(ho_ImageMax2, ho_PillImage, &ho_ImageSub3, 1, 0);
 		threshold(ho_ImageSub3, &ho_Region6, 25, 255);
 		//fill_up (Region6, RegionFillUp5)
-		opening_circle(ho_Region6, &ho_RegionOpening6, 1);
+		opening_circle(ho_Region6, &ho_RegionOpening6, m_checkparam.d_InterException_Open);
 		closing_circle(ho_RegionOpening6, &ho_RegionClosing3, 3.5);
 		connection(ho_RegionClosing3, &ho_ConnectedRegions9);
-		select_shape(ho_ConnectedRegions9, &ho_SelectedRegions6, "area", "and", 50, 99999);
+		select_shape(ho_ConnectedRegions9, &ho_SelectedRegions6, "area", "and", m_checkparam.i_InterException_Area, 99999);
 
 
 		connection(ho_PillRegions, &ho_ConnectedRegions8);
@@ -776,7 +806,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
 		disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 		disp_obj(ho_PillRegions, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-		disp_obj(ho_RegionData, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		disp_obj(ho_RegionIntersection4, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 
 		//disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 		result = "Good";

@@ -46,10 +46,17 @@ struct CHECKPARAM
 	int i_CheckPosNo;
 	char c_OperateCore[20];
 	//////////////////////////////////////////////////////////////////////////
-	int i_BandChannel = -1;
-	int i_BandThread = -1;
-	int i_PillChannel1 = -1;
-	int i_PillThread1 = -1;
+	int i_BandArea = -1;
+	int i_BandException1_Area = -1;
+	int i_BandException2_Value = -1;
+	int i_BandException3_Area = -1;
+	int i_InterException_Area = -1;
+	double d_InterException_Open = -1;
+	//int i_BandChannel = -1;
+	//int i_BandThread = -1;
+	//int i_PillChannel1 = -1;
+	//int i_PillThread1 = -1;
+
 	//////////////////////////////////////////////////////////////////////////
 	CHECKPARAM()
 	{

@@ -392,7 +392,7 @@ void QtGuiSetting::onSelectImageChannel(int channels)
 	set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
 	if (obj->objectName() =="BandChannel")
 	{
-		_checkparam.i_BandChannel = channels;
+		//_checkparam.i_BandChannel = channels;
 	}
 // 	if (obj->objectName() == "1stChannel")
 // 	{
@@ -441,43 +441,64 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 	QSlider* hsd;
 	if (0 == rowindex)
 	{
-		rowindex = ui.tableWidget->rowCount();
-		ui.tableWidget->insertRow(rowindex);
-		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("泡罩板通道"));
-		item->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowindex, 0, item);
-		stlist.clear();
-		stlist << "R" << "G" << "B" << "H" << "S" << "V";
-		box = new QComboBox();
-		box->setObjectName("BandChannel");
-		box->addItems(stlist);
-		box->setCurrentIndex(_checkparam.i_BandChannel);
-		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
-		ui.tableWidget->setCellWidget(rowindex, 1, box);
+		//rowindex = ui.tableWidget->rowCount();
+		//ui.tableWidget->insertRow(rowindex);
+		//item = new QTableWidgetItem();
+		//item->setText(QString::fromLocal8Bit("泡罩板通道"));
+		//item->setTextAlignment(Qt::AlignCenter);
+		//ui.tableWidget->setItem(rowindex, 0, item);
+		//stlist.clear();
+		//stlist << "R" << "G" << "B" << "H" << "S" << "V";
+		//box = new QComboBox();
+		//box->setObjectName("BandChannel");
+		//box->addItems(stlist);
+		//box->setCurrentIndex(_checkparam.i_BandChannel);
+		//connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
+		//ui.tableWidget->setCellWidget(rowindex, 1, box);
 
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("泡罩板阈值"));
+		item->setText(QString::fromLocal8Bit("泡罩板面积"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_BandThread));
+		item->setText(QString::number(_checkparam.i_BandArea));
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
 		
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("版面异常1面积"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_BandException1_Area));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
 
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("泡罩板阈值"));
+		item->setText(QString::fromLocal8Bit("版面异常2阈值"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_BandException2_Value));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("版面异常2阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		hsd = new QSlider(Qt::Horizontal);
 		hsd->setMinimum(0);
 		hsd->setMaximum(255);
-		hsd->setValue(_checkparam.i_BandThread);
+		hsd->setValue(_checkparam.i_BandException2_Value);
 		hsd->setStyleSheet("  \
      QSlider::add-page:Horizontal\
      {     \
@@ -507,71 +528,44 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		});//利用lambda表达式可用
 		ui.tableWidget->setCellWidget(rowindex, 1, hsd);
 
-		rowindex = ui.tableWidget->rowCount();
-		ui.tableWidget->insertRow(rowindex);
-		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("药剂通道"));
-		item->setTextAlignment(Qt::AlignCenter);
-		ui.tableWidget->setItem(rowindex, 0, item);
-		stlist.clear();
-		stlist << "R" << "G" << "B" << "H" << "S" << "V";
-		box = new QComboBox();
-		box->setObjectName("BandChannel");
-		box->addItems(stlist);
-		box->setCurrentIndex(_checkparam.i_PillChannel1);
-		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
-		ui.tableWidget->setCellWidget(rowindex, 1, box);
+
 
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("药剂阈值"));
+		item->setText(QString::fromLocal8Bit("版面异常3面积"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
-		item->setText(QString::number(_checkparam.i_PillThread1));
+		item->setText(QString::number(_checkparam.i_BandException3_Area));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+		
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("内部异常面积"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_InterException_Area));
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
 
 
+
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("药剂阈值"));
+		item->setText(QString::fromLocal8Bit("内部异常开运算"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
-		hsd = new QSlider(Qt::Horizontal);
-		hsd->setMinimum(0);
-		hsd->setMaximum(255);
-		hsd->setValue(_checkparam.i_PillThread1);
-		hsd->setStyleSheet("  \
-     QSlider::add-page:Horizontal\
-     {     \
-        background-color: rgb(87, 97, 106);\
-        height:4px;\
-     }\
-     QSlider::sub-page:Horizontal \
-    {\
-        background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(7,208,255, 255), stop:1 rgba(7,208,255, 255));\
-        height:4px;\
-     }\
-    QSlider::groove:Horizontal \
-    {\
-        background:transparent;\
-        height:6px;\
-    }\
-    QSlider::handle:Horizontal \
-    {\
-        height: 25px;\
-        width:35px;\
-        border-image: url(./ico/btn.png);\
-        margin: -15 0px; \
-    }\
-    ");
-		connect(hsd, &QSlider::valueChanged, [=]() {
-			ui.tableWidget->item(rowindex - 1, 1)->setText(QString::number(hsd->value()));
-		});//利用lambda表达式可用
-		ui.tableWidget->setCellWidget(rowindex, 1, hsd);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.d_InterException_Open));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
 
  	}
 	ui.tableWidget->blockSignals(false);
@@ -584,27 +578,51 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		HTuple hv_Width, hv_Height;
 
 		Mat MatToShow(m_MOriginal);
-		// Local iconic variables 
-		Hobject  ho_ImageMax, ho_ImageSub, ho_ImageMin, ho_ImageSub1;
-		Hobject  ho_Region, ho_Regions_black, ho_Regions1, ho_RegionOpening1;
-		Hobject  ho_RegionClosing2, ho_RegionBand, ho_Regions2, ho_RegionOpening2;
-		Hobject  ho_RegionBandErosion, ho_ImageReduced, ho_Regions;
-		Hobject  ho_RegionFillUp, ho_RegionOpening, ho_ConnectedRegions;
-		Hobject  ho_SelectedRegions, ho_RegionUnion, ho_RegionDilation;
-		Hobject  ho_RegionDifference1, ho_ImageReduced1, ho_Regions3;
-		Hobject  ho_RegionOpening3, ho_ImageMin1, ho_ImageSub2, ho_Regions4;
-		Hobject  ho_ConnectedRegions1, ho_RegionTrans1, ho_SelectedRegions1;
-		Hobject  ho_RegionUnion3, ho_RegionUnion2, ho_RegionDilation1;
-		Hobject  ho_RegionDifference2, ho_PillRegion, ho_ObjectSelected;
-		Hobject  ho_RegionOpening5, ho_RegionTrans, ho_RegionDifference;
-		Hobject  ho_RegionOpening6, ho_RegionIntersection, ho_RegionOpening7;
-		Hobject  ho_RegionUnion1, ho_RegionFillUp1, ho_ConnectedRegions2;
+		//Local iconic variables 
+		Hobject  ho_R, ho_G, ho_B, ho_H, ho_S;
+		Hobject  ho_V, ho_Region, ho_RegionFillUp, ho_ConnectedRegions;
+		Hobject  ho_SelectedRegions, ho_RegionBand, ho_BandErosion;
+		Hobject  ho_ImageSub2, ho_ImageReduced, ho_Region1, ho_RegionFillUp1;
+		Hobject  ho_RegionOpening, ho_ConnectedRegions1, ho_RegionClosing4;
+		Hobject  ho_PillRegions, ho_PillDilation, ho_RegionDifference1;
+		Hobject  ho_ImageReduced1, ho_Region3, ho_RegionOpening2;
+		Hobject  ho_RegionFillUp2, ho_ConnectedRegions5, ho_RegionSeam;
+		Hobject  ho_RegionTrans3, ho_RegionUnion1, ho_Rectangle;
+		Hobject  ho_RegionDifference, ho_RegionErosion, ho_ImageMax;
+		Hobject  ho_ImageSub, ho_Region2, ho_RegionOpening1, ho_RegionIntersection;
+		Hobject  ho_ConnectedRegions3, ho_RegionTrans, ho_SelectedRegions2;
+		Hobject  ho_RegionData, ho_RegionUnion, ho_RegionClosing;
+		Hobject  ho_ConnectedRegions4, ho_SelectedRegions3, ho_RegionIntersection4;
+		Hobject  ho_ImageReduced4, ho_ImageMax3, ho_RegionDynThresh;
+		Hobject  ho_RegionFillUp4, ho_RegionOpening8, ho_Region4;
+		Hobject  ho_ConnectedRegions6, ho_RegionClosing1, ho_RegionOpening3;
+		Hobject  ho_SelectedRegions4, ho_RegionIntersection1, ho_RegionLeft;
+		Hobject  ho_ImageMean, ho_ImageMax4, ho_ImageSub4, ho_Region8;
+		Hobject  ho_RegionIntersection6, ho_RegionFillUp6, ho_RegionOpening11;
+		Hobject  ho_ConnectedRegions10, ho_SelectedRegions7, ho_Region9;
+		Hobject  ho_Circle2, ho_RegionDifference3, ho_RegionIntersection7;
+		Hobject  ho_RegionClosing6, ho_ImageReduced2, ho_ImageMax1;
+		Hobject  ho_ImageSub1, ho_ImageReduced3, ho_Region5, ho_RegionFillUp3;
+		Hobject  ho_RegionClosing2, ho_RegionOpening4, ho_ConnectedRegions7;
+		Hobject  ho_RegionTrans1, ho_SelectedRegions5, ho_BandStrange;
+		Hobject  ho_PillInter, ho_PillDilation1, ho_RegionErosion3;
+		Hobject  ho_PillDilation2, ho_PillImage, ho_ImageMax2, ho_ImageSub3;
+		Hobject  ho_Region6, ho_RegionOpening6, ho_RegionClosing3;
+		Hobject  ho_ConnectedRegions9, ho_SelectedRegions6, ho_ConnectedRegions8;
+		Hobject  ho_SortedRegions, ho_RegionOpening5, ho_ObjectSelected;
+		Hobject  ho_Circle, ho_RegionDifference2, ho_RegionOpening7;
+		Hobject  ho_RegionDilation, ho_RegionIntersection3;
 
 
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_Area, hv_ExpDefaultCtrlDummyVar;
-		HTuple  hv_Area1, hv_Number, hv_Area2, hv_Area4, hv_Row;
-		HTuple  hv_Column, hv_m_bEach, hv_Index1, hv_Area3;
+		HTuple  hv_Number, hv_Row5, hv_Column5, hv_Radius3, hv_Area1;
+		HTuple  hv_Row, hv_Column, hv_Phi, hv_Length1, hv_Length2;
+		HTuple  hv_Number1, hv_Row1, hv_Column1, hv_Phi1, hv_Length11;
+		HTuple  hv_Length21, hv_Area6, hv_Area2, hv_Area7, hv_Row4;
+		HTuple  hv_Column4, hv_Radius2, hv_Area8, hv_Area3, hv_Index1;
+		HTuple  hv_Row2, hv_Column2, hv_Radius, hv_Area4, hv_Area5;
+		HTuple  hv_Number2;
 		Hobject ho_ImageChannel[6];
 		if (m_MOriginal.empty())
 		{
@@ -615,52 +633,204 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
 		get_image_size(ho_Image, &hv_Width, &hv_Height);
 		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
-		_checkparam.i_BandChannel = ((QComboBox*)(ui.tableWidget->cellWidget(0, 1)))->currentIndex();
-		_checkparam.i_BandThread = ui.tableWidget->item(1, c)->text().toInt();
-		_checkparam.i_PillChannel1 = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
-		_checkparam.i_PillThread1 = ui.tableWidget->item(4, c)->text().toInt();
+		//_checkparam.i_BandArea = ((QComboBox*)(ui.tableWidget->cellWidget(0, 1)))->currentIndex();
+		_checkparam.i_BandArea = ui.tableWidget->item(0, c)->text().toInt();
+		//_checkparam.i_PillChannel1 = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
+		_checkparam.i_BandException1_Area = ui.tableWidget->item(1, c)->text().toInt();
+		_checkparam.i_BandException2_Value = ui.tableWidget->item(2, c)->text().toInt();
+		_checkparam.i_BandException3_Area = ui.tableWidget->item(4, c)->text().toInt();
+		_checkparam.i_InterException_Area = ui.tableWidget->item(5, c)->text().toInt();
+		_checkparam.d_InterException_Open = ui.tableWidget->item(6, c)->text().toDouble();
 
 
-		threshold(ho_ImageChannel[_checkparam.i_BandChannel], &ho_Regions1, _checkparam.i_BandThread, 255);
-		opening_circle(ho_Regions1, &ho_RegionOpening1, 3.5);
-		closing_circle(ho_RegionOpening1, &ho_RegionClosing2, 20.5);
-		fill_up(ho_RegionClosing2, &ho_RegionFillUp1);
-		connection(ho_RegionFillUp1, &ho_ConnectedRegions2);
-		select_shape_std(ho_ConnectedRegions2, &ho_RegionBand, "max_area", 70);
+		//**找到整体药版区域
+		threshold(ho_ImageChannel[0], &ho_Region, 120, 255);
+		fill_up(ho_Region, &ho_RegionFillUp);
+		connection(ho_RegionFillUp, &ho_ConnectedRegions);
+		select_shape_std(ho_ConnectedRegions, &ho_SelectedRegions, "max_area", 70);
+		shape_trans(ho_SelectedRegions, &ho_RegionBand, "convex");
 		area_center(ho_RegionBand, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 
+		//**药剂数量
+		erosion_circle(ho_RegionBand, &ho_BandErosion, 10.5);
+		sub_image(ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageSub2, 1, 0);
+		reduce_domain(ho_ImageSub2, ho_BandErosion, &ho_ImageReduced);
+		threshold(ho_ImageReduced, &ho_Region1, 25, 255);
+		fill_up(ho_Region1, &ho_RegionFillUp1);
+		opening_circle(ho_RegionFillUp1, &ho_RegionOpening, 3.5);
+		connection(ho_RegionOpening, &ho_ConnectedRegions1);
+		closing_circle(ho_ConnectedRegions1, &ho_RegionClosing4, 3.5);
+		select_shape(ho_RegionClosing4, &ho_PillRegions, (HTuple("area").Append("circularity")),
+			"and", (HTuple(16500).Append(0.8)), (HTuple(22500).Append(1.0)));
 
+		//去除药剂区域
+		smallest_circle(ho_PillRegions, &hv_Row5, &hv_Column5, &hv_Radius3);
+		gen_circle(&ho_PillDilation, hv_Row5, hv_Column5, (hv_Radius3 / hv_Radius3) * 110);
+		difference(ho_BandErosion, ho_PillDilation, &ho_RegionDifference1);
 
-		erosion_circle(ho_RegionBand, &ho_RegionBandErosion, 3.5);
-		reduce_domain(ho_ImageChannel[_checkparam.i_PillChannel1], ho_RegionBandErosion, &ho_ImageReduced);
-		threshold(ho_ImageReduced, &ho_Regions, _checkparam.i_PillThread1, 255);
-		fill_up(ho_Regions, &ho_RegionFillUp);
-		opening_circle(ho_RegionFillUp, &ho_RegionOpening, 3.5);
-		connection(ho_RegionOpening, &ho_ConnectedRegions);
-		select_shape(ho_ConnectedRegions, &ho_SelectedRegions, "area", "and", 16500, 99999);
+		//**喷印日期
+		shape_trans(ho_PillRegions, &ho_RegionTrans3, "convex");
+		union1(ho_RegionTrans3, &ho_RegionUnion1);
+		smallest_rectangle2(ho_RegionUnion1, &hv_Row, &hv_Column, &hv_Phi, &hv_Length1,
+			&hv_Length2);
+		gen_rectangle2(&ho_Rectangle, hv_Row, hv_Column, hv_Phi, hv_Length1, hv_Length2 + 500);
+		difference(ho_RegionBand, ho_Rectangle, &ho_RegionDifference);
+		//connection (RegionDifference, ConnectedRegions2)
+
+		//select_shape_std (ConnectedRegions2, SelectedRegions1, 'max_area', 70)
+		erosion_circle(ho_RegionDifference, &ho_RegionErosion, 15);
+		gray_dilation_rect(ho_ImageChannel[1], &ho_ImageMax, 7, 7);
+		sub_image(ho_ImageMax, ho_ImageChannel[1], &ho_ImageSub, 1, 0);
+		threshold(ho_ImageSub, &ho_Region2, 10, 255);
+		opening_circle(ho_Region2, &ho_RegionOpening1, 2);
+		intersection(ho_RegionErosion, ho_RegionOpening1, &ho_RegionIntersection);
+		connection(ho_RegionIntersection, &ho_ConnectedRegions3);
+		shape_trans(ho_ConnectedRegions3, &ho_RegionTrans, "convex");
+		select_shape(ho_RegionTrans, &ho_SelectedRegions2, "area", "and", 200, 99999);
+		count_obj(ho_SelectedRegions2, &hv_Number1);
+		if (0 != (hv_Number1 == 0))
+		{
+
+			gen_empty_obj(&ho_RegionData);
+			// stop(); only in hdevelop
+			//continue
+		}
+		else
+		{
+			union1(ho_SelectedRegions2, &ho_RegionUnion);
+			closing_rectangle1(ho_RegionUnion, &ho_RegionClosing, 1, 100);
+			connection(ho_RegionClosing, &ho_ConnectedRegions4);
+			select_shape_std(ho_ConnectedRegions4, &ho_SelectedRegions3, "max_area", 70);
+			smallest_rectangle2(ho_SelectedRegions3, &hv_Row1, &hv_Column1, &hv_Phi1, &hv_Length11,
+				&hv_Length21);
+			gen_rectangle2(&ho_RegionData, hv_Row1, hv_Column1, hv_Phi1, hv_Length11, hv_Length21);
+			//喷印日期缺陷
+			intersection(ho_RegionDifference, ho_RegionData, &ho_RegionData);
+		}
+		//***去除药剂区域和日期去区域
+		difference(ho_RegionDifference1, ho_RegionData, &ho_RegionLeft);
+		//***版面异常1
+		mean_image(ho_ImageChannel[5], &ho_ImageMean, 11, 11);
+		gray_dilation_rect(ho_ImageMean, &ho_ImageMax4, 15, 15);
+		sub_image(ho_ImageMax4, ho_ImageMean, &ho_ImageSub4, 1, 0);
+		threshold(ho_ImageSub4, &ho_Region8, 10, 255);
+		intersection(ho_Region8, ho_RegionLeft, &ho_RegionIntersection6);
+		fill_up(ho_RegionIntersection6, &ho_RegionFillUp6);
+		//opening_circle (Region8, RegionOpening9, 3.5)
+		//*     intersection (RegionOpening9, RegionLeft, RegionIntersection5)
+		opening_circle(ho_RegionFillUp6, &ho_RegionOpening11, 3.5);
+		connection(ho_RegionOpening11, &ho_ConnectedRegions10);
+		select_shape(ho_ConnectedRegions10, &ho_SelectedRegions7, (HTuple("contlength").Append("area")),
+			"and", (HTuple(20).Append(_checkparam.i_BandException1_Area)), (HTuple(5000).Append(99999)));
+
+		//**版面异常2
+		threshold(ho_ImageChannel[1], &ho_Region9, 0, _checkparam.i_BandException2_Value);
+		difference(ho_PillDilation, ho_PillRegions, &ho_RegionDifference3);
+		intersection(ho_Region9, ho_RegionDifference3, &ho_RegionIntersection7);
+		closing_circle(ho_RegionIntersection7, &ho_RegionClosing6, 3.5);
+
+		//***版面异常3
+		reduce_domain(ho_ImageChannel[2], ho_RegionLeft, &ho_ImageReduced2);
+		gray_dilation_rect(ho_ImageReduced2, &ho_ImageMax1, 7, 7);
+		sub_image(ho_ImageMax1, ho_ImageReduced2, &ho_ImageSub1, 1, 0);
+		reduce_domain(ho_ImageSub1, ho_BandErosion, &ho_ImageReduced3);
+		threshold(ho_ImageReduced3, &ho_Region5, 40, 255);
+		fill_up(ho_Region5, &ho_RegionFillUp3);
+		closing_circle(ho_RegionFillUp3, &ho_RegionClosing2, 3.5);
+		opening_circle(ho_RegionClosing2, &ho_RegionOpening4, 2.5);
+		connection(ho_RegionOpening4, &ho_ConnectedRegions7);
+		shape_trans(ho_ConnectedRegions7, &ho_RegionTrans1, "convex");
+		select_shape(ho_RegionTrans1, &ho_SelectedRegions5, "area", "and", _checkparam.i_BandException3_Area, 99999);
+		union1(ho_SelectedRegions5, &ho_BandStrange);
+
+		//**片剂内部异常
+		gen_empty_obj(&ho_PillInter);
+		//dilation_circle (PillDilation, PillDilation1, 10)
+		erosion_circle(ho_PillDilation, &ho_RegionErosion3, 10.5);
+		shape_trans(ho_RegionErosion3, &ho_PillDilation1, "convex");
+		union1(ho_PillDilation1, &ho_PillDilation2);
+		//union1 (PillRegions, PillRegions)
+		reduce_domain(ho_ImageChannel[1], ho_PillDilation2, &ho_PillImage);
+		//texture_laws (PillImage, ImageTexture, 'le', 3, 5)
+
+		gray_dilation_rect(ho_PillImage, &ho_ImageMax2, 5, 5);
+		sub_image(ho_ImageMax2, ho_PillImage, &ho_ImageSub3, 1, 0);
+		threshold(ho_ImageSub3, &ho_Region6, 25, 255);
+		//fill_up (Region6, RegionFillUp5)
+		opening_circle(ho_Region6, &ho_RegionOpening6, _checkparam.d_InterException_Open);
+		closing_circle(ho_RegionOpening6, &ho_RegionClosing3, 3.5);
+		connection(ho_RegionClosing3, &ho_ConnectedRegions9);
+		select_shape(ho_ConnectedRegions9, &ho_SelectedRegions6, "area", "and", _checkparam.i_InterException_Area, 99999);
+
 		switch (r)
 		{
+		case 0:
+		{
+			disp_obj(ho_ImageChannel[0], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "blue");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionBand, m_WND);
+			set_color(m_WND, "red");
+			set_tposition(m_WND, 10, 10);
+			write_string(m_WND, "泡罩版面积：" + hv_Area);
+			break;
+		}
 		case 1:
 		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
+			disp_obj(ho_ImageChannel[5], m_WND);
 			set_draw(m_WND, "margin");
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionBand, m_WND);
+			disp_obj(ho_SelectedRegions7, m_WND);
+			set_tposition(m_WND, 10,10);
+			write_string(m_WND, "最小筛选面积：" + HTuple(_checkparam.i_BandException1_Area));
+			break;
+		}
+		case 2:
+		{
+			disp_obj(ho_ImageChannel[1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region9, m_WND);
+			set_tposition(m_WND, 10, 10);
+			write_string(m_WND, "最大阈值：" + HTuple(_checkparam.i_BandException2_Value));
+
 			break;
 		}
 		case 4:
 		{
-			disp_obj(ho_ImageChannel[_checkparam.i_PillChannel1], m_WND);
+			disp_obj(ho_ImageChannel[2], m_WND);
 			set_draw(m_WND, "margin");
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
-			disp_obj(ho_ConnectedRegions, m_WND);
+			disp_obj(ho_BandStrange, m_WND);
+			set_tposition(m_WND, 10, 10);
+			write_string(m_WND, "最小筛选面积：" + HTuple(_checkparam.i_BandException3_Area));
 			break;
 		}
-		case 7:
+		case 5:
 		{
-
+			disp_obj(ho_ImageChannel[1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions6, m_WND);
+			set_tposition(m_WND, 10, 10);
+			write_string(m_WND, "最小筛选面积：" + HTuple(_checkparam.i_InterException_Area));
+			break;
+		}
+		case 6:
+		{
+			disp_obj(ho_ImageChannel[1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening6, m_WND);
+			set_tposition(m_WND, 10, 10);
+			write_string(m_WND, "开运算半径：" + HTuple(_checkparam.d_InterException_Open));
+			break;
 		}
 		}
 	}
