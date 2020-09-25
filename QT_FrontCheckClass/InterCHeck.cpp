@@ -15,6 +15,9 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	checkparam->i_BandException3_Area = configIniRead.value("/" + cameraname + "/BandException3_Area", "50").toInt();
 	checkparam->i_InterException_Area = configIniRead.value("/" + cameraname + "/InterException_Area", "50").toInt();
 	checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1").toDouble();
+	checkparam->i_PillRadius = configIniRead.value("/" + cameraname + "/PillRadius", "110").toInt();
+	checkparam->i_BandException2_Radius = configIniRead.value("/" + cameraname + "/BandException2_Radius", "0").toInt();
+
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -34,6 +37,9 @@ bool CInterCHeck::SaveCheckParam(CHECKPARAM * checkparam)
 	configIniRead.setValue("/" + cameraname + "/BandException3_Area", checkparam->i_BandException3_Area);
 	configIniRead.setValue("/" + cameraname + "/InterException_Area", checkparam->i_InterException_Area);
 	configIniRead.setValue("/" + cameraname + "/InterException_Open", checkparam->d_InterException_Open);
+	configIniRead.setValue("/" + cameraname + "/PillRadius", checkparam->i_PillRadius);
+	configIniRead.setValue("/" + cameraname + "/BandException2_Radius", checkparam->i_BandException2_Radius);
+
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -159,6 +165,21 @@ void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _d
 	optin.insert(pair<string, string>("parameter", (AppPath + "/DefaultModel/params.yaml").toLocal8Bit()));
 	optin.insert(pair<string, string>("detectors", (AppPath + "/DefaultModel/detectors.yaml").toLocal8Bit()));
 	circle_times = m_ShowLabel.size();
+	if (dataR != nullptr)
+	{
+		delete dataR;
+		dataR = nullptr;
+	}
+	if (dataB != nullptr)
+	{
+		delete dataB;
+		dataB = nullptr;
+	}
+	if (dataG != nullptr)
+	{
+		delete dataG;
+		dataG = nullptr;
+	}
 	if (dataR == NULL && w != 0 && h != 0)
 	{
 		dataR = new uchar[w*h];
@@ -470,8 +491,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-			result = QString::fromLocal8Bit("¬¡ƒ£∞Ê√Ê¥ÌŒÛ");
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "¬¡ƒ£∞Ê√Ê¥ÌŒÛ");
+			result = QString::fromLocal8Bit("¬¡ƒ£∞Â√Ê¥ÌŒÛ");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "¬¡ƒ£∞Â√Ê¥ÌŒÛ");
 			return 1;
 			// stop(); only in hdevelop
 			//continue
@@ -523,7 +544,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//dilation_circle(ho_PillRegions, &ho_PillDilation, 25.5);
 		//shape_trans(ho_PillDilation, &ho_RegionTrans4, "convex");
 		smallest_circle(ho_PillRegions, &hv_Row5, &hv_Column5, &hv_Radius3);
-		gen_circle(&ho_PillDilation, hv_Row5, hv_Column5, (hv_Radius3 / hv_Radius3) * 110);
+		gen_circle(&ho_PillDilation, hv_Row5, hv_Column5, (hv_Radius3 / hv_Radius3) * m_checkparam.i_PillRadius);
 		difference(ho_BandErosion, ho_PillDilation, &ho_RegionDifference1);
 
 		//**¬¡ƒ£Ω”∑Ï“Ï≥£
@@ -675,8 +696,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_SelectedRegions7, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-			result = QString::fromLocal8Bit("∞Ê√Ê“Ï≥£1");
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "∞Ê√Ê“Ï≥£1");
+			result = QString::fromLocal8Bit("“©∞Â»±œ›");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "“©∞Â»±œ›");
 			return 1;
 			// stop(); only in hdevelop
 			//continue
@@ -684,7 +705,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//**∞Ê√Ê“Ï≥£2
 		threshold(ho_ImageChannel[1], &ho_Region9, 0, m_checkparam.i_BandException2_Value);
-		difference(ho_PillDilation, ho_PillRegions, &ho_RegionDifference3);
+		smallest_circle(ho_PillRegions, &hv_Row4, &hv_Column4, &hv_Radius2);
+		gen_circle(&ho_Circle2, hv_Row4, hv_Column4, hv_Radius2+m_checkparam.i_BandException2_Radius);
+		//shape_trans (PillRegions, PillRegions, 'convex')
+		difference(ho_PillDilation, ho_Circle2, &ho_RegionDifference3);
 		intersection(ho_Region9, ho_RegionDifference3, &ho_RegionIntersection7);
 		closing_circle(ho_RegionIntersection7, &ho_RegionClosing6, 3.5);
 		area_center(ho_RegionClosing6, &hv_Area8, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
@@ -695,8 +719,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_RegionClosing6, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-			result = QString::fromLocal8Bit("∞Ê√Ê“Ï≥£2");
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "∞Ê√Ê“Ï≥£2");
+			result = QString::fromLocal8Bit("“©∞Â»±œ›");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "“©∞Â»±œ›");
 			return 1;
 		}
 
@@ -722,8 +746,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_BandStrange, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-			result = QString::fromLocal8Bit("∞Ê√Ê“Ï≥£3");
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "∞Ê√Ê“Ï≥£3");
+			result = QString::fromLocal8Bit("“©∞Â»±œ›");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "“©∞Â»±œ›");
 			return 1;
 			// stop(); only in hdevelop
 		}
@@ -794,8 +818,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 			disp_obj(ho_PillInter, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-			result = QString::fromLocal8Bit("∆¨º¡ƒ⁄≤ø¥ÌŒÛ");
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "∆¨º¡ƒ⁄≤ø¥ÌŒÛ");
+			result = QString::fromLocal8Bit("∆¨º¡ƒ⁄≤ø»±œ›");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "∆¨º¡ƒ⁄≤ø»±œ›");
 			return 1;
 			// stop(); only in hdevelop
 			//continue

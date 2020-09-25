@@ -58,7 +58,7 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	QDesktopWidget *dwsktopwidget = QApplication::desktop();
 	QRect deskrect = dwsktopwidget->availableGeometry();
 	QRect screenrect = dwsktopwidget->screenGeometry();
-	if (deskrect.height() < 1366)
+	if (deskrect.height() < 1100)
 	{
 		this->resize(768*2+5, 1366/2);
 		ui.groupBox->move(ui.ShowLabel->pos().x() + ui.ShowLabel->width() + 2, ui.ShowLabel->pos().y());
@@ -470,7 +470,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("版面异常1面积"));
+		item->setText(QString::fromLocal8Bit("板面缺陷1面积"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -481,7 +481,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("版面异常2阈值"));
+		item->setText(QString::fromLocal8Bit("板面缺陷2阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -492,7 +492,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("版面异常2阈值"));
+		item->setText(QString::fromLocal8Bit("板面缺陷2阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		hsd = new QSlider(Qt::Horizontal);
@@ -533,7 +533,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("版面异常3面积"));
+		item->setText(QString::fromLocal8Bit("板面缺陷3面积"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -545,7 +545,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("内部异常面积"));
+		item->setText(QString::fromLocal8Bit("内部缺陷面积"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -558,7 +558,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("内部异常开运算"));
+		item->setText(QString::fromLocal8Bit("内部缺陷开运算"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -566,7 +566,27 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		item->setTextAlignment(Qt::AlignRight);
 		ui.tableWidget->setItem(rowindex, 1, item);
 
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("药剂区域半径"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_PillRadius));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
 
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("板面缺陷2半径增量"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_BandException2_Radius));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
  	}
 	ui.tableWidget->blockSignals(false);
 }
@@ -622,7 +642,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		HTuple  hv_Length21, hv_Area6, hv_Area2, hv_Area7, hv_Row4;
 		HTuple  hv_Column4, hv_Radius2, hv_Area8, hv_Area3, hv_Index1;
 		HTuple  hv_Row2, hv_Column2, hv_Radius, hv_Area4, hv_Area5;
-		HTuple  hv_Number2;
+		HTuple  hv_Number2, hv_Area9;
 		Hobject ho_ImageChannel[6];
 		if (m_MOriginal.empty())
 		{
@@ -641,6 +661,8 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		_checkparam.i_BandException3_Area = ui.tableWidget->item(4, c)->text().toInt();
 		_checkparam.i_InterException_Area = ui.tableWidget->item(5, c)->text().toInt();
 		_checkparam.d_InterException_Open = ui.tableWidget->item(6, c)->text().toDouble();
+		_checkparam.i_PillRadius = ui.tableWidget->item(7, c)->text().toInt();
+		_checkparam.i_BandException2_Radius = ui.tableWidget->item(8, c)->text().toInt();
 
 
 		//**找到整体药版区域
@@ -665,7 +687,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 
 		//去除药剂区域
 		smallest_circle(ho_PillRegions, &hv_Row5, &hv_Column5, &hv_Radius3);
-		gen_circle(&ho_PillDilation, hv_Row5, hv_Column5, (hv_Radius3 / hv_Radius3) * 110);
+		gen_circle(&ho_PillDilation, hv_Row5, hv_Column5, (hv_Radius3 / hv_Radius3) * _checkparam.i_PillRadius);
 		difference(ho_BandErosion, ho_PillDilation, &ho_RegionDifference1);
 
 		//**喷印日期
@@ -722,10 +744,13 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		connection(ho_RegionOpening11, &ho_ConnectedRegions10);
 		select_shape(ho_ConnectedRegions10, &ho_SelectedRegions7, (HTuple("contlength").Append("area")),
 			"and", (HTuple(20).Append(_checkparam.i_BandException1_Area)), (HTuple(5000).Append(99999)));
-
+		area_center(ho_SelectedRegions7, &hv_Area7, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		//**版面异常2
 		threshold(ho_ImageChannel[1], &ho_Region9, 0, _checkparam.i_BandException2_Value);
-		difference(ho_PillDilation, ho_PillRegions, &ho_RegionDifference3);
+		smallest_circle(ho_PillRegions, &hv_Row4, &hv_Column4, &hv_Radius2);
+		gen_circle(&ho_Circle2, hv_Row4, hv_Column4, hv_Radius2+_checkparam.i_BandException2_Radius);
+		//shape_trans (PillRegions, PillRegions, 'convex')
+		difference(ho_PillDilation, ho_Circle2, &ho_RegionDifference3);
 		intersection(ho_Region9, ho_RegionDifference3, &ho_RegionIntersection7);
 		closing_circle(ho_RegionIntersection7, &ho_RegionClosing6, 3.5);
 
@@ -742,7 +767,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		shape_trans(ho_ConnectedRegions7, &ho_RegionTrans1, "convex");
 		select_shape(ho_RegionTrans1, &ho_SelectedRegions5, "area", "and", _checkparam.i_BandException3_Area, 99999);
 		union1(ho_SelectedRegions5, &ho_BandStrange);
-
+		area_center(ho_BandStrange, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		//**片剂内部异常
 		gen_empty_obj(&ho_PillInter);
 		//dilation_circle (PillDilation, PillDilation1, 10)
@@ -761,6 +786,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		closing_circle(ho_RegionOpening6, &ho_RegionClosing3, 3.5);
 		connection(ho_RegionClosing3, &ho_ConnectedRegions9);
 		select_shape(ho_ConnectedRegions9, &ho_SelectedRegions6, "area", "and", _checkparam.i_InterException_Area, 99999);
+		area_center(ho_SelectedRegions6, &hv_Area9, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 
 		switch (r)
 		{
@@ -779,12 +805,12 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		case 1:
 		{
 			disp_obj(ho_ImageChannel[5], m_WND);
-			set_draw(m_WND, "margin");
+			set_draw(m_WND, "fill");
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_SelectedRegions7, m_WND);
 			set_tposition(m_WND, 10,10);
-			write_string(m_WND, "最小筛选面积：" + HTuple(_checkparam.i_BandException1_Area));
+			write_string(m_WND, "缺陷面积：" + hv_Area7);
 			break;
 		}
 		case 2:
@@ -794,31 +820,30 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_Region9, m_WND);
-			set_tposition(m_WND, 10, 10);
-			write_string(m_WND, "最大阈值：" + HTuple(_checkparam.i_BandException2_Value));
-
+			//set_tposition(m_WND, 10, 10);
+			//write_string(m_WND, "最大阈值：" + HTuple(_checkparam.i_BandException2_Value));
 			break;
 		}
 		case 4:
 		{
 			disp_obj(ho_ImageChannel[2], m_WND);
-			set_draw(m_WND, "margin");
+			set_draw(m_WND, "fill");
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_BandStrange, m_WND);
 			set_tposition(m_WND, 10, 10);
-			write_string(m_WND, "最小筛选面积：" + HTuple(_checkparam.i_BandException3_Area));
+			write_string(m_WND, "缺陷面积：" + hv_Area3);
 			break;
 		}
 		case 5:
 		{
 			disp_obj(ho_ImageChannel[1], m_WND);
-			set_draw(m_WND, "margin");
+			set_draw(m_WND, "fill");
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_SelectedRegions6, m_WND);
 			set_tposition(m_WND, 10, 10);
-			write_string(m_WND, "最小筛选面积：" + HTuple(_checkparam.i_InterException_Area));
+			write_string(m_WND, "缺陷面积：" + hv_Area9);
 			break;
 		}
 		case 6:
@@ -828,8 +853,26 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_RegionOpening6, m_WND);
-			set_tposition(m_WND, 10, 10);
-			write_string(m_WND, "开运算半径：" + HTuple(_checkparam.d_InterException_Open));
+			//set_tposition(m_WND, 10, 10);
+			//write_string(m_WND, "开运算半径：" + HTuple(_checkparam.d_InterException_Open));
+			break;
+		}
+		case 7:
+		{
+			disp_obj(ho_Image, m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_PillDilation, m_WND);
+			break;
+		}
+		case 8:
+		{
+			disp_obj(ho_Image, m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Circle2, m_WND);
 			break;
 		}
 		}

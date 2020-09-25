@@ -52,6 +52,8 @@ struct CHECKPARAM
 	int i_BandException3_Area = -1;
 	int i_InterException_Area = -1;
 	double d_InterException_Open = -1;
+	int i_PillRadius = -1;
+	int i_BandException2_Radius = -1;
 	//int i_BandChannel = -1;
 	//int i_BandThread = -1;
 	//int i_PillChannel1 = -1;
