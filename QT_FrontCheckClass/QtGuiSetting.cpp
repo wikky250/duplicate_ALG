@@ -470,7 +470,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("板面缺陷1面积"));
+		item->setText(QString::fromLocal8Bit("药板大缺陷面积"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -481,7 +481,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("板面缺陷2阈值"));
+		item->setText(QString::fromLocal8Bit("药剂囊阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -492,7 +492,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("板面缺陷2阈值"));
+		item->setText(QString::fromLocal8Bit("药剂囊阈值"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		hsd = new QSlider(Qt::Horizontal);
@@ -533,7 +533,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("板面缺陷3面积"));
+		item->setText(QString::fromLocal8Bit("药板小缺陷面积"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -580,7 +580,7 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
-		item->setText(QString::fromLocal8Bit("板面缺陷2半径增量"));
+		item->setText(QString::fromLocal8Bit("药剂囊半径增量"));
 		item->setTextAlignment(Qt::AlignCenter);
 		ui.tableWidget->setItem(rowindex, 0, item);
 		item = new QTableWidgetItem();
@@ -809,8 +809,8 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_SelectedRegions7, m_WND);
-			set_tposition(m_WND, 10,10);
-			write_string(m_WND, "缺陷面积：" + hv_Area7);
+			//set_tposition(m_WND, 10,10);
+			//write_string(m_WND, "缺陷面积：" + hv_Area7);
 			break;
 		}
 		case 2:
@@ -819,7 +819,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			set_draw(m_WND, "margin");
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
-			disp_obj(ho_Region9, m_WND);
+			disp_obj(ho_RegionClosing6, m_WND);
 			//set_tposition(m_WND, 10, 10);
 			//write_string(m_WND, "最大阈值：" + HTuple(_checkparam.i_BandException2_Value));
 			break;
@@ -831,8 +831,8 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_BandStrange, m_WND);
-			set_tposition(m_WND, 10, 10);
-			write_string(m_WND, "缺陷面积：" + hv_Area3);
+			//set_tposition(m_WND, 10, 10);
+			//write_string(m_WND, "缺陷面积：" + hv_Area3);
 			break;
 		}
 		case 5:
@@ -842,8 +842,8 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
 			disp_obj(ho_SelectedRegions6, m_WND);
-			set_tposition(m_WND, 10, 10);
-			write_string(m_WND, "缺陷面积：" + hv_Area9);
+			//set_tposition(m_WND, 10, 10);
+			//write_string(m_WND, "缺陷面积：" + hv_Area9);
 			break;
 		}
 		case 6:
@@ -852,7 +852,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			set_draw(m_WND, "margin");
 			set_color(m_WND, "red");
 			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionOpening6, m_WND);
+			disp_obj(ho_SelectedRegions6, m_WND);
 			//set_tposition(m_WND, 10, 10);
 			//write_string(m_WND, "开运算半径：" + HTuple(_checkparam.d_InterException_Open));
 			break;
