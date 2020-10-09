@@ -513,17 +513,15 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		count_obj(ho_PillRegions, &hv_Number);
 		if (0 != (hv_Number != 18))
 		{
-
 			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
 			disp_obj(ho_PillRegions, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
 			result = QString::fromLocal8Bit("“©º¡ ˝¡ø¥ÌŒÛ");
 			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "“©º¡ ˝¡ø¥ÌŒÛ");
+
 			return 1;
 			// stop(); only in hdevelop
 			//continue
@@ -593,7 +591,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		intersection(ho_RegionErosion, ho_RegionOpening1, &ho_RegionIntersection);
 		connection(ho_RegionIntersection, &ho_ConnectedRegions3);
 		shape_trans(ho_ConnectedRegions3, &ho_RegionTrans, "convex");
-		select_shape(ho_RegionTrans, &ho_SelectedRegions2, "area", "and", 200, 99999);
+		select_shape(ho_RegionTrans, &ho_SelectedRegions2, "area", "and", 100, 99999);
 		count_obj(ho_SelectedRegions2, &hv_Number1);
 		if (0 != (hv_Number1 == 0))
 		{
@@ -675,7 +673,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//***∞Ê√Ê“Ï≥£1
 
-		mean_image(ho_ImageChannel[5], &ho_ImageMean, 11, 11);
+		mean_image(ho_ImageChannel[2], &ho_ImageMean, 11, 11);
 		gray_dilation_rect(ho_ImageMean, &ho_ImageMax4, 15, 15);
 		sub_image(ho_ImageMax4, ho_ImageMean, &ho_ImageSub4, 1, 0);
 		threshold(ho_ImageSub4, &ho_Region8, 10, 255);
@@ -719,8 +717,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_RegionClosing6, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-			result = QString::fromLocal8Bit("“©∞Â»±œ›");
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "“©∞Â»±œ›");
+			result = QString::fromLocal8Bit("∆¨º¡«¯”Ú»±œ›");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "∆¨º¡«¯”Ú»±œ›");
 			return 1;
 		}
 
@@ -790,7 +788,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				difference(ho_Circle, ho_ObjectSelected, &ho_RegionDifference2);
 				opening_circle(ho_RegionDifference2, &ho_RegionOpening7, 2.5);
 				area_center(ho_RegionOpening7, &hv_Area4, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-				dilation_circle(ho_Circle, &ho_RegionDilation, 5.5);
+				dilation_circle(ho_Circle, &ho_RegionDilation, 3.5);
 				intersection(ho_RegionDilation, ho_SelectedRegions6, &ho_RegionIntersection3
 				);
 				area_center(ho_RegionIntersection3, &hv_Area5, &hv_ExpDefaultCtrlDummyVar,
