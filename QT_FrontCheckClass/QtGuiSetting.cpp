@@ -427,6 +427,7 @@ void QtGuiSetting::onSelectImageChannel(int channels)
 	}
 	m_bChanged = true;
 }
+
 void QtGuiSetting::SetParam(CHECKPARAM param)
 {
 	_checkparam = param;
@@ -677,13 +678,13 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		erosion_circle(ho_RegionBand, &ho_BandErosion, 10.5);
 		sub_image(ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageSub2, 1, 0);
 		reduce_domain(ho_ImageSub2, ho_BandErosion, &ho_ImageReduced);
-		threshold(ho_ImageReduced, &ho_Region1, 25, 255);
+		threshold(ho_ImageReduced, &ho_Region1, 20, 255);
 		fill_up(ho_Region1, &ho_RegionFillUp1);
 		opening_circle(ho_RegionFillUp1, &ho_RegionOpening, 3.5);
 		connection(ho_RegionOpening, &ho_ConnectedRegions1);
 		closing_circle(ho_ConnectedRegions1, &ho_RegionClosing4, 3.5);
 		select_shape(ho_RegionClosing4, &ho_PillRegions, (HTuple("area").Append("circularity")),
-			"and", (HTuple(16500).Append(0.8)), (HTuple(22500).Append(1.0)));
+			"and", (HTuple(10500).Append(0.8)), (HTuple(22500).Append(1.0)));
 
 		//去除药剂区域
 		smallest_circle(ho_PillRegions, &hv_Row5, &hv_Column5, &hv_Radius3);
@@ -708,7 +709,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		intersection(ho_RegionErosion, ho_RegionOpening1, &ho_RegionIntersection);
 		connection(ho_RegionIntersection, &ho_ConnectedRegions3);
 		shape_trans(ho_ConnectedRegions3, &ho_RegionTrans, "convex");
-		select_shape(ho_RegionTrans, &ho_SelectedRegions2, "area", "and", 200, 99999);
+		select_shape(ho_RegionTrans, &ho_SelectedRegions2, "area", "and", 100, 99999);
 		count_obj(ho_SelectedRegions2, &hv_Number1);
 		if (0 != (hv_Number1 == 0))
 		{
@@ -732,7 +733,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//***去除药剂区域和日期去区域
 		difference(ho_RegionDifference1, ho_RegionData, &ho_RegionLeft);
 		//***版面异常1
-		mean_image(ho_ImageChannel[5], &ho_ImageMean, 11, 11);
+		mean_image(ho_ImageChannel[2], &ho_ImageMean, 11, 11);
 		gray_dilation_rect(ho_ImageMean, &ho_ImageMax4, 15, 15);
 		sub_image(ho_ImageMax4, ho_ImageMean, &ho_ImageSub4, 1, 0);
 		threshold(ho_ImageSub4, &ho_Region8, 10, 255);

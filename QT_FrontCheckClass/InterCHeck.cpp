@@ -493,6 +493,9 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
 			result = QString::fromLocal8Bit("铝模板面错误");
 			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "铝模板面错误");
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 50, 10);
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "当前药板面积为："+hv_Area);
 			return 1;
 			// stop(); only in hdevelop
 			//continue
@@ -502,13 +505,13 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		erosion_circle(ho_RegionBand, &ho_BandErosion, 10.5);
 		sub_image(ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageSub2, 1, 0);
 		reduce_domain(ho_ImageSub2, ho_BandErosion, &ho_ImageReduced);
-		threshold(ho_ImageReduced, &ho_Region1, 25, 255);
+		threshold(ho_ImageReduced, &ho_Region1, 20, 255);
 		fill_up(ho_Region1, &ho_RegionFillUp1);
 		opening_circle(ho_RegionFillUp1, &ho_RegionOpening, 3.5);
 		connection(ho_RegionOpening, &ho_ConnectedRegions1);
 		closing_circle(ho_ConnectedRegions1, &ho_RegionClosing4, 3.5);
 		select_shape(ho_RegionClosing4, &ho_PillRegions, (HTuple("area").Append("circularity")),
-			"and", (HTuple(16500).Append(0.8)), (HTuple(22500).Append(1.0)));
+			"and", (HTuple(10500).Append(0.8)), (HTuple(22500).Append(1.0)));
 		//shape_trans (PillRegions, PillRegions, 'convex')
 		count_obj(ho_PillRegions, &hv_Number);
 		if (0 != (hv_Number != 18))
@@ -600,8 +603,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-			result = QString::fromLocal8Bit("无喷印日期");
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "无喷印日期");
+			result = QString::fromLocal8Bit("无批号");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "无批号");
 			return 1;
 			gen_empty_obj(&ho_RegionData);
 			// stop(); only in hdevelop
@@ -633,8 +636,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 				disp_obj(ho_RegionOpening8, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 10, 10);
-				result = QString::fromLocal8Bit("喷印日期缺陷");
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "喷印日期缺陷");
+				result = QString::fromLocal8Bit("批号缺陷");
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "批号缺陷");
 				return 1;
 			}
 
@@ -763,7 +766,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		gray_dilation_rect(ho_PillImage, &ho_ImageMax2, 5, 5);
 		sub_image(ho_ImageMax2, ho_PillImage, &ho_ImageSub3, 1, 0);
-		threshold(ho_ImageSub3, &ho_Region6, 25, 255);
+		threshold(ho_ImageSub3, &ho_Region6, 20, 255);
 		//fill_up (Region6, RegionFillUp5)
 		opening_circle(ho_Region6, &ho_RegionOpening6, m_checkparam.d_InterException_Open);
 		closing_circle(ho_RegionOpening6, &ho_RegionClosing3, 3.5);
@@ -793,7 +796,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				);
 				area_center(ho_RegionIntersection3, &hv_Area5, &hv_ExpDefaultCtrlDummyVar,
 					&hv_ExpDefaultCtrlDummyVar);
-				if (0 != (hv_Area5 > 40))
+				if (0 != (hv_Area5 > 50))
 				{
 					concat_obj(ho_PillInter, ho_RegionIntersection3, &ho_PillInter);
 				}
