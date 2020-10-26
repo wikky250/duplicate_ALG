@@ -111,4 +111,5 @@ public slots:
 	void onSelectImageChannel(int);
 
 	void onPopKeyboard(int, int);
+	void hideKeyBoard();
 };
