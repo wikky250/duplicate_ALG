@@ -17,6 +17,7 @@ signals:
 	void ShouldSaveParam(CHECKPARAM*);
 	void CloseGetSample();
 	void SignShowImage(int, Mat, int);
+	
 private:
 	uchar* dataR = NULL;
 	uchar* dataG = NULL;
@@ -25,6 +26,7 @@ private:
 	Hobject Mat2Hobject(Mat & image);
 	Mat Hobject2Mat(Hobject Hobj);
 	int m_WND =-1;
+	QDialog *dlg_keyboard = nullptr;
 public:
 	QtGuiSetting(QWidget *parent = Q_NULLPTR,void* AlgPointer = nullptr);
 	int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str);//全是中文
@@ -76,6 +78,13 @@ private:
 	bool containImages(QDir&);
 	void initImageLS(QString str);
 public slots:
+	//void onBandChanged(int);
+	//void onCapsulesChanged(int);
+	//void onBatchChanged(int);
+	//void onCapDefectChanged(int);
+	//void onRedChanged(int);
+	//void onYellowChanged(int);
+	//void onBandDefectChanged(int);
 	void closeEvent(QCloseEvent *);
 	void mousePressEvent(QMouseEvent *);
 	void mouseReleaseEvent(QMouseEvent * p);
@@ -100,4 +109,6 @@ public slots:
 	//自动测量值
 	void onAutoDetest();
 	void onSelectImageChannel(int);
+
+	void onPopKeyboard(int, int);
 };

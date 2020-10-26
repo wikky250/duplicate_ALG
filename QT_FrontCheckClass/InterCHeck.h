@@ -14,7 +14,8 @@ private:
 	QString ngdir_str;
 	QString okdir_str;
 	const char* test_name;
-	char* c_AlgName;
+	const char* c_AlgName;
+	const char* c_AlgVersion;
 	//ÏÔÊ¾´°¿Ú£¬InitWindow¸³Öµ
 	int  m_iShowPos;
 	QImage disImage;
@@ -67,6 +68,7 @@ public:
 	virtual void Release();
 	virtual char* GetCameraName(void);
 	virtual char* GetAlgName(void);
+	virtual char* GetAlgVersion(void);
 	virtual int ShowParamDlg(QWidget *parent, bool b_showornot);
 	virtual int SetParam(int _typeofcamera, char* _cameraName);
 	virtual int ReturnParam(int *_typeofcamera, char& _cameraName);

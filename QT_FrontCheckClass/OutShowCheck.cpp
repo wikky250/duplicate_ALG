@@ -84,6 +84,7 @@ void COutShowCheck::TESTSETSHOW(void * pt)
 {
 	SecretBase->TESTSETSHOW(pt);
 }
+
 void COutShowCheck::SetResultCallBack(UI_MONITOR ui, CallbackText callbackfun)
 {
 	SecretBase->SetResultCallBack(ui,callbackfun);
