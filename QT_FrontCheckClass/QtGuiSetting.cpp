@@ -462,6 +462,8 @@ void QtGuiSetting::onPopKeyboard(int, int)
 			if (i == 3) { pb->setObjectName("1");  pb->setText("+1"); };
 			pb->resize(50, 50);
 			pb->move(50 * i, 0);
+			pb->setCheckable(true);
+			connect(pb, SIGNAL(toggled(bool)), this, SLOT(onbtnchange(bool)));
 		}
 	}
 	QPoint p = this->cursor().pos();
@@ -469,6 +471,15 @@ void QtGuiSetting::onPopKeyboard(int, int)
 	dlg_keyboard->show();
 	dlg_keyboard->move(QPoint(q.x() + ui.tableWidget->width(), p.y()));
 	//dlg->move(QPoint(100, 100));
+}
+void QtGuiSetting::onbtnchange(bool b)
+{
+	QPushButton* btn = qobject_cast<QPushButton*>(sender());
+	double d = btn->objectName().toDouble();
+	if (1==d)
+	{
+		m_ba1 = b;
+	}
 }
 void QtGuiSetting::hideKeyBoard()
 {

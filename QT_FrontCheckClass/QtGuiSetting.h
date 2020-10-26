@@ -26,7 +26,6 @@ private:
 	Hobject Mat2Hobject(Mat & image);
 	Mat Hobject2Mat(Hobject Hobj);
 	int m_WND =-1;
-	QDialog *dlg_keyboard = nullptr;
 public:
 	QtGuiSetting(QWidget *parent = Q_NULLPTR,void* AlgPointer = nullptr);
 	int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str);//全是中文
@@ -74,6 +73,9 @@ private:
 	QString m_currentImagePath; //the current Item of the current Image checking
 	QTimer *m_timerReadList;
 	QTimer *clickedtimer;
+	QDialog *dlg_keyboard = nullptr;
+	QTimer *m_timerChanger = nullptr;
+	bool m_bm1 = false, m_bm05 = false, m_ba1 = false, m_ba05 = false;
 	bool isImage(QFileInfo& info);
 	bool containImages(QDir&);
 	void initImageLS(QString str);
@@ -111,5 +113,6 @@ public slots:
 	void onSelectImageChannel(int);
 
 	void onPopKeyboard(int, int);
+	void onbtnchange(bool);
 	void hideKeyBoard();
 };
