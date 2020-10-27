@@ -2,6 +2,10 @@
 #include <QMessageBox>
 //#include "image.h"
 QString AppPath;
+void MyHalconExceptionHandler(const HException& except)
+{
+	throw except;
+}
 bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 {
 	QSettings configIniRead(AppPath + "\\DefaultModel\\CheckParam.ini", QSettings::IniFormat);
@@ -204,6 +208,8 @@ CInterCHeck::CInterCHeck(bool b_test)
 	saveImageindex = 0;
 	saveImageOKindex = 0;
 	//后期移动到其他位置。2018年11月23日13:47:49
+	HException::InstallHHandler(&MyHalconExceptionHandler);
+
 	if (b_test)
 	{
 	}

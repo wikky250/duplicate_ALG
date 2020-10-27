@@ -9,6 +9,7 @@ void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
 	((QtGuiSetting*)ui)->emit SignShowImage(pos, img, times);
 }
+
 QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	: QDialog(parent)
 {
@@ -363,6 +364,7 @@ Mat QtGuiSetting::Hobject2Mat(Hobject Hobj)
 void QtGuiSetting::onAutoDetest()
 {
 }
+
 void QtGuiSetting::onSelectImageChannel(int channels)
 {
 	QComboBox* obj = qobject_cast<QComboBox*>(sender());//ÅÐ¶ÏÊÇÄÄ¸ö°´Å¥´¥·¢ÁË²Ûº¯Êý
@@ -476,7 +478,7 @@ void QtGuiSetting::onPopKeyboard(int, int)
 
 	QPoint q = ui.tableWidget->mapToGlobal(QPoint(0, 0));
 	dlg_keyboard->show();
-	QMessageBox::warning(nullptr, "", QString::number(q.x() + ui.tableWidget->width()) + QString::number(p.y()));
+	//QMessageBox::warning(nullptr, "", QString::number(q.x() + ui.tableWidget->width()) +","+ QString::number(p.y()));
 	dlg_keyboard->move(QPoint(q.x() + ui.tableWidget->width(), p.y()));
 
 	//QPoint p = this->cursor().pos();
@@ -534,9 +536,9 @@ void QtGuiSetting::onbtnreleased()
 	QPushButton* btn = qobject_cast<QPushButton*>(sender());
 	double d = btn->objectName().toDouble();
 	bool b_checked = btn->isChecked();
-	if (b_checked)
 	{
 		btn->setChecked(false);
+	if (b_checked)
 		m_timerChanger->stop();
 		delete m_timerChanger;
 		m_timerChanger = nullptr;
@@ -572,7 +574,7 @@ void QtGuiSetting::onbtnreleased()
 
 void QtGuiSetting::ontimechanger()
 {
-	ui.tableWidget->blockSignals(true);
+
 
 	if (m_itimechange%m_itimestep == 0)
 	{
@@ -586,6 +588,7 @@ void QtGuiSetting::ontimechanger()
 			else
 			{
 				m_itimestep = 2;
+				ui.tableWidget->blockSignals(true);
 			}
 			item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange/55)));
 
@@ -615,11 +618,14 @@ void QtGuiSetting::ontimechanger()
 			else
 			{
 				m_itimestep = 2;
+				ui.tableWidget->blockSignals(true);
+
 			}
 			item->setText(QString::number(item->text().toDouble() - pow(10, m_itimechange / 55)));
 		}
 	}
 	m_itimechange++;
+	ui.tableWidget->blockSignals(false);
 }
 
 void QtGuiSetting::hideKeyBoard()
@@ -1599,6 +1605,8 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("BandChannel");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
 		box->setCurrentIndex(_checkparam.i_BandChannel);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		box->installEventFilter(this);
@@ -1642,6 +1650,9 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("CapsulesChannel");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+
 		box->setCurrentIndex(_checkparam.i_CapsulesChannel);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -1722,6 +1733,9 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("BatchChannel");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+
 		box->setCurrentIndex(_checkparam.i_BatchChannel);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -1862,6 +1876,9 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("Channel_CapsulesDefect");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+
 		box->setCurrentIndex(_checkparam.i_Channel_CapsulesDefect);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -1946,6 +1963,9 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("Channel_RegionRed");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+
 		box->setCurrentIndex(_checkparam.i_Channel_RegionRed);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -1962,6 +1982,9 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("Channel_RedDefect1");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+
 		box->setCurrentIndex(_checkparam.i_Channel_RedDefect1);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -1978,6 +2001,9 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("Channel_RedDefect2");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+
 		box->setCurrentIndex(_checkparam.i_Channel_RedDefect2);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -2257,6 +2283,9 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box = new QComboBox();
 		box->setObjectName("Channel_BandDefect");
 		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+
 		box->setCurrentIndex(_checkparam.i_Channel_BandDefect);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -2680,14 +2709,47 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		_checkparam.i_MinArea_BandDefect = ui.tableWidget->item(63, c)->text().toInt();
 		_checkparam.i_MaxArea_BandDefect = ui.tableWidget->item(64, c)->text().toInt();
 
-
+		//((CInterCHeck*)p_Parent)->RealCheck(m_MOriginal, _checkparam, m_WND);
 
 		//***Ò©°å³ß´ç
 		threshold(ho_ImageChannel[_checkparam.i_BandChannel], &ho_Region, _checkparam.i_MinGray_Band, 255);
+		if (1==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region, m_WND);
+			return;
+		}
 		fill_up(ho_Region, &ho_RegionFillUp2);
 		connection(ho_RegionFillUp2, &ho_ConnectedRegions);
 		select_shape_std(ho_ConnectedRegions, &ho_RegionBand, "max_area", 70);
 		area_center(ho_RegionBand, &hv_AreaBand, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+		if (2==r)
+		{
+			if (hv_AreaBand < _checkparam.i_MinArea_Band)
+			{
+				disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
+				set_draw(m_WND, "margin");
+				set_color(m_WND, "red");
+				set_line_width(m_WND, 3);
+				disp_obj(ho_RegionBand, m_WND);
+				set_tposition(m_WND, 10, 10);
+				write_string(m_WND, "ÅÝÕÖ°åÃæ»ý£º" + hv_AreaBand);
+			}
+			else
+			{
+				disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
+				set_draw(m_WND, "margin");
+				set_color(m_WND, "green");
+				set_line_width(m_WND, 3);
+				disp_obj(ho_RegionBand, m_WND);
+				set_tposition(m_WND, 10, 10);
+				write_string(m_WND, "ÅÝÕÖ°åÃæ»ý£º" + hv_AreaBand);
+			}
+			return;
+		}
 		//if (0 != (hv_AreaBand < 740000))
 		//{
 		//	disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
@@ -2711,12 +2773,68 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//**½ºÄÒÊýÁ¿
 		reduce_domain(ho_ImageChannel[_checkparam.i_CapsulesChannel], ho_RegionBand, &ho_ImageReduced);
 		threshold(ho_ImageReduced, &ho_Regions, _checkparam.i_MinGray_Capsules, 255);
+		if (4==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Regions, m_WND);
+			return;
+		}
 		opening_circle(ho_Regions, &ho_RegionOpening, _checkparam.d_OR_Capsules);
+		if (5==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening, m_WND);
+			return;
+		}
 		fill_up(ho_RegionOpening, &ho_RegionFillUp);
 		connection(ho_RegionFillUp, &ho_ConnectedRegions1);
 		select_shape(ho_ConnectedRegions1, &ho_SelectedRegions, "area", "and", _checkparam.i_MinArea_Capsules,
 			_checkparam.i_MaxArea_Capsules);
+		if (6==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions, m_WND);
+			return;
+		}
+		if (7==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions, m_WND);
+			return;
+		}
 		shape_trans(ho_SelectedRegions, &ho_RegionPill, "convex");
+		if (8==r)
+		{
+			if (hv_NumberPill == _checkparam.i_Number_Capsules)
+			{
+				disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+				set_draw(m_WND, "margin");
+				set_color(m_WND, "green");
+				set_line_width(m_WND, 3);
+				disp_obj(ho_RegionPill, m_WND);
+			}
+			else
+			{
+				disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+				set_draw(m_WND, "margin");
+				set_color(m_WND, "red");
+				set_line_width(m_WND, 3);
+				disp_obj(ho_RegionPill, m_WND);
+			}
+			return;
+		}
 		count_obj(ho_RegionPill, &hv_NumberPill);
 		//if (0 != (HTuple(hv_NumberPill != 10).And(hv_NumberPill != 0)))
 		//{
@@ -2816,19 +2934,109 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		smallest_rectangle2(ho_RegionUnion, &hv_Row, &hv_Column, &hv_Phi, &hv_Length1,
 			&hv_Length2);
 		gen_rectangle2(&ho_Rectangle, hv_Row, hv_Column, hv_Phi, hv_Length1 + _checkparam.i_LengthAdd_1, hv_Length2 + _checkparam.i_LengthAdd_2);
+		if (10==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "fill");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Rectangle, m_WND);
+			return;
+		}
+		if (11==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "fill");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Rectangle, m_WND);
+			return;
+		}
 		difference(ho_RegionBand, ho_Rectangle, &ho_RegionDifference);
 		erosion_circle(ho_RegionDifference, &ho_RegionErosion, _checkparam.d_ER_Batch);
+		if (12==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionErosion, m_WND);
+			return;
+		}
 		connection(ho_RegionErosion, &ho_ConnectedRegions16);
 		select_shape_std(ho_ConnectedRegions16, &ho_SelectedRegions10, "max_area", 70);
 		gray_dilation_rect(ho_ImageChannel[_checkparam.i_BatchChannel], &ho_ImageMax, _checkparam.i_MaskHeight_Batch, _checkparam.i_MaskWidth_Batch);
+		if (13==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax, m_WND);
+			return;
+		}
+		if (14==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax, m_WND);
+			return;
+		}
 		sub_image(ho_ImageMax, ho_ImageChannel[_checkparam.i_BatchChannel], &ho_ImageSub1, 1, 0);
 		threshold(ho_ImageSub1, &ho_Region4, _checkparam.i_MinGray_Batch, 255);
+		if (15==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region4, m_WND);
+			return;
+		}
 		//dyn_threshold (ImageMax, G, RegionDynThresh, 10, 'light')
 		opening_circle(ho_Region4, &ho_RegionOpening1, _checkparam.d_OR_Batch);
+		if (16==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening1, m_WND);
+			return;
+		}
 		intersection(ho_RegionOpening1, ho_SelectedRegions10, &ho_RegionIntersection);
 		closing_circle(ho_RegionIntersection, &ho_RegionClosing, _checkparam.d_CR_Batch);
+		if (17==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionClosing, m_WND);
+			return;
+		}
 		connection(ho_RegionClosing, &ho_ConnectedRegions3);
 		select_shape(ho_ConnectedRegions3, &ho_SelectedRegions2, "area", "and", _checkparam.i_MinArea_Batch, _checkparam.i_MaxArea_Batch);
+		if (18==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions2, m_WND);
+			return;
+		}
+		if (19==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions2, m_WND);
+			return;
+		}
 		shape_trans(ho_SelectedRegions2, &ho_RegionTrans1, "convex");
 		union1(ho_RegionTrans1, &ho_RegionUnion1);
 		count_obj(ho_RegionUnion1, &hv_Number3);
@@ -2904,12 +3112,48 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//***½ºÄÒÄÚ²¿È±ÏÝ
 		union1(ho_RegionPill, &ho_RegionPill);
 		erosion_circle(ho_RegionPill, &ho_RegionErosion2, _checkparam.d_ER_RegionCapsules);
+		if (21==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionErosion2, m_WND);
+			return;
+		}
 		reduce_domain(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], ho_RegionErosion2, &ho_ImageReduced1);
 		//****ºìÉ«²¿·Ö½ºÄÒ
 		threshold(ho_ImageReduced1, &ho_Region1, 0, _checkparam.i_MaxGray_CapsulesRed);
+		if (22==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region1, m_WND);
+			return;
+		}
 		connection(ho_Region1, &ho_ConnectedRegions4);
 		select_shape(ho_ConnectedRegions4, &ho_SelectedRegions4, "area", "and", _checkparam.i_MinArea_CapsulesRed,
 			_checkparam.i_MaxArea_CapsulesRed);
+		if (23==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions4, m_WND);
+			return;
+		}
+		if (24 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions4, m_WND);
+			return;
+		}
 		union1(ho_SelectedRegions4, &ho_RegionUnion3);
 		fill_up(ho_RegionUnion3, &ho_RegionRed);
 
@@ -2925,7 +3169,25 @@ void QtGuiSetting::onCellChanged(int r, int c)
 
 		//***ºì»Æ·Ö½çÇøÓò
 		dilation_circle(ho_RegionRed, &ho_RegionDilation2, _checkparam.d_DR_CapsulesRed);
+		if (25==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionDilation2, m_WND);
+			return;
+		}
 		dilation_circle(ho_RegionYellow, &ho_RegionDilation3, _checkparam.d_DR_CapsulesYellow);
+		if (26==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionDilation3, m_WND);
+			return;
+		}
 		intersection(ho_RegionDilation2, ho_RegionDilation3, &ho_RegionCross);
 
 		//****ºìÉ«½ºÄÒÈ±ÏÝ
@@ -3601,6 +3863,10 @@ void QtGuiSetting::onCellChanged(int r, int c)
 	}
 	catch (HException &e)
 	{
+		QMessageBox::warning(nullptr, "", e.message);
+		m_timerChanger->stop();
+		delete m_timerChanger;
+		m_timerChanger = nullptr;
 	}
 	m_bChanged = true;
 	ui.pB_Save->setEnabled(true);
