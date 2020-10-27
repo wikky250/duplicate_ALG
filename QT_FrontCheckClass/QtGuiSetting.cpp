@@ -3,6 +3,7 @@
 #include <QtWidgets/QComboBox>
 #include <QDesktopWidget>
 #include <math.h>
+#include<QMessageBox>
 typedef void*   UI_MONITOR;
 void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
@@ -449,18 +450,19 @@ void QtGuiSetting::onPopKeyboard(int, int)
 {
 	if (nullptr == dlg_keyboard)
 	{
+		//QMessageBox::warning(nullptr, "", "123");
 		dlg_keyboard = new QDialog(this);
 		dlg_keyboard->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
-		dlg_keyboard->resize(QSize(200, 50));
+		dlg_keyboard->resize(QSize(100, 50));
 		QPushButton* pb = nullptr;
 		int w = 50;
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			pb = new QPushButton(dlg_keyboard);
 			if (i == 0) { pb->setObjectName("-1"); pb->setText("-1"); };
-			if (i == 1) { pb->setObjectName("-0.5"); pb->setText("-0.5"); };
-			if (i == 2) { pb->setObjectName("0.5");  pb->setText("+0.5"); };
-			if (i == 3) { pb->setObjectName("1");  pb->setText("+1"); };
+	/*		if (i == 1) { pb->setObjectName("-0.5"); pb->setText("-0.5"); };
+			if (i == 2) { pb->setObjectName("0.5");  pb->setText("+0.5"); };*/
+			if (i == 1) { pb->setObjectName("1");  pb->setText("+1"); };
 			pb->resize(50, 50);
 			pb->move(50 * i, 0);
 			pb->setCheckable(true);
@@ -471,9 +473,17 @@ void QtGuiSetting::onPopKeyboard(int, int)
 		}
 	}
 	QPoint p = this->cursor().pos();
-	QPoint q = mapToGlobal(ui.tableWidget->pos());
+
+	QPoint q = ui.tableWidget->mapToGlobal(QPoint(0, 0));
 	dlg_keyboard->show();
-	dlg_keyboard->move(QPoint(q.x() + 3 * ui.tableWidget->width(), p.y()));
+	QMessageBox::warning(nullptr, "", QString::number(q.x() + ui.tableWidget->width()) + QString::number(p.y()));
+	dlg_keyboard->move(QPoint(q.x() + ui.tableWidget->width(), p.y()));
+
+	//QPoint p = this->cursor().pos();
+	//QPoint q = (ui.tableWidget->pos());
+	//dlg_keyboard->show();
+	//dlg_keyboard->move(p.x(), p.y());
+	//dlg_keyboard->move(mapToParent( QPoint(q.x() + /*3 * */ui.tableWidget->width(), p.y())));
 	//dlg->move(QPoint(100, 100));
 }
 void QtGuiSetting::onbtnpressed()
