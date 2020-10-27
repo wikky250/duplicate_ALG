@@ -75,6 +75,9 @@ private:
 	QTimer *clickedtimer;
 	QDialog *dlg_keyboard = nullptr;
 	QTimer *m_timerChanger = nullptr;
+	int m_itimechange = 0;
+	int m_itimestep = 5;
+	int m_ichagetimes = 0;
 	bool m_bm1 = false, m_bm05 = false, m_ba1 = false, m_ba05 = false;
 	bool isImage(QFileInfo& info);
 	bool containImages(QDir&);
@@ -113,6 +116,8 @@ public slots:
 	void onSelectImageChannel(int);
 
 	void onPopKeyboard(int, int);
-	void onbtnchange(bool);
+	void onbtnpressed( );
+	void onbtnreleased();
+	void ontimechanger();
 	void hideKeyBoard();
 };

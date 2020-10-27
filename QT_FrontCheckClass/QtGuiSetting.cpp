@@ -2,6 +2,7 @@
 #include "InterCHeck.h"
 #include <QtWidgets/QComboBox>
 #include <QDesktopWidget>
+#include <math.h>
 typedef void*   UI_MONITOR;
 void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
@@ -36,7 +37,7 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	ui.tableWidget->setMouseTracking(true);
 	ui.lw_ImageList->viewport()->installEventFilter(this);
 
-	bool b =ui.lw_ImageList->hasMouseTracking();
+	bool b = ui.lw_ImageList->hasMouseTracking();
 	setMouseTracking(true);
 	m_bButton = false;
 	m_SAppPath = qApp->applicationDirPath();//exeÎÄ¼þ¼Ð
@@ -82,7 +83,7 @@ bool QtGuiSetting::eventFilter(QObject * watched, QEvent * event)
 {
 	if (watched == ui.lw_ImageList->viewport())
 	{
-		if (event->type()== QEvent::MouseButtonRelease)
+		if (event->type() == QEvent::MouseButtonRelease)
 		{
 			hideKeyBoard();
 		}
@@ -134,58 +135,58 @@ void QtGuiSetting::mousePressEvent(QMouseEvent *p)
 			return;
 		}
 		Hobject ho_Image = Mat2Hobject(m_MOriginal);
-			get_image_size(ho_Image, &hv_Width, &hv_Height);
-			set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
-			disp_obj(ho_Image, m_WND);
+		get_image_size(ho_Image, &hv_Width, &hv_Height);
+		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
+		disp_obj(ho_Image, m_WND);
 		return;
 	}
 	return;
 }
 void QtGuiSetting::mouseMoveEvent(QMouseEvent *p)
 {
-// 	QPoint poi = QCursor::pos();
-// 	if (ui.ShowLabel->geometry().contains(this->mapFromGlobal(poi)) && b_GetAuthority)
-// 	{
-// 		setCursor(Qt::CrossCursor);
-// 		m_PointFinale = p->pos();
-// 		if (m_bButton)
-// 		{
-// 			QRect rec = ui.ShowLabel->geometry();
-// 			QPoint pt = p->pos();
-// 			pt.setX(pt.x() - rec.x() - ui.ShowLabel->frameWidth());
-// 			pt.setY(pt.y() - rec.y() - ui.ShowLabel->frameWidth());
-// 			double scale_x = m_MOriginal.cols*1.0 / (rec.width() - ui.ShowLabel->frameWidth() * 2);
-// 			double scale_y = m_MOriginal.rows*1.0 / (rec.height() - ui.ShowLabel->frameWidth() * 2);
-// 			if (pt.x() > m_PointOriginal.x())
-// 			{
-// 				m_RectToDraw.setLeft(m_PointOriginal.x());
-// 				m_RectToDraw.setRight(pt.x());
-// 			}
-// 			else
-// 			{
-// 				m_RectToDraw.setRight(m_PointOriginal.x());
-// 				m_RectToDraw.setLeft(pt.x());
-// 			}
-// 			if (pt.y() > m_PointOriginal.y())
-// 			{
-// 				m_RectToDraw.setTop(m_PointOriginal.y());
-// 				m_RectToDraw.setBottom(pt.y());
-// 			}
-// 			else
-// 			{
-// 				m_RectToDraw.setBottom(m_PointOriginal.y());
-// 				m_RectToDraw.setTop(pt.y());
-// 			}
-// 			cv::Mat img2show;
-// 			cvtColor(m_MOriginal, img2show, COLOR_BGR2RGB);
-// 			m_RectOpencv = cv::Rect(m_RectToDraw.x()*scale_x, m_RectToDraw.y()*scale_y, m_RectToDraw.width()*scale_x, m_RectToDraw.height()*scale_y);
-// 			cv::rectangle(img2show, m_RectOpencv, cv::Scalar(255, 0, 0), 5, 8, 0);
-// 			onShowImage(&img2show);
-// 			m_bChanged = true;
-// 		}
-// 	}
-// 	else
-// 		setCursor(Qt::ArrowCursor);
+	// 	QPoint poi = QCursor::pos();
+	// 	if (ui.ShowLabel->geometry().contains(this->mapFromGlobal(poi)) && b_GetAuthority)
+	// 	{
+	// 		setCursor(Qt::CrossCursor);
+	// 		m_PointFinale = p->pos();
+	// 		if (m_bButton)
+	// 		{
+	// 			QRect rec = ui.ShowLabel->geometry();
+	// 			QPoint pt = p->pos();
+	// 			pt.setX(pt.x() - rec.x() - ui.ShowLabel->frameWidth());
+	// 			pt.setY(pt.y() - rec.y() - ui.ShowLabel->frameWidth());
+	// 			double scale_x = m_MOriginal.cols*1.0 / (rec.width() - ui.ShowLabel->frameWidth() * 2);
+	// 			double scale_y = m_MOriginal.rows*1.0 / (rec.height() - ui.ShowLabel->frameWidth() * 2);
+	// 			if (pt.x() > m_PointOriginal.x())
+	// 			{
+	// 				m_RectToDraw.setLeft(m_PointOriginal.x());
+	// 				m_RectToDraw.setRight(pt.x());
+	// 			}
+	// 			else
+	// 			{
+	// 				m_RectToDraw.setRight(m_PointOriginal.x());
+	// 				m_RectToDraw.setLeft(pt.x());
+	// 			}
+	// 			if (pt.y() > m_PointOriginal.y())
+	// 			{
+	// 				m_RectToDraw.setTop(m_PointOriginal.y());
+	// 				m_RectToDraw.setBottom(pt.y());
+	// 			}
+	// 			else
+	// 			{
+	// 				m_RectToDraw.setBottom(m_PointOriginal.y());
+	// 				m_RectToDraw.setTop(pt.y());
+	// 			}
+	// 			cv::Mat img2show;
+	// 			cvtColor(m_MOriginal, img2show, COLOR_BGR2RGB);
+	// 			m_RectOpencv = cv::Rect(m_RectToDraw.x()*scale_x, m_RectToDraw.y()*scale_y, m_RectToDraw.width()*scale_x, m_RectToDraw.height()*scale_y);
+	// 			cv::rectangle(img2show, m_RectOpencv, cv::Scalar(255, 0, 0), 5, 8, 0);
+	// 			onShowImage(&img2show);
+	// 			m_bChanged = true;
+	// 		}
+	// 	}
+	// 	else
+	// 		setCursor(Qt::ArrowCursor);
 	return;
 }
 QtGuiSetting::~QtGuiSetting()
@@ -453,34 +454,164 @@ void QtGuiSetting::onPopKeyboard(int, int)
 		dlg_keyboard->resize(QSize(200, 50));
 		QPushButton* pb = nullptr;
 		int w = 50;
-		for (int i = 0;i < 4;i++)
+		for (int i = 0; i < 4; i++)
 		{
 			pb = new QPushButton(dlg_keyboard);
 			if (i == 0) { pb->setObjectName("-1"); pb->setText("-1"); };
-			if (i == 1) { pb->setObjectName("-0.5"); pb->setText("-0.5");};
-			if (i == 2) { pb->setObjectName("0.5");  pb->setText("+0.5");};
+			if (i == 1) { pb->setObjectName("-0.5"); pb->setText("-0.5"); };
+			if (i == 2) { pb->setObjectName("0.5");  pb->setText("+0.5"); };
 			if (i == 3) { pb->setObjectName("1");  pb->setText("+1"); };
 			pb->resize(50, 50);
 			pb->move(50 * i, 0);
 			pb->setCheckable(true);
-			connect(pb, SIGNAL(toggled(bool)), this, SLOT(onbtnchange(bool)));
+			//connect(pb, SIGNAL(toggled(bool)), this, SLOT(onbtnchange(bool)));
+			connect(pb, SIGNAL(pressed()), this, SLOT(onbtnpressed()));
+			connect(pb, SIGNAL(released()), this, SLOT(onbtnreleased()));
+
 		}
 	}
 	QPoint p = this->cursor().pos();
 	QPoint q = mapToGlobal(ui.tableWidget->pos());
 	dlg_keyboard->show();
-	dlg_keyboard->move(QPoint(q.x() + ui.tableWidget->width(), p.y()));
+	dlg_keyboard->move(QPoint(q.x() + 3 * ui.tableWidget->width(), p.y()));
 	//dlg->move(QPoint(100, 100));
 }
-void QtGuiSetting::onbtnchange(bool b)
+void QtGuiSetting::onbtnpressed()
 {
 	QPushButton* btn = qobject_cast<QPushButton*>(sender());
 	double d = btn->objectName().toDouble();
-	if (1==d)
+	bool b_checked = btn->isChecked();
+	if (nullptr==m_timerChanger)
 	{
-		m_ba1 = b;
+		m_timerChanger = new QTimer();
+		connect(m_timerChanger, SIGNAL(timeout()), this, SLOT(ontimechanger()));
+		m_timerChanger->start(100);
+	}
+	if (1 == d)
+	{
+		/*QTableWidgetItem *item = ui.tableWidget->currentItem();
+		item->setText(QString::number(item->text().toInt() + 1));*/
+		m_ba1 = true;
+
+	}
+	if (0.5 == d)
+	{
+	/*	QTableWidgetItem *item = ui.tableWidget->currentItem();
+		item->setText(QString::number(item->text().toDouble() + 0.5));*/
+		//m_ba05 = true;
+	}
+	if (-0.5 == d)
+	{
+		/*QTableWidgetItem *item = ui.tableWidget->currentItem();
+		item->setText(QString::number(item->text().toDouble() - 0.5));*/
+		//m_bm05 = true;
+	}
+	if (-1 == d)
+	{
+		/*	QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toInt() - 1));*/
+		m_bm1 = true;
+	}
+	
+	//if (b_checked)
+	//{
+	//	btn->setChecked(false);
+		
+	//}
+}
+void QtGuiSetting::onbtnreleased()
+{
+	QPushButton* btn = qobject_cast<QPushButton*>(sender());
+	double d = btn->objectName().toDouble();
+	bool b_checked = btn->isChecked();
+	if (b_checked)
+	{
+		btn->setChecked(false);
+		m_timerChanger->stop();
+		delete m_timerChanger;
+		m_timerChanger = nullptr;
+		m_itimechange = 0;
+		m_itimestep = 5;
+		m_bm1 = false;
+		m_bm05 = false;
+		m_ba05 = false;
+		m_ba1 = false;
+		/*if (1 == d)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toInt() + 1));
+
+		}
+		if (0.5 == d)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toDouble() + 0.5));
+		}
+		if (-0.5 == d)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toDouble() - 0.5));
+		}
+		if (-1 == d)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toInt() - 1));
+		}*/
 	}
 }
+
+void QtGuiSetting::ontimechanger()
+{
+	ui.tableWidget->blockSignals(true);
+
+	if (m_itimechange%m_itimestep == 0)
+	{
+		if (m_ba1)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			if (m_itimechange < 24)
+			{
+				/*item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange++%m_itimestep-1)));*/
+			}
+			else
+			{
+				m_itimestep = 2;
+			}
+			item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange/55)));
+
+			//else if (m_itimechange < 100)
+			//{
+			//	//m_itimestep = 2;
+			//	item->setText(QString::number(item->text().toDouble() + 10));
+			//}
+		}
+		if (m_ba05)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toDouble() + 0.5));
+		}
+		if (m_bm05)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toDouble() - 0.5));
+		}
+		if (m_bm1)
+		{
+			QTableWidgetItem *item = ui.tableWidget->currentItem();
+			if (m_itimechange < 24)
+			{
+				/*item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange++%m_itimestep-1)));*/
+			}
+			else
+			{
+				m_itimestep = 2;
+			}
+			item->setText(QString::number(item->text().toDouble() - pow(10, m_itimechange / 55)));
+		}
+	}
+	m_itimechange++;
+}
+
 void QtGuiSetting::hideKeyBoard()
 {
 	if (nullptr != dlg_keyboard)
@@ -2468,6 +2599,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
 		get_image_size(ho_Image, &hv_Width, &hv_Height);
 		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
+
 		_checkparam.i_BandChannel = ((QComboBox*)(ui.tableWidget->cellWidget(0, 1)))->currentIndex();
 		//_checkparam.i_BandChannel = ui.tableWidget->item(0, c)->text().toInt();
 		//_checkparam.i_PillChannel1 = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
@@ -2537,6 +2669,8 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		_checkparam.i_MaxHeight_BandDefect = ui.tableWidget->item(62, c)->text().toInt();
 		_checkparam.i_MinArea_BandDefect = ui.tableWidget->item(63, c)->text().toInt();
 		_checkparam.i_MaxArea_BandDefect = ui.tableWidget->item(64, c)->text().toInt();
+
+
 
 		//***Ò©°å³ß´ç
 		threshold(ho_ImageChannel[_checkparam.i_BandChannel], &ho_Region, _checkparam.i_MinGray_Band, 255);
