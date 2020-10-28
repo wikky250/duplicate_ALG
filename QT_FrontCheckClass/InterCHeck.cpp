@@ -24,7 +24,7 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	
 	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "0").toInt();
 	checkparam->i_MinGray_Band = configIniRead.value("/" + cameraname + "/MinGray_Band", "100").toInt();
-	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "740000").toInt();
+	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "680000").toInt();
 	checkparam->i_CapsulesChannel = configIniRead.value("/" + cameraname + "/CapsulesChannel", "4").toInt();
 	checkparam->i_MinGray_Capsules = configIniRead.value("/" + cameraname + "/MinGray_Capsules", "70").toInt();
 	checkparam->d_OR_Capsules = configIniRead.value("/" + cameraname + "/OR_Capsules", "2.5").toDouble();
@@ -67,14 +67,14 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	checkparam->i_MinGray_RedDefect = configIniRead.value("/" + cameraname + "/MinGray_RedDefect", "35").toInt();
 	checkparam->d_ER_RedDefect = configIniRead.value("/" + cameraname + "/ER_RedDefect", "3.5").toDouble();
 	checkparam->d_OR_RedDefect = configIniRead.value("/" + cameraname + "/OR_RedDefect", "1.5").toDouble();
-	checkparam->i_MinArea_RedDefect = configIniRead.value("/" + cameraname + "/MinArea_RedDefect", "10").toInt();
+	checkparam->i_MinArea_RedDefect = configIniRead.value("/" + cameraname + "/MinArea_RedDefect", "20").toInt();
 	checkparam->i_MaxArea_RedDefect = configIniRead.value("/" + cameraname + "/MaxArea_RedDefect", "99999").toInt();
 	checkparam->i_MaskHeight_RegionYellow = configIniRead.value("/" + cameraname + "/MaskHeight_RegionYellow", "5").toInt();
 	checkparam->i_MaskWidth_RegionYellow = configIniRead.value("/" + cameraname + "/MaskWidth_RegionYellow", "5").toInt();
 	checkparam->i_MinGray_RegionYellow = configIniRead.value("/" + cameraname + "/MinGray_RegionYellow", "20").toInt();
 	checkparam->i_MaxGray_RegionYellow = configIniRead.value("/" + cameraname + "/MaxGray_RegionYellow", "185").toInt();
 	checkparam->d_OR_RegionYellow = configIniRead.value("/" + cameraname + "/OR_RegionYellow", "1.5").toDouble();
-	checkparam->i_MinArea_RegionYellow = configIniRead.value("/" + cameraname + "/MinArea_RegionYellow", "10").toInt();
+	checkparam->i_MinArea_RegionYellow = configIniRead.value("/" + cameraname + "/MinArea_RegionYellow", "20").toInt();
 	checkparam->i_MaxArea_RegionYellow = configIniRead.value("/" + cameraname + "/MaxArea_RegionYellow", "99999").toInt();
 	checkparam->i_Channel_BandDefect = configIniRead.value("/" + cameraname + "/Channel_BandDefect", "2").toInt();
 	checkparam->d_DR_BandDefect = configIniRead.value("/" + cameraname + "/DR_BandDefect", "3").toDouble();
@@ -571,7 +571,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 	int i_error = 0, i_null = 0;
 	try
 	{
-		Hobject  ho_Image;
+		Hobject  ho_Image, ho_R, ho_G, ho_B, ho_H, ho_S;
 		Hobject  ho_V, ho_Region, ho_RegionFillUp2, ho_ConnectedRegions;
 		Hobject  ho_RegionBand, ho_ImageReduced, ho_Regions, ho_RegionOpening;
 		Hobject  ho_RegionFillUp, ho_ConnectedRegions1, ho_SelectedRegions;
@@ -585,11 +585,12 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_ImageMax, ho_ImageSub1, ho_Region4, ho_RegionOpening1;
 		Hobject  ho_RegionIntersection, ho_RegionClosing, ho_ConnectedRegions3;
 		Hobject  ho_SelectedRegions2, ho_RegionTrans1, ho_RegionUnion1;
-		Hobject  ho_Rectangle1, ho_ImageReduced4, ho_Region11, ho_RegionOpening6;
-		Hobject  ho_ConnectedRegions8, ho_SelectedRegions5, ho_Circle3;
-		Hobject  ho_RegionErosion2, ho_ImageReduced1, ho_Region1;
-		Hobject  ho_ConnectedRegions4, ho_SelectedRegions4, ho_RegionUnion3;
-		Hobject  ho_RegionRed, ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
+		Hobject  ho_Rectangle1, ho_RegionIntersection9, ho_ImageReduced4;
+		Hobject  ho_Region11, ho_RegionOpening6, ho_ConnectedRegions8;
+		Hobject  ho_SelectedRegions5, ho_Circle3, ho_RegionErosion2;
+		Hobject  ho_ImageReduced1, ho_Region1, ho_ConnectedRegions4;
+		Hobject  ho_SelectedRegions4, ho_RegionUnion3, ho_RegionRed;
+		Hobject  ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
 		Hobject  ho_RegionFillUp4, ho_RegionOpening9, ho_RegionErosion4;
 		Hobject  ho_Region3, ho_RegionYellow, ho_RegionDilation2;
 		Hobject  ho_RegionDilation3, ho_RegionCross, ho_ImageReduced2;
@@ -603,15 +604,14 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_ImageMax2, ho_ImageSub, ho_Region5, ho_Region8;
 		Hobject  ho_RegionIntersection3, ho_RegionDifference7, ho_ConnectedRegions14;
 		Hobject  ho_RegionOpening3, ho_SelectedRegions11, ho_ConnectedRegions10;
-		Hobject  ho_Circle2, ho_RegionDilation, ho_RegionErosion1;
-		Hobject  ho_RegionUnion4, ho_RegionLeft, ho_ImageLeft, ho_ImageMax3;
-		Hobject  ho_ImageSub4, ho_Region9, ho_RegionDifference6;
-		Hobject  ho_RegionFillUp3, ho_RegionClosing3, ho_ConnectedRegions13;
-		Hobject  ho_SelectedRegions8, ho_Circle, ho_ImageReduced7;
-		Hobject  ho_ImageOpening, ho_ImageSub5, ho_ImageResult, ho_ImageSub6;
-		Hobject  ho_Region13, ho_Region12, ho_ConnectedRegions11;
-		Hobject  ho_RegionTrans4, ho_RegionIntersection5, ho_RegionDifference1;
-		Hobject  ho_ImageReduced6, ho_ImageMax4, ho_RegionDynThresh1, ho_RegionIntersection9;
+		Hobject  ho_Circle2, ho_RegionErosion6, ho_ImageReduced12;
+		Hobject  ho_Region18, ho_RegionFillUp6, ho_ConnectedRegions22;
+		Hobject  ho_SelectedRegions17, ho_RegionTrans7, ho_Rectangle4;
+		Hobject  ho_RegionOpening13, ho_ConnectedRegions19, ho_SelectedRegions16;
+		Hobject  ho_RegionTrans6, ho_ImageMax3, ho_ImageSub4, ho_Region9;
+		Hobject  ho_RegionIntersection13, ho_ConnectedRegions24;
+		Hobject  ho_SelectedRegions19, ho_RegionUnion7, ho_RegionClosing7;
+		Hobject  ho_ConnectedRegions23, ho_SelectedRegions18, ho_Circle;
 
 
 		// Local control variables 
@@ -626,9 +626,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		HTuple  hv_Length21, hv_Value, hv_Value1, hv_ratio, hv_Number4;
 		HTuple  hv_Row5, hv_Column5, hv_Radius3, hv_Number, hv_Row3;
 		HTuple  hv_Column3, hv_Radius1, hv_Area, hv_Row4, hv_Column4;
-		HTuple  hv_Radius2, hv_Number2, hv_Row2, hv_Column2, hv_Radius;
-		HTuple  hv_UsedThreshold;
-		HTuple  hv_Width, hv_Height;
+		HTuple  hv_Radius2, hv_Row8, hv_Column8, hv_Phi3, hv_Length13;
+		HTuple  hv_Length23, hv_Number8, hv_Row2, hv_Column2, hv_Radius;
+		HTuple  hv_UsedThreshold, hv_Width, hv_Height;
+
 
 
 		//Image Acquisition 01: Code generated by Image Acquisition 01
@@ -849,7 +850,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		}
 		//***½ºÄÒÄÚ²¿È±ÏÝ
 		union1(ho_RegionPill, &ho_RegionPill);
-		erosion_circle(ho_RegionPill, &ho_RegionErosion2, m_checkparam.d_ER_BandDefect);
+		erosion_circle(ho_RegionPill, &ho_RegionErosion2, m_checkparam.d_ER_RegionCapsules);
 		reduce_domain(ho_ImageChannel[m_checkparam.i_Channel_CapsulesDefect], ho_RegionErosion2, &ho_ImageReduced1);
 		//****ºìÉ«²¿·Ö½ºÄÒ
 		threshold(ho_ImageReduced1, &ho_Region1, 0, m_checkparam.i_MaxGray_CapsulesRed);
@@ -952,25 +953,73 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			return 1;
 		}
 		//***Ò©°åÈ±ÏÝ
-		dilation_circle(ho_RegionPill, &ho_RegionDilation, m_checkparam.d_DR_BandDefect);
-		erosion_circle(ho_RegionBand, &ho_RegionErosion1, m_checkparam.d_ER_BandDefect);
-		union2(ho_RegionPill, ho_Rectangle1, &ho_RegionUnion4);
-		difference(ho_RegionErosion1, ho_RegionUnion4, &ho_RegionLeft);
-		reduce_domain(ho_ImageChannel[m_checkparam.i_Channel_BandDefect], ho_RegionLeft, &ho_ImageLeft);
-		gray_dilation_rect(ho_ImageLeft, &ho_ImageMax3, m_checkparam.i_MaskHeight_BandDefect, m_checkparam.i_MaskWidth_BandDefect);
-		sub_image(ho_ImageMax3, ho_ImageLeft, &ho_ImageSub4, 1, 0);
-		threshold(ho_ImageSub4, &ho_Region9, m_checkparam.i_MinGray_BandDefect, 255);
-		difference(ho_Region9, ho_RegionDilation, &ho_RegionDifference6);
-		fill_up(ho_RegionDifference6, &ho_RegionFillUp3);
-		closing_circle(ho_RegionFillUp3, &ho_RegionClosing3, m_checkparam.d_CR_BandDefect);
-		connection(ho_RegionClosing3, &ho_ConnectedRegions13);
-		select_shape(ho_ConnectedRegions13, &ho_SelectedRegions8, (HTuple("width").Append("height").Append("area")),
-			"and", (HTuple(m_checkparam.i_MinWidth_BandDefect).Append(m_checkparam.i_MinHeight_BandDefect).Append(m_checkparam.i_MinArea_BandDefect)),
-			(HTuple(m_checkparam.i_MaxWidth_BandDefect).Append(m_checkparam.i_MaxHeight_BandDefect).Append(m_checkparam.i_MaxArea_BandDefect)));
-		count_obj(ho_SelectedRegions8, &hv_Number2);
-		if (0 != (hv_Number2 != 0))
+		erosion_circle(ho_RegionBand, &ho_RegionErosion6, 3.5);
+		reduce_domain(ho_ImageChannel[0], ho_RegionErosion6, &ho_ImageReduced12);
+
+		threshold(ho_ImageReduced12, &ho_Region18, 0, 190);
+		fill_up(ho_Region18, &ho_RegionFillUp6);
+		connection(ho_RegionFillUp6, &ho_ConnectedRegions22);
+		select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", 2000,
+			99999);
+		shape_trans(ho_SelectedRegions17, &ho_RegionTrans7, "convex");
+		smallest_rectangle2(ho_RegionTrans7, &hv_Row8, &hv_Column8, &hv_Phi3, &hv_Length13,
+			&hv_Length23);
+		gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * 80,
+			hv_Length23);
+
+		opening_circle(ho_Region18, &ho_RegionOpening13, 1.5);
+		connection(ho_RegionOpening13, &ho_ConnectedRegions19);
+		select_shape(ho_ConnectedRegions19, &ho_SelectedRegions16, "area", "and", 2000,
+			99999);
+		shape_trans(ho_SelectedRegions16, &ho_RegionTrans6, "convex");
+		//erosion_circle (RegionTrans6, RegionErosion5, 2.5)
+
+		//dilation_circle (RegionPill, RegionDilation, 3)
+		//erosion_circle (RegionBand, RegionErosion1, 5)
+		//union2 (RegionTrans7, Rectangle1, RegionUnion4)
+		//*     difference (RegionErosion1, RegionUnion4, RegionLeft)
+		//*     reduce_domain (B, RegionLeft, ImageLeft)
+
+
+		gray_dilation_rect(ho_ImageChannel[0], &ho_ImageMax3, 7, 7);
+		sub_image(ho_ImageMax3, ho_ImageChannel[0], &ho_ImageSub4, 1, 0);
+		threshold(ho_ImageSub4, &ho_Region9, 45, 255);
+		intersection(ho_Region9, ho_Rectangle4, &ho_RegionIntersection13);
+		connection(ho_RegionIntersection13, &ho_ConnectedRegions24);
+		select_shape(ho_ConnectedRegions24, &ho_SelectedRegions19, (HTuple("width").Append("height")),
+			"and", (HTuple(3).Append(3)), (HTuple(99999).Append(9999)));
+		union1(ho_SelectedRegions19, &ho_RegionUnion7);
+		closing_circle(ho_RegionUnion7, &ho_RegionClosing7, 2.5);
+		connection(ho_RegionClosing7, &ho_ConnectedRegions23);
+		select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", 30,
+			99999);
+		count_obj(ho_SelectedRegions18, &hv_Number8);
+
+		//difference (Region9, RegionDilation, RegionDifference6)
+		//*     fill_up (RegionDifference6, RegionFillUp3)
+		//*     closing_circle (RegionFillUp3, RegionClosing3, 1.5)
+		//*     connection (RegionClosing3, ConnectedRegions13)
+		//*     select_shape (ConnectedRegions13, SelectedRegions8, ['width','height','area'], 'and', [1,3,20], [100,100,9999])
+		//*     count_obj (SelectedRegions8, Number2)
+		//difference (RegionTrans6, RegionPill, RegionDifference13)
+		//*     dilation_circle (RegionDifference13, RegionDilation4, 5)
+		//*     intersection (RegionDilation4, SelectedRegions8, RegionIntersection12)
+		//*     opening_circle (RegionIntersection12, RegionOpening14, 1.5)
+		//*     difference (SelectedRegions8, RegionOpening14, RegionDifference14)
+
+
+
+
+		//fill_up (Region9, RegionFillUp1)
+		//threshold (ImageLeft, Region10, 0, 140)
+		//intersection (RegionFillUp1, Region10, RegionIntersection4)
+		//opening_circle (RegionIntersection4, RegionOpening2, 1)
+		//connection (RegionOpening2, ConnectedRegions6)
+		//select_shape (ConnectedRegions6, SelectedRegions3, 'area', 'and', 20, 99999)
+		//count_obj (SelectedRegions3, Number2)
+		if (0 != (hv_Number8 != 0))
 		{
-			smallest_circle(ho_SelectedRegions8, &hv_Row2, &hv_Column2, &hv_Radius);
+			smallest_circle(ho_SelectedRegions18, &hv_Row2, &hv_Column2, &hv_Radius);
 			gen_circle(&ho_Circle, hv_Row2, hv_Column2, hv_Radius);
 			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");

@@ -539,9 +539,12 @@ void QtGuiSetting::onbtnreleased()
 	{
 		btn->setChecked(false);
 	if (b_checked)
-		m_timerChanger->stop();
-		delete m_timerChanger;
-		m_timerChanger = nullptr;
+		if (nullptr!=m_timerChanger)
+		{
+			m_timerChanger->stop();
+			delete m_timerChanger;
+			m_timerChanger = nullptr;
+		}
 		m_itimechange = 0;
 		m_itimestep = 5;
 		m_bm1 = false;
@@ -574,8 +577,6 @@ void QtGuiSetting::onbtnreleased()
 
 void QtGuiSetting::ontimechanger()
 {
-
-
 	if (m_itimechange%m_itimestep == 0)
 	{
 		if (m_ba1)
@@ -1652,7 +1653,6 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box->addItems(stlist);
 		box->setView(new QListView());
 		box->setStyleSheet("font-size:20pt");
-
 		box->setCurrentIndex(_checkparam.i_CapsulesChannel);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -2566,8 +2566,6 @@ void QtGuiSetting::onCellChanged(int r, int c)
 	try
 	{
 		c = 1;//·ÀÖ¹¼üÅÌtable
-		HTuple hv_Width, hv_Height;
-
 		Mat MatToShow(m_MOriginal);
 		//Local iconic variables 
 		Hobject  ho_R, ho_G, ho_B, ho_H, ho_S;
@@ -2584,11 +2582,12 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		Hobject  ho_ImageMax, ho_ImageSub1, ho_Region4, ho_RegionOpening1;
 		Hobject  ho_RegionIntersection, ho_RegionClosing, ho_ConnectedRegions3;
 		Hobject  ho_SelectedRegions2, ho_RegionTrans1, ho_RegionUnion1;
-		Hobject  ho_Rectangle1, ho_ImageReduced4, ho_Region11, ho_RegionOpening6;
-		Hobject  ho_ConnectedRegions8, ho_SelectedRegions5, ho_Circle3;
-		Hobject  ho_RegionErosion2, ho_ImageReduced1, ho_Region1;
-		Hobject  ho_ConnectedRegions4, ho_SelectedRegions4, ho_RegionUnion3;
-		Hobject  ho_RegionRed, ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
+		Hobject  ho_Rectangle1, ho_RegionIntersection9, ho_ImageReduced4;
+		Hobject  ho_Region11, ho_RegionOpening6, ho_ConnectedRegions8;
+		Hobject  ho_SelectedRegions5, ho_Circle3, ho_RegionErosion2;
+		Hobject  ho_ImageReduced1, ho_Region1, ho_ConnectedRegions4;
+		Hobject  ho_SelectedRegions4, ho_RegionUnion3, ho_RegionRed;
+		Hobject  ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
 		Hobject  ho_RegionFillUp4, ho_RegionOpening9, ho_RegionErosion4;
 		Hobject  ho_Region3, ho_RegionYellow, ho_RegionDilation2;
 		Hobject  ho_RegionDilation3, ho_RegionCross, ho_ImageReduced2;
@@ -2602,16 +2601,14 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		Hobject  ho_ImageMax2, ho_ImageSub, ho_Region5, ho_Region8;
 		Hobject  ho_RegionIntersection3, ho_RegionDifference7, ho_ConnectedRegions14;
 		Hobject  ho_RegionOpening3, ho_SelectedRegions11, ho_ConnectedRegions10;
-		Hobject  ho_Circle2, ho_RegionDilation, ho_RegionErosion1;
-		Hobject  ho_RegionUnion4, ho_RegionLeft, ho_ImageLeft, ho_ImageMax3;
-		Hobject  ho_ImageSub4, ho_Region9, ho_RegionDifference6;
-		Hobject  ho_RegionFillUp3, ho_RegionClosing3, ho_ConnectedRegions13;
-		Hobject  ho_SelectedRegions8, ho_Circle, ho_ImageReduced7;
-		Hobject  ho_ImageOpening, ho_ImageSub5, ho_ImageResult, ho_ImageSub6;
-		Hobject  ho_Region13, ho_Region12, ho_ConnectedRegions11;
-		Hobject  ho_RegionTrans4, ho_RegionIntersection5, ho_RegionDifference1;
-		Hobject  ho_ImageReduced6, ho_ImageMax4, ho_RegionDynThresh1, ho_RegionIntersection9;
-
+		Hobject  ho_Circle2, ho_RegionErosion6, ho_ImageReduced12;
+		Hobject  ho_Region18, ho_RegionFillUp6, ho_ConnectedRegions22;
+		Hobject  ho_SelectedRegions17, ho_RegionTrans7, ho_Rectangle4;
+		Hobject  ho_RegionOpening13, ho_ConnectedRegions19, ho_SelectedRegions16;
+		Hobject  ho_RegionTrans6, ho_ImageMax3, ho_ImageSub4, ho_Region9;
+		Hobject  ho_RegionIntersection13, ho_ConnectedRegions24;
+		Hobject  ho_SelectedRegions19, ho_RegionUnion7, ho_RegionClosing7;
+		Hobject  ho_ConnectedRegions23, ho_SelectedRegions18, ho_Circle;
 
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_BaseName;
@@ -2625,10 +2622,602 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		HTuple  hv_Length21, hv_Value, hv_Value1, hv_ratio, hv_Number4;
 		HTuple  hv_Row5, hv_Column5, hv_Radius3, hv_Number, hv_Row3;
 		HTuple  hv_Column3, hv_Radius1, hv_Area, hv_Row4, hv_Column4;
-		HTuple  hv_Radius2, hv_Number2, hv_Row2, hv_Column2, hv_Radius;
-		HTuple  hv_UsedThreshold;
+		HTuple  hv_Radius2, hv_Row8, hv_Column8, hv_Phi3, hv_Length13;
+		HTuple  hv_Length23, hv_Number8, hv_Row2, hv_Column2, hv_Radius;
+		HTuple  hv_UsedThreshold, hv_Width, hv_Height;
 
 		Hobject ho_ImageChannel[6];
+#pragma region setvalue
+
+		_checkparam.i_BandChannel = ((QComboBox*)(ui.tableWidget->cellWidget(0, 1)))->currentIndex();
+		//_checkparam.i_BandChannel = ui.tableWidget->item(0, c)->text().toInt();
+		//_checkparam.i_PillChannel1 = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
+		_checkparam.i_MinGray_Band = ui.tableWidget->item(1, c)->text().toInt();
+		if (_checkparam.i_MinGray_Band <= 0 || _checkparam.i_MinGray_Band>=255)
+		{
+			if (nullptr!=m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+
+		}
+		_checkparam.i_MinArea_Band = ui.tableWidget->item(2, c)->text().toInt();
+		if (_checkparam.i_MinArea_Band<=0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+
+		}
+		_checkparam.i_CapsulesChannel = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
+		_checkparam.i_MinGray_Capsules = ui.tableWidget->item(4, c)->text().toInt();
+		if (_checkparam.i_MinGray_Capsules <= 0 || _checkparam.i_MinGray_Capsules >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_Capsules = ui.tableWidget->item(5, c)->text().toDouble();
+		if (_checkparam.d_OR_Capsules <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_Capsules = ui.tableWidget->item(6, c)->text().toInt();
+		if (_checkparam.i_MinArea_Capsules <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxArea_Capsules = ui.tableWidget->item(7, c)->text().toInt();
+		if (_checkparam.i_MaxArea_Capsules <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_Number_Capsules = ui.tableWidget->item(8, c)->text().toInt();
+		if (_checkparam.i_Number_Capsules <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_BatchChannel = ((QComboBox*)(ui.tableWidget->cellWidget(9, 1)))->currentIndex();
+		_checkparam.i_LengthAdd_1 = ui.tableWidget->item(10, c)->text().toInt();
+		if (_checkparam.i_LengthAdd_1 <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_LengthAdd_2 = ui.tableWidget->item(11, c)->text().toInt();
+		if (_checkparam.i_LengthAdd_2 <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_ER_Batch = ui.tableWidget->item(12, c)->text().toDouble();
+		if (_checkparam.d_ER_Batch <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskHeight_Batch = ui.tableWidget->item(13, c)->text().toInt();
+		if (_checkparam.i_MaskHeight_Batch <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskWidth_Batch = ui.tableWidget->item(14, c)->text().toInt();
+		if (_checkparam.i_MaskWidth_Batch <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinGray_Batch = ui.tableWidget->item(15, c)->text().toInt();
+		if (_checkparam.i_MinGray_Batch <= 0 || _checkparam.i_MinGray_Batch >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_Batch = ui.tableWidget->item(16, c)->text().toDouble();
+		if (_checkparam.d_OR_Batch <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_CR_Batch = ui.tableWidget->item(17, c)->text().toDouble();
+		if (_checkparam.d_CR_Batch <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_Batch = ui.tableWidget->item(18, c)->text().toInt();
+		if (_checkparam.i_MinArea_Batch <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxArea_Batch = ui.tableWidget->item(19, c)->text().toInt();
+		if (_checkparam.i_MaxArea_Batch <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		//_checkparam.i_MinArea_BatchDefect = ui.tableWidget->item(20, c)->text().toInt();
+		//_checkparam.i_MaxArea_BatchDefect = ui.tableWidget->item(21, c)->text().toInt();
+		_checkparam.i_Channel_CapsulesDefect = ((QComboBox*)(ui.tableWidget->cellWidget(20, 1)))->currentIndex();
+		_checkparam.d_ER_RegionCapsules = ui.tableWidget->item(21, c)->text().toDouble();
+		if (_checkparam.d_ER_RegionCapsules <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxGray_CapsulesRed = ui.tableWidget->item(22, c)->text().toInt();
+		if (_checkparam.i_MaxGray_CapsulesRed <= 0 || _checkparam.i_MaxGray_CapsulesRed >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_CapsulesRed = ui.tableWidget->item(23, c)->text().toInt();
+		if (_checkparam.i_MinArea_CapsulesRed <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxArea_CapsulesRed = ui.tableWidget->item(24, c)->text().toInt();
+		if (_checkparam.i_MaxArea_CapsulesRed <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_DR_CapsulesRed = ui.tableWidget->item(25, c)->text().toDouble();
+		if (_checkparam.d_DR_CapsulesRed <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_DR_CapsulesYellow = ui.tableWidget->item(26, c)->text().toDouble();
+		if (_checkparam.d_DR_CapsulesYellow <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_Channel_RegionRed = ((QComboBox*)(ui.tableWidget->cellWidget(27, 1)))->currentIndex();
+		_checkparam.i_Channel_RedDefect1 = ((QComboBox*)(ui.tableWidget->cellWidget(28, 1)))->currentIndex();
+		_checkparam.i_Channel_RedDefect2 = ((QComboBox*)(ui.tableWidget->cellWidget(29, 1)))->currentIndex();
+		_checkparam.i_MaskHeight_RegionRed = ui.tableWidget->item(30, c)->text().toInt();
+		if (_checkparam.i_MaskHeight_RegionRed <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskWidth_RegionRed = ui.tableWidget->item(31, c)->text().toInt();
+		if (_checkparam.i_MaskWidth_RegionRed <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinGray_RegionRed = ui.tableWidget->item(32, c)->text().toInt();
+		if (_checkparam.i_MinGray_RegionRed <= 0 || _checkparam.i_MinGray_RegionRed >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxGray_RegionRed = ui.tableWidget->item(33, c)->text().toInt();
+		if (_checkparam.i_MaxGray_RegionRed <= 0 || _checkparam.i_MaxGray_RegionRed >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_CR_RegionRed = ui.tableWidget->item(34, c)->text().toDouble();
+		if (_checkparam.d_CR_RegionRed <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_RegionRed = ui.tableWidget->item(35, c)->text().toDouble();
+		if (_checkparam.d_OR_RegionRed <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_RegionRed = ui.tableWidget->item(36, c)->text().toInt();
+		if (_checkparam.i_MinArea_RegionRed <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxArea_RegionRed = ui.tableWidget->item(37, c)->text().toInt();
+		if (_checkparam.i_MaxArea_RegionRed <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskHeight_RedDefect = ui.tableWidget->item(38, c)->text().toInt();
+		if (_checkparam.i_MaskHeight_RedDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskWidth_RedDefect = ui.tableWidget->item(39, c)->text().toInt();
+		if (_checkparam.i_MaskWidth_RedDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinGray_RedDefect = ui.tableWidget->item(40, c)->text().toInt();
+		if (_checkparam.i_MinGray_RedDefect <= 0 || _checkparam.i_MinGray_RedDefect >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_ER_RedDefect = ui.tableWidget->item(41, c)->text().toDouble();
+		if (_checkparam.d_ER_RedDefect <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_RedDefect = ui.tableWidget->item(42, c)->text().toDouble();
+		if (_checkparam.d_OR_RedDefect <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_RedDefect = ui.tableWidget->item(43, c)->text().toInt();
+		if (_checkparam.i_MinArea_RedDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxArea_RedDefect = ui.tableWidget->item(44, c)->text().toInt();
+		if (_checkparam.i_MaxArea_RedDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskHeight_RegionYellow = ui.tableWidget->item(45, c)->text().toInt();
+		if (_checkparam.i_MaskHeight_RegionYellow <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskWidth_RegionYellow = ui.tableWidget->item(46, c)->text().toInt();
+		if (_checkparam.i_MaskWidth_RegionYellow <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinGray_RegionYellow = ui.tableWidget->item(47, c)->text().toInt();
+		if (_checkparam.i_MinGray_RegionYellow <= 0 || _checkparam.i_MinGray_RegionYellow >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxGray_RegionYellow = ui.tableWidget->item(48, c)->text().toInt();
+		if (_checkparam.i_MaxGray_RegionYellow <= 0 || _checkparam.i_MaxGray_RegionYellow >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_RegionYellow = ui.tableWidget->item(49, c)->text().toDouble();
+		if (_checkparam.d_OR_RegionYellow <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_RegionYellow = ui.tableWidget->item(50, c)->text().toInt();
+		if (_checkparam.i_MinArea_RegionYellow <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxArea_RegionYellow = ui.tableWidget->item(51, c)->text().toInt();
+		if (_checkparam.i_MaxArea_RegionYellow <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_Channel_BandDefect = ((QComboBox*)(ui.tableWidget->cellWidget(52, 1)))->currentIndex();
+		_checkparam.d_DR_BandDefect = ui.tableWidget->item(53, c)->text().toDouble();
+		if (_checkparam.d_DR_BandDefect <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_ER_BandDefect = ui.tableWidget->item(54, c)->text().toDouble();
+		if (_checkparam.d_ER_BandDefect <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskHeight_BandDefect = ui.tableWidget->item(55, c)->text().toInt();
+		if (_checkparam.i_MaskHeight_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskWidth_BandDefect = ui.tableWidget->item(56, c)->text().toInt();
+		if (_checkparam.i_MaskWidth_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinGray_BandDefect = ui.tableWidget->item(57, c)->text().toInt();
+		if (_checkparam.i_MinGray_BandDefect <= 0 || _checkparam.i_MinGray_BandDefect >= 255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_CR_BandDefect = ui.tableWidget->item(58, c)->text().toDouble();
+		if (_checkparam.d_CR_BandDefect <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinWidth_BandDefect = ui.tableWidget->item(59, c)->text().toInt();
+		if (_checkparam.i_MinWidth_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxWidth_BandDefect = ui.tableWidget->item(60, c)->text().toInt();
+		if (_checkparam.i_MaxWidth_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinHeight_BandDefect = ui.tableWidget->item(61, c)->text().toInt();
+		if (_checkparam.i_MinHeight_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxHeight_BandDefect = ui.tableWidget->item(62, c)->text().toInt();
+		if (_checkparam.i_MaxHeight_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_BandDefect = ui.tableWidget->item(63, c)->text().toInt();
+		if (_checkparam.i_MinArea_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxArea_BandDefect = ui.tableWidget->item(64, c)->text().toInt();
+		if (_checkparam.i_MaxArea_BandDefect <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		m_bChanged = true;
+		ui.pB_Save->setEnabled(true);
+		//((CInterCHeck*)p_Parent)->RealCheck(m_MOriginal, _checkparam, m_WND);
+
+#pragma endregion setvalue
 		if (m_MOriginal.empty())
 		{
 			return;
@@ -2638,78 +3227,6 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
 		get_image_size(ho_Image, &hv_Width, &hv_Height);
 		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
-
-		_checkparam.i_BandChannel = ((QComboBox*)(ui.tableWidget->cellWidget(0, 1)))->currentIndex();
-		//_checkparam.i_BandChannel = ui.tableWidget->item(0, c)->text().toInt();
-		//_checkparam.i_PillChannel1 = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
-		_checkparam.i_MinGray_Band = ui.tableWidget->item(1, c)->text().toInt();
-		_checkparam.i_MinArea_Band = ui.tableWidget->item(2, c)->text().toInt();
-		_checkparam.i_CapsulesChannel = ((QComboBox*)(ui.tableWidget->cellWidget(3, 1)))->currentIndex();
-		_checkparam.i_MinGray_Capsules = ui.tableWidget->item(4, c)->text().toInt();
-		_checkparam.d_OR_Capsules = ui.tableWidget->item(5, c)->text().toDouble();
-		_checkparam.i_MinArea_Capsules = ui.tableWidget->item(6, c)->text().toInt();
-		_checkparam.i_MaxArea_Capsules = ui.tableWidget->item(7, c)->text().toInt();
-		_checkparam.i_Number_Capsules = ui.tableWidget->item(8, c)->text().toInt();
-		_checkparam.i_BatchChannel = ((QComboBox*)(ui.tableWidget->cellWidget(9, 1)))->currentIndex();
-		_checkparam.i_LengthAdd_1 = ui.tableWidget->item(10, c)->text().toInt();
-		_checkparam.i_LengthAdd_2 = ui.tableWidget->item(11, c)->text().toInt();
-		_checkparam.d_ER_Batch = ui.tableWidget->item(12, c)->text().toDouble();
-		_checkparam.i_MaskHeight_Batch = ui.tableWidget->item(13, c)->text().toInt();
-		_checkparam.i_MaskWidth_Batch = ui.tableWidget->item(14, c)->text().toInt();
-		_checkparam.i_MinGray_Batch = ui.tableWidget->item(15, c)->text().toInt();
-		_checkparam.d_OR_Batch = ui.tableWidget->item(16, c)->text().toDouble();
-		_checkparam.d_CR_Batch = ui.tableWidget->item(17, c)->text().toDouble();
-		_checkparam.i_MinArea_Batch = ui.tableWidget->item(18, c)->text().toInt();
-		_checkparam.i_MaxArea_Batch = ui.tableWidget->item(19, c)->text().toInt();
-		//_checkparam.i_MinArea_BatchDefect = ui.tableWidget->item(20, c)->text().toInt();
-		//_checkparam.i_MaxArea_BatchDefect = ui.tableWidget->item(21, c)->text().toInt();
-		_checkparam.i_Channel_CapsulesDefect = ((QComboBox*)(ui.tableWidget->cellWidget(20, 1)))->currentIndex();
-		_checkparam.d_ER_RegionCapsules = ui.tableWidget->item(21, c)->text().toDouble();
-		_checkparam.i_MaxGray_CapsulesRed = ui.tableWidget->item(22, c)->text().toInt();
-		_checkparam.i_MinArea_CapsulesRed = ui.tableWidget->item(23, c)->text().toInt();
-		_checkparam.i_MaxArea_CapsulesRed = ui.tableWidget->item(24, c)->text().toInt();
-		_checkparam.d_DR_CapsulesRed = ui.tableWidget->item(25, c)->text().toDouble();
-		_checkparam.d_DR_CapsulesYellow = ui.tableWidget->item(26, c)->text().toDouble();
-		_checkparam.i_Channel_RegionRed = ((QComboBox*)(ui.tableWidget->cellWidget(27, 1)))->currentIndex();
-		_checkparam.i_Channel_RedDefect1 = ((QComboBox*)(ui.tableWidget->cellWidget(28, 1)))->currentIndex();
-		_checkparam.i_Channel_RedDefect2 = ((QComboBox*)(ui.tableWidget->cellWidget(29, 1)))->currentIndex();
-		_checkparam.i_MaskHeight_RegionRed = ui.tableWidget->item(30, c)->text().toInt();
-		_checkparam.i_MaskWidth_RegionRed = ui.tableWidget->item(31, c)->text().toInt();
-		_checkparam.i_MinGray_RegionRed = ui.tableWidget->item(32, c)->text().toInt();
-		_checkparam.i_MaxGray_RegionRed = ui.tableWidget->item(33, c)->text().toInt();
-		_checkparam.d_CR_RegionRed = ui.tableWidget->item(34, c)->text().toDouble();
-		_checkparam.d_OR_RegionRed = ui.tableWidget->item(35, c)->text().toDouble();
-		_checkparam.i_MinArea_RegionRed = ui.tableWidget->item(36, c)->text().toInt();
-		_checkparam.i_MaxArea_RegionRed = ui.tableWidget->item(37, c)->text().toInt();
-		_checkparam.i_MaskHeight_RedDefect = ui.tableWidget->item(38, c)->text().toInt();
-		_checkparam.i_MaskWidth_RedDefect = ui.tableWidget->item(39, c)->text().toInt();
-		_checkparam.i_MinGray_RedDefect = ui.tableWidget->item(40, c)->text().toInt();
-		_checkparam.d_ER_RedDefect = ui.tableWidget->item(41, c)->text().toDouble();
-		_checkparam.d_OR_RedDefect = ui.tableWidget->item(42, c)->text().toDouble();
-		_checkparam.i_MinArea_RedDefect = ui.tableWidget->item(43, c)->text().toInt();
-		_checkparam.i_MaxArea_RedDefect = ui.tableWidget->item(44, c)->text().toInt();
-		_checkparam.i_MaskHeight_RegionYellow = ui.tableWidget->item(45, c)->text().toInt();
-		_checkparam.i_MaskWidth_RegionYellow = ui.tableWidget->item(46, c)->text().toInt();
-		_checkparam.i_MinGray_RegionYellow = ui.tableWidget->item(47, c)->text().toInt();
-		_checkparam.i_MaxGray_RegionYellow = ui.tableWidget->item(48, c)->text().toInt();
-		_checkparam.d_OR_RegionYellow = ui.tableWidget->item(49, c)->text().toDouble();
-		_checkparam.i_MinArea_RegionYellow = ui.tableWidget->item(50, c)->text().toInt();
-		_checkparam.i_MaxArea_RegionYellow = ui.tableWidget->item(51, c)->text().toInt();
-		_checkparam.i_Channel_BandDefect = ((QComboBox*)(ui.tableWidget->cellWidget(52, 1)))->currentIndex();
-		_checkparam.d_DR_BandDefect = ui.tableWidget->item(53, c)->text().toDouble();
-		_checkparam.d_ER_BandDefect = ui.tableWidget->item(54, c)->text().toDouble();
-		_checkparam.i_MaskHeight_BandDefect = ui.tableWidget->item(55, c)->text().toInt();
-		_checkparam.i_MaskWidth_BandDefect = ui.tableWidget->item(56, c)->text().toInt();
-		_checkparam.i_MinGray_BandDefect = ui.tableWidget->item(57, c)->text().toInt();
-		_checkparam.d_CR_BandDefect = ui.tableWidget->item(58, c)->text().toDouble();
-		_checkparam.i_MinWidth_BandDefect = ui.tableWidget->item(59, c)->text().toInt();
-		_checkparam.i_MaxWidth_BandDefect = ui.tableWidget->item(60, c)->text().toInt();
-		_checkparam.i_MinHeight_BandDefect = ui.tableWidget->item(61, c)->text().toInt();
-		_checkparam.i_MaxHeight_BandDefect = ui.tableWidget->item(62, c)->text().toInt();
-		_checkparam.i_MinArea_BandDefect = ui.tableWidget->item(63, c)->text().toInt();
-		_checkparam.i_MaxArea_BandDefect = ui.tableWidget->item(64, c)->text().toInt();
-
-		//((CInterCHeck*)p_Parent)->RealCheck(m_MOriginal, _checkparam, m_WND);
 
 		//***Ò©°å³ß´ç
 		threshold(ho_ImageChannel[_checkparam.i_BandChannel], &ho_Region, _checkparam.i_MinGray_Band, 255);
@@ -3193,30 +3710,163 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//****ºìÉ«½ºÄÒÈ±ÏÝ
 		reduce_domain(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], ho_RegionErosion4, &ho_ImageReduced2);
 		gray_dilation_rect(ho_ImageReduced2, &ho_ImageMax1, _checkparam.i_MaskHeight_RegionRed, _checkparam.i_MaskWidth_RegionRed);
+		if (30==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax1, m_WND);
+			return;
+		}
+		if (31 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax1, m_WND);
+			return;
+		}
 		sub_image(ho_ImageMax1, ho_ImageReduced2, &ho_ImageSub3, 1, 0);
 		threshold(ho_ImageSub3, &ho_Regions2, _checkparam.i_MinGray_RegionRed, 255);
+		if (32==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Regions2, m_WND);
+			return;
+		}
 		threshold(ho_ImageReduced2, &ho_Region2, 0, _checkparam.i_MaxGray_RegionRed);
+		if (33==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region2, m_WND);
+			return;
+		}
 		intersection(ho_Regions2, ho_Region2, &ho_RegionIntersection1);
 		closing_circle(ho_RegionIntersection1, &ho_RegionClosing1, _checkparam.d_CR_RegionRed);
+		if (34==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionClosing1, m_WND);
+			return;
+		}
 		opening_circle(ho_RegionClosing1, &ho_RegionOpening5, _checkparam.d_OR_RegionRed);
+		if (35==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening5, m_WND);
+			return;
+		}
 		connection(ho_RegionOpening5, &ho_ConnectedRegions2);
 		select_shape(ho_ConnectedRegions2, &ho_SelectedRegions1, "area", "and", _checkparam.i_MinArea_RegionRed, _checkparam.i_MaxArea_RegionRed);
+		if (36==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions1, m_WND);
+			return;
+		}
+		if (37 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions1, m_WND);
+			return;
+		}
 
 		reduce_domain(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], ho_RegionErosion4, &ho_ImageReduced5);
 		gray_dilation_rect(ho_ImageReduced5, &ho_ImageMax5, _checkparam.i_MaskHeight_RedDefect, _checkparam.i_MaskWidth_RegionRed);
+		if (38==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax5, m_WND);
+			return;
+		}
+		if (39 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax5, m_WND);
+			return;
+		}
 		sub_image(ho_ImageMax5, ho_ImageReduced5, &ho_ImageSub7, 1, 0);
 		//gray_erosion_rect (ImageReduced5, ImageMin, 5, 5)
 		//sub_image (ImageReduced5, ImageMin, ImageSub2, 1, 0)
 		threshold(ho_ImageSub7, &ho_Region6, _checkparam.i_MinGray_RedDefect, 255);
-
+		if (40==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region6, m_WND);
+			return;
+		}
 		erosion_circle(ho_RegionErosion4, &ho_RegionErosion3, _checkparam.d_ER_RedDefect);
+		if (41==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionErosion3, m_WND);
+			return;
+		}
 		difference(ho_RegionOpening9, ho_RegionErosion3, &ho_RegionDifference8);
 		difference(ho_Region6, ho_RegionDifference8, &ho_RegionDifference9);
 		opening_circle(ho_RegionDifference9, &ho_RegionOpening8, _checkparam.d_OR_RedDefect);
+		if (42==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening8, m_WND);
+			return;
+		}
 		connection(ho_RegionOpening8, &ho_ConnectedRegions15);
 		select_shape(ho_ConnectedRegions15, &ho_SelectedRegions9, "area", "and", _checkparam.i_MinArea_RedDefect,
 			_checkparam.i_MaxArea_RedDefect);
-
+		if (43==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions9, m_WND);
+			return;
+		}
+		if (44 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions9, m_WND);
+			return;
+		}
 		//threshold (ImageReduced5, Region7, 120, 255)
 		//intersection (Region6, Region7, RegionIntersection2)
 		//opening_circle (RegionIntersection2, RegionOpening4, 1)
@@ -3245,14 +3895,77 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//***»ÆÉ«½ºÄÒ
 		reduce_domain(ho_ImageReduced1, ho_RegionYellow, &ho_ImageReduced3);
 		gray_dilation_rect(ho_ImageReduced3, &ho_ImageMax2, _checkparam.i_MaskHeight_RegionYellow, _checkparam.i_MaskWidth_RegionYellow);
+		if (45==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax2, m_WND);
+			return;
+		}
+		if (46 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax2, m_WND);
+			return;
+		}
 		sub_image(ho_ImageMax2, ho_ImageReduced3, &ho_ImageSub, 1, 0);
 		threshold(ho_ImageSub, &ho_Region5, _checkparam.i_MinGray_RegionYellow, 255);
+		if (47==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region5, m_WND);
+			return;
+		}
 		threshold(ho_ImageReduced3, &ho_Region8, 0, _checkparam.i_MaxGray_RegionYellow);
+		if (48==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region8, m_WND);
+			return;
+		}
 		intersection(ho_Region5, ho_Region8, &ho_RegionIntersection3);
 		difference(ho_RegionIntersection3, ho_RegionCross, &ho_RegionDifference7);
 		connection(ho_RegionDifference7, &ho_ConnectedRegions14);
 		opening_circle(ho_RegionDifference7, &ho_RegionOpening3, _checkparam.d_OR_RegionYellow);
+		if (49==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening3, m_WND);
+			return;
+		}
 		select_shape(ho_RegionOpening3, &ho_SelectedRegions11, "area", "and", _checkparam.i_MinArea_RegionYellow, _checkparam.i_MaxArea_RegionYellow);
+		if (50==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions11, m_WND);
+			return;
+		}
+		if (51 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions11, m_WND);
+			return;
+		}
 		area_center(ho_SelectedRegions11, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		//if (0 != (hv_Area.Num()))
 		//{
@@ -3272,22 +3985,39 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//	return 1;
 		//}
 		//***Ò©°åÈ±ÏÝ
-		dilation_circle(ho_RegionPill, &ho_RegionDilation, _checkparam.d_DR_BandDefect);
-		erosion_circle(ho_RegionBand, &ho_RegionErosion1, _checkparam.d_ER_BandDefect);
-		union2(ho_RegionPill, ho_Rectangle1, &ho_RegionUnion4);
-		difference(ho_RegionErosion1, ho_RegionUnion4, &ho_RegionLeft);
-		reduce_domain(ho_ImageChannel[_checkparam.i_Channel_BandDefect], ho_RegionLeft, &ho_ImageLeft);
-		gray_dilation_rect(ho_ImageLeft, &ho_ImageMax3, _checkparam.i_MaskHeight_BandDefect, _checkparam.i_MaskWidth_BandDefect);
-		sub_image(ho_ImageMax3, ho_ImageLeft, &ho_ImageSub4, 1, 0);
-		threshold(ho_ImageSub4, &ho_Region9, _checkparam.i_MinGray_BandDefect, 255);
-		difference(ho_Region9, ho_RegionDilation, &ho_RegionDifference6);
-		fill_up(ho_RegionDifference6, &ho_RegionFillUp3);
-		closing_circle(ho_RegionFillUp3, &ho_RegionClosing3, _checkparam.d_CR_BandDefect);
-		connection(ho_RegionClosing3, &ho_ConnectedRegions13);
-		select_shape(ho_ConnectedRegions13, &ho_SelectedRegions8, (HTuple("width").Append("height").Append("area")),
-			"and", (HTuple(_checkparam.i_MinWidth_BandDefect).Append(_checkparam.i_MinHeight_BandDefect).Append(_checkparam.i_MinArea_BandDefect)),
-			(HTuple(_checkparam.i_MaxWidth_BandDefect).Append(_checkparam.i_MaxHeight_BandDefect).Append(_checkparam.i_MaxArea_BandDefect)));
-		count_obj(ho_SelectedRegions8, &hv_Number2);
+		erosion_circle(ho_RegionBand, &ho_RegionErosion6, 3.5);
+		reduce_domain(ho_ImageChannel[0], ho_RegionErosion6, &ho_ImageReduced12);
+
+		threshold(ho_ImageReduced12, &ho_Region18, 0, 190);
+		fill_up(ho_Region18, &ho_RegionFillUp6);
+		connection(ho_RegionFillUp6, &ho_ConnectedRegions22);
+		select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", 2000,
+			99999);
+		shape_trans(ho_SelectedRegions17, &ho_RegionTrans7, "convex");
+		smallest_rectangle2(ho_RegionTrans7, &hv_Row8, &hv_Column8, &hv_Phi3, &hv_Length13,
+			&hv_Length23);
+		gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * 80,
+			hv_Length23);
+
+		opening_circle(ho_Region18, &ho_RegionOpening13, 1.5);
+		connection(ho_RegionOpening13, &ho_ConnectedRegions19);
+		select_shape(ho_ConnectedRegions19, &ho_SelectedRegions16, "area", "and", 2000,
+			99999);
+		shape_trans(ho_SelectedRegions16, &ho_RegionTrans6, "convex");
+
+
+		gray_dilation_rect(ho_ImageChannel[0], &ho_ImageMax3, 7, 7);
+		sub_image(ho_ImageMax3, ho_ImageChannel[0], &ho_ImageSub4, 1, 0);
+		threshold(ho_ImageSub4, &ho_Region9, 45, 255);
+		intersection(ho_Region9, ho_Rectangle4, &ho_RegionIntersection13);
+		connection(ho_RegionIntersection13, &ho_ConnectedRegions24);
+		select_shape(ho_ConnectedRegions24, &ho_SelectedRegions19, (HTuple("width").Append("height")),
+			"and", (HTuple(3).Append(3)), (HTuple(99999).Append(9999)));
+		union1(ho_SelectedRegions19, &ho_RegionUnion7);
+		closing_circle(ho_RegionUnion7, &ho_RegionClosing7, 2.5);
+		connection(ho_RegionClosing7, &ho_ConnectedRegions23);
+		select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", 30,
+			99999);
 		//if (0 != (hv_Number2 != 0))
 		//{
 		//	smallest_circle(ho_SelectedRegions8, &hv_Row2, &hv_Column2, &hv_Radius);
@@ -3306,560 +4036,560 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//}
 
 
-		switch (r)
-		{
+		//switch (r)
+		//{
 
-		case 1:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region, m_WND);
-			//set_tposition(m_WND, 10,10);
-			//write_string(m_WND, "È±ÏÝÃæ»ý£º" + hv_Area7);
-			break;
-		}
-		case 2:
-		{
-			if (hv_AreaBand < _checkparam.i_MinArea_Band)
-			{
-				disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
-				set_draw(m_WND, "margin");
-				set_color(m_WND, "red");
-				set_line_width(m_WND, 3);
-				disp_obj(ho_RegionBand, m_WND);
-				set_tposition(m_WND, 10, 10);
-				write_string(m_WND, "ÅÝÕÖ°åÃæ»ý£º" + hv_AreaBand);
-			}
-			else
-			{
-				disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
-				set_draw(m_WND, "margin");
-				set_color(m_WND, "green");
-				set_line_width(m_WND, 3);
-				disp_obj(ho_RegionBand, m_WND);
-				set_tposition(m_WND, 10, 10);
-				write_string(m_WND, "ÅÝÕÖ°åÃæ»ý£º" + hv_AreaBand);
-			}
+		//case 1:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region, m_WND);
+		//	//set_tposition(m_WND, 10,10);
+		//	//write_string(m_WND, "È±ÏÝÃæ»ý£º" + hv_Area7);
+		//	break;
+		//}
+		//case 2:
+		//{
+		//	if (hv_AreaBand < _checkparam.i_MinArea_Band)
+		//	{
+		//		disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
+		//		set_draw(m_WND, "margin");
+		//		set_color(m_WND, "red");
+		//		set_line_width(m_WND, 3);
+		//		disp_obj(ho_RegionBand, m_WND);
+		//		set_tposition(m_WND, 10, 10);
+		//		write_string(m_WND, "ÅÝÕÖ°åÃæ»ý£º" + hv_AreaBand);
+		//	}
+		//	else
+		//	{
+		//		disp_obj(ho_ImageChannel[_checkparam.i_BandChannel], m_WND);
+		//		set_draw(m_WND, "margin");
+		//		set_color(m_WND, "green");
+		//		set_line_width(m_WND, 3);
+		//		disp_obj(ho_RegionBand, m_WND);
+		//		set_tposition(m_WND, 10, 10);
+		//		write_string(m_WND, "ÅÝÕÖ°åÃæ»ý£º" + hv_AreaBand);
+		//	}
 
-			//set_tposition(m_WND, 10, 10);
-			//write_string(m_WND, "×î´óãÐÖµ£º" + HTuple(_checkparam.i_BandException2_Value));
-			break;
-		}
-		case 4:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Regions, m_WND);
+		//	//set_tposition(m_WND, 10, 10);
+		//	//write_string(m_WND, "×î´óãÐÖµ£º" + HTuple(_checkparam.i_BandException2_Value));
+		//	break;
+		//}
+		//case 4:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Regions, m_WND);
 
-			break;
-		}
-		case 5:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionOpening, m_WND);
-			break;
-		}
-		case 6:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions, m_WND);
-			break;
-		}
-		case 7:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions, m_WND);
-			break;
-		}
-		case 8:
-		{
-			if (hv_NumberPill == _checkparam.i_Number_Capsules)
-			{
-				disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
-				set_draw(m_WND, "margin");
-				set_color(m_WND, "green");
-				set_line_width(m_WND, 3);
-				disp_obj(ho_RegionPill, m_WND);
-			}
-			else
-			{
-				disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
-				set_draw(m_WND, "margin");
-				set_color(m_WND, "red");
-				set_line_width(m_WND, 3);
-				disp_obj(ho_RegionPill, m_WND);
-			}
+		//	break;
+		//}
+		//case 5:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionOpening, m_WND);
+		//	break;
+		//}
+		//case 6:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions, m_WND);
+		//	break;
+		//}
+		//case 7:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions, m_WND);
+		//	break;
+		//}
+		//case 8:
+		//{
+		//	if (hv_NumberPill == _checkparam.i_Number_Capsules)
+		//	{
+		//		disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+		//		set_draw(m_WND, "margin");
+		//		set_color(m_WND, "green");
+		//		set_line_width(m_WND, 3);
+		//		disp_obj(ho_RegionPill, m_WND);
+		//	}
+		//	else
+		//	{
+		//		disp_obj(ho_ImageChannel[_checkparam.i_CapsulesChannel], m_WND);
+		//		set_draw(m_WND, "margin");
+		//		set_color(m_WND, "red");
+		//		set_line_width(m_WND, 3);
+		//		disp_obj(ho_RegionPill, m_WND);
+		//	}
 
-			break;
-		}
+		//	break;
+		//}
 
-		case 10:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "fill");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Rectangle, m_WND);
-			break;
-		}
-		case 11:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "fill");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Rectangle, m_WND);
-			break;
-		}
-		case 12:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionErosion, m_WND);
-			break;
-		}
-		case 13:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax, m_WND);
-			break;
-		}
-		case 14:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax, m_WND);
-			break;
-		}
-		case 15:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region4, m_WND);
-			break;
-		}
-		case 16:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionOpening1, m_WND);
-			break;
-		}
-		case 17:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionClosing, m_WND);
-			break;
-		}
-		case 18:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions2, m_WND);
-			break;
-		}
-		case 19:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions2, m_WND);
-			break;
-		}
-		case 21:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionErosion2, m_WND);
-			break;
-		}
-		case 22:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region1, m_WND);
-			break;
-		}
-		case 23:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions4, m_WND);
-			break;
-		}
-		case 24:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions4, m_WND);
-			break;
-		}
-		case 25:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionDilation2, m_WND);
-			break;
-		}
-		case 26:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionDilation3, m_WND);
-			break;
-		}
-		case 30:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax1, m_WND);
-			break;
-		}
-		case 31:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax1, m_WND);
+		//case 10:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "fill");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Rectangle, m_WND);
+		//	break;
+		//}
+		//case 11:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "fill");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Rectangle, m_WND);
+		//	break;
+		//}
+		//case 12:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionErosion, m_WND);
+		//	break;
+		//}
+		//case 13:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax, m_WND);
+		//	break;
+		//}
+		//case 14:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax, m_WND);
+		//	break;
+		//}
+		//case 15:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region4, m_WND);
+		//	break;
+		//}
+		//case 16:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionOpening1, m_WND);
+		//	break;
+		//}
+		//case 17:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionClosing, m_WND);
+		//	break;
+		//}
+		//case 18:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions2, m_WND);
+		//	break;
+		//}
+		//case 19:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_BatchChannel], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions2, m_WND);
+		//	break;
+		//}
+		//case 21:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionErosion2, m_WND);
+		//	break;
+		//}
+		//case 22:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region1, m_WND);
+		//	break;
+		//}
+		//case 23:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions4, m_WND);
+		//	break;
+		//}
+		//case 24:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions4, m_WND);
+		//	break;
+		//}
+		//case 25:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionDilation2, m_WND);
+		//	break;
+		//}
+		//case 26:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_CapsulesDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionDilation3, m_WND);
+		//	break;
+		//}
+		//case 30:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax1, m_WND);
+		//	break;
+		//}
+		//case 31:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax1, m_WND);
 
-			break;
-		}
-		case 32:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Regions2, m_WND);
-			break;
-		}
-		case 33:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region2, m_WND);
-			break;
-		}
-		case 34:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionClosing1, m_WND);
-			break;
-		}
-		case 35:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionOpening5, m_WND);
-			break;
-		}
-		case 36:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions1, m_WND);
-			break;
-		}
-		case 37:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions1, m_WND);
-			break;
-		}
-		case 38:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax5, m_WND);
-			break;
-		}
-		case 39:
-		{
+		//	break;
+		//}
+		//case 32:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Regions2, m_WND);
+		//	break;
+		//}
+		//case 33:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region2, m_WND);
+		//	break;
+		//}
+		//case 34:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionClosing1, m_WND);
+		//	break;
+		//}
+		//case 35:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionOpening5, m_WND);
+		//	break;
+		//}
+		//case 36:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions1, m_WND);
+		//	break;
+		//}
+		//case 37:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect1], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions1, m_WND);
+		//	break;
+		//}
+		//case 38:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax5, m_WND);
+		//	break;
+		//}
+		//case 39:
+		//{
 
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax5, m_WND);
-			break;
-		}
-		case 40:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region6, m_WND);
-			break;
-		}
-		case 41:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionErosion3, m_WND);
-			break;
-		}
-		case 42:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionOpening8, m_WND);
-			break;
-		}
-		case 43:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions9, m_WND);
-			break;
-		}
-		case 44:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions9, m_WND);
-			break;
-		}
-		case 45:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax2, m_WND);
-			break;
-		}
-		case 46:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax2, m_WND);
-			break;
-		}
-		case 47:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region5, m_WND);
-			break;
-		}
-		case 48:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region8, m_WND);
-			break;
-		}
-		case 49:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionOpening3, m_WND);
-			break;
-		}
-		case 50:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions11, m_WND);
-			break;
-		}
-		case 51:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions11, m_WND);
-			break;
-		}
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax5, m_WND);
+		//	break;
+		//}
+		//case 40:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region6, m_WND);
+		//	break;
+		//}
+		//case 41:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionErosion3, m_WND);
+		//	break;
+		//}
+		//case 42:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionOpening8, m_WND);
+		//	break;
+		//}
+		//case 43:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions9, m_WND);
+		//	break;
+		//}
+		//case 44:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_RedDefect2], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions9, m_WND);
+		//	break;
+		//}
+		//case 45:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax2, m_WND);
+		//	break;
+		//}
+		//case 46:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax2, m_WND);
+		//	break;
+		//}
+		//case 47:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region5, m_WND);
+		//	break;
+		//}
+		//case 48:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region8, m_WND);
+		//	break;
+		//}
+		//case 49:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionOpening3, m_WND);
+		//	break;
+		//}
+		//case 50:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions11, m_WND);
+		//	break;
+		//}
+		//case 51:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions11, m_WND);
+		//	break;
+		//}
 
-		case 53:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionDilation, m_WND);
-			break;
-		}
-		case 54:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionErosion1, m_WND);
-			break;
-		}
-		case 55:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax3, m_WND);
-			break;
-		}
-		case 56:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_ImageMax3, m_WND);
-			break;
-		}
-		case 57:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_Region9, m_WND);
-			break;
-		}
-		case 58:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_RegionClosing3, m_WND);
-			break;
-		}
-		case 59:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions8, m_WND);
-			break;
-		}
-		case 60:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions8, m_WND);
-			break;
-		}
-		case 61:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions8, m_WND);
-			break;
-		}
-		case 62:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions8, m_WND);
-			break;
-		}
-		case 63:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions8, m_WND);
-			break;
-		}
-		case 64:
-		{
-			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
-			set_draw(m_WND, "margin");
-			set_color(m_WND, "red");
-			set_line_width(m_WND, 3);
-			disp_obj(ho_SelectedRegions8, m_WND);
-			break;
-		}
-		}
+		//case 53:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionDilation, m_WND);
+		//	break;
+		//}
+		//case 54:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionErosion1, m_WND);
+		//	break;
+		//}
+		//case 55:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax3, m_WND);
+		//	break;
+		//}
+		//case 56:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_ImageMax3, m_WND);
+		//	break;
+		//}
+		//case 57:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_Region9, m_WND);
+		//	break;
+		//}
+		//case 58:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_RegionClosing3, m_WND);
+		//	break;
+		//}
+		//case 59:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions8, m_WND);
+		//	break;
+		//}
+		//case 60:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions8, m_WND);
+		//	break;
+		//}
+		//case 61:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions8, m_WND);
+		//	break;
+		//}
+		//case 62:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions8, m_WND);
+		//	break;
+		//}
+		//case 63:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions8, m_WND);
+		//	break;
+		//}
+		//case 64:
+		//{
+		//	disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
+		//	set_draw(m_WND, "margin");
+		//	set_color(m_WND, "red");
+		//	set_line_width(m_WND, 3);
+		//	disp_obj(ho_SelectedRegions8, m_WND);
+		//	break;
+		//}
+		//}
 	}
 	catch (HException &e)
 	{
@@ -3868,8 +4598,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		delete m_timerChanger;
 		m_timerChanger = nullptr;
 	}
-	m_bChanged = true;
-	ui.pB_Save->setEnabled(true);
+
 }
 void QtGuiSetting::SetModelMat(Mat tempgray)
 {
