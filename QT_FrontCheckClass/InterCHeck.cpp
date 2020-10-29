@@ -89,6 +89,31 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
 	checkparam->i_MaxHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaxHeight_BandDefect", "100").toInt();
 	checkparam->i_MinArea_BandDefect = configIniRead.value("/" + cameraname + "/MinArea_BandDefect", "10").toInt();
 	checkparam->i_MaxArea_BandDefect = configIniRead.value("/" + cameraname + "/MaxArea_BandDefect", "9999").toInt();
+	checkparam->b_IsOpen = configIniRead.value("/" + cameraname + "/IsOpen", "false").toBool();
+	checkparam->i_Channel_InCapsules = configIniRead.value("/" + cameraname + "/Channel_InCapsules", "2").toInt();
+	checkparam->d_ER_InCapsules = configIniRead.value("/" + cameraname + "/ER_InCapsules", "7.5").toDouble();
+	checkparam->i_MaxGray_InCapsules = configIniRead.value("/" + cameraname + "/MaxGray_InCapsules", "120").toInt();
+	checkparam->d_OR_InCapsules = configIniRead.value("/" + cameraname + "/OR_InCapsules", ".5").toDouble();
+	checkparam->i_MinArea_InCapsules = configIniRead.value("/" + cameraname + "/MinArea_InCapsules", "2000").toInt();
+	checkparam->i_MaxArea_InCapsules = configIniRead.value("/" + cameraname + "/MaxArea_InCapsules", "99999").toInt();
+	checkparam->i_LengthPlus_1 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
+	checkparam->i_LengthPlus_2 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
+	checkparam->i_Channel_Middle = configIniRead.value("/" + cameraname + "/Channel_Middle", "0").toInt();
+	checkparam->i_MaskHeight_Middle = configIniRead.value("/" + cameraname + "/MaskHeight_Middle", "7").toInt();
+	checkparam->i_MaskWidth_Middle = configIniRead.value("/" + cameraname + "/MaskWidth_Middle", "7").toInt();
+	checkparam->i_MinGray_Middle = configIniRead.value("/" + cameraname + "/MinGray_Middle", "45").toInt();
+	checkparam->i_MinWidth_Middle = configIniRead.value("/" + cameraname + "/MinWidth_Middle", "5").toInt();
+	checkparam->i_MinHeight_Middle = configIniRead.value("/" + cameraname + "/MinHeight_Middle", "3").toInt();
+	checkparam->d_CR_Middle = configIniRead.value("/" + cameraname + "/CR_Middle", "2.5").toDouble();
+	checkparam->i_MinArea_Middle = configIniRead.value("/" + cameraname + "/MinArea_Middle", "30").toInt();
+	checkparam->i_Channel_Plate = configIniRead.value("/" + cameraname + "/Channel_Plate", "0").toInt();
+	checkparam->i_MaxGray_Plate = configIniRead.value("/" + cameraname + "/MaxGray_Plate", "190").toInt();
+	checkparam->d_CR_Plate = configIniRead.value("/" + cameraname + "/CR_Plate", "1.5").toDouble();
+	checkparam->d_OR_Plate_1 = configIniRead.value("/" + cameraname + "/OR_Plate_1", "3.5").toDouble();
+	checkparam->i_MinArea_Plate_1 = configIniRead.value("/" + cameraname + "/MinArea_Middle_1", "1500").toInt();
+	checkparam->d_OR_Plate_2 = configIniRead.value("/" + cameraname + "/OR_Plate_2", "1.5").toDouble();
+	checkparam->i_MinArea_Plate_2 = configIniRead.value("/" + cameraname + "/MinArea_Middle_2", "30").toInt();
+
 
 
 
@@ -185,6 +210,34 @@ bool CInterCHeck::SaveCheckParam(CHECKPARAM * checkparam)
 	configIniRead.setValue("/" + cameraname + "/MaxHeight_BandDefect", checkparam->i_MaxHeight_BandDefect);
 	configIniRead.setValue("/" + cameraname + "/MinArea_BandDefect", checkparam->i_MinArea_BandDefect);
 	configIniRead.setValue("/" + cameraname + "/MaxArea_BandDefect", checkparam->i_MaxArea_BandDefect);
+	configIniRead.setValue("/" + cameraname + "/IsOpen", checkparam->b_IsOpen);
+	configIniRead.setValue("/" + cameraname + "/Channel_InCapsules", checkparam->i_Channel_InCapsules);
+	configIniRead.setValue("/" + cameraname + "/ER_InCapsules", checkparam->d_ER_InCapsules);
+	configIniRead.setValue("/" + cameraname + "/MaxGray_InCapsules", checkparam->i_MaxGray_InCapsules);
+	configIniRead.setValue("/" + cameraname + "/OR_InCapsules", checkparam->d_OR_InCapsules);
+	configIniRead.setValue("/" + cameraname + "/MinArea_InCapsules", checkparam->i_MinArea_InCapsules);
+	configIniRead.setValue("/" + cameraname + "/MaxArea_InCapsules", checkparam->i_MaxArea_InCapsules);
+	configIniRead.setValue("/" + cameraname + "/LengthPlus_1", checkparam->i_LengthPlus_1);
+	configIniRead.setValue("/" + cameraname + "/LengthPlus_2", checkparam->i_LengthPlus_2);
+	configIniRead.setValue("/" + cameraname + "/Channel_Middle", checkparam->i_Channel_Middle);
+	configIniRead.setValue("/" + cameraname + "/MaskHeight_Middle", checkparam->i_MaskHeight_Middle);
+	configIniRead.setValue("/" + cameraname + "/MaskWidth_Middle", checkparam->i_MaskWidth_Middle);
+	configIniRead.setValue("/" + cameraname + "/MinGray_Middle", checkparam->i_MinGray_Middle);
+	configIniRead.setValue("/" + cameraname + "/MinWidth_Middle", checkparam->i_MinWidth_Middle);
+	configIniRead.setValue("/" + cameraname + "/MinHeight_Middle", checkparam->i_MinHeight_Middle);
+	configIniRead.setValue("/" + cameraname + "/CR_Middle", checkparam->d_CR_Middle);
+	configIniRead.setValue("/" + cameraname + "/MinArea_Middle", checkparam->i_MinArea_Middle);
+	configIniRead.setValue("/" + cameraname + "/Channel_Plate", checkparam->i_Channel_Plate);
+	configIniRead.setValue("/" + cameraname + "/MaxGray_Plate", checkparam->i_MaxGray_Plate);
+	configIniRead.setValue("/" + cameraname + "/CR_Plate", checkparam->d_CR_Plate);
+	configIniRead.setValue("/" + cameraname + "/OR_Plate_1", checkparam->d_OR_Plate_1);
+	configIniRead.setValue("/" + cameraname + "/MinArea_Middle_1", checkparam->i_MinArea_Plate_1);
+	configIniRead.setValue("/" + cameraname + "/OR_Plate_2", checkparam->d_OR_Plate_2);
+	configIniRead.setValue("/" + cameraname + "/MinArea_Middle_2", checkparam->i_MinArea_Plate_2);
+
+
+
+
 	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
@@ -634,7 +687,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		HTuple  hv_Column3, hv_Radius1, hv_Area, hv_Row4, hv_Column4;
 		HTuple  hv_Radius2, hv_Row8, hv_Column8, hv_Phi3, hv_Length13;
 		HTuple  hv_Length23, hv_Number8, hv_Row2, hv_Column2, hv_Radius;
-		HTuple  hv_UsedThreshold, hv_Width, hv_Height;
+		HTuple  hv_UsedThreshold, hv_Width, hv_Height, hv_Area3;
 
 
 
@@ -857,21 +910,21 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//***** «∑ÒºÏ≤‚Ω∫ƒ“Õ∑Œ≤≤ø
 		gen_empty_obj(&ho_RegionArc);
-		erosion_circle(ho_RegionBand, &ho_RegionErosion6, 7.5);
-		reduce_domain(ho_ImageChannel[2], ho_RegionErosion6, &ho_ImageReduced12);
-		threshold(ho_ImageReduced12, &ho_Region18, 0, 120);
+		erosion_circle(ho_RegionBand, &ho_RegionErosion6, m_checkparam.d_ER_InCapsules);
+		reduce_domain(ho_ImageChannel[m_checkparam.i_Channel_InCapsules], ho_RegionErosion6, &ho_ImageReduced12);
+		threshold(ho_ImageReduced12, &ho_Region18, 0, m_checkparam.i_MaxGray_InCapsules);
 		fill_up(ho_Region18, &ho_RegionFillUp6);
-		opening_circle(ho_RegionFillUp6, &ho_RegionOpening15, 1.5);
+		opening_circle(ho_RegionFillUp6, &ho_RegionOpening15, m_checkparam.d_OR_InCapsules);
 		connection(ho_RegionOpening15, &ho_ConnectedRegions22);
-		select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", 2000,
-			99999);
+		select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", m_checkparam.i_MinArea_InCapsules,
+			m_checkparam.i_MaxArea_InCapsules);
 		shape_trans(ho_SelectedRegions17, &ho_RegionTrans7, "convex");
 		//inner_rectangle1 (RegionTrans7, Row13, Column13, Row23, Column23)
 		//gen_rectangle1 (Rectangle6, Row13, Column13, Row23, Column23)
 		smallest_rectangle2(ho_RegionTrans7, &hv_Row8, &hv_Column8, &hv_Phi3, &hv_Length13,
 			&hv_Length23);
-		gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * 80,
-			(hv_Length23 / hv_Length23) * 70);
+		gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * m_checkparam.i_LengthPlus_1,
+			(hv_Length23 / hv_Length23) * m_checkparam.i_LengthPlus_2);
 		gen_rectangle2(&ho_Rectangle7, hv_Row8, hv_Column8, hv_Phi3, hv_Length13, hv_Length23);
 		difference(ho_Rectangle7, ho_Rectangle4, &ho_RegionDifference15);
 
@@ -938,10 +991,14 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		union2(ho_SelectedRegions1, ho_SelectedRegions9, &ho_RegionUnion2);
 
-		difference(ho_RegionUnion2, ho_RegionDifference15, &ho_RegionDifference19);
-
+		if (m_checkparam.b_IsOpen)
+		{
+			difference(ho_RegionUnion2, ho_RegionDifference15, &ho_RegionUnion2);
+		}
+	
+		area_center(ho_RegionUnion2, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		count_obj(ho_RegionUnion2, &hv_Number);
-		if (0 != (hv_Number != 0))
+		if (00 != (hv_Area3 > 0))
 		{
 			connection(ho_RegionUnion2, &ho_ConnectedRegions7);
 			smallest_circle(ho_ConnectedRegions7, &hv_Row3, &hv_Column3, &hv_Radius1);
@@ -967,12 +1024,15 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		connection(ho_RegionDifference7, &ho_ConnectedRegions14);
 		opening_circle(ho_RegionDifference7, &ho_RegionOpening3, m_checkparam.d_OR_RegionYellow);
 		select_shape(ho_RegionOpening3, &ho_SelectedRegions11, "area", "and", m_checkparam.i_MinArea_RegionYellow, m_checkparam.i_MaxArea_RegionYellow);
-		
-		difference(ho_SelectedRegions11, ho_RegionDifference15, &ho_RegionDifference18);
+		if (m_checkparam.b_IsOpen)
+		{
+			difference(ho_SelectedRegions11, ho_RegionDifference15, &ho_SelectedRegions11);
+		}
+	
 
 
 		area_center(ho_SelectedRegions11, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-		if (0 != (hv_Area.Num()))
+		if (0 != (hv_Area > 0))
 		{
 			connection(ho_SelectedRegions11, &ho_ConnectedRegions10);
 			smallest_circle(ho_ConnectedRegions10, &hv_Row4, &hv_Column4, &hv_Radius2);
@@ -988,37 +1048,37 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			return 1;
 		}
 		//***“©∞Â»±œ›
-		gray_dilation_rect(ho_ImageChannel[0], &ho_ImageMax3, 7, 7);
-		sub_image(ho_ImageMax3, ho_ImageChannel[0], &ho_ImageSub4, 1, 0);
-		threshold(ho_ImageSub4, &ho_Region9, 45, 255);
+		gray_dilation_rect(ho_ImageChannel[m_checkparam.i_Channel_Middle], &ho_ImageMax3, m_checkparam.i_MaskHeight_Middle, m_checkparam.i_MaskWidth_Middle);
+		sub_image(ho_ImageMax3, ho_ImageChannel[m_checkparam.i_Channel_Middle], &ho_ImageSub4, 1, 0);
+		threshold(ho_ImageSub4, &ho_Region9, m_checkparam.i_MinGray_Middle, 255);
 		intersection(ho_Region9, ho_Rectangle4, &ho_RegionIntersection13);
 		connection(ho_RegionIntersection13, &ho_ConnectedRegions24);
 		select_shape(ho_ConnectedRegions24, &ho_SelectedRegions19, (HTuple("width").Append("height")),
-			"and", (HTuple(3).Append(3)), (HTuple(99999).Append(9999)));
+			"and", (HTuple(m_checkparam.i_MinWidth_Middle).Append(m_checkparam.i_MinHeight_Middle)), (HTuple(99999).Append(9999)));
 		union1(ho_SelectedRegions19, &ho_RegionUnion7);
-		closing_circle(ho_RegionUnion7, &ho_RegionClosing7, 2.5);
+		closing_circle(ho_RegionUnion7, &ho_RegionClosing7, m_checkparam.d_CR_Middle);
 		connection(ho_RegionClosing7, &ho_ConnectedRegions23);
-		select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", 30,
+		select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", m_checkparam.i_MinArea_Middle,
 			99999);
 
 
 
-		reduce_domain(ho_ImageChannel[0], ho_RegionErosion6, &ho_ImageReduced13);
-		threshold(ho_ImageReduced13, &ho_Regions1, 0, 185);
-		closing_circle(ho_Regions1, &ho_RegionClosing8, 1.5);
+		reduce_domain(ho_ImageChannel[m_checkparam.i_Channel_Plate], ho_RegionErosion6, &ho_ImageReduced13);
+		threshold(ho_ImageReduced13, &ho_Regions1, 0, m_checkparam.i_MaxGray_Plate);
+		closing_circle(ho_Regions1, &ho_RegionClosing8, m_checkparam.d_CR_Plate);
 		fill_up(ho_RegionClosing8, &ho_RegionFillUp7);
-		opening_circle(ho_RegionFillUp7, &ho_RegionOpening17, 3.5);
+		opening_circle(ho_RegionFillUp7, &ho_RegionOpening17, m_checkparam.d_OR_Plate_1);
 		connection(ho_RegionOpening17, &ho_ConnectedRegions25);
-		select_shape(ho_ConnectedRegions25, &ho_SelectedRegions20, "area", "and", 1500,
+		select_shape(ho_ConnectedRegions25, &ho_SelectedRegions20, "area", "and", m_checkparam.i_MinArea_Plate_1,
 			99999);
 		shape_trans(ho_SelectedRegions20, &ho_RegionTrans8, "convex");
 		union2(ho_RegionTrans8, ho_Rectangle1, &ho_RegionUnion8);
 		difference(ho_RegionErosion6, ho_RegionUnion8, &ho_RegionDifference17);
 		intersection(ho_RegionDifference17, ho_Region9, &ho_RegionIntersection14);
 		fill_up(ho_RegionIntersection14, &ho_RegionFillUp8);
-		opening_circle(ho_RegionFillUp8, &ho_RegionOpening18, 1.5);
+		opening_circle(ho_RegionFillUp8, &ho_RegionOpening18, m_checkparam.d_OR_Plate_2);
 		connection(ho_RegionOpening18, &ho_ConnectedRegions26);
-		select_shape(ho_ConnectedRegions26, &ho_SelectedRegions21, "area", "and", 30,
+		select_shape(ho_ConnectedRegions26, &ho_SelectedRegions21, "area", "and", m_checkparam.i_MinArea_Plate_2,
 			99999);
 		union2(ho_SelectedRegions18, ho_SelectedRegions21, &ho_RegionUnion9);
 		connection(ho_RegionUnion9, &ho_ConnectedRegions27);

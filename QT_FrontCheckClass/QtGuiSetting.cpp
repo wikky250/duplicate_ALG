@@ -4,6 +4,7 @@
 #include <QDesktopWidget>
 #include <math.h>
 #include<QMessageBox>
+#include<QCheckBox>
 typedef void*   UI_MONITOR;
 void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
@@ -1584,6 +1585,7 @@ void QtGuiSetting::hideKeyBoard()
 void QtGuiSetting::SetParam(CHECKPARAM param)
 {
 	_checkparam = param;
+	this->setWindowFlags(Qt::FramelessWindowHint);
 	ui.tableWidget->blockSignals(true);
 	ui.tableWidget->setSortingEnabled(false);
 	ui.tableWidget->clearContents();
@@ -1593,8 +1595,15 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 	QStringList stlist;
 	QComboBox *box;
 	QSlider* hsd;
+	QCheckBox *qck;
 	if (0 == rowindex)
 	{
+
+
+
+
+
+
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);
 		item = new QTableWidgetItem();
@@ -2285,7 +2294,6 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		box->addItems(stlist);
 		box->setView(new QListView());
 		box->setStyleSheet("font-size:20pt");
-
 		box->setCurrentIndex(_checkparam.i_Channel_BandDefect);
 		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
 		ui.tableWidget->setCellWidget(rowindex, 1, box);
@@ -2449,6 +2457,343 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 		ui.tableWidget->setItem(rowindex, 1, item);
 
 
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("ÊÇ·ñ¿ªÆô"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		qck = new QCheckBox();
+		qck->setChecked(_checkparam.b_IsOpen);
+		qck->setText(QString::fromLocal8Bit("ÊÇ·ñ¿ªÆô"));
+		ui.tableWidget->setCellWidget(rowindex, 1, qck);
+		connect(qck, &QCheckBox::stateChanged, [=](bool b) 
+		{
+		_checkparam.b_IsOpen = b; m_bChanged = true;
+		ui.pB_Save->setEnabled(true); 
+		});
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText("Channel_InCapsules");
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		stlist.clear();
+		stlist << "R" << "G" << "B" << "H" << "S" << "V";
+		box = new QComboBox();
+		box->setObjectName("Channel_InCapsules");
+		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+		box->setCurrentIndex(_checkparam.i_Channel_InCapsules);
+		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
+		ui.tableWidget->setCellWidget(rowindex, 1, box);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("ER_InCapsules"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.d_ER_InCapsules));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MaxGray_InCapsules"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MaxGray_InCapsules));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("OR_InCapsules"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.d_OR_InCapsules));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MinArea_InCapsules"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MinArea_InCapsules));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MaxArea_InCapsules"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MaxArea_InCapsules));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("LengthPlus_1"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_LengthPlus_1));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("LengthPlus_2"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_LengthPlus_2));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText("Channel_Middle");
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		stlist.clear();
+		stlist << "R" << "G" << "B" << "H" << "S" << "V";
+		box = new QComboBox();
+		box->setObjectName("Channel_Middle");
+		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+		box->setCurrentIndex(_checkparam.i_Channel_Middle);
+		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
+		ui.tableWidget->setCellWidget(rowindex, 1, box);
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MaskHeight_Middle"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MaskHeight_Middle));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MaskWidth_Middle"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MaskWidth_Middle));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MinGray_Middle"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MinGray_Middle));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MinWidth_Middle"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MinWidth_Middle));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MinHeight_Middle"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MinHeight_Middle));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("CR_Middle"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.d_CR_Middle));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MinArea_Middle"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MinArea_Middle));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText("Channel_Plate");
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		stlist.clear();
+		stlist << "R" << "G" << "B" << "H" << "S" << "V";
+		box = new QComboBox();
+		box->setObjectName("Channel_Plate");
+		box->addItems(stlist);
+		box->setView(new QListView());
+		box->setStyleSheet("font-size:20pt");
+		box->setCurrentIndex(_checkparam.i_Channel_Plate);
+		connect(box, SIGNAL(activated(int)), this, SLOT(onSelectImageChannel(int)));
+		ui.tableWidget->setCellWidget(rowindex, 1, box);
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MaxGray_Plate"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MaxGray_Plate));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("CR_Plate"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.d_CR_Plate));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("OR_Plate_1"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.d_OR_Plate_1));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MinArea_Plate_1"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MinArea_Plate_1));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("OR_Plate_2"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.d_OR_Plate_2));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
+
+
+
+
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText(QString::fromLocal8Bit("MinArea_Plate_2"));
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		item = new QTableWidgetItem();
+		item->setText(QString::number(_checkparam.i_MinArea_Plate_2));
+		item->setTextAlignment(Qt::AlignRight);
+		ui.tableWidget->setItem(rowindex, 1, item);
+
 
 
 
@@ -2584,10 +2929,13 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		Hobject  ho_SelectedRegions2, ho_RegionTrans1, ho_RegionUnion1;
 		Hobject  ho_Rectangle1, ho_RegionIntersection9, ho_ImageReduced4;
 		Hobject  ho_Region11, ho_RegionOpening6, ho_ConnectedRegions8;
-		Hobject  ho_SelectedRegions5, ho_Circle3, ho_RegionErosion2;
-		Hobject  ho_ImageReduced1, ho_Region1, ho_ConnectedRegions4;
-		Hobject  ho_SelectedRegions4, ho_RegionUnion3, ho_RegionRed;
-		Hobject  ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
+		Hobject  ho_SelectedRegions5, ho_Circle3, ho_RegionArc, ho_RegionErosion6;
+		Hobject  ho_ImageReduced12, ho_Region18, ho_RegionFillUp6;
+		Hobject  ho_RegionOpening15, ho_ConnectedRegions22, ho_SelectedRegions17;
+		Hobject  ho_RegionTrans7, ho_Rectangle4, ho_Rectangle7, ho_RegionDifference15;
+		Hobject  ho_RegionErosion2, ho_ImageReduced1, ho_Region1;
+		Hobject  ho_ConnectedRegions4, ho_SelectedRegions4, ho_RegionUnion3;
+		Hobject  ho_RegionRed, ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
 		Hobject  ho_RegionFillUp4, ho_RegionOpening9, ho_RegionErosion4;
 		Hobject  ho_Region3, ho_RegionYellow, ho_RegionDilation2;
 		Hobject  ho_RegionDilation3, ho_RegionCross, ho_ImageReduced2;
@@ -2597,18 +2945,21 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		Hobject  ho_ImageMax5, ho_ImageSub7, ho_Region6, ho_RegionErosion3;
 		Hobject  ho_RegionDifference8, ho_RegionDifference9, ho_RegionOpening8;
 		Hobject  ho_ConnectedRegions15, ho_SelectedRegions9, ho_RegionUnion2;
-		Hobject  ho_ConnectedRegions7, ho_Circle1, ho_ImageReduced3;
-		Hobject  ho_ImageMax2, ho_ImageSub, ho_Region5, ho_Region8;
-		Hobject  ho_RegionIntersection3, ho_RegionDifference7, ho_ConnectedRegions14;
-		Hobject  ho_RegionOpening3, ho_SelectedRegions11, ho_ConnectedRegions10;
-		Hobject  ho_Circle2, ho_RegionErosion6, ho_ImageReduced12;
-		Hobject  ho_Region18, ho_RegionFillUp6, ho_ConnectedRegions22;
-		Hobject  ho_SelectedRegions17, ho_RegionTrans7, ho_Rectangle4;
-		Hobject  ho_RegionOpening13, ho_ConnectedRegions19, ho_SelectedRegions16;
-		Hobject  ho_RegionTrans6, ho_ImageMax3, ho_ImageSub4, ho_Region9;
-		Hobject  ho_RegionIntersection13, ho_ConnectedRegions24;
-		Hobject  ho_SelectedRegions19, ho_RegionUnion7, ho_RegionClosing7;
-		Hobject  ho_ConnectedRegions23, ho_SelectedRegions18, ho_Circle;
+		Hobject  ho_RegionDifference19, ho_ConnectedRegions7, ho_Circle1;
+		Hobject  ho_ImageReduced3, ho_ImageMax2, ho_ImageSub, ho_Region5;
+		Hobject  ho_Region8, ho_RegionIntersection3, ho_RegionDifference7;
+		Hobject  ho_ConnectedRegions14, ho_RegionOpening3, ho_SelectedRegions11;
+		Hobject  ho_RegionDifference18, ho_ConnectedRegions10, ho_Circle2;
+		Hobject  ho_ImageMax3, ho_ImageSub4, ho_Region9, ho_RegionIntersection13;
+		Hobject  ho_ConnectedRegions24, ho_SelectedRegions19, ho_RegionUnion7;
+		Hobject  ho_RegionClosing7, ho_ConnectedRegions23, ho_SelectedRegions18;
+		Hobject  ho_ImageReduced13, ho_Regions1, ho_RegionClosing8;
+		Hobject  ho_RegionFillUp7, ho_RegionOpening17, ho_ConnectedRegions25;
+		Hobject  ho_SelectedRegions20, ho_RegionTrans8, ho_RegionUnion8;
+		Hobject  ho_RegionDifference17, ho_RegionIntersection14;
+		Hobject  ho_RegionFillUp8, ho_RegionOpening18, ho_ConnectedRegions26;
+		Hobject  ho_SelectedRegions21, ho_RegionUnion9, ho_ConnectedRegions27;
+		Hobject  ho_Circle;
 
 		// Local control variables 
 		HTuple  hv_ImageFiles, hv_Index, hv_BaseName;
@@ -3213,6 +3564,212 @@ void QtGuiSetting::onCellChanged(int r, int c)
 				m_timerChanger = nullptr;
 			}
 		}
+		_checkparam.i_Channel_InCapsules = ((QComboBox*)(ui.tableWidget->cellWidget(66, 1)))->currentIndex();
+		_checkparam.d_ER_InCapsules = ui.tableWidget->item(67, c)->text().toDouble();
+		if (_checkparam.d_ER_InCapsules <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaxGray_InCapsules = ui.tableWidget->item(68, c)->text().toInt();
+		if (_checkparam.i_MaxGray_InCapsules <= 0 || _checkparam.i_MaxGray_InCapsules>=255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_InCapsules = ui.tableWidget->item(69, c)->text().toDouble();
+		if (_checkparam.d_OR_InCapsules <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_InCapsules = ui.tableWidget->item(70, c)->text().toInt();
+		if (_checkparam.i_MinArea_InCapsules <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+
+		_checkparam.i_MaxArea_InCapsules = ui.tableWidget->item(71, c)->text().toInt();
+		if (_checkparam.i_MaxArea_InCapsules <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_LengthPlus_1 = ui.tableWidget->item(72, c)->text().toInt();
+		if (_checkparam.i_LengthPlus_1 <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_LengthPlus_2 = ui.tableWidget->item(73, c)->text().toInt();
+		if (_checkparam.i_LengthPlus_2 <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_Channel_Middle = ((QComboBox*)(ui.tableWidget->cellWidget(74, 1)))->currentIndex();
+		_checkparam.i_MaskHeight_Middle = ui.tableWidget->item(75, c)->text().toInt();
+		if (_checkparam.i_MaskHeight_Middle <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MaskWidth_Middle = ui.tableWidget->item(76, c)->text().toInt();
+		if (_checkparam.i_MaskWidth_Middle <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinGray_Middle = ui.tableWidget->item(77, c)->text().toInt();
+		if (_checkparam.i_MinGray_Middle <= 0||_checkparam.i_MinGray_Middle>=255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinWidth_Middle = ui.tableWidget->item(78, c)->text().toInt();
+		if (_checkparam.i_MinWidth_Middle <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinHeight_Middle = ui.tableWidget->item(79, c)->text().toInt();
+		if (_checkparam.i_MinHeight_Middle <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_CR_Middle = ui.tableWidget->item(80, c)->text().toDouble();
+		if (_checkparam.d_CR_Middle <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_Middle = ui.tableWidget->item(81, c)->text().toInt();
+		if (_checkparam.i_MinArea_Middle <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_Channel_Plate = ((QComboBox*)(ui.tableWidget->cellWidget(82, 1)))->currentIndex();
+		_checkparam.i_MaxGray_Plate = ui.tableWidget->item(83, c)->text().toInt();
+		if (_checkparam.i_MaxGray_Plate <= 0 || _checkparam.i_MaxGray_Plate>=255)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_CR_Plate = ui.tableWidget->item(84, c)->text().toDouble();
+		if (_checkparam.d_CR_Plate <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_Plate_1 = ui.tableWidget->item(85, c)->text().toDouble();
+		if (_checkparam.d_OR_Plate_1 <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_Plate_1 = ui.tableWidget->item(86, c)->text().toInt();
+		if (_checkparam.i_MinArea_Plate_1 <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.d_OR_Plate_2 = ui.tableWidget->item(87, c)->text().toDouble();
+		if (_checkparam.d_OR_Plate_2 <= 0.5)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+		_checkparam.i_MinArea_Plate_2 = ui.tableWidget->item(88, c)->text().toInt();
+		if (_checkparam.i_MinArea_Plate_2 <= 0)
+		{
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
+		}
+
+
 		m_bChanged = true;
 		ui.pB_Save->setEnabled(true);
 		//((CInterCHeck*)p_Parent)->RealCheck(m_MOriginal, _checkparam, m_WND);
@@ -3222,6 +3779,7 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		{
 			return;
 		}
+		
 		Hobject ho_Image = Mat2Hobject(m_MOriginal);
 		decompose3(ho_Image, &ho_ImageChannel[0], &ho_ImageChannel[1], &ho_ImageChannel[2]);
 		trans_from_rgb(ho_ImageChannel[0], ho_ImageChannel[1], ho_ImageChannel[2], &ho_ImageChannel[3], &ho_ImageChannel[4], &ho_ImageChannel[5], "hsv");
@@ -3626,6 +4184,92 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//	//}
 
 		//}
+
+
+		gen_empty_obj(&ho_RegionArc);
+		erosion_circle(ho_RegionBand, &ho_RegionErosion6, _checkparam.d_ER_InCapsules);
+		if (67==r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_InCapsules], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionErosion6, m_WND);
+			return;
+		}
+		reduce_domain(ho_ImageChannel[_checkparam.i_Channel_InCapsules], ho_RegionErosion6, &ho_ImageReduced12);
+		threshold(ho_ImageReduced12, &ho_Region18, 0, _checkparam.i_MaxGray_InCapsules);
+		if (68 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_InCapsules], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region18, m_WND);
+			return;
+		}
+		fill_up(ho_Region18, &ho_RegionFillUp6);
+		opening_circle(ho_RegionFillUp6, &ho_RegionOpening15, _checkparam.d_OR_InCapsules);
+		if (69 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_InCapsules], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening15, m_WND);
+			return;
+		}
+		connection(ho_RegionOpening15, &ho_ConnectedRegions22);
+		select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", _checkparam.i_MinArea_InCapsules,
+			_checkparam.i_MaxArea_InCapsules);
+		if (70 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_InCapsules], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions17, m_WND);
+			return;
+		}
+		if (71 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_InCapsules], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions17, m_WND);
+			return;
+		}
+		shape_trans(ho_SelectedRegions17, &ho_RegionTrans7, "convex");
+		//inner_rectangle1 (RegionTrans7, Row13, Column13, Row23, Column23)
+		//gen_rectangle1 (Rectangle6, Row13, Column13, Row23, Column23)
+		smallest_rectangle2(ho_RegionTrans7, &hv_Row8, &hv_Column8, &hv_Phi3, &hv_Length13,
+			&hv_Length23);
+		gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * _checkparam.i_LengthPlus_1,
+			(hv_Length23 / hv_Length23) * _checkparam.i_LengthPlus_2);
+		if (72 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_InCapsules], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Rectangle4, m_WND);
+			return;
+		}
+		if (73 == r)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_InCapsules], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Rectangle4, m_WND);
+			return;
+		}
+		gen_rectangle2(&ho_Rectangle7, hv_Row8, hv_Column8, hv_Phi3, hv_Length13, hv_Length23);
+		difference(ho_Rectangle7, ho_Rectangle4, &ho_RegionDifference15);
+
+
+
 		//***½ºÄÒÄÚ²¿È±ÏÝ
 		union1(ho_RegionPill, &ho_RegionPill);
 		erosion_circle(ho_RegionPill, &ho_RegionErosion2, _checkparam.d_ER_RegionCapsules);
@@ -3874,6 +4518,10 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//select_shape (ConnectedRegions5, SelectedRegions6, 'area', 'and', 20, 2000)
 
 		union2(ho_SelectedRegions1, ho_SelectedRegions9, &ho_RegionUnion2);
+		if (_checkparam.b_IsOpen)
+		{
+			difference(ho_RegionUnion2, ho_RegionDifference15, &ho_RegionUnion2);
+		}
 		count_obj(ho_RegionUnion2, &hv_Number);
 		//if (0 != (hv_Number != 0))
 		//{
@@ -3947,7 +4595,12 @@ void QtGuiSetting::onCellChanged(int r, int c)
 			disp_obj(ho_RegionOpening3, m_WND);
 			return;
 		}
+		
 		select_shape(ho_RegionOpening3, &ho_SelectedRegions11, "area", "and", _checkparam.i_MinArea_RegionYellow, _checkparam.i_MaxArea_RegionYellow);
+		if (_checkparam.b_IsOpen)
+		{
+			difference(ho_SelectedRegions11, ho_RegionDifference15, &ho_SelectedRegions11);
+		}
 		if (50==r)
 		{
 			disp_obj(ho_ImageChannel[_checkparam.i_Channel_BandDefect], m_WND);
@@ -3985,39 +4638,156 @@ void QtGuiSetting::onCellChanged(int r, int c)
 		//	return 1;
 		//}
 		//***Ò©°åÈ±ÏÝ
-		erosion_circle(ho_RegionBand, &ho_RegionErosion6, 3.5);
-		reduce_domain(ho_ImageChannel[0], ho_RegionErosion6, &ho_ImageReduced12);
-
-		threshold(ho_ImageReduced12, &ho_Region18, 0, 190);
-		fill_up(ho_Region18, &ho_RegionFillUp6);
-		connection(ho_RegionFillUp6, &ho_ConnectedRegions22);
-		select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", 2000,
-			99999);
-		shape_trans(ho_SelectedRegions17, &ho_RegionTrans7, "convex");
-		smallest_rectangle2(ho_RegionTrans7, &hv_Row8, &hv_Column8, &hv_Phi3, &hv_Length13,
-			&hv_Length23);
-		gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * 80,
-			hv_Length23);
-
-		opening_circle(ho_Region18, &ho_RegionOpening13, 1.5);
-		connection(ho_RegionOpening13, &ho_ConnectedRegions19);
-		select_shape(ho_ConnectedRegions19, &ho_SelectedRegions16, "area", "and", 2000,
-			99999);
-		shape_trans(ho_SelectedRegions16, &ho_RegionTrans6, "convex");
-
-
-		gray_dilation_rect(ho_ImageChannel[0], &ho_ImageMax3, 7, 7);
-		sub_image(ho_ImageMax3, ho_ImageChannel[0], &ho_ImageSub4, 1, 0);
-		threshold(ho_ImageSub4, &ho_Region9, 45, 255);
+		gray_dilation_rect(ho_ImageChannel[_checkparam.i_Channel_Middle], &ho_ImageMax3, _checkparam.i_MaskHeight_Middle, _checkparam.i_MaskWidth_Middle);
+		if (r==75)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Middle], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax3, m_WND);
+			return;
+		}
+		if (r == 76)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Middle], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_ImageMax3, m_WND);
+			return;
+		}
+		sub_image(ho_ImageMax3, ho_ImageChannel[_checkparam.i_Channel_Middle], &ho_ImageSub4, 1, 0);
+		threshold(ho_ImageSub4, &ho_Region9, _checkparam.i_MinGray_Middle, 255);
+		if (r == 77)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Middle], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Region9, m_WND);
+			return;
+		}
 		intersection(ho_Region9, ho_Rectangle4, &ho_RegionIntersection13);
 		connection(ho_RegionIntersection13, &ho_ConnectedRegions24);
 		select_shape(ho_ConnectedRegions24, &ho_SelectedRegions19, (HTuple("width").Append("height")),
-			"and", (HTuple(3).Append(3)), (HTuple(99999).Append(9999)));
+			"and", (HTuple(_checkparam.i_MinWidth_Middle).Append(_checkparam.i_MinHeight_Middle)), (HTuple(99999).Append(9999)));
+		if (r == 78)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Middle], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions19, m_WND);
+			return;
+		}
+		if (r == 79)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Middle], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions19, m_WND);
+			return;
+		}
 		union1(ho_SelectedRegions19, &ho_RegionUnion7);
-		closing_circle(ho_RegionUnion7, &ho_RegionClosing7, 2.5);
+		closing_circle(ho_RegionUnion7, &ho_RegionClosing7, _checkparam.d_CR_Middle);
+		if (r == 80)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Middle], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionClosing7, m_WND);
+			return;
+		}
 		connection(ho_RegionClosing7, &ho_ConnectedRegions23);
-		select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", 30,
+		select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", _checkparam.i_MinArea_Middle,
 			99999);
+		if (r == 81)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Middle], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions18, m_WND);
+			return;
+		}
+
+
+		reduce_domain(ho_ImageChannel[_checkparam.i_Channel_Plate], ho_RegionErosion6, &ho_ImageReduced13);
+		threshold(ho_ImageReduced13, &ho_Regions1, 0, _checkparam.i_MaxGray_Plate);
+		if (r == 83)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Plate], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_Regions1, m_WND);
+			return;
+		}
+		closing_circle(ho_Regions1, &ho_RegionClosing8, _checkparam.d_CR_Plate);
+		if (r == 84)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Plate], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionClosing8, m_WND);
+			return;
+		}
+		fill_up(ho_RegionClosing8, &ho_RegionFillUp7);
+		opening_circle(ho_RegionFillUp7, &ho_RegionOpening17, _checkparam.d_OR_Plate_1);
+		if (r == 85)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Plate], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening17, m_WND);
+			return;
+		}
+		connection(ho_RegionOpening17, &ho_ConnectedRegions25);
+		select_shape(ho_ConnectedRegions25, &ho_SelectedRegions20, "area", "and", _checkparam.i_MinArea_Plate_1,
+			99999);
+		if (r == 86)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Plate], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions20, m_WND);
+			return;
+		}
+		shape_trans(ho_SelectedRegions20, &ho_RegionTrans8, "convex");
+		union2(ho_RegionTrans8, ho_Rectangle1, &ho_RegionUnion8);
+		difference(ho_RegionErosion6, ho_RegionUnion8, &ho_RegionDifference17);
+		intersection(ho_RegionDifference17, ho_Region9, &ho_RegionIntersection14);
+		fill_up(ho_RegionIntersection14, &ho_RegionFillUp8);
+		opening_circle(ho_RegionFillUp8, &ho_RegionOpening18, _checkparam.d_OR_Plate_2);
+		if (r == 87)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Plate], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_RegionOpening18, m_WND);
+			return;
+		}
+		connection(ho_RegionOpening18, &ho_ConnectedRegions26);
+		select_shape(ho_ConnectedRegions26, &ho_SelectedRegions21, "area", "and", _checkparam.i_MinArea_Plate_2,
+			99999);
+		if (r == 88)
+		{
+			disp_obj(ho_ImageChannel[_checkparam.i_Channel_Plate], m_WND);
+			set_draw(m_WND, "margin");
+			set_color(m_WND, "red");
+			set_line_width(m_WND, 3);
+			disp_obj(ho_SelectedRegions21, m_WND);
+			return;
+		}
+		union2(ho_SelectedRegions18, ho_SelectedRegions21, &ho_RegionUnion9);
+		connection(ho_RegionUnion9, &ho_ConnectedRegions27);
 		//if (0 != (hv_Number2 != 0))
 		//{
 		//	smallest_circle(ho_SelectedRegions8, &hv_Row2, &hv_Column2, &hv_Radius);

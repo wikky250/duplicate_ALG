@@ -138,6 +138,41 @@ struct CHECKPARAM
 	int i_MaxHeight_BandDefect = -1;
 	int i_MinArea_BandDefect = -1;
 	int i_MaxArea_BandDefect = -1;
+	//2020.10.29 new added params
+	bool b_IsOpen = -1;
+	int i_Channel_InCapsules = -1;
+	double d_ER_InCapsules = -1;//67
+	int i_MaxGray_InCapsules = -1;
+	double d_OR_InCapsules = -1;
+	int i_MinArea_InCapsules = -1;
+	int i_MaxArea_InCapsules = -1;
+	int i_LengthPlus_1 = -1;
+	int i_LengthPlus_2 = -1;
+
+	int i_Channel_Middle = -1;
+	int i_MaskHeight_Middle = -1;//75
+	int i_MaskWidth_Middle = -1;
+	int i_MinGray_Middle = -1;
+	int i_MinWidth_Middle = -1;
+	int i_MinHeight_Middle = -1;
+	double d_CR_Middle = -1;
+	int i_MinArea_Middle = -1;
+	int i_Channel_Plate = -1;
+	int i_MaxGray_Plate = -1;//83
+	double d_CR_Plate = -1;
+	double d_OR_Plate_1 = -1;
+	int i_MinArea_Plate_1 = -1;
+	double d_OR_Plate_2 = -1;
+	int i_MinArea_Plate_2 = -1;
+
+
+
+
+
+
+
+
+
 	//////////////////////////////////////////////////////////////////////
 
 	CHECKPARAM()
