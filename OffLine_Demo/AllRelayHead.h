@@ -54,6 +54,8 @@
 #include <fstream>
 #include <iostream> 
 #include <math.h>
+#include "windows.h"
+#include "shellapi.h"
 #pragma region log
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"

@@ -106,6 +106,10 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 
 	connect(ui.Button_Start, SIGNAL(toggled(bool)), this, SLOT(onStartCheck(bool)));//checked button
 	connect(ui.Button_CameraSet, SIGNAL(clicked()), this, SLOT(onCameraSet()));//not checked button
+	connect(ui.Button_DataOut, &QPushButton::clicked, [=]()
+	{
+		ShellExecuteA(NULL, "open", g_vectorCamera[0]->file_path, NULL, "", SW_SHOW);
+	});//not checked button
 	connect(ui.Button_Exit, &QPushButton::clicked, [=]() {
 		if (QMessageBox::Yes == showMsgBox(QMessageBox::Question, "退出确认", "确认退出系统吗？", "确认", "取消"))
 		{
@@ -569,12 +573,14 @@ bool OffLine_Demo::SlotShowResult(QStringList strlist)
 {
 	//"Good,Error1,Error2,Error1,Error0,..."
 	QSettings Dir(m_IniResultPath, QSettings::IniFormat);//找到按下开始时创建的路径下的文件 没有就自动创建
-	QString total = QString::number(ui.tableWidget_Result->item(0, 2)->text().toInt() + strlist.size());
-	ui.tableWidget_Result->item(0, 2)->setText(total);
-	Dir.setValue("Result/Total", total);//写总数，没有key值也会创建一个
-
+	int nulls = 0;
 	for (int i = 0; i < strlist.size(); i++)
 	{
+		if (strlist[i].contains("NULL"))
+		{ 
+			nulls++;
+			continue;
+		}
 		int z = 1;
 		for (; z < ui.tableWidget_Result->rowCount(); z++)//最开始count==2，总数和合格数
 		{
@@ -596,6 +602,9 @@ bool OffLine_Demo::SlotShowResult(QStringList strlist)
 			Dir.setValue("Result/" + strlist[i], QString::number(ui.tableWidget_Result->item(z, 2)->text().toInt()));
 		}
 	}
+	QString total = QString::number(ui.tableWidget_Result->item(0, 2)->text().toInt() + strlist.size()-nulls);
+	ui.tableWidget_Result->item(0, 2)->setText(total);
+	Dir.setValue("Result/Total", total);//写总数，没有key值也会创建一个
 	return false;
 }
 
@@ -730,6 +739,7 @@ void OffLine_Demo::onSelectImageList(QListWidgetItem *item, QListWidgetItem *it)
 
 	{
 		strcpy(g_vectorCamera[0]->file_path, pathselect.toLocal8Bit());
+		ui.label_3->setText(QString::fromLocal8Bit(g_vectorCamera[0]->file_path));
 		emit(STARTCHECK(-1, 0));
 	}
 }
@@ -766,6 +776,7 @@ void OffLine_Demo::onDoubleImageList(QListWidgetItem *item)
 // 		}
 		initImageLS(m_sImageListPath);
 		strcpy(g_vectorCamera[0]->file_path, m_sImageListPath.toLocal8Bit());
+		ui.label_3->setText(QString::fromLocal8Bit(g_vectorCamera[0]->file_path));
 		return;
 	}
 
@@ -797,6 +808,7 @@ void OffLine_Demo::onDoubleImageList(QListWidgetItem *item)
 	else
 	{
 		strcpy(g_vectorCamera[0]->file_path, pathselect.toLocal8Bit());
+		ui.label_3->setText(pathselect);
 		emit(STARTCHECK(-1, 1));
 	}
 }
