@@ -166,8 +166,9 @@ struct CHECKPARAM
 	int i_MinArea_Plate_2 = -1;
 
 
-
-
+	//switch of detect 
+	bool b_CheckPill = -1;
+	bool b_CheckCapsule = -1;
 
 
 

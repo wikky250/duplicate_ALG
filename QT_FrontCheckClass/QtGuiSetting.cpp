@@ -2819,10 +2819,40 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 
 
 
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText("Pill");
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		qck = new QCheckBox();
+		qck->setChecked(_checkparam.b_CheckPill);
+		qck->setText("Enable");
+		ui.tableWidget->setCellWidget(rowindex, 1, qck);
+		connect(qck, &QCheckBox::stateChanged, [=](bool b)
+		{
+			_checkparam.b_CheckPill = b; m_bChanged = true;
+			ui.pB_Save->setEnabled(true);
+		});
 
 
 
 
+		rowindex = ui.tableWidget->rowCount();
+		ui.tableWidget->insertRow(rowindex);
+		item = new QTableWidgetItem();
+		item->setText("Capsule");
+		item->setTextAlignment(Qt::AlignCenter);
+		ui.tableWidget->setItem(rowindex, 0, item);
+		qck = new QCheckBox();
+		qck->setChecked(_checkparam.b_CheckCapsule);
+		qck->setText("Enable");
+		ui.tableWidget->setCellWidget(rowindex, 1, qck);
+		connect(qck, &QCheckBox::stateChanged, [=](bool b)
+		{
+			_checkparam.b_CheckCapsule = b; m_bChanged = true;
+			ui.pB_Save->setEnabled(true);
+		});
 
 
 
