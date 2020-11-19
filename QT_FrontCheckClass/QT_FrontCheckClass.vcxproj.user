@@ -2,13 +2,14 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <QTDIR>D:\Qt\Qt5.13.0\5.13.0\msvc2017</QTDIR>
+    <QTDIR>C:\Qt\Qt5.13.0\5.13.0\msvc2017</QTDIR>
     <LocalDebuggerCommandArguments>$(QmlDebug);</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommand>$(SolutionDir)$(Platform)\$(Configuration)\Offline_Demo.exe</LocalDebuggerCommand>
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <QTDIR>D:\Qt\Qt5.13.0\5.13.0\msvc2017</QTDIR>
+    <QTDIR>C:\Qt\Qt5.13.0\5.13.0\msvc2017</QTDIR>
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>
 </Project>

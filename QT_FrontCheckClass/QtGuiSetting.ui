@@ -52,13 +52,20 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="2">
-       <widget class="QPushButton" name="pB_Save">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="pB_ContinueTest">
         <property name="text">
-         <string>保存</string>
+         <string>测试</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QPushButton" name="pB_Exit">
+        <property name="text">
+         <string>退出</string>
         </property>
        </widget>
       </item>
@@ -69,19 +76,13 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0" rowspan="2">
-       <widget class="QTableWidget" name="tableWidget">
-        <property name="font">
-         <font>
-          <pointsize>21</pointsize>
-         </font>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="pB_Save">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QPushButton" name="pB_Exit">
         <property name="text">
-         <string>退出</string>
+         <string>保存</string>
         </property>
        </widget>
       </item>
@@ -94,13 +95,12 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="pB_ContinueTest">
-        <property name="text">
-         <string>测试</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
+      <item row="0" column="0" rowspan="2">
+       <widget class="QMyTreeWidget" name="treeWidget">
+        <property name="font">
+         <font>
+          <pointsize>21</pointsize>
+         </font>
         </property>
        </widget>
       </item>
@@ -110,6 +110,13 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QMyTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>./qmytreewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
  <slots>
