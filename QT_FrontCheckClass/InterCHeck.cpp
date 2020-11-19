@@ -133,6 +133,11 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 
 	return false;
 }
+bool CInterCHeck::SaveCheckParam()
+{
+	m_bchangedparam = true;
+	return false;
+}
 CInterCHeck::CInterCHeck(bool b_test)
 {
 	m_b_test = b_test;
