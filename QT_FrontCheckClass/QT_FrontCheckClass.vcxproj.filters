@@ -2,7 +2,6 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="CheckRelay.cpp" />
-    <ClCompile Include="InterCHeck.cpp" />
     <ClCompile Include="OutShowCheck.cpp" />
     <ClCompile Include="QT_FrontCheckClass.cpp" />
     <ClCompile Include="QtGuiSetting.cpp">

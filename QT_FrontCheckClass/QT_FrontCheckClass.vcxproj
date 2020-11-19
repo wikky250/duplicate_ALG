@@ -197,7 +197,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CheckRelay.cpp" />
-    <ClCompile Include="InterCHeck.cpp" />
     <ClCompile Include="OutShowCheck.cpp" />
     <ClCompile Include="QMyTreeWidget.cpp" />
     <ClCompile Include="QtGuiSetting.cpp" />
