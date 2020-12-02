@@ -5,6 +5,7 @@
 #include <math.h>
 #include<QMessageBox>
 #include<QCheckBox>
+#include<QMyTreeWidget.h>;
 typedef void*   UI_MONITOR;
 void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
@@ -29,6 +30,8 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	clickedtimer = nullptr;
 	ui.setupUi(this);
 	ui.tableWidget->setColumnCount(2);
+	//QMyTreeWidget *qmt;
+	//qmt->ReadYAMLFile("D:/work/Qt_Test/CheckParam.yaml");
 	QStringList LIST;
 	LIST << QString::fromLocal8Bit("项目") << QString::fromLocal8Bit("参数");
 	ui.tableWidget->setHorizontalHeaderLabels(LIST);
@@ -1618,13 +1621,10 @@ void QtGuiSetting::SetParam(CHECKPARAM param)
 	QComboBox *box;
 	QSlider* hsd;
 	QCheckBox *qck;
+
 	if (0 == rowindex)
 	{
-
-
-
-
-
+		
 
 		rowindex = ui.tableWidget->rowCount();
 		ui.tableWidget->insertRow(rowindex);

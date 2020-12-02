@@ -8,6 +8,7 @@
     <ClCompile Include="QtGuiSetting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QMyTreeWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpencvRelay.h" />
@@ -27,6 +28,7 @@
     <QtMoc Include="InterCHeck.h" />
     <QtMoc Include="OutShowCheck.h" />
     <QtMoc Include="QT_FrontCheckClass.h" />
+    <QtMoc Include="QMyTreeWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QtGuiSetting.ui" />
@@ -35,6 +37,11 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
       <ParseFiles>true</ParseFiles>
     </Filter>
   </ItemGroup>

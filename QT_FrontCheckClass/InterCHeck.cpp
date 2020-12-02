@@ -709,14 +709,15 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_ConnectedRegions35, ho_SelectedRegions32, ho_ImageSub10;
 		Hobject  ho_ImageReduced, ho_Regions, ho_RegionIntersection20;
 		Hobject  ho_RegionFillUp13, ho_RegionOpening, ho_RegionClosing13;
-		Hobject  ho_ConnectedRegions1, ho_SelectedRegions, ho_RegionPill;
-		Hobject  ho_RegionUnion13, ho_RegionDilation6, ho_Rectangle8;
-		Hobject  ho_RegionDifference23, ho_Rectangle9, ho_EmptyPill;
-		Hobject  ho_RegionUnion5, ho_RegionTrans3, ho_RegionDifference3;
-		Hobject  ho_TopPills, ho_BottomPills, ho_SortedRegions, ho_ObjectSelected;
-		Hobject  ho_ObjectSelected1, ho_RegionDilation1, ho_ConnectedRegions9;
-		Hobject  ho_Rectangle2, ho_RegionDifference2, ho_RegionTrans2;
-		Hobject  ho_RegionTrans, ho_RegionUnion, ho_Rectangle, ho_RegionDifference;
+		Hobject  ho_ConnectedRegions1, ho_SelectedRegions, ho_RegionTrans14;
+		Hobject  ho_RegionPill, ho_RegionUnion13, ho_RegionDilation6;
+		Hobject  ho_Rectangle8, ho_RegionDifference23, ho_Rectangle9;
+		Hobject  ho_EmptyPill, ho_RegionUnion5, ho_RegionTrans3;
+		Hobject  ho_RegionDifference3, ho_TopPills, ho_BottomPills;
+		Hobject  ho_SortedRegions, ho_ObjectSelected, ho_ObjectSelected1;
+		Hobject  ho_RegionDilation1, ho_ConnectedRegions9, ho_Rectangle2;
+		Hobject  ho_RegionDifference2, ho_RegionTrans2, ho_RegionTrans;
+		Hobject  ho_RegionUnion, ho_Rectangle, ho_RegionDifference;
 		Hobject  ho_RegionErosion, ho_ConnectedRegions16, ho_SelectedRegions10;
 		Hobject  ho_ImageMax, ho_ImageSub1, ho_Region4, ho_RegionOpening1;
 		Hobject  ho_RegionIntersection, ho_RegionClosing, ho_ConnectedRegions3;
@@ -724,34 +725,37 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_Rectangle1, ho_RegionIntersection9, ho_ImageReduced4;
 		Hobject  ho_Region11, ho_RegionOpening6, ho_ConnectedRegions8;
 		Hobject  ho_SelectedRegions5, ho_Circle3, ho_ImageSub12;
-		Hobject  ho_Region28, ho_RegionIntersection17, ho_RegionDifference20;
-		Hobject  ho_RegionOpening21, ho_RegionClosing10, ho_ConnectedRegions38;
-		Hobject  ho_SelectedRegions34, ho_Circle5, ho_RegionShadow;
-		Hobject  ho_RegionBatch, ho_RegionUnion14, ho_RegionDifference24;
-		Hobject  ho_RegionDifference15, ho_RegionUnion2, ho_Region18;
-		Hobject  ho_RegionTrans7, ho_ImageReduced18, ho_ImageOpening;
-		Hobject  ho_Lines3, ho_UnionContours, ho_SelectedXLD, ho_Region29;
-		Hobject  ho_RegionIntersection23, ho_RegionFillUp10, ho_ConnectedRegions39;
-		Hobject  ho_SelectedRegions35, ho_ImageMax7, ho_ImageSub11;
-		Hobject  ho_Regions4, ho_RegionIntersection21, ho_RegionFillUp14;
-		Hobject  ho_RegionOpening25, ho_ConnectedRegions36, ho_SelectedRegions33;
-		Hobject  ho_Region21, ho_RegionIntersection16, ho_RegionClosing9;
-		Hobject  ho_ConnectedRegions29, ho_SelectedRegions23, ho_ImageMax6;
-		Hobject  ho_ImageSub9, ho_Region25, ho_RegionClosing12, ho_RegionOpening22;
-		Hobject  ho_RegionIntersection18, ho_RegionFillUp11, ho_ConnectedRegions32;
-		Hobject  ho_BadPill, ho_ObjectSelected3, ho_Rectangle10;
-		Hobject  ho_RegionErosion11, ho_ImageReduced19, ho_Lines1;
-		Hobject  ho_UnionContours1, ho_SelectedXLD1, ho_Regions3;
-		Hobject  ho_RegionIntersection19, ho_RegionFillUp12, ho_RegionOpening23;
-		Hobject  ho_ConnectedRegions34, ho_SelectedRegions31, ho_RegionTrans13;
-		Hobject  ho_Circle4, ho_RegionDifference22, ho_ConnectedRegions33;
-		Hobject  ho_SelectedRegions29, ho_SelectedRegions28, ho_RegionTrans12;
-		Hobject  ho_RegionArc, ho_RegionErosion6, ho_ImageReduced12;
-		Hobject  ho_RegionFillUp6, ho_RegionOpening15, ho_ConnectedRegions22;
-		Hobject  ho_SelectedRegions17, ho_Rectangle4, ho_Rectangle7;
-		Hobject  ho_RegionErosion2, ho_ImageReduced1, ho_Region1;
-		Hobject  ho_ConnectedRegions4, ho_SelectedRegions4, ho_RegionUnion3;
-		Hobject  ho_RegionRed, ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
+		Hobject  ho_RegionShadow, ho_RegionBatch, ho_RegionTrans10;
+		Hobject  ho_RegionErosion9, ho_RegionDifference24, ho_ImageMax8;
+		Hobject  ho_ImageSub15, ho_Regions5, ho_RegionIntersection25;
+		Hobject  ho_RegionOpening27, ho_ConnectedRegions41, ho_SelectedRegions37;
+		Hobject  ho_RegionTrans15, ho_RegionClosing15, ho_RegionFillUp16;
+		Hobject  ho_RegionOpening29, ho_RegionUnion17, ho_ConnectedRegions42;
+		Hobject  ho_Circle7, ho_RegionUnion18, ho_RegionDifference15;
+		Hobject  ho_RegionUnion2, ho_Region18, ho_RegionTrans7, ho_ImageReduced18;
+		Hobject  ho_ImageOpening, ho_Lines3, ho_UnionContours, ho_SelectedXLD;
+		Hobject  ho_Region29, ho_RegionIntersection23, ho_RegionFillUp10;
+		Hobject  ho_ConnectedRegions39, ho_SelectedRegions35, ho_ImageMax7;
+		Hobject  ho_ImageSub11, ho_Regions4, ho_RegionIntersection21;
+		Hobject  ho_RegionFillUp14, ho_RegionOpening25, ho_ConnectedRegions36;
+		Hobject  ho_SelectedRegions33, ho_Region21, ho_RegionIntersection16;
+		Hobject  ho_RegionClosing9, ho_ConnectedRegions29, ho_SelectedRegions23;
+		Hobject  ho_ImageMax6, ho_ImageSub9, ho_Region25, ho_RegionClosing12;
+		Hobject  ho_RegionOpening22, ho_RegionIntersection18, ho_RegionFillUp11;
+		Hobject  ho_ConnectedRegions32, ho_Circle6, ho_BadPill, ho_ObjectSelected3;
+		Hobject  ho_Rectangle10, ho_RegionErosion11, ho_RegionUnion15;
+		Hobject  ho_ImageReduced19, ho_Lines1, ho_UnionContours1;
+		Hobject  ho_SelectedXLD1, ho_ImageSub13, ho_Regions3, ho_RegionIntersection19;
+		Hobject  ho_RegionFillUp12, ho_RegionOpening23, ho_ConnectedRegions34;
+		Hobject  ho_SelectedRegions31, ho_RegionTrans13, ho_Circle4;
+		Hobject  ho_RegionDifference22, ho_ConnectedRegions33, ho_SelectedRegions29;
+		Hobject  ho_SelectedRegions28, ho_RegionTrans12, ho_RegionArc;
+		Hobject  ho_RegionErosion6, ho_ImageReduced12, ho_RegionFillUp6;
+		Hobject  ho_RegionOpening15, ho_ConnectedRegions22, ho_SelectedRegions17;
+		Hobject  ho_Rectangle4, ho_Rectangle7, ho_RegionErosion2;
+		Hobject  ho_ImageReduced1, ho_Region1, ho_ConnectedRegions4;
+		Hobject  ho_SelectedRegions4, ho_RegionUnion3, ho_RegionRed;
+		Hobject  ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
 		Hobject  ho_RegionFillUp4, ho_RegionOpening9, ho_RegionErosion4;
 		Hobject  ho_Region3, ho_RegionYellow, ho_RegionDilation2;
 		Hobject  ho_RegionDilation3, ho_RegionCross, ho_ImageReduced2;
@@ -778,13 +782,14 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_RegionDifference17, ho_RegionIntersection14;
 		Hobject  ho_RegionFillUp8, ho_RegionOpening18, ho_ConnectedRegions26;
 		Hobject  ho_SelectedRegions21, ho_RegionUnion9, ho_ConnectedRegions27;
-		Hobject  ho_ConnectedRegions6, ho_Circle, ho_RegionIntersection24;
-		Hobject  ho_RegionClosing15, ho_ConnectedRegions40, ho_SelectedRegions36;
-		Hobject  ho_Region27, ho_RegionOpening26, ho_RegionClosing14;
-		Hobject  ho_ConnectedRegions37, ho_SelectedRegions30, ho_RegionIntersection22;
-		Hobject  ho_RegionTrans10, ho_RegionTrans14,ho_RegionUnion15;
-		Hobject  ho_ImageSub13, ho_RegionErosion9;
-
+		Hobject  ho_ConnectedRegions6, ho_Circle, ho_ImageSub16, ho_Region27;
+		Hobject  ho_ImageScaleMax1, ho_Region31, ho_RegionIntersection24;
+		Hobject  ho_RegionFillUp15, ho_RegionOpening28, ho_ConnectedRegions40;
+		Hobject  ho_SelectedRegions36, ho_ImageSub14, ho_RegionDifference26;
+		Hobject  ho_RegionDifference25, ho_ImageReduced20, ho_ImageOpening1;
+		Hobject  ho_Lines2, ho_SelectedXLD2, ho_UnionContours2, ho_Region30;
+		Hobject  ho_RegionOpening26, ho_RegionClosing14, ho_ConnectedRegions37;
+		Hobject  ho_SelectedRegions30, ho_RegionIntersection22, ho_RegionUnion16;
 		// Local control variables 
 		HTuple  hv_check_pill, hv_check_capsule, hv_ImageFiles;
 		HTuple  hv_Index, hv_BaseName, hv_Extension, hv_Directory;
@@ -800,21 +805,23 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		HTuple  hv_Phi, hv_Length1, hv_Length2, hv_Number3, hv_Row1;
 		HTuple  hv_Column1, hv_Phi1, hv_Length11, hv_Length21, hv_Value;
 		HTuple  hv_Value1, hv_ratio, hv_Number4, hv_Row5, hv_Column5;
-		HTuple  hv_Radius3, hv_Row19, hv_Column19, hv_Radius6, hv_Number12;
-		HTuple  hv_Number15, hv_Number17, hv_Area6, hv_Mean1, hv_Number13;
-		HTuple  hv_Index4, hv_Area5, hv_Number14, hv_Row16, hv_Column16;
-		HTuple  hv_Row25, hv_Column25, hv_Number9, hv_Row10, hv_Column10;
+		HTuple  hv_Radius3, hv_Row26, hv_Column26, hv_Radius8, hv_Number12;
+		HTuple  hv_Number15, hv_Number17, hv_Row20, hv_Column20;
+		HTuple  hv_Radius7, hv_Area6, hv_Mean1, hv_Number13, hv_Index4;
+		HTuple  hv_Area5, hv_Number14, hv_Row16, hv_Column16, hv_Row25;
+		HTuple  hv_Column25, hv_Number9, hv_Row10, hv_Column10;
 		HTuple  hv_Radius5, hv_Number11, hv_Number10, hv_Row8, hv_Column8;
 		HTuple  hv_Phi3, hv_Length13, hv_Length23, hv_Area3, hv_Number;
 		HTuple  hv_Row3, hv_Column3, hv_Radius1, hv_Area, hv_Row4;
 		HTuple  hv_Column4, hv_Radius2, hv_Number8, hv_Row2, hv_Column2;
-		HTuple  hv_Radius, hv_Number16, hv_Area7, hv_Row18, hv_Column18;
+		HTuple  hv_Radius, hv_Number16, hv_Number19, hv_Area7, hv_Row18;
+		HTuple  hv_Column18, hv_Value2;
+
 		HTuple  hv_Width, hv_Height;
 
 
 		hv_check_pill = 1;
 		hv_check_capsule = 0;
-
 		//Image Acquisition 01: Code generated by Image Acquisition 01
 		get_image_size(m_hoLiveImage, &hv_Width, &hv_Height);
 		decompose3(m_hoLiveImage, &ho_R, &ho_G, &ho_B);
@@ -837,25 +844,26 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 80, 10);
 			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "µ±Ç°ÅÝÕÖ°åÃæ»ýÎª£º" + hv_AreaBand);
-			return 1;
+			return 1;  
 		}
 
 		smallest_rectangle2(ho_RegionBand, &hv_Row17, &hv_Column17, &hv_Phi5, &hv_Length15,
 			&hv_Length25);
-		gen_rectangle2(&ho_Rectangle11, hv_Row17, hv_Column17, hv_Phi5, hv_Length15 - 5,
-			hv_Length25 - 5);
+		gen_rectangle2(&ho_Rectangle11, hv_Row17, hv_Column17, hv_Phi5, hv_Length15 - 10,
+			hv_Length25 - 10);
 		difference(ho_Rectangle11, ho_RegionBand, &ho_RegionDifference19);
 		opening_circle(ho_RegionDifference19, &ho_RegionOpening20, 1.5);
 		connection(ho_RegionOpening20, &ho_ConnectedRegions30);
-		select_shape(ho_ConnectedRegions30, &ho_SelectedRegions24, "area", "and", 2000,
+		select_shape(ho_ConnectedRegions30, &ho_SelectedRegions24, "area", "and", 1600,
 			99999);
 		count_obj(ho_SelectedRegions24, &hv_Number18);
 		if (0 != (hv_Number18 > 0))
 		{
 			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
 			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
-			disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			//set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
+			//disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_SelectedRegions24, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
@@ -1076,7 +1084,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		intersection(ho_RegionOpening1, ho_SelectedRegions10, &ho_RegionIntersection);
 		closing_circle(ho_RegionIntersection, &ho_RegionClosing, 5);
 		connection(ho_RegionClosing, &ho_ConnectedRegions3);
-		select_shape(ho_ConnectedRegions3, &ho_SelectedRegions2, "area", "and", 150,
+		select_shape(ho_ConnectedRegions3, &ho_SelectedRegions2, "area", "and", 700,
 			99999);
 		shape_trans(ho_SelectedRegions2, &ho_RegionTrans1, "convex");
 		union1(ho_RegionTrans1, &ho_RegionUnion1);
@@ -1162,23 +1170,32 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//***********ÅÝÕÖÒõÓ°ÇøÓò
 		sub_image(ho_G, ho_S, &ho_ImageSub12, 1, 0);
-		threshold(ho_ImageSub12, &ho_Region28, 0, 145);
-		intersection(ho_Region28, ho_RegionBand, &ho_RegionIntersection17);
-		difference(ho_RegionIntersection17, ho_Rectangle1, &ho_RegionDifference20);
-		opening_circle(ho_RegionDifference20, &ho_RegionOpening21, 2.5);
-		closing_circle(ho_RegionOpening21, &ho_RegionClosing10, 1.5);
-		connection(ho_RegionClosing10, &ho_ConnectedRegions38);
-		select_shape(ho_ConnectedRegions38, &ho_SelectedRegions34, "area", "and", 1500,
-			99999);
-		smallest_circle(ho_SelectedRegions34, &hv_Row19, &hv_Column19, &hv_Radius6);
-		gen_circle(&ho_Circle5, hv_Row19, hv_Column19, hv_Radius6);
-		difference(ho_Circle5, ho_RegionPill, &ho_RegionShadow);
-		//*******************************
+
+		gray_dilation_rect(ho_V, &ho_ImageMax8, 31, 31);
+		sub_image(ho_ImageMax8, ho_V, &ho_ImageSub15, 1, 0);
+		threshold(ho_ImageSub15, &ho_Regions5, 20, 255);
+		intersection(ho_Regions5, ho_RegionBand, &ho_RegionIntersection25);
+
+		opening_circle(ho_RegionIntersection25, &ho_RegionOpening27, 1.5);
+		connection(ho_RegionOpening27, &ho_ConnectedRegions41);
+		select_shape(ho_ConnectedRegions41, &ho_SelectedRegions37, (HTuple("width").Append("height")),
+			"and", (HTuple(50).Append(50)), (HTuple(99999).Append(99999)));
+		shape_trans(ho_SelectedRegions37, &ho_RegionTrans15, "convex");
+		closing_circle(ho_SelectedRegions37, &ho_RegionClosing15, 70.5);
+		fill_up(ho_RegionClosing15, &ho_RegionFillUp16);
+		opening_circle(ho_RegionFillUp16, &ho_RegionOpening29, 50.5);
+		union1(ho_RegionOpening29, &ho_RegionUnion17);
+		connection(ho_RegionUnion17, &ho_ConnectedRegions42);
+		inner_circle(ho_ConnectedRegions42, &hv_Row26, &hv_Column26, &hv_Radius8);
+		gen_circle(&ho_Circle7, hv_Row26, hv_Column26, (hv_Radius8 / hv_Radius8) * 85);
+		union1(ho_Circle7, &ho_RegionUnion18);
 		dilation_circle(ho_Rectangle1, &ho_RegionBatch, 5.5);
-		union2(ho_Circle5, ho_RegionBatch, &ho_RegionUnion14);
+		//union2 (Circle5, RegionBatch, RegionUnion14)
 		shape_trans(ho_RegionBand, &ho_RegionTrans10, "convex");
 		erosion_rectangle1(ho_RegionTrans10, &ho_RegionErosion9, 5, 1);
-		difference(ho_RegionErosion9, ho_RegionUnion14, &ho_RegionDifference24);
+		difference(ho_RegionErosion9, ho_RegionUnion18, &ho_RegionDifference24);
+		difference(ho_RegionUnion18, ho_RegionPill, &ho_RegionShadow);
+
 		//erosion_circle(ho_RegionDifference24, &ho_RegionErosion9, 10.5);
 
 		//opening_circle (RegionDifference15, RegionOpening16, 1.5)
@@ -1215,7 +1232,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			//	"true");
 			union_adjacent_contours_xld(ho_Lines3, &ho_UnionContours, 10, 1, "attr_keep");
 			select_shape_xld(ho_UnionContours, &ho_SelectedXLD, (HTuple("contlength").Append("circularity")),
-				"and", (HTuple(30).Append(0)), (HTuple(99999).Append(0.1)));
+				"and", (HTuple(35).Append(0)), (HTuple(99999).Append(0.1)));
 			count_obj(ho_SelectedXLD, &hv_Number12);
 			if (0 != (hv_Number12 > 0))
 			{
@@ -1242,8 +1259,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			intersection(ho_Region29, ho_RegionDifference24, &ho_RegionIntersection23);
 			fill_up(ho_RegionIntersection23, &ho_RegionFillUp10);
 			connection(ho_RegionFillUp10, &ho_ConnectedRegions39);
-			select_shape(ho_ConnectedRegions39, &ho_SelectedRegions35, "area", "and", 20,
-				99999);
+			select_shape(ho_ConnectedRegions39, &ho_SelectedRegions35, (HTuple("area").Append("circularity")),
+				"and", (HTuple(20).Append(0.1)), (HTuple(99999).Append(1)));
 
 			//gray_dilation_rect(ho_B, &ho_ImageMax7, 7, 7);
 			//sub_image(ho_ImageMax7, ho_B, &ho_ImageSub11, 1, 0);
@@ -1400,7 +1417,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			gen_rectangle2(&ho_Rectangle8, hv_Row14, hv_Column14, hv_Phi4, hv_Length14 + 30,
 				hv_Length24 + 30);
 			sub_image(ho_B, ho_S, &ho_ImageSub13, 1, 0);
-			threshold(ho_ImageSub13, &ho_Regions3, 0, 80);
+			threshold(ho_ImageSub13, &ho_Regions3, 0, 90);
 			intersection(ho_Regions3, ho_Rectangle8, &ho_RegionIntersection19);
 			fill_up(ho_RegionIntersection19, &ho_RegionFillUp12);
 			opening_circle(ho_RegionFillUp12, &ho_RegionOpening23, 1.5);
@@ -1409,11 +1426,11 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				99999);
 			shape_trans(ho_SelectedRegions31, &ho_RegionTrans13, "convex");
 			smallest_circle(ho_SelectedRegions31, &hv_Row10, &hv_Column10, &hv_Radius5);
-			gen_circle(&ho_Circle4, hv_Row10, hv_Column10, hv_Radius5 - 5);
+			gen_circle(&ho_Circle4, hv_Row10, hv_Column10, hv_Radius5 - 3);
 			difference(ho_Circle4, ho_SelectedRegions31, &ho_RegionDifference22);
 			connection(ho_RegionDifference22, &ho_ConnectedRegions33);
 			select_shape(ho_ConnectedRegions33, &ho_SelectedRegions29, (HTuple("area").Append("circularity")), "and",
-				(HTuple(100).Append(0.1)), (HTuple(99999).Append(1)));
+				(HTuple(100).Append(0.09)), (HTuple(99999).Append(1)));
 			count_obj(ho_SelectedRegions29, &hv_Number11);
 			if (0 != (hv_Number11 > 0))
 			{
@@ -1447,7 +1464,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		{
 
 			select_shape(ho_ConnectedRegions32, &ho_SelectedRegions28, (HTuple("area").Append("circularity")),
-				"and", (HTuple(30).Append(0.25)), (HTuple(99999).Append(1)));
+				"and", (HTuple(25).Append(0.25)), (HTuple(99999).Append(1)));
 			count_obj(ho_SelectedRegions28, &hv_Number10);
 			if (0 != (hv_Number10 != 0))
 			{
@@ -1635,10 +1652,15 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		}
 
 		//***********ÒõÓ°ÇøÓòÈ±ÏÝ
-		intersection(ho_Region29, ho_RegionShadow, &ho_RegionIntersection24);
-		closing_circle(ho_RegionIntersection24, &ho_RegionClosing15, 2.5);
-		connection(ho_RegionClosing15, &ho_ConnectedRegions40);
-		select_shape(ho_ConnectedRegions40, &ho_SelectedRegions36, "area", "and", 20,
+		sub_image(ho_V, ho_S, &ho_ImageSub16, 1, 0);
+		scale_image_max(ho_ImageSub16, &ho_ImageScaleMax1);
+		threshold(ho_ImageScaleMax1, &ho_Region31, 0, 130);
+		intersection(ho_Region31, ho_RegionShadow, &ho_RegionIntersection24);
+		fill_up(ho_RegionIntersection24, &ho_RegionFillUp15);
+		opening_circle(ho_RegionFillUp15, &ho_RegionOpening28, 1.5);
+		/*closing_circle(ho_RegionIntersection24, &ho_RegionClosing15, 2.5);*/
+		connection(ho_RegionOpening28, &ho_ConnectedRegions40);
+		select_shape(ho_ConnectedRegions40, &ho_SelectedRegions36, "area", "and", 25,
 			99999);
 		count_obj(ho_SelectedRegions36, &hv_Number16);
 		if (0 != (hv_Number16 > 0))
@@ -1648,21 +1670,45 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_SelectedRegions36, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "ÔàÎÛ/ºÚµã");
-			result = QString::fromLocal8Bit("ÔàÎÛ/ºÚµã");
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "ÒìÎï/ÔàÎÛ");
+			result = QString::fromLocal8Bit("ÒìÎï/ÔàÎÛ");
 			return 1;
 			// stop(); only in hdevelop
 
 		}
 		//********************
+		// 
 
+		
+		sub_image(ho_V, ho_S, &ho_ImageSub14, 1, 0);
+		difference(ho_RegionBand, ho_RegionBatch, &ho_RegionDifference26);
+		difference(ho_RegionDifference26, ho_RegionUnion18, &ho_RegionDifference25);
+		reduce_domain(ho_ImageSub14, ho_RegionDifference25, &ho_ImageReduced20);
+		gray_opening_rect(ho_ImageReduced20, &ho_ImageOpening1, 7, 7);
+		lines_gauss(ho_ImageOpening1, &ho_Lines2, 1.5, 3, 4, "dark", "true", "bar-shaped",
+			"true");
+		select_shape_xld(ho_Lines2, &ho_SelectedXLD2, (HTuple("contlength").Append("circularity")),
+			"and", (HTuple(35).Append(0)), (HTuple(99999).Append(0.02)));
+		count_obj(ho_SelectedXLD2, &hv_Number19);
+		if (0 != (hv_Number19 > 0))
+		{
+			union_adjacent_contours_xld(ho_SelectedXLD2, &ho_UnionContours2, 10, 1, "attr_keep");
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
+			disp_obj(ho_UnionContours2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "Öå°å");
+			result = QString::fromLocal8Bit("Öå°å");
+			return 1;
+			// stop(); only in hdevelop
+		}
 
 
 		//ÍøÎÆ²»Çå
 		if (0 != m_checkparam.b_CheckPill)
 		{
-
-			threshold(ho_R, &ho_Region27, 175, 255);
+			threshold(ho_ImageSub14, &ho_Region27, 170, 255);
 			opening_circle(ho_Region27, &ho_RegionOpening26, 1.5);
 			closing_circle(ho_RegionOpening26, &ho_RegionClosing14, 3.5);
 			connection(ho_RegionClosing14, &ho_ConnectedRegions37);
@@ -1671,7 +1717,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 
-			threshold(ho_V, &ho_Region4, 185, 255);
+			threshold(ho_G, &ho_Region4, 175, 255);
 			connection(ho_Region4, &ho_ConnectedRegions6);
 			closing_circle(ho_ConnectedRegions6, &ho_RegionClosing1, 10);
 			opening_circle(ho_RegionClosing1, &ho_RegionOpening3, 7.5);
@@ -1679,8 +1725,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				999999);
 			intersection(ho_SelectedRegions30, ho_SelectedRegions4, &ho_RegionIntersection22
 			);
-			area_center(ho_RegionIntersection22, &hv_Area7, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-			if (0 != (hv_Area7 > 10000))
+			union1(ho_RegionIntersection22, &ho_RegionUnion16);
+			area_center(ho_RegionUnion16, &hv_Area7, &hv_Row18, &hv_Column18);
+			region_features(ho_RegionUnion16, "circularity", &hv_Value2);
+			if (0 != (HTuple(hv_Area7 > 10000).And(hv_Value2 > 0.2)))
 			{
 				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
