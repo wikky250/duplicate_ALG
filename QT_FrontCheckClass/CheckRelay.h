@@ -61,11 +61,13 @@ struct CHECKPARAM
 	//////////////////////////////////////////////////////////////////////////
 
 
-	///////////Capsules Detect////////////////////////////////////////////////
+	///////////the kinds of errors////////////////////////////////////////////////
 	//the size of band
 	int i_BandChannel = -1;
 	int i_MinGray_Band = -1;
 	int i_MinArea_Band = -1;
+	//defect of band
+	int i_PlusLength_Rectangle = -1;
 	//the number of Capsules
 	int i_CapsulesChannel = -1;
 	int i_MinGray_Capsules = -1;
