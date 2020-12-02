@@ -23,11 +23,11 @@ private:
 public slots:
 	void showEvent(QShowEvent *)
 	{
-		times = new QTimer();
+		times = new QTimer(this);
 		times->setSingleShot(true);
 		connect(times, &QTimer::timeout, [=]()
 		{
-			delete this;
+			this->setVisible(false);
 		});
 		times->start(2000);
 	}
@@ -54,16 +54,23 @@ public:
 class QMyTreeWidget : public QTreeWidget
 {
 	Q_OBJECT
-
+signals:
+	void TempSave();
 private:
+	YAML::Node _mparam;
 	YAML::Node _param;
+	QTextDocument *document = nullptr;
+	QTextEdit *editor = nullptr;
+	QMyTextEdit * detailtext = nullptr;
 public:
 	QMyTreeWidget(QWidget *parent);
 	~QMyTreeWidget();
 	bool ReadYAMLFile(QString filepath);
+	bool ReadYAMLFile(YAML::Node, char* cameraname = nullptr);
 	bool SaveYAMLFile(QString filepath);
 public slots:
 	void SliderValueChanged(int);
 	void CheckValueChanged(int);
 	void showCnDetail(QTreeWidgetItem*, int);
+	void textAreaChanged();
 };
