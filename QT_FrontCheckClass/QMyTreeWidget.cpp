@@ -111,11 +111,11 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 	_mparam = params;
 	if (nullptr == cameraname)
 	{
-		_param = params;
+		_param = _mparam;
 	}
 	else
 	{
-		_param = params[cameraname];
+		_param = _mparam[cameraname];
 	}
 	try
 	{
@@ -255,7 +255,7 @@ bool QMyTreeWidget::SaveYAMLFile(QString filepath)
 
 	std::ofstream fout(filepath.toStdString().c_str());
 
-	fout << _param;
+	fout << _mparam;
 
 	fout.close();
 
