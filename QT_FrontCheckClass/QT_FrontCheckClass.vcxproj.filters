@@ -2,13 +2,21 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="CheckRelay.cpp" />
-    <ClCompile Include="InterCHeck.cpp" />
     <ClCompile Include="OutShowCheck.cpp" />
     <ClCompile Include="QT_FrontCheckClass.cpp" />
     <ClCompile Include="QtGuiSetting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="QMyTreeWidget.cpp" />
+=======
+    <ClCompile Include="QMyTreeWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InterCHeck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> ff61316fb6997015f5341c9e555eab343b892193
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpencvRelay.h" />
@@ -28,7 +36,13 @@
     <QtMoc Include="InterCHeck.h" />
     <QtMoc Include="OutShowCheck.h" />
     <QtMoc Include="QT_FrontCheckClass.h" />
+<<<<<<< HEAD
     <QtMoc Include="QMyTreeWidget.h" />
+=======
+    <QtMoc Include="QMyTreeWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+>>>>>>> ff61316fb6997015f5341c9e555eab343b892193
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QtGuiSetting.ui" />

@@ -2,6 +2,8 @@
 #include "QT_FRONTCheckClass.h"
 #include "QtGuiSetting.h"
 //#include "InspectProcessor.h"
+#include "yaml-cpp/yaml.h"
+#pragma comment(lib,"yaml-cppd.lib")
 class CInterCHeck :public QObject,
 	public CBaseCheckAlg
 {
@@ -94,10 +96,10 @@ public:
 	virtual void SetCloseCallBack(CallbackClose callbackfun);
 	bool OtherBeforeCheck(Mat);
 	bool OtherAfterCheck();
-	int RealCheck(QString&, CHECKPARAM *,int);
+	int RealCheck(QString&, CHECKPARAM *, int);
+	bool LoadCheckParam(CHECKPARAM *checkparam,QString* str = nullptr);
 public slots:
 	void EndCheck();
-	bool LoadCheckParam(CHECKPARAM *checkparam);
-	bool SaveCheckParam(CHECKPARAM *checkparam);
+	bool SaveCheckParam();
 };
 

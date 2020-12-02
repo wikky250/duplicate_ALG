@@ -14,7 +14,7 @@ signals:
 	void StartGetSample(QLabel *lab, QString str);
 	void UpdatetoTest(CHECKPARAM*);
 	void StartSave(QString *str);
-	void ShouldSaveParam(CHECKPARAM*);
+	void ShouldSaveParam();
 	void CloseGetSample();
 	void SignShowImage(int, Mat, int);
 	
@@ -33,7 +33,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 		//算法相关
 public:
-	void SetParam(CHECKPARAM param);
+	void SetParam(CHECKPARAM);
 	void SetModelMat(Mat img);
 private:
 	bool b_GetAuthority;
@@ -45,6 +45,7 @@ private:
 	QString m_sSelectFile;
 	//检测参数
 	CHECKPARAM _checkparam;
+	YAML::Node m_node;
 	//模板样品保存位置
 	QString m_strSaveFile;
 	//模板样品保存位置

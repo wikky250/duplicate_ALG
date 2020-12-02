@@ -6,231 +6,136 @@ void MyHalconExceptionHandler(const HException& except)
 {
 	throw except;
 }
-bool CInterCHeck::LoadCheckParam(CHECKPARAM * checkparam)
+bool CInterCHeck::LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 {
-	QSettings configIniRead(AppPath + "\\DefaultModel\\CheckParam.ini", QSettings::IniFormat);
-	configIniRead.setIniCodec("UTF-8");
-	QString cameraname = checkparam->c_CameraName;
-	//∂¡»°ºÏ≤‚≤Œ ˝≈‰÷√
-	//////////////////////////////////////////////////////////////////////////
-	//checkparam->i_BandArea = configIniRead.value("/" + cameraname + "/BandArea", "865000").toInt();
-	//checkparam->i_BandException1_Area = configIniRead.value("/" + cameraname + "/BandException1_Area", "300").toInt();
-	//checkparam->i_BandException2_Value = configIniRead.value("/" + cameraname + "/BandException2_Value", "110").toInt();
-	//checkparam->i_BandException3_Area = configIniRead.value("/" + cameraname + "/BandException3_Area", "50").toInt();
-	//checkparam->i_InterException_Area = configIniRead.value("/" + cameraname + "/InterException_Area", "50").toInt();
-	//checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1.5").toDouble();
-	//checkparam->i_PillRadius = configIniRead.value("/" + cameraname + "/PillRadius", "85").toInt();
-	//checkparam->i_BandException2_Radius = configIniRead.value("/" + cameraname + "/BandException2_Radius", "0").toInt();
-	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "0").toInt();
-	checkparam->i_MinGray_Band = configIniRead.value("/" + cameraname + "/MinGray_Band", "").toInt();
-	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "680000").toInt();
-	checkparam->i_CapsulesChannel = configIniRead.value("/" + cameraname + "/CapsulesChannel", "4").toInt();
-	checkparam->i_MinGray_Capsules = configIniRead.value("/" + cameraname + "/MinGray_Capsules", "70").toInt();
-	checkparam->d_OR_Capsules = configIniRead.value("/" + cameraname + "/OR_Capsules", "2.5").toDouble();
-	checkparam->i_MinArea_Capsules = configIniRead.value("/" + cameraname + "/MinArea_Capsules", "10000").toInt();
-	checkparam->i_MaxArea_Capsules = configIniRead.value("/" + cameraname + "/MaxArea_Capsules", "99999").toInt();
-	checkparam->i_Number_Capsules = configIniRead.value("/" + cameraname + "/Number_Capsules", "10").toInt();
-	checkparam->i_BatchChannel = configIniRead.value("/" + cameraname + "/BatchChannel", "0").toInt();
-	checkparam->i_LengthAdd_1 = configIniRead.value("/" + cameraname + "/LengthAdd_1", "30").toInt();
-	checkparam->i_LengthAdd_2 = configIniRead.value("/" + cameraname + "/LengthAdd_2", "1000").toInt();
-	checkparam->d_ER_Batch = configIniRead.value("/" + cameraname + "/ER_Batch", "10").toDouble();
-	checkparam->i_MaskHeight_Batch = configIniRead.value("/" + cameraname + "/MaksHeight_Batch", "11").toInt();
-	checkparam->i_MaskWidth_Batch = configIniRead.value("/" + cameraname + "/MaksWidth_Batch", "11").toInt();
-	checkparam->i_MinGray_Batch = configIniRead.value("/" + cameraname + "/MinGray_Batch", "15").toInt();
-	checkparam->d_OR_Batch = configIniRead.value("/" + cameraname + "/OR_Batch", "1").toDouble();
-	checkparam->d_CR_Batch = configIniRead.value("/" + cameraname + "/CR_Batch", "5").toDouble();
-	checkparam->i_MinArea_Batch = configIniRead.value("/" + cameraname + "/MinArea_Batch", "150").toInt();
-	checkparam->i_MaxArea_Batch = configIniRead.value("/" + cameraname + "/MaxArea_Batch", "99999").toInt();
-	//checkparam->i_MinArea_BatchDefect = configIniRead.value("/" + cameraname + "/MinArea_BatchDefect", "50").toInt();
-	//checkparam->i_MaxArea_BatchDefect = configIniRead.value("/" + cameraname + "/MaxArea_BatchDefect", "99999").toInt();
-	checkparam->i_Channel_CapsulesDefect = configIniRead.value("/" + cameraname + "/Channel_CapsulesDefect", "1").toInt();
-	checkparam->d_ER_RegionCapsules = configIniRead.value("/" + cameraname + "/ER_RegionCapsules", "12.5").toDouble();
-	checkparam->i_MaxGray_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxGray_CapsulesRed", "128").toInt();
-	checkparam->i_MinArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MinArea_CapsulesRed", "1500").toInt();
-	checkparam->i_MaxArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxArea_CapsulesRed", "99999").toInt();
-	checkparam->d_DR_CapsulesRed = configIniRead.value("/" + cameraname + "/DR_CapsulesRed", "3").toDouble();
-	checkparam->d_DR_CapsulesYellow = configIniRead.value("/" + cameraname + "/DR_CapsulesYellow", "3").toDouble();
-	checkparam->i_Channel_RegionRed = configIniRead.value("/" + cameraname + "/Channel_RegionRed", "4").toInt();
-	checkparam->i_MaskHeight_RegionRed = configIniRead.value("/" + cameraname + "/MaksHeight_RegionRed", "11").toInt();
-	checkparam->i_MaskWidth_RegionRed = configIniRead.value("/" + cameraname + "/MaksWidth_RegionRed", "11").toInt();
-	checkparam->i_MinGray_RegionRed = configIniRead.value("/" + cameraname + "/MinGray_RegionRed", "60").toInt();
-	checkparam->i_MaxGray_RegionRed = configIniRead.value("/" + cameraname + "/MaxGray_RegionRed", "100").toInt();
-	checkparam->d_CR_RegionRed = configIniRead.value("/" + cameraname + "/CR_RegionRed", "1").toDouble();
-	checkparam->d_OR_RegionRed = configIniRead.value("/" + cameraname + "/OR_RegionRed", "1").toDouble();
-	checkparam->i_MinArea_RegionRed = configIniRead.value("/" + cameraname + "/MinArea_RegionRed", "20").toInt();
-	checkparam->i_MaxArea_RegionRed = configIniRead.value("/" + cameraname + "/MaxArea_RegionRed", "2000").toInt();
-	checkparam->i_Channel_RedDefect1 = configIniRead.value("/" + cameraname + "/Channel_RedDefect1", "5").toInt();
-	checkparam->i_Channel_RedDefect2 = configIniRead.value("/" + cameraname + "/Channel_RedDefect2", "4").toInt();
-	checkparam->i_MaskHeight_RedDefect = configIniRead.value("/" + cameraname + "/MaksHeight_RedDefect", "5").toInt();
-	checkparam->i_MaskWidth_RedDefect = configIniRead.value("/" + cameraname + "/MaksWidth_RedDefect", "5").toInt();
-	checkparam->i_MinGray_RedDefect = configIniRead.value("/" + cameraname + "/MinGray_RedDefect", "35").toInt();
-	checkparam->d_ER_RedDefect = configIniRead.value("/" + cameraname + "/ER_RedDefect", "3.5").toDouble();
-	checkparam->d_OR_RedDefect = configIniRead.value("/" + cameraname + "/OR_RedDefect", "1.5").toDouble();
-	checkparam->i_MinArea_RedDefect = configIniRead.value("/" + cameraname + "/MinArea_RedDefect", "20").toInt();
-	checkparam->i_MaxArea_RedDefect = configIniRead.value("/" + cameraname + "/MaxArea_RedDefect", "99999").toInt();
-	checkparam->i_MaskHeight_RegionYellow = configIniRead.value("/" + cameraname + "/MaskHeight_RegionYellow", "5").toInt();
-	checkparam->i_MaskWidth_RegionYellow = configIniRead.value("/" + cameraname + "/MaskWidth_RegionYellow", "5").toInt();
-	checkparam->i_MinGray_RegionYellow = configIniRead.value("/" + cameraname + "/MinGray_RegionYellow", "20").toInt();
-	checkparam->i_MaxGray_RegionYellow = configIniRead.value("/" + cameraname + "/MaxGray_RegionYellow", "185").toInt();
-	checkparam->d_OR_RegionYellow = configIniRead.value("/" + cameraname + "/OR_RegionYellow", "1.5").toDouble();
-	checkparam->i_MinArea_RegionYellow = configIniRead.value("/" + cameraname + "/MinArea_RegionYellow", "20").toInt();
-	checkparam->i_MaxArea_RegionYellow = configIniRead.value("/" + cameraname + "/MaxArea_RegionYellow", "99999").toInt();
-	checkparam->i_Channel_BandDefect = configIniRead.value("/" + cameraname + "/Channel_BandDefect", "2").toInt();
-	checkparam->d_DR_BandDefect = configIniRead.value("/" + cameraname + "/DR_BandDefect", "3").toDouble();
-	checkparam->d_ER_BandDefect = configIniRead.value("/" + cameraname + "/ER_BandDefect", "5").toDouble();
-	checkparam->i_MaskHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaskHeight_BandDefect", "3").toInt();
-	checkparam->i_MaskWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaskWidth_BandDefect", "3").toInt();
-	checkparam->i_MinGray_BandDefect = configIniRead.value("/" + cameraname + "/MinGray_BandDefect", "45").toInt();
-	checkparam->d_CR_BandDefect = configIniRead.value("/" + cameraname + "/CR_BandDefect", "1.5").toDouble();
-	checkparam->i_MinWidth_BandDefect = configIniRead.value("/" + cameraname + "/MinWidth_BandDefect", "1").toInt();
-	checkparam->i_MaxWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaxWidth_BandDefect", "100").toInt();
-	checkparam->i_MinHeight_BandDefect = configIniRead.value("/" + cameraname + "/MinHeight_BandDefect", "3").toInt();
-	checkparam->i_MaxHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaxHeight_BandDefect", "100").toInt();
-	checkparam->i_MinArea_BandDefect = configIniRead.value("/" + cameraname + "/MinArea_BandDefect", "10").toInt();
-	checkparam->i_MaxArea_BandDefect = configIniRead.value("/" + cameraname + "/MaxArea_BandDefect", "9999").toInt();
-	checkparam->b_IsOpen = configIniRead.value("/" + cameraname + "/IsOpen", "false").toBool();
-	checkparam->i_Channel_InCapsules = configIniRead.value("/" + cameraname + "/Channel_InCapsules", "2").toInt();
-	checkparam->d_ER_InCapsules = configIniRead.value("/" + cameraname + "/ER_InCapsules", "7.5").toDouble();
-	checkparam->i_MaxGray_InCapsules = configIniRead.value("/" + cameraname + "/MaxGray_InCapsules", "120").toInt();
-	checkparam->d_OR_InCapsules = configIniRead.value("/" + cameraname + "/OR_InCapsules", ".5").toDouble();
-	checkparam->i_MinArea_InCapsules = configIniRead.value("/" + cameraname + "/MinArea_InCapsules", "2000").toInt();
-	checkparam->i_MaxArea_InCapsules = configIniRead.value("/" + cameraname + "/MaxArea_InCapsules", "99999").toInt();
-	checkparam->i_LengthPlus_1 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
-	checkparam->i_LengthPlus_2 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
-	checkparam->i_Channel_Middle = configIniRead.value("/" + cameraname + "/Channel_Middle", "0").toInt();
-	checkparam->i_MaskHeight_Middle = configIniRead.value("/" + cameraname + "/MaskHeight_Middle", "7").toInt();
-	checkparam->i_MaskWidth_Middle = configIniRead.value("/" + cameraname + "/MaskWidth_Middle", "7").toInt();
-	checkparam->i_MinGray_Middle = configIniRead.value("/" + cameraname + "/MinGray_Middle", "45").toInt();
-	checkparam->i_MinWidth_Middle = configIniRead.value("/" + cameraname + "/MinWidth_Middle", "5").toInt();
-	checkparam->i_MinHeight_Middle = configIniRead.value("/" + cameraname + "/MinHeight_Middle", "3").toInt();
-	checkparam->d_CR_Middle = configIniRead.value("/" + cameraname + "/CR_Middle", "2.5").toDouble();
-	checkparam->i_MinArea_Middle = configIniRead.value("/" + cameraname + "/MinArea_Middle", "30").toInt();
-	checkparam->i_Channel_Plate = configIniRead.value("/" + cameraname + "/Channel_Plate", "0").toInt();
-	checkparam->i_MaxGray_Plate = configIniRead.value("/" + cameraname + "/MaxGray_Plate", "190").toInt();
-	//////////////////////////////////////////////////////////////////////////
-	checkparam->d_CR_Plate = configIniRead.value("/" + cameraname + "/CR_Plate", "1.5").toDouble();
-	checkparam->d_OR_Plate_1 = configIniRead.value("/" + cameraname + "/OR_Plate_1", "3.5").toDouble();
-	checkparam->i_MinArea_Plate_1 = configIniRead.value("/" + cameraname + "/MinArea_Middle_1", "1500").toInt();
-	checkparam->d_OR_Plate_2 = configIniRead.value("/" + cameraname + "/OR_Plate_2", "1.5").toDouble();
-	checkparam->i_MinArea_Plate_2 = configIniRead.value("/" + cameraname + "/MinArea_Middle_2", "30").toInt();
-	checkparam->b_CheckCapsule = configIniRead.value("/" + cameraname + "/CheckCapsule", "false").toBool();
-	checkparam->b_CheckPill = configIniRead.value("/" + cameraname + "/CheckPill", "false").toBool();
+	YAML::Node _param;
+	if (nullptr == str)
+	{
+		_param = YAML::LoadFile(QString(AppPath + "/DefaultModel/CheckParam.yaml").toStdString());
+		QSettings configIniRead(AppPath + "\\DefaultModel\\CheckParam.ini", QSettings::IniFormat);
+		configIniRead.setIniCodec("UTF-8");
+ 		QString cameraname = checkparam->c_CameraName;
+	}
+	else
+	{
+		_param = YAML::LoadFile(str->toStdString().c_str());
+	}
+	checkparam->i_BandChannel = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_“©∞Â»±œ›").toStdString()][QString::fromLocal8Bit("“©∞ÂÕ®µ¿").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_“©∞Â»±œ›").toStdString()][QString::fromLocal8Bit("“©∞Â◊Ó–°„–÷µ").toStdString()]["value"].as<int>();
 
-	//////////////////////////////////////////////////////////////////////////
+// 	//∂¡»°ºÏ≤‚≤Œ ˝≈‰÷√
+// 	//////////////////////////////////////////////////////////////////////////
+// 	//checkparam->i_BandArea = configIniRead.value("/" + cameraname + "/BandArea", "865000").toInt();
+// 	//checkparam->i_BandException1_Area = configIniRead.value("/" + cameraname + "/BandException1_Area", "300").toInt();
+// 	//checkparam->i_BandException2_Value = configIniRead.value("/" + cameraname + "/BandException2_Value", "110").toInt();
+// 	//checkparam->i_BandException3_Area = configIniRead.value("/" + cameraname + "/BandException3_Area", "50").toInt();
+// 	//checkparam->i_InterException_Area = configIniRead.value("/" + cameraname + "/InterException_Area", "50").toInt();
+// 	//checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1.5").toDouble();
+// 	//checkparam->i_PillRadius = configIniRead.value("/" + cameraname + "/PillRadius", "85").toInt();
+// 	//checkparam->i_BandException2_Radius = configIniRead.value("/" + cameraname + "/BandException2_Radius", "0").toInt();
+// 	
+// 	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "0").toInt();
+// 	checkparam->i_MinGray_Band = configIniRead.value("/" + cameraname + "/MinGray_Band", "100").toInt();
+// 	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "680000").toInt();
+// 	checkparam->i_CapsulesChannel = configIniRead.value("/" + cameraname + "/CapsulesChannel", "4").toInt();
+// 	checkparam->i_MinGray_Capsules = configIniRead.value("/" + cameraname + "/MinGray_Capsules", "70").toInt();
+// 	checkparam->d_OR_Capsules = configIniRead.value("/" + cameraname + "/OR_Capsules", "2.5").toDouble();
+// 	checkparam->i_MinArea_Capsules = configIniRead.value("/" + cameraname + "/MinArea_Capsules", "10000").toInt();
+// 	checkparam->i_MaxArea_Capsules = configIniRead.value("/" + cameraname + "/MaxArea_Capsules", "99999").toInt();
+// 	checkparam->i_Number_Capsules = configIniRead.value("/" + cameraname + "/Number_Capsules", "10").toInt();
+// 	checkparam->i_BatchChannel = configIniRead.value("/" + cameraname + "/BatchChannel", "0").toInt();
+// 	checkparam->i_LengthAdd_1 = configIniRead.value("/" + cameraname + "/LengthAdd_1", "30").toInt();
+// 	checkparam->i_LengthAdd_2 = configIniRead.value("/" + cameraname + "/LengthAdd_2", "1000").toInt();
+// 	checkparam->d_ER_Batch = configIniRead.value("/" + cameraname + "/ER_Batch", "10").toDouble();
+// 	checkparam->i_MaskHeight_Batch = configIniRead.value("/" + cameraname + "/MaksHeight_Batch", "11").toInt();
+// 	checkparam->i_MaskWidth_Batch = configIniRead.value("/" + cameraname + "/MaksWidth_Batch", "11").toInt();
+// 	checkparam->i_MinGray_Batch = configIniRead.value("/" + cameraname + "/MinGray_Batch", "15").toInt();
+// 	checkparam->d_OR_Batch = configIniRead.value("/" + cameraname + "/OR_Batch", "1").toDouble();
+// 	checkparam->d_CR_Batch = configIniRead.value("/" + cameraname + "/CR_Batch", "5").toDouble();
+// 	checkparam->i_MinArea_Batch = configIniRead.value("/" + cameraname + "/MinArea_Batch", "150").toInt();
+// 	checkparam->i_MaxArea_Batch = configIniRead.value("/" + cameraname + "/MaxArea_Batch", "99999").toInt();
+// 	//checkparam->i_MinArea_BatchDefect = configIniRead.value("/" + cameraname + "/MinArea_BatchDefect", "50").toInt();
+// 	//checkparam->i_MaxArea_BatchDefect = configIniRead.value("/" + cameraname + "/MaxArea_BatchDefect", "99999").toInt();
+// 	checkparam->i_Channel_CapsulesDefect = configIniRead.value("/" + cameraname + "/Channel_CapsulesDefect", "1").toInt();
+// 	checkparam->d_ER_RegionCapsules = configIniRead.value("/" + cameraname + "/ER_RegionCapsules", "12.5").toDouble();
+// 	checkparam->i_MaxGray_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxGray_CapsulesRed", "128").toInt();
+// 	checkparam->i_MinArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MinArea_CapsulesRed", "1500").toInt();
+// 	checkparam->i_MaxArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxArea_CapsulesRed", "99999").toInt();
+// 	checkparam->d_DR_CapsulesRed = configIniRead.value("/" + cameraname + "/DR_CapsulesRed", "3").toDouble();
+// 	checkparam->d_DR_CapsulesYellow = configIniRead.value("/" + cameraname + "/DR_CapsulesYellow", "3").toDouble();
+// 	checkparam->i_Channel_RegionRed = configIniRead.value("/" + cameraname + "/Channel_RegionRed", "4").toInt();
+// 	checkparam->i_MaskHeight_RegionRed = configIniRead.value("/" + cameraname + "/MaksHeight_RegionRed", "11").toInt();
+// 	checkparam->i_MaskWidth_RegionRed = configIniRead.value("/" + cameraname + "/MaksWidth_RegionRed", "11").toInt();
+// 	checkparam->i_MinGray_RegionRed = configIniRead.value("/" + cameraname + "/MinGray_RegionRed", "60").toInt();
+// 	checkparam->i_MaxGray_RegionRed = configIniRead.value("/" + cameraname + "/MaxGray_RegionRed", "100").toInt();
+// 	checkparam->d_CR_RegionRed = configIniRead.value("/" + cameraname + "/CR_RegionRed", "1").toDouble();
+// 	checkparam->d_OR_RegionRed = configIniRead.value("/" + cameraname + "/OR_RegionRed", "1").toDouble();
+// 	checkparam->i_MinArea_RegionRed = configIniRead.value("/" + cameraname + "/MinArea_RegionRed", "20").toInt();
+// 	checkparam->i_MaxArea_RegionRed = configIniRead.value("/" + cameraname + "/MaxArea_RegionRed", "2000").toInt();
+// 	checkparam->i_Channel_RedDefect1 = configIniRead.value("/" + cameraname + "/Channel_RedDefect1", "5").toInt();
+// 	checkparam->i_Channel_RedDefect2 = configIniRead.value("/" + cameraname + "/Channel_RedDefect2", "4").toInt();
+// 	checkparam->i_MaskHeight_RedDefect = configIniRead.value("/" + cameraname + "/MaksHeight_RedDefect", "5").toInt();
+// 	checkparam->i_MaskWidth_RedDefect = configIniRead.value("/" + cameraname + "/MaksWidth_RedDefect", "5").toInt();
+// 	checkparam->i_MinGray_RedDefect = configIniRead.value("/" + cameraname + "/MinGray_RedDefect", "35").toInt();
+// 	checkparam->d_ER_RedDefect = configIniRead.value("/" + cameraname + "/ER_RedDefect", "3.5").toDouble();
+// 	checkparam->d_OR_RedDefect = configIniRead.value("/" + cameraname + "/OR_RedDefect", "1.5").toDouble();
+// 	checkparam->i_MinArea_RedDefect = configIniRead.value("/" + cameraname + "/MinArea_RedDefect", "20").toInt();
+// 	checkparam->i_MaxArea_RedDefect = configIniRead.value("/" + cameraname + "/MaxArea_RedDefect", "99999").toInt();
+// 	checkparam->i_MaskHeight_RegionYellow = configIniRead.value("/" + cameraname + "/MaskHeight_RegionYellow", "5").toInt();
+// 	checkparam->i_MaskWidth_RegionYellow = configIniRead.value("/" + cameraname + "/MaskWidth_RegionYellow", "5").toInt();
+// 	checkparam->i_MinGray_RegionYellow = configIniRead.value("/" + cameraname + "/MinGray_RegionYellow", "20").toInt();
+// 	checkparam->i_MaxGray_RegionYellow = configIniRead.value("/" + cameraname + "/MaxGray_RegionYellow", "185").toInt();
+// 	checkparam->d_OR_RegionYellow = configIniRead.value("/" + cameraname + "/OR_RegionYellow", "1.5").toDouble();
+// 	checkparam->i_MinArea_RegionYellow = configIniRead.value("/" + cameraname + "/MinArea_RegionYellow", "20").toInt();
+// 	checkparam->i_MaxArea_RegionYellow = configIniRead.value("/" + cameraname + "/MaxArea_RegionYellow", "99999").toInt();
+// 	checkparam->i_Channel_BandDefect = configIniRead.value("/" + cameraname + "/Channel_BandDefect", "2").toInt();
+// 	checkparam->d_DR_BandDefect = configIniRead.value("/" + cameraname + "/DR_BandDefect", "3").toDouble();
+// 	checkparam->d_ER_BandDefect = configIniRead.value("/" + cameraname + "/ER_BandDefect", "5").toDouble();
+// 	checkparam->i_MaskHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaskHeight_BandDefect", "3").toInt();
+// 	checkparam->i_MaskWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaskWidth_BandDefect", "3").toInt();
+// 	checkparam->i_MinGray_BandDefect = configIniRead.value("/" + cameraname + "/MinGray_BandDefect", "45").toInt();
+// 	checkparam->d_CR_BandDefect = configIniRead.value("/" + cameraname + "/CR_BandDefect", "1.5").toDouble();
+// 	checkparam->i_MinWidth_BandDefect = configIniRead.value("/" + cameraname + "/MinWidth_BandDefect", "1").toInt();
+// 	checkparam->i_MaxWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaxWidth_BandDefect", "100").toInt();
+// 	checkparam->i_MinHeight_BandDefect = configIniRead.value("/" + cameraname + "/MinHeight_BandDefect", "3").toInt();
+// 	checkparam->i_MaxHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaxHeight_BandDefect", "100").toInt();
+// 	checkparam->i_MinArea_BandDefect = configIniRead.value("/" + cameraname + "/MinArea_BandDefect", "10").toInt();
+// 	checkparam->i_MaxArea_BandDefect = configIniRead.value("/" + cameraname + "/MaxArea_BandDefect", "9999").toInt();
+// 	checkparam->b_IsOpen = configIniRead.value("/" + cameraname + "/IsOpen", "false").toBool();
+// 	checkparam->i_Channel_InCapsules = configIniRead.value("/" + cameraname + "/Channel_InCapsules", "2").toInt();
+// 	checkparam->d_ER_InCapsules = configIniRead.value("/" + cameraname + "/ER_InCapsules", "7.5").toDouble();
+// 	checkparam->i_MaxGray_InCapsules = configIniRead.value("/" + cameraname + "/MaxGray_InCapsules", "120").toInt();
+// 	checkparam->d_OR_InCapsules = configIniRead.value("/" + cameraname + "/OR_InCapsules", ".5").toDouble();
+// 	checkparam->i_MinArea_InCapsules = configIniRead.value("/" + cameraname + "/MinArea_InCapsules", "2000").toInt();
+// 	checkparam->i_MaxArea_InCapsules = configIniRead.value("/" + cameraname + "/MaxArea_InCapsules", "99999").toInt();
+// 	checkparam->i_LengthPlus_1 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
+// 	checkparam->i_LengthPlus_2 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
+// 	checkparam->i_Channel_Middle = configIniRead.value("/" + cameraname + "/Channel_Middle", "0").toInt();
+// 	checkparam->i_MaskHeight_Middle = configIniRead.value("/" + cameraname + "/MaskHeight_Middle", "7").toInt();
+// 	checkparam->i_MaskWidth_Middle = configIniRead.value("/" + cameraname + "/MaskWidth_Middle", "7").toInt();
+// 	checkparam->i_MinGray_Middle = configIniRead.value("/" + cameraname + "/MinGray_Middle", "45").toInt();
+// 	checkparam->i_MinWidth_Middle = configIniRead.value("/" + cameraname + "/MinWidth_Middle", "5").toInt();
+// 	checkparam->i_MinHeight_Middle = configIniRead.value("/" + cameraname + "/MinHeight_Middle", "3").toInt();
+// 	checkparam->d_CR_Middle = configIniRead.value("/" + cameraname + "/CR_Middle", "2.5").toDouble();
+// 	checkparam->i_MinArea_Middle = configIniRead.value("/" + cameraname + "/MinArea_Middle", "30").toInt();
+// 	checkparam->i_Channel_Plate = configIniRead.value("/" + cameraname + "/Channel_Plate", "0").toInt();
+// 	checkparam->i_MaxGray_Plate = configIniRead.value("/" + cameraname + "/MaxGray_Plate", "190").toInt();
+// 	checkparam->d_CR_Plate = configIniRead.value("/" + cameraname + "/CR_Plate", "1.5").toDouble();
+// 	checkparam->d_OR_Plate_1 = configIniRead.value("/" + cameraname + "/OR_Plate_1", "3.5").toDouble();
+// 	checkparam->i_MinArea_Plate_1 = configIniRead.value("/" + cameraname + "/MinArea_Middle_1", "1500").toInt();
+// 	checkparam->d_OR_Plate_2 = configIniRead.value("/" + cameraname + "/OR_Plate_2", "1.5").toDouble();
+// 	checkparam->i_MinArea_Plate_2 = configIniRead.value("/" + cameraname + "/MinArea_Middle_2", "30").toInt();
+
+
+
+
+
+
 	return false;
 }
-bool CInterCHeck::SaveCheckParam(CHECKPARAM * checkparam)
+bool CInterCHeck::SaveCheckParam()
 {
 	m_bchangedparam = true;
-	m_checkparam = *checkparam;
-	QSettings configIniRead(AppPath + "\\DefaultModel\\CheckParam.ini", QSettings::IniFormat);
-	QString cameraname = checkparam->c_CameraName;
-	QString sss = configIniRead.value("/" + cameraname + "/OperateCore", "NoRead").toString();
-	strcpy(checkparam->c_OperateCore, configIniRead.value("/" + cameraname + "/OperateCore", "NoRead").toString().toStdString().c_str());
-	//–¥»ÎºÏ≤‚≤Œ ˝≈‰÷√
-	//////////////////////////////////////////////////////////////////////////
-	//configIniRead.setValue("/" + cameraname + "/BandArea", checkparam->i_BandArea);
-	//configIniRead.setValue("/" + cameraname + "/BandException1_Area", checkparam->i_BandException1_Area);
-	//configIniRead.setValue("/" + cameraname + "/BandException2_Value", checkparam->i_BandException2_Value);
-	//configIniRead.setValue("/" + cameraname + "/BandException3_Area", checkparam->i_BandException3_Area);
-	//configIniRead.setValue("/" + cameraname + "/InterException_Area", checkparam->i_InterException_Area);
-	//configIniRead.setValue("/" + cameraname + "/InterException_Open", checkparam->d_InterException_Open);
-	//configIniRead.setValue("/" + cameraname + "/PillRadius", checkparam->i_PillRadius);
-	//configIniRead.setValue("/" + cameraname + "/BandException2_Radius", checkparam->i_BandException2_Radius);
-	configIniRead.setValue("/" + cameraname + "/BandChannel", checkparam->i_BandChannel);
-	configIniRead.setValue("/" + cameraname + "/MinGray_Band", checkparam->i_MinGray_Band);
-	configIniRead.setValue("/" + cameraname + "/MinArea_Band", checkparam->i_MinArea_Band);
-	configIniRead.setValue("/" + cameraname + "/CapsulesChannel", checkparam->i_CapsulesChannel);
-	configIniRead.setValue("/" + cameraname + "/MinGray_Capsules", checkparam->i_MinGray_Capsules);
-	configIniRead.setValue("/" + cameraname + "/OR_Capsules", checkparam->d_OR_Capsules);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_Capsules", checkparam->i_MaxArea_Capsules);
-	configIniRead.setValue("/" + cameraname + "/Number_Capsules", checkparam->i_Number_Capsules);
-	configIniRead.setValue("/" + cameraname + "/BatchChannel", checkparam->i_BatchChannel);
-	configIniRead.setValue("/" + cameraname + "/LengthAdd_1", checkparam->i_LengthAdd_1);
-	configIniRead.setValue("/" + cameraname + "/LengthAdd_2", checkparam->i_LengthAdd_2);
-	configIniRead.setValue("/" + cameraname + "/ER_Batch", checkparam->d_ER_Batch);
-	configIniRead.setValue("/" + cameraname + "/MaskHeight_Batch", checkparam->i_MaskHeight_Batch);
-	configIniRead.setValue("/" + cameraname + "/MaskWidth_Batch", checkparam->i_MaskWidth_Batch);
-	configIniRead.setValue("/" + cameraname + "/MinGray_Batch", checkparam->i_MinGray_Batch);
-	configIniRead.setValue("/" + cameraname + "/OR_Batch", checkparam->d_OR_Batch);
-	configIniRead.setValue("/" + cameraname + "/CR_Batch", checkparam->d_CR_Batch);
-	configIniRead.setValue("/" + cameraname + "/MinArea_Batch", checkparam->i_MinArea_Batch);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_Batch", checkparam->i_MaxArea_Batch);
-	//configIniRead.setValue("/" + cameraname + "/MinArea_BatchDefect", checkparam->i_MinArea_BatchDefect);
-	//configIniRead.setValue("/" + cameraname + "/MaxArea_BatchDefect", checkparam->i_MaxArea_BatchDefect);
-	configIniRead.setValue("/" + cameraname + "/Channel_CapsulesDefect", checkparam->i_Channel_CapsulesDefect);
-	configIniRead.setValue("/" + cameraname + "/ER_RegionCapsules", checkparam->d_ER_RegionCapsules);
-	configIniRead.setValue("/" + cameraname + "/MaxGray_CapsulesRed", checkparam->i_MaxGray_CapsulesRed);
-	configIniRead.setValue("/" + cameraname + "/MinArea_CapsulesRed", checkparam->i_MinArea_CapsulesRed);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_CapsulesRed", checkparam->i_MaxArea_CapsulesRed);
-	configIniRead.setValue("/" + cameraname + "/DR_CapsulesRed", checkparam->d_DR_CapsulesRed);
-	configIniRead.setValue("/" + cameraname + "/DR_CapsulesYellow", checkparam->d_DR_CapsulesYellow);
-	configIniRead.setValue("/" + cameraname + "/Channel_RegionRed", checkparam->i_Channel_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/MaskHeight_RegionRed", checkparam->i_MaskHeight_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/MaskWidth_RegionRed", checkparam->i_MaskWidth_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/MinGray_RegionRed", checkparam->i_MinGray_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/MaxGray_RegionRed", checkparam->i_MaxGray_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/CR_RegionRed", checkparam->d_CR_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/OR_RegionRed", checkparam->d_OR_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/MinArea_RegionRed", checkparam->i_MinArea_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_RegionRed", checkparam->i_MaxArea_RegionRed);
-	configIniRead.setValue("/" + cameraname + "/Channel_RedDefect1", checkparam->i_Channel_RedDefect1);
-	configIniRead.setValue("/" + cameraname + "/Channel_RedDefect2", checkparam->i_Channel_RedDefect2);
-	configIniRead.setValue("/" + cameraname + "/MaskHeight_RedDefect", checkparam->i_MaskHeight_RedDefect);
-	configIniRead.setValue("/" + cameraname + "/MaskWidth_RedDefect", checkparam->i_MaskWidth_RedDefect);
-	configIniRead.setValue("/" + cameraname + "/MinGray_RedDefect", checkparam->i_MinGray_RedDefect);
-	configIniRead.setValue("/" + cameraname + "/ER_RedDefect", checkparam->d_ER_RedDefect);
-	configIniRead.setValue("/" + cameraname + "/OR_RedDefect", checkparam->d_OR_RedDefect);
-	configIniRead.setValue("/" + cameraname + "/MinArea_RedDefect", checkparam->i_MinArea_RedDefect);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_RedDefect", checkparam->i_MaxArea_RedDefect);
-	configIniRead.setValue("/" + cameraname + "/MaskHeight_RegionYellow", checkparam->i_MaskHeight_RegionYellow);
-	configIniRead.setValue("/" + cameraname + "/MaskWidth_RegionYellow", checkparam->i_MaskWidth_RegionYellow);
-	configIniRead.setValue("/" + cameraname + "/MinGray_RegionYellow", checkparam->i_MinGray_RegionYellow);
-	configIniRead.setValue("/" + cameraname + "/MaxGray_RegionYellow", checkparam->i_MaxGray_RegionYellow);
-	configIniRead.setValue("/" + cameraname + "/OR_RegionYellow", checkparam->d_OR_RegionYellow);
-	configIniRead.setValue("/" + cameraname + "/MinArea_RegionYellow", checkparam->i_MinArea_RegionYellow);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_RegionYellow", checkparam->i_MaxArea_RegionYellow);
-	configIniRead.setValue("/" + cameraname + "/Channel_BandDefect", checkparam->i_Channel_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/DR_BandDefect", checkparam->d_DR_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/ER_BandDefect", checkparam->d_ER_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MaskHeight_BandDefect", checkparam->i_MaskHeight_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MaskWidth_BandDefect", checkparam->i_MaskWidth_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MinGray_BandDefect", checkparam->i_MinGray_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/CR_BandDefect", checkparam->d_CR_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MinWidth_BandDefect", checkparam->i_MinWidth_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MaxWidth_BandDefect", checkparam->i_MaxWidth_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MinHeight_BandDefect", checkparam->i_MinHeight_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MaxHeight_BandDefect", checkparam->i_MaxHeight_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MinArea_BandDefect", checkparam->i_MinArea_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_BandDefect", checkparam->i_MaxArea_BandDefect);
-	configIniRead.setValue("/" + cameraname + "/IsOpen", checkparam->b_IsOpen);
-	configIniRead.setValue("/" + cameraname + "/Channel_InCapsules", checkparam->i_Channel_InCapsules);
-	configIniRead.setValue("/" + cameraname + "/ER_InCapsules", checkparam->d_ER_InCapsules);
-	configIniRead.setValue("/" + cameraname + "/MaxGray_InCapsules", checkparam->i_MaxGray_InCapsules);
-	configIniRead.setValue("/" + cameraname + "/OR_InCapsules", checkparam->d_OR_InCapsules);
-	configIniRead.setValue("/" + cameraname + "/MinArea_InCapsules", checkparam->i_MinArea_InCapsules);
-	configIniRead.setValue("/" + cameraname + "/MaxArea_InCapsules", checkparam->i_MaxArea_InCapsules);
-	configIniRead.setValue("/" + cameraname + "/LengthPlus_1", checkparam->i_LengthPlus_1);
-	configIniRead.setValue("/" + cameraname + "/LengthPlus_2", checkparam->i_LengthPlus_2);
-	configIniRead.setValue("/" + cameraname + "/Channel_Middle", checkparam->i_Channel_Middle);
-	configIniRead.setValue("/" + cameraname + "/MaskHeight_Middle", checkparam->i_MaskHeight_Middle);
-	configIniRead.setValue("/" + cameraname + "/MaskWidth_Middle", checkparam->i_MaskWidth_Middle);
-	configIniRead.setValue("/" + cameraname + "/MinGray_Middle", checkparam->i_MinGray_Middle);
-	configIniRead.setValue("/" + cameraname + "/MinWidth_Middle", checkparam->i_MinWidth_Middle);
-	configIniRead.setValue("/" + cameraname + "/MinHeight_Middle", checkparam->i_MinHeight_Middle);
-	configIniRead.setValue("/" + cameraname + "/CR_Middle", checkparam->d_CR_Middle);
-	configIniRead.setValue("/" + cameraname + "/MinArea_Middle", checkparam->i_MinArea_Middle);
-	configIniRead.setValue("/" + cameraname + "/Channel_Plate", checkparam->i_Channel_Plate);
-	configIniRead.setValue("/" + cameraname + "/MaxGray_Plate", checkparam->i_MaxGray_Plate);
-	configIniRead.setValue("/" + cameraname + "/CR_Plate", checkparam->d_CR_Plate);
-	configIniRead.setValue("/" + cameraname + "/OR_Plate_1", checkparam->d_OR_Plate_1);
-	configIniRead.setValue("/" + cameraname + "/MinArea_Middle_1", checkparam->i_MinArea_Plate_1);
-	configIniRead.setValue("/" + cameraname + "/OR_Plate_2", checkparam->d_OR_Plate_2);
-	configIniRead.setValue("/" + cameraname + "/MinArea_Middle_2", checkparam->i_MinArea_Plate_2);
-	configIniRead.setValue("/" + cameraname + "/CheckCapsule", checkparam->b_CheckCapsule);
-	configIniRead.setValue("/" + cameraname + "/CheckPill", checkparam->b_CheckPill);
-
-	//////////////////////////////////////////////////////////////////////////
 	return false;
 }
 CInterCHeck::CInterCHeck(bool b_test)
@@ -295,7 +200,7 @@ int CInterCHeck::ShowParamDlg(QWidget * parent, bool b_showornot)
 	setdlg->SetParam(m_checkparam);
 	setdlg->SetModelMat(LastImage);
 	m_bchangedparam = false;
-	QObject::connect(setdlg, SIGNAL(ShouldSaveParam(CHECKPARAM*)), this, SLOT(SaveCheckParam(CHECKPARAM*)));
+	QObject::connect(setdlg, SIGNAL(ShouldSaveParam()), this, SLOT(SaveCheckParam()));
 	setdlg->exec();
 	delete setdlg;
 	setdlg = nullptr;
