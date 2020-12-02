@@ -21,7 +21,8 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 		_param = YAML::LoadFile(str->toStdString().c_str());
 	}
 	checkparam->i_BandChannel = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板缺陷").toStdString()][QString::fromLocal8Bit("药板通道").toStdString()]["value"].as<int>();
-	checkparam->i_MinGray_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板缺陷").toStdString()][QString::fromLocal8Bit("药板最小阈值").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板缺陷").toStdString()][QString::fromLocal8Bit("药板最小灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板缺陷").toStdString()][QString::fromLocal8Bit("药板最小面积").toStdString()]["value"].as<int>();
 
 // 	//读取检测参数配置
 // 	//////////////////////////////////////////////////////////////////////////
@@ -751,7 +752,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "当前泡罩板面积为：" + hv_AreaBand);
 			return 1;  
 		}
-
 		smallest_rectangle2(ho_RegionBand, &hv_Row17, &hv_Column17, &hv_Phi5, &hv_Length15,
 			&hv_Length25);
 		gen_rectangle2(&ho_Rectangle11, hv_Row17, hv_Column17, hv_Phi5, hv_Length15 - 10,
@@ -777,10 +777,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			return 1;
 			// stop(); only in hdevelop
 		}
-
-
 		//*******铝模
-		if (0 != m_checkparam.b_CheckPill)
+		if (0 != m_checkparam.b_CheckPill	)
 		{
 			threshold(ho_H, &ho_Region26, 230, 255);
 			opening_circle(ho_Region26, &ho_RegionOpening24, 1.5);
