@@ -526,27 +526,9 @@ void QtGuiSetting::onSaveParam()
 	{
 		if (QMessageBox::Save == QMessageBox::question(this, QString::fromLocal8Bit("参数已修改"), QString::fromLocal8Bit("是否保存？"), QMessageBox::Save, QMessageBox::No))
 		{
-			std::ofstream fout(QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml").toStdString());
-
-			fout << m_node;
-
-			fout.close();
-
-			try
-			{
-			}
-			catch (YAML::ParserException e)
-			{
-				QMessageBox::warning(nullptr, "", e.what());
-			}
-			catch (YAML::RepresentationException e)
-			{
-				QMessageBox::warning(nullptr, "", e.what());
-			}
-			catch (YAML::Exception e)
-			{
-				QMessageBox::warning(nullptr, "", e.what());
-			}
+			QFile::remove(QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml"));
+			QFile::copy(QString(qApp->applicationDirPath() + "/Temp.yaml"), QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml"));
+			emit ShouldSaveParam();
 			m_bChanged = false;
 			ui.pB_Save->setEnabled(false);
 		}
@@ -949,33 +931,7 @@ void QtGuiSetting::SetModelMat(Mat tempgray)
 void QtGuiSetting::closeEvent(QCloseEvent *)
 {
 	close_window(HTuple(m_WND));
-	if (m_bChanged)
-	{
-		if (QMessageBox::Save == QMessageBox::question(this, QString::fromLocal8Bit("参数已修改"), QString::fromLocal8Bit("是否保存？"), QMessageBox::Save, QMessageBox::No))
-		{
-			emit ShouldSaveParam();
-			try
-			{
-			std::ofstream fout(QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml").toStdString());
-			fout << m_node;
-			fout.close();
-			}
-			catch (YAML::ParserException e)
-			{
-				QMessageBox::warning(nullptr, "", e.what());
-			}
-			catch (YAML::RepresentationException e)
-			{
-				QMessageBox::warning(nullptr, "", e.what());
-			}
-			catch (YAML::Exception e)
-			{
-				QMessageBox::warning(nullptr, "", e.what());
-			}
-		}
-		m_bChanged = false;
-		ui.pB_Save->setEnabled(false);
-	}
+	onSaveParam();
 }
 void QtGuiSetting::onBtnGetImage()
 {
