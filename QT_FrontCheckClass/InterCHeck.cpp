@@ -14,118 +14,191 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 		_param = YAML::LoadFile(QString(AppPath + "/DefaultModel/CheckParam.yaml").toStdString());
 		QSettings configIniRead(AppPath + "\\DefaultModel\\CheckParam.ini", QSettings::IniFormat);
 		configIniRead.setIniCodec("UTF-8");
- 		QString cameraname = checkparam->c_CameraName;
+		QString cameraname = checkparam->c_CameraName;
 	}
 	else
 	{
 		_param = YAML::LoadFile(str->toStdString().c_str());
 	}
-	checkparam->i_BandChannel = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板缺陷").toStdString()][QString::fromLocal8Bit("药板通道").toStdString()]["value"].as<int>();
-	checkparam->i_MinGray_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板缺陷").toStdString()][QString::fromLocal8Bit("药板最小灰度").toStdString()]["value"].as<int>();
-	checkparam->i_MinArea_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板缺陷").toStdString()][QString::fromLocal8Bit("药板最小面积").toStdString()]["value"].as<int>();
 
-// 	//读取检测参数配置
-// 	//////////////////////////////////////////////////////////////////////////
-// 	//checkparam->i_BandArea = configIniRead.value("/" + cameraname + "/BandArea", "865000").toInt();
-// 	//checkparam->i_BandException1_Area = configIniRead.value("/" + cameraname + "/BandException1_Area", "300").toInt();
-// 	//checkparam->i_BandException2_Value = configIniRead.value("/" + cameraname + "/BandException2_Value", "110").toInt();
-// 	//checkparam->i_BandException3_Area = configIniRead.value("/" + cameraname + "/BandException3_Area", "50").toInt();
-// 	//checkparam->i_InterException_Area = configIniRead.value("/" + cameraname + "/InterException_Area", "50").toInt();
-// 	//checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1.5").toDouble();
-// 	//checkparam->i_PillRadius = configIniRead.value("/" + cameraname + "/PillRadius", "85").toInt();
-// 	//checkparam->i_BandException2_Radius = configIniRead.value("/" + cameraname + "/BandException2_Radius", "0").toInt();
-// 	
-// 	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "0").toInt();
-// 	checkparam->i_MinGray_Band = configIniRead.value("/" + cameraname + "/MinGray_Band", "100").toInt();
-// 	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "680000").toInt();
-// 	checkparam->i_CapsulesChannel = configIniRead.value("/" + cameraname + "/CapsulesChannel", "4").toInt();
-// 	checkparam->i_MinGray_Capsules = configIniRead.value("/" + cameraname + "/MinGray_Capsules", "70").toInt();
-// 	checkparam->d_OR_Capsules = configIniRead.value("/" + cameraname + "/OR_Capsules", "2.5").toDouble();
-// 	checkparam->i_MinArea_Capsules = configIniRead.value("/" + cameraname + "/MinArea_Capsules", "10000").toInt();
-// 	checkparam->i_MaxArea_Capsules = configIniRead.value("/" + cameraname + "/MaxArea_Capsules", "99999").toInt();
-// 	checkparam->i_Number_Capsules = configIniRead.value("/" + cameraname + "/Number_Capsules", "10").toInt();
-// 	checkparam->i_BatchChannel = configIniRead.value("/" + cameraname + "/BatchChannel", "0").toInt();
-// 	checkparam->i_LengthAdd_1 = configIniRead.value("/" + cameraname + "/LengthAdd_1", "30").toInt();
-// 	checkparam->i_LengthAdd_2 = configIniRead.value("/" + cameraname + "/LengthAdd_2", "1000").toInt();
-// 	checkparam->d_ER_Batch = configIniRead.value("/" + cameraname + "/ER_Batch", "10").toDouble();
-// 	checkparam->i_MaskHeight_Batch = configIniRead.value("/" + cameraname + "/MaksHeight_Batch", "11").toInt();
-// 	checkparam->i_MaskWidth_Batch = configIniRead.value("/" + cameraname + "/MaksWidth_Batch", "11").toInt();
-// 	checkparam->i_MinGray_Batch = configIniRead.value("/" + cameraname + "/MinGray_Batch", "15").toInt();
-// 	checkparam->d_OR_Batch = configIniRead.value("/" + cameraname + "/OR_Batch", "1").toDouble();
-// 	checkparam->d_CR_Batch = configIniRead.value("/" + cameraname + "/CR_Batch", "5").toDouble();
-// 	checkparam->i_MinArea_Batch = configIniRead.value("/" + cameraname + "/MinArea_Batch", "150").toInt();
-// 	checkparam->i_MaxArea_Batch = configIniRead.value("/" + cameraname + "/MaxArea_Batch", "99999").toInt();
-// 	//checkparam->i_MinArea_BatchDefect = configIniRead.value("/" + cameraname + "/MinArea_BatchDefect", "50").toInt();
-// 	//checkparam->i_MaxArea_BatchDefect = configIniRead.value("/" + cameraname + "/MaxArea_BatchDefect", "99999").toInt();
-// 	checkparam->i_Channel_CapsulesDefect = configIniRead.value("/" + cameraname + "/Channel_CapsulesDefect", "1").toInt();
-// 	checkparam->d_ER_RegionCapsules = configIniRead.value("/" + cameraname + "/ER_RegionCapsules", "12.5").toDouble();
-// 	checkparam->i_MaxGray_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxGray_CapsulesRed", "128").toInt();
-// 	checkparam->i_MinArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MinArea_CapsulesRed", "1500").toInt();
-// 	checkparam->i_MaxArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxArea_CapsulesRed", "99999").toInt();
-// 	checkparam->d_DR_CapsulesRed = configIniRead.value("/" + cameraname + "/DR_CapsulesRed", "3").toDouble();
-// 	checkparam->d_DR_CapsulesYellow = configIniRead.value("/" + cameraname + "/DR_CapsulesYellow", "3").toDouble();
-// 	checkparam->i_Channel_RegionRed = configIniRead.value("/" + cameraname + "/Channel_RegionRed", "4").toInt();
-// 	checkparam->i_MaskHeight_RegionRed = configIniRead.value("/" + cameraname + "/MaksHeight_RegionRed", "11").toInt();
-// 	checkparam->i_MaskWidth_RegionRed = configIniRead.value("/" + cameraname + "/MaksWidth_RegionRed", "11").toInt();
-// 	checkparam->i_MinGray_RegionRed = configIniRead.value("/" + cameraname + "/MinGray_RegionRed", "60").toInt();
-// 	checkparam->i_MaxGray_RegionRed = configIniRead.value("/" + cameraname + "/MaxGray_RegionRed", "100").toInt();
-// 	checkparam->d_CR_RegionRed = configIniRead.value("/" + cameraname + "/CR_RegionRed", "1").toDouble();
-// 	checkparam->d_OR_RegionRed = configIniRead.value("/" + cameraname + "/OR_RegionRed", "1").toDouble();
-// 	checkparam->i_MinArea_RegionRed = configIniRead.value("/" + cameraname + "/MinArea_RegionRed", "20").toInt();
-// 	checkparam->i_MaxArea_RegionRed = configIniRead.value("/" + cameraname + "/MaxArea_RegionRed", "2000").toInt();
-// 	checkparam->i_Channel_RedDefect1 = configIniRead.value("/" + cameraname + "/Channel_RedDefect1", "5").toInt();
-// 	checkparam->i_Channel_RedDefect2 = configIniRead.value("/" + cameraname + "/Channel_RedDefect2", "4").toInt();
-// 	checkparam->i_MaskHeight_RedDefect = configIniRead.value("/" + cameraname + "/MaksHeight_RedDefect", "5").toInt();
-// 	checkparam->i_MaskWidth_RedDefect = configIniRead.value("/" + cameraname + "/MaksWidth_RedDefect", "5").toInt();
-// 	checkparam->i_MinGray_RedDefect = configIniRead.value("/" + cameraname + "/MinGray_RedDefect", "35").toInt();
-// 	checkparam->d_ER_RedDefect = configIniRead.value("/" + cameraname + "/ER_RedDefect", "3.5").toDouble();
-// 	checkparam->d_OR_RedDefect = configIniRead.value("/" + cameraname + "/OR_RedDefect", "1.5").toDouble();
-// 	checkparam->i_MinArea_RedDefect = configIniRead.value("/" + cameraname + "/MinArea_RedDefect", "20").toInt();
-// 	checkparam->i_MaxArea_RedDefect = configIniRead.value("/" + cameraname + "/MaxArea_RedDefect", "99999").toInt();
-// 	checkparam->i_MaskHeight_RegionYellow = configIniRead.value("/" + cameraname + "/MaskHeight_RegionYellow", "5").toInt();
-// 	checkparam->i_MaskWidth_RegionYellow = configIniRead.value("/" + cameraname + "/MaskWidth_RegionYellow", "5").toInt();
-// 	checkparam->i_MinGray_RegionYellow = configIniRead.value("/" + cameraname + "/MinGray_RegionYellow", "20").toInt();
-// 	checkparam->i_MaxGray_RegionYellow = configIniRead.value("/" + cameraname + "/MaxGray_RegionYellow", "185").toInt();
-// 	checkparam->d_OR_RegionYellow = configIniRead.value("/" + cameraname + "/OR_RegionYellow", "1.5").toDouble();
-// 	checkparam->i_MinArea_RegionYellow = configIniRead.value("/" + cameraname + "/MinArea_RegionYellow", "20").toInt();
-// 	checkparam->i_MaxArea_RegionYellow = configIniRead.value("/" + cameraname + "/MaxArea_RegionYellow", "99999").toInt();
-// 	checkparam->i_Channel_BandDefect = configIniRead.value("/" + cameraname + "/Channel_BandDefect", "2").toInt();
-// 	checkparam->d_DR_BandDefect = configIniRead.value("/" + cameraname + "/DR_BandDefect", "3").toDouble();
-// 	checkparam->d_ER_BandDefect = configIniRead.value("/" + cameraname + "/ER_BandDefect", "5").toDouble();
-// 	checkparam->i_MaskHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaskHeight_BandDefect", "3").toInt();
-// 	checkparam->i_MaskWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaskWidth_BandDefect", "3").toInt();
-// 	checkparam->i_MinGray_BandDefect = configIniRead.value("/" + cameraname + "/MinGray_BandDefect", "45").toInt();
-// 	checkparam->d_CR_BandDefect = configIniRead.value("/" + cameraname + "/CR_BandDefect", "1.5").toDouble();
-// 	checkparam->i_MinWidth_BandDefect = configIniRead.value("/" + cameraname + "/MinWidth_BandDefect", "1").toInt();
-// 	checkparam->i_MaxWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaxWidth_BandDefect", "100").toInt();
-// 	checkparam->i_MinHeight_BandDefect = configIniRead.value("/" + cameraname + "/MinHeight_BandDefect", "3").toInt();
-// 	checkparam->i_MaxHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaxHeight_BandDefect", "100").toInt();
-// 	checkparam->i_MinArea_BandDefect = configIniRead.value("/" + cameraname + "/MinArea_BandDefect", "10").toInt();
-// 	checkparam->i_MaxArea_BandDefect = configIniRead.value("/" + cameraname + "/MaxArea_BandDefect", "9999").toInt();
-// 	checkparam->b_IsOpen = configIniRead.value("/" + cameraname + "/IsOpen", "false").toBool();
-// 	checkparam->i_Channel_InCapsules = configIniRead.value("/" + cameraname + "/Channel_InCapsules", "2").toInt();
-// 	checkparam->d_ER_InCapsules = configIniRead.value("/" + cameraname + "/ER_InCapsules", "7.5").toDouble();
-// 	checkparam->i_MaxGray_InCapsules = configIniRead.value("/" + cameraname + "/MaxGray_InCapsules", "120").toInt();
-// 	checkparam->d_OR_InCapsules = configIniRead.value("/" + cameraname + "/OR_InCapsules", ".5").toDouble();
-// 	checkparam->i_MinArea_InCapsules = configIniRead.value("/" + cameraname + "/MinArea_InCapsules", "2000").toInt();
-// 	checkparam->i_MaxArea_InCapsules = configIniRead.value("/" + cameraname + "/MaxArea_InCapsules", "99999").toInt();
-// 	checkparam->i_LengthPlus_1 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
-// 	checkparam->i_LengthPlus_2 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
-// 	checkparam->i_Channel_Middle = configIniRead.value("/" + cameraname + "/Channel_Middle", "0").toInt();
-// 	checkparam->i_MaskHeight_Middle = configIniRead.value("/" + cameraname + "/MaskHeight_Middle", "7").toInt();
-// 	checkparam->i_MaskWidth_Middle = configIniRead.value("/" + cameraname + "/MaskWidth_Middle", "7").toInt();
-// 	checkparam->i_MinGray_Middle = configIniRead.value("/" + cameraname + "/MinGray_Middle", "45").toInt();
-// 	checkparam->i_MinWidth_Middle = configIniRead.value("/" + cameraname + "/MinWidth_Middle", "5").toInt();
-// 	checkparam->i_MinHeight_Middle = configIniRead.value("/" + cameraname + "/MinHeight_Middle", "3").toInt();
-// 	checkparam->d_CR_Middle = configIniRead.value("/" + cameraname + "/CR_Middle", "2.5").toDouble();
-// 	checkparam->i_MinArea_Middle = configIniRead.value("/" + cameraname + "/MinArea_Middle", "30").toInt();
-// 	checkparam->i_Channel_Plate = configIniRead.value("/" + cameraname + "/Channel_Plate", "0").toInt();
-// 	checkparam->i_MaxGray_Plate = configIniRead.value("/" + cameraname + "/MaxGray_Plate", "190").toInt();
-// 	checkparam->d_CR_Plate = configIniRead.value("/" + cameraname + "/CR_Plate", "1.5").toDouble();
-// 	checkparam->d_OR_Plate_1 = configIniRead.value("/" + cameraname + "/OR_Plate_1", "3.5").toDouble();
-// 	checkparam->i_MinArea_Plate_1 = configIniRead.value("/" + cameraname + "/MinArea_Middle_1", "1500").toInt();
-// 	checkparam->d_OR_Plate_2 = configIniRead.value("/" + cameraname + "/OR_Plate_2", "1.5").toDouble();
-// 	checkparam->i_MinArea_Plate_2 = configIniRead.value("/" + cameraname + "/MinArea_Middle_2", "30").toInt();
+	if (!_param[checkparam->c_CameraName].IsDefined())
+	{
+		return false;
+	}
+	checkparam->i_Channel_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板通道").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板最小灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_Band = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_PlusLength_Rectangle = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("最小外接矩形增量").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_BandDefect = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板缺陷最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_Channel_Al = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_铝模缺陷").toStdString()][QString::fromLocal8Bit("铝模通道").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Al = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_铝模缺陷").toStdString()][QString::fromLocal8Bit("铝模最小灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_Al = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_铝模缺陷").toStdString()][QString::fromLocal8Bit("铝模缺陷最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_Channel1_NumPill = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("片剂数量通道1").toStdString()]["value"].as<int>();
+	checkparam->i_Channel2_NumPill = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("片剂数量通道2").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_NumPill = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_NumPill = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_Number_NumPill = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("片剂个数").toStdString()]["value"].as<int>();
+	checkparam->i_PlusLength1_Batch = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小外接矩形增量1").toStdString()]["value"].as<int>();
+	checkparam->i_PlusLength2_Batch = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小外接矩形增量2").toStdString()]["value"].as<int>();
+	checkparam->i_Channel_Batch = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("批号通道").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Batch = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<int>();
+	checkparam->d_Opening_Batch = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("开运算参数").toStdString()]["value"].as<double>();
+	checkparam->d_Closing_Batch = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("闭运算参数").toStdString()]["value"].as<double>();
+	checkparam->i_MinArea_Batch = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_Channel_Shadow = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("阴影通道").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Shadow = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<int>();
+	checkparam->i_Width_Shadow = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("筛选最小宽度").toStdString()]["value"].as<int>();
+	checkparam->i_Length_Shadow= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("筛选最小长度").toStdString()]["value"].as<int>();
+	checkparam->d_Closing_Shadow= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("闭运算参数").toStdString()]["value"].as<double>();
+	checkparam->d_Opening_Shadow= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("开运算参数").toStdString()]["value"].as<double>();
+	checkparam->i_Radius_Shadow= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("最小内接圆半径").toStdString()]["value"].as<int>();
+	checkparam->i_Channel_Crack= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板裂纹/毛发").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<int>();
+	checkparam->i_Length_Crack= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板裂纹/毛发").toStdString()][QString::fromLocal8Bit("筛选最小长度").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_Crack= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板裂纹/毛发").toStdString()][QString::fromLocal8Bit("筛选最大圆度").toStdString()]["value"].as<double>();
+	checkparam->i_MinArea_BlackSpot= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选黑点最小面积").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_BlackSpot= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选黑点最小圆度").toStdString()]["value"].as<double>();
+	checkparam->i_Channel_Dirty= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Dirty= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_Dirty= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选脏污最小面积").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_Dirty = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选脏污最小圆度").toStdString()]["value"].as<double>();
+	checkparam->i_Channel_Fissure= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<int>();
+	checkparam->i_MaxGray_Fissure= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("最大灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_Fissure= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("筛选最小面积").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_Fissure= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("筛选最大圆度").toStdString()]["value"].as<double>();
+	checkparam->i_Channel_Iner= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<int>();
+	checkparam->i_MinGray_Iner= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<int>();
+	checkparam->d_Closing_Iner= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("闭运算参数").toStdString()]["value"].as<double>();
+	checkparam->d_Opening_Iner = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("开运算参数").toStdString()]["value"].as<double>();
+	checkparam->i_MinArea_Half= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_半片").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_RectMove1_Half = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_半片").toStdString()][QString::fromLocal8Bit("仿射矩形增量1").toStdString()]["value"].as<int>();
+	checkparam->i_RectMove2_Half = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_半片").toStdString()][QString::fromLocal8Bit("仿射矩形增量2").toStdString()]["value"].as<int>();
+	checkparam->d_Erosion_Break= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("圆腐蚀参数").toStdString()]["value"].as<double>();
+	checkparam->i_Channel_Break= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<int>();
+	checkparam->i_Length_Break= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("筛选裂片最小长度").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_Break = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("筛选裂片最大圆度").toStdString()]["value"].as<double>();
+	checkparam->i_RectMove_Lack = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("仿射矩形增量").toStdString()]["value"].as<int>();
+	checkparam->i_Channel1_Lack = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<int>();
+	checkparam->i_Channel2_Lack = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<int>();
+	checkparam->i_MaxGray_Lack= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("最大灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea1_Lack= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("筛选圆最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_RadiusMove_Lack = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("最小内接圆半径增量").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea2_Lack= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("筛选缺陷最小面积").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_Lack= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("筛选缺陷最大圆度").toStdString()]["value"].as<double>();
+	checkparam->i_MinArea_PillDirty = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂脏污/黑点").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_PillDirty= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_片剂脏污/黑点").toStdString()][QString::fromLocal8Bit("最小圆度").toStdString()]["value"].as<double>();
+	checkparam->i_Channel1_ShadowDefect= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<int>();
+	checkparam->i_Channel2_ShadowDefect = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<int>();
+	checkparam->i_MaxGray_ShadowDefect= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("最大灰度").toStdString()]["value"].as<int>();
+	checkparam->i_MinArea_ShadowDefect= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<int>();
+	checkparam->i_Channel1_Folds = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<int>();
+	checkparam->i_Channel2_Folds = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<int>();
+	checkparam->i_Length_Folds= _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("最小长度").toStdString()]["value"].as<int>();
+	checkparam->d_Circularity_Folds = _param[checkparam->c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("最大圆度").toStdString()]["value"].as<double>();
+
+
+
+	// 	//读取检测参数配置
+	// 	//////////////////////////////////////////////////////////////////////////
+	// 	//checkparam->i_BandArea = configIniRead.value("/" + cameraname + "/BandArea", "865000").toInt();
+	// 	//checkparam->i_BandException1_Area = configIniRead.value("/" + cameraname + "/BandException1_Area", "300").toInt();
+	// 	//checkparam->i_BandException2_Value = configIniRead.value("/" + cameraname + "/BandException2_Value", "110").toInt();
+	// 	//checkparam->i_BandException3_Area = configIniRead.value("/" + cameraname + "/BandException3_Area", "50").toInt();
+	// 	//checkparam->i_InterException_Area = configIniRead.value("/" + cameraname + "/InterException_Area", "50").toInt();
+	// 	//checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1.5").toDouble();
+	// 	//checkparam->i_PillRadius = configIniRead.value("/" + cameraname + "/PillRadius", "85").toInt();
+	// 	//checkparam->i_BandException2_Radius = configIniRead.value("/" + cameraname + "/BandException2_Radius", "0").toInt();
+	// 	
+	// 	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "0").toInt();
+	// 	checkparam->i_MinGray_Band = configIniRead.value("/" + cameraname + "/MinGray_Band", "100").toInt();
+	// 	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "680000").toInt();
+	// 	checkparam->i_CapsulesChannel = configIniRead.value("/" + cameraname + "/CapsulesChannel", "4").toInt();
+	// 	checkparam->i_MinGray_Capsules = configIniRead.value("/" + cameraname + "/MinGray_Capsules", "70").toInt();
+	// 	checkparam->d_OR_Capsules = configIniRead.value("/" + cameraname + "/OR_Capsules", "2.5").toDouble();
+	// 	checkparam->i_MinArea_Capsules = configIniRead.value("/" + cameraname + "/MinArea_Capsules", "10000").toInt();
+	// 	checkparam->i_MaxArea_Capsules = configIniRead.value("/" + cameraname + "/MaxArea_Capsules", "99999").toInt();
+	// 	checkparam->i_Number_Capsules = configIniRead.value("/" + cameraname + "/Number_Capsules", "10").toInt();
+	// 	checkparam->i_BatchChannel = configIniRead.value("/" + cameraname + "/BatchChannel", "0").toInt();
+	// 	checkparam->i_LengthAdd_1 = configIniRead.value("/" + cameraname + "/LengthAdd_1", "30").toInt();
+	// 	checkparam->i_LengthAdd_2 = configIniRead.value("/" + cameraname + "/LengthAdd_2", "1000").toInt();
+	// 	checkparam->d_ER_Batch = configIniRead.value("/" + cameraname + "/ER_Batch", "10").toDouble();
+	// 	checkparam->i_MaskHeight_Batch = configIniRead.value("/" + cameraname + "/MaksHeight_Batch", "11").toInt();
+	// 	checkparam->i_MaskWidth_Batch = configIniRead.value("/" + cameraname + "/MaksWidth_Batch", "11").toInt();
+	// 	checkparam->i_MinGray_Batch = configIniRead.value("/" + cameraname + "/MinGray_Batch", "15").toInt();
+	// 	checkparam->d_OR_Batch = configIniRead.value("/" + cameraname + "/OR_Batch", "1").toDouble();
+	// 	checkparam->d_CR_Batch = configIniRead.value("/" + cameraname + "/CR_Batch", "5").toDouble();
+	// 	checkparam->i_MinArea_Batch = configIniRead.value("/" + cameraname + "/MinArea_Batch", "150").toInt();
+	// 	checkparam->i_MaxArea_Batch = configIniRead.value("/" + cameraname + "/MaxArea_Batch", "99999").toInt();
+	// 	//checkparam->i_MinArea_BatchDefect = configIniRead.value("/" + cameraname + "/MinArea_BatchDefect", "50").toInt();
+	// 	//checkparam->i_MaxArea_BatchDefect = configIniRead.value("/" + cameraname + "/MaxArea_BatchDefect", "99999").toInt();
+	// 	checkparam->i_Channel_CapsulesDefect = configIniRead.value("/" + cameraname + "/Channel_CapsulesDefect", "1").toInt();
+	// 	checkparam->d_ER_RegionCapsules = configIniRead.value("/" + cameraname + "/ER_RegionCapsules", "12.5").toDouble();
+	// 	checkparam->i_MaxGray_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxGray_CapsulesRed", "128").toInt();
+	// 	checkparam->i_MinArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MinArea_CapsulesRed", "1500").toInt();
+	// 	checkparam->i_MaxArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxArea_CapsulesRed", "99999").toInt();
+	// 	checkparam->d_DR_CapsulesRed = configIniRead.value("/" + cameraname + "/DR_CapsulesRed", "3").toDouble();
+	// 	checkparam->d_DR_CapsulesYellow = configIniRead.value("/" + cameraname + "/DR_CapsulesYellow", "3").toDouble();
+	// 	checkparam->i_Channel_RegionRed = configIniRead.value("/" + cameraname + "/Channel_RegionRed", "4").toInt();
+	// 	checkparam->i_MaskHeight_RegionRed = configIniRead.value("/" + cameraname + "/MaksHeight_RegionRed", "11").toInt();
+	// 	checkparam->i_MaskWidth_RegionRed = configIniRead.value("/" + cameraname + "/MaksWidth_RegionRed", "11").toInt();
+	// 	checkparam->i_MinGray_RegionRed = configIniRead.value("/" + cameraname + "/MinGray_RegionRed", "60").toInt();
+	// 	checkparam->i_MaxGray_RegionRed = configIniRead.value("/" + cameraname + "/MaxGray_RegionRed", "100").toInt();
+	// 	checkparam->d_CR_RegionRed = configIniRead.value("/" + cameraname + "/CR_RegionRed", "1").toDouble();
+	// 	checkparam->d_OR_RegionRed = configIniRead.value("/" + cameraname + "/OR_RegionRed", "1").toDouble();
+	// 	checkparam->i_MinArea_RegionRed = configIniRead.value("/" + cameraname + "/MinArea_RegionRed", "20").toInt();
+	// 	checkparam->i_MaxArea_RegionRed = configIniRead.value("/" + cameraname + "/MaxArea_RegionRed", "2000").toInt();
+	// 	checkparam->i_Channel_RedDefect1 = configIniRead.value("/" + cameraname + "/Channel_RedDefect1", "5").toInt();
+	// 	checkparam->i_Channel_RedDefect2 = configIniRead.value("/" + cameraname + "/Channel_RedDefect2", "4").toInt();
+	// 	checkparam->i_MaskHeight_RedDefect = configIniRead.value("/" + cameraname + "/MaksHeight_RedDefect", "5").toInt();
+	// 	checkparam->i_MaskWidth_RedDefect = configIniRead.value("/" + cameraname + "/MaksWidth_RedDefect", "5").toInt();
+	// 	checkparam->i_MinGray_RedDefect = configIniRead.value("/" + cameraname + "/MinGray_RedDefect", "35").toInt();
+	// 	checkparam->d_ER_RedDefect = configIniRead.value("/" + cameraname + "/ER_RedDefect", "3.5").toDouble();
+	// 	checkparam->d_OR_RedDefect = configIniRead.value("/" + cameraname + "/OR_RedDefect", "1.5").toDouble();
+	// 	checkparam->i_MinArea_RedDefect = configIniRead.value("/" + cameraname + "/MinArea_RedDefect", "20").toInt();
+	// 	checkparam->i_MaxArea_RedDefect = configIniRead.value("/" + cameraname + "/MaxArea_RedDefect", "99999").toInt();
+	// 	checkparam->i_MaskHeight_RegionYellow = configIniRead.value("/" + cameraname + "/MaskHeight_RegionYellow", "5").toInt();
+	// 	checkparam->i_MaskWidth_RegionYellow = configIniRead.value("/" + cameraname + "/MaskWidth_RegionYellow", "5").toInt();
+	// 	checkparam->i_MinGray_RegionYellow = configIniRead.value("/" + cameraname + "/MinGray_RegionYellow", "20").toInt();
+	// 	checkparam->i_MaxGray_RegionYellow = configIniRead.value("/" + cameraname + "/MaxGray_RegionYellow", "185").toInt();
+	// 	checkparam->d_OR_RegionYellow = configIniRead.value("/" + cameraname + "/OR_RegionYellow", "1.5").toDouble();
+	// 	checkparam->i_MinArea_RegionYellow = configIniRead.value("/" + cameraname + "/MinArea_RegionYellow", "20").toInt();
+	// 	checkparam->i_MaxArea_RegionYellow = configIniRead.value("/" + cameraname + "/MaxArea_RegionYellow", "99999").toInt();
+	// 	checkparam->i_Channel_BandDefect = configIniRead.value("/" + cameraname + "/Channel_BandDefect", "2").toInt();
+	// 	checkparam->d_DR_BandDefect = configIniRead.value("/" + cameraname + "/DR_BandDefect", "3").toDouble();
+	// 	checkparam->d_ER_BandDefect = configIniRead.value("/" + cameraname + "/ER_BandDefect", "5").toDouble();
+	// 	checkparam->i_MaskHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaskHeight_BandDefect", "3").toInt();
+	// 	checkparam->i_MaskWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaskWidth_BandDefect", "3").toInt();
+	// 	checkparam->i_MinGray_BandDefect = configIniRead.value("/" + cameraname + "/MinGray_BandDefect", "45").toInt();
+	// 	checkparam->d_CR_BandDefect = configIniRead.value("/" + cameraname + "/CR_BandDefect", "1.5").toDouble();
+	// 	checkparam->i_MinWidth_BandDefect = configIniRead.value("/" + cameraname + "/MinWidth_BandDefect", "1").toInt();
+	// 	checkparam->i_MaxWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaxWidth_BandDefect", "100").toInt();
+	// 	checkparam->i_MinHeight_BandDefect = configIniRead.value("/" + cameraname + "/MinHeight_BandDefect", "3").toInt();
+	// 	checkparam->i_MaxHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaxHeight_BandDefect", "100").toInt();
+	// 	checkparam->i_MinArea_BandDefect = configIniRead.value("/" + cameraname + "/MinArea_BandDefect", "10").toInt();
+	// 	checkparam->i_MaxArea_BandDefect = configIniRead.value("/" + cameraname + "/MaxArea_BandDefect", "9999").toInt();
+	// 	checkparam->b_IsOpen = configIniRead.value("/" + cameraname + "/IsOpen", "false").toBool();
+	// 	checkparam->i_Channel_InCapsules = configIniRead.value("/" + cameraname + "/Channel_InCapsules", "2").toInt();
+	// 	checkparam->d_ER_InCapsules = configIniRead.value("/" + cameraname + "/ER_InCapsules", "7.5").toDouble();
+	// 	checkparam->i_MaxGray_InCapsules = configIniRead.value("/" + cameraname + "/MaxGray_InCapsules", "120").toInt();
+	// 	checkparam->d_OR_InCapsules = configIniRead.value("/" + cameraname + "/OR_InCapsules", ".5").toDouble();
+	// 	checkparam->i_MinArea_InCapsules = configIniRead.value("/" + cameraname + "/MinArea_InCapsules", "2000").toInt();
+	// 	checkparam->i_MaxArea_InCapsules = configIniRead.value("/" + cameraname + "/MaxArea_InCapsules", "99999").toInt();
+	// 	checkparam->i_LengthPlus_1 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
+	// 	checkparam->i_LengthPlus_2 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
+	// 	checkparam->i_Channel_Middle = configIniRead.value("/" + cameraname + "/Channel_Middle", "0").toInt();
+	// 	checkparam->i_MaskHeight_Middle = configIniRead.value("/" + cameraname + "/MaskHeight_Middle", "7").toInt();
+	// 	checkparam->i_MaskWidth_Middle = configIniRead.value("/" + cameraname + "/MaskWidth_Middle", "7").toInt();
+	// 	checkparam->i_MinGray_Middle = configIniRead.value("/" + cameraname + "/MinGray_Middle", "45").toInt();
+	// 	checkparam->i_MinWidth_Middle = configIniRead.value("/" + cameraname + "/MinWidth_Middle", "5").toInt();
+	// 	checkparam->i_MinHeight_Middle = configIniRead.value("/" + cameraname + "/MinHeight_Middle", "3").toInt();
+	// 	checkparam->d_CR_Middle = configIniRead.value("/" + cameraname + "/CR_Middle", "2.5").toDouble();
+	// 	checkparam->i_MinArea_Middle = configIniRead.value("/" + cameraname + "/MinArea_Middle", "30").toInt();
+	// 	checkparam->i_Channel_Plate = configIniRead.value("/" + cameraname + "/Channel_Plate", "0").toInt();
+	// 	checkparam->i_MaxGray_Plate = configIniRead.value("/" + cameraname + "/MaxGray_Plate", "190").toInt();
+	// 	checkparam->d_CR_Plate = configIniRead.value("/" + cameraname + "/CR_Plate", "1.5").toDouble();
+	// 	checkparam->d_OR_Plate_1 = configIniRead.value("/" + cameraname + "/OR_Plate_1", "3.5").toDouble();
+	// 	checkparam->i_MinArea_Plate_1 = configIniRead.value("/" + cameraname + "/MinArea_Middle_1", "1500").toInt();
+	// 	checkparam->d_OR_Plate_2 = configIniRead.value("/" + cameraname + "/OR_Plate_2", "1.5").toDouble();
+	// 	checkparam->i_MinArea_Plate_2 = configIniRead.value("/" + cameraname + "/MinArea_Middle_2", "30").toInt();
 
 
 
@@ -136,6 +209,7 @@ bool CInterCHeck::LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 }
 bool CInterCHeck::SaveCheckParam()
 {
+	LoadCheckParam(&m_checkparam);
 	m_bchangedparam = true;
 	return false;
 }
@@ -435,7 +509,7 @@ int CInterCHeck::Check(Mat imgpackage, void *checkparam, QString &str)
 		{
 			m_checkparam = *(CHECKPARAM*)checkparam;
 		}
-		QString strwarning;
+			QString strwarning;
 		m_hoLiveImage = Mat2Hobject(imgpackage);
 	}
 	catch (cv::Exception& e)
@@ -605,20 +679,20 @@ void calculate_lines_gauss_parameters(Halcon::HTuple hv_MaxLineWidth, Halcon::HT
 int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1)
 {
 	int i_error = 0, i_null = 0;
+	
 	try
 	{
 		Hobject  ho_Image, ho_R, ho_G, ho_B, ho_H, ho_S;
 		Hobject  ho_V, ho_Region, ho_RegionFillUp2, ho_ConnectedRegions;
 		Hobject  ho_RegionBand, ho_Rectangle11, ho_RegionDifference19;
 		Hobject  ho_RegionOpening20, ho_ConnectedRegions30, ho_SelectedRegions24;
-		Hobject  ho_Region26, ho_RegionOpening24, ho_RegionFillUp;
-		Hobject  ho_ConnectedRegions35, ho_SelectedRegions32, ho_ImageSub10;
-		Hobject  ho_ImageReduced, ho_Regions, ho_RegionIntersection20;
+		Hobject  ho_ImageSub10, ho_ImageReduced, ho_Regions, ho_RegionIntersection20;
 		Hobject  ho_RegionFillUp13, ho_RegionOpening, ho_RegionClosing13;
-		Hobject  ho_ConnectedRegions1, ho_SelectedRegions, ho_RegionTrans14;
-		Hobject  ho_RegionPill, ho_RegionUnion13, ho_RegionDilation6;
-		Hobject  ho_Rectangle8, ho_RegionDifference23, ho_Rectangle9;
-		Hobject  ho_EmptyPill, ho_RegionUnion5, ho_RegionTrans3;
+		Hobject  ho_ConnectedRegions1, ho_Circle8, ho_SelectedRegions;
+		Hobject  ho_RegionTrans14, ho_RegionPill, ho_error_pill;
+		Hobject  ho_ObjectSelected4, ho_Rectangle13, ho_RegionUnion13;
+		Hobject  ho_RegionDilation6, ho_Rectangle8, ho_RegionDifference23;
+		Hobject  ho_Rectangle9, ho_EmptyPill, ho_RegionUnion5, ho_RegionTrans3;
 		Hobject  ho_RegionDifference3, ho_TopPills, ho_BottomPills;
 		Hobject  ho_SortedRegions, ho_ObjectSelected, ho_ObjectSelected1;
 		Hobject  ho_RegionDilation1, ho_ConnectedRegions9, ho_Rectangle2;
@@ -632,96 +706,108 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_Region11, ho_RegionOpening6, ho_ConnectedRegions8;
 		Hobject  ho_SelectedRegions5, ho_Circle3, ho_ImageSub12;
 		Hobject  ho_RegionShadow, ho_RegionBatch, ho_RegionTrans10;
-		Hobject  ho_RegionErosion9, ho_RegionDifference24, ho_ImageMax8;
-		Hobject  ho_ImageSub15, ho_Regions5, ho_RegionIntersection25;
+		Hobject  ho_RegionErosion9, ho_RegionDifference24, ho_RegionDifference28;
+		Hobject  ho_RegionOpening31, ho_ImageMax8, ho_ImageSub15;
+		Hobject  ho_Regions5, ho_RegionDifference29, ho_RegionIntersection25;
 		Hobject  ho_RegionOpening27, ho_ConnectedRegions41, ho_SelectedRegions37;
-		Hobject  ho_RegionTrans15, ho_RegionClosing15, ho_RegionFillUp16;
-		Hobject  ho_RegionOpening29, ho_RegionUnion17, ho_ConnectedRegions42;
+		Hobject  ho_RegionTrans15, ho_RegionUnion17, ho_ConnectedRegions42;
 		Hobject  ho_Circle7, ho_RegionUnion18, ho_RegionDifference15;
 		Hobject  ho_RegionUnion2, ho_Region18, ho_RegionTrans7, ho_ImageReduced18;
 		Hobject  ho_ImageOpening, ho_Lines3, ho_UnionContours, ho_SelectedXLD;
 		Hobject  ho_Region29, ho_RegionIntersection23, ho_RegionFillUp10;
-		Hobject  ho_ConnectedRegions39, ho_SelectedRegions35, ho_ImageMax7;
-		Hobject  ho_ImageSub11, ho_Regions4, ho_RegionIntersection21;
-		Hobject  ho_RegionFillUp14, ho_RegionOpening25, ho_ConnectedRegions36;
-		Hobject  ho_SelectedRegions33, ho_Region21, ho_RegionIntersection16;
-		Hobject  ho_RegionClosing9, ho_ConnectedRegions29, ho_SelectedRegions23;
-		Hobject  ho_ImageMax6, ho_ImageSub9, ho_Region25, ho_RegionClosing12;
-		Hobject  ho_RegionOpening22, ho_RegionIntersection18, ho_RegionFillUp11;
-		Hobject  ho_ConnectedRegions32, ho_Circle6, ho_BadPill, ho_ObjectSelected3;
-		Hobject  ho_Rectangle10, ho_RegionErosion11, ho_RegionUnion15;
-		Hobject  ho_ImageReduced19, ho_Lines1, ho_UnionContours1;
-		Hobject  ho_SelectedXLD1, ho_ImageSub13, ho_Regions3, ho_RegionIntersection19;
-		Hobject  ho_RegionFillUp12, ho_RegionOpening23, ho_ConnectedRegions34;
-		Hobject  ho_SelectedRegions31, ho_RegionTrans13, ho_Circle4;
-		Hobject  ho_RegionDifference22, ho_ConnectedRegions33, ho_SelectedRegions29;
-		Hobject  ho_SelectedRegions28, ho_RegionTrans12, ho_RegionArc;
-		Hobject  ho_RegionErosion6, ho_ImageReduced12, ho_RegionFillUp6;
-		Hobject  ho_RegionOpening15, ho_ConnectedRegions22, ho_SelectedRegions17;
-		Hobject  ho_Rectangle4, ho_Rectangle7, ho_RegionErosion2;
-		Hobject  ho_ImageReduced1, ho_Region1, ho_ConnectedRegions4;
-		Hobject  ho_SelectedRegions4, ho_RegionUnion3, ho_RegionRed;
-		Hobject  ho_ImageReduced9, ho_Region15, ho_RegionIntersection6;
-		Hobject  ho_RegionFillUp4, ho_RegionOpening9, ho_RegionErosion4;
-		Hobject  ho_Region3, ho_RegionYellow, ho_RegionDilation2;
-		Hobject  ho_RegionDilation3, ho_RegionCross, ho_ImageReduced2;
-		Hobject  ho_ImageMax1, ho_ImageSub3, ho_Regions2, ho_Region2;
-		Hobject  ho_RegionIntersection1, ho_RegionClosing1, ho_RegionOpening5;
-		Hobject  ho_ConnectedRegions2, ho_SelectedRegions1, ho_ImageReduced5;
-		Hobject  ho_ImageMax5, ho_ImageSub7, ho_Region6, ho_RegionErosion3;
-		Hobject  ho_RegionDifference8, ho_RegionDifference9, ho_RegionOpening8;
-		Hobject  ho_ConnectedRegions15, ho_SelectedRegions9, ho_ConnectedRegions7;
-		Hobject  ho_Circle1, ho_ImageReduced3, ho_ImageMax2, ho_ImageSub;
-		Hobject  ho_Region5, ho_Region8, ho_RegionIntersection3;
-		Hobject  ho_RegionDifference7, ho_ConnectedRegions14, ho_RegionOpening3;
-		Hobject  ho_SelectedRegions11, ho_ConnectedRegions10, ho_Circle2;
-		Hobject  ho_ImageMax3, ho_ImageSub4, ho_Region9, ho_Region20;
-		Hobject  ho_RegionErosion7, ho_RegionIntersection15, ho_RegionFillUp9;
-		Hobject  ho_RegionOpening19, ho_ConnectedRegions28, ho_RegionTrans9;
-		Hobject  ho_SelectedRegions22, ho_RegionUnion10, ho_RegionErosion8;
-		Hobject  ho_RegionDifference18, ho_RegionIntersection13;
-		Hobject  ho_ConnectedRegions24, ho_SelectedRegions19, ho_RegionUnion7;
-		Hobject  ho_RegionClosing7, ho_ConnectedRegions23, ho_SelectedRegions18;
-		Hobject  ho_ImageReduced13, ho_Regions1, ho_RegionClosing8;
-		Hobject  ho_RegionFillUp7, ho_RegionOpening17, ho_ConnectedRegions25;
-		Hobject  ho_SelectedRegions20, ho_RegionTrans8, ho_RegionUnion8;
-		Hobject  ho_RegionDifference17, ho_RegionIntersection14;
-		Hobject  ho_RegionFillUp8, ho_RegionOpening18, ho_ConnectedRegions26;
-		Hobject  ho_SelectedRegions21, ho_RegionUnion9, ho_ConnectedRegions27;
-		Hobject  ho_ConnectedRegions6, ho_Circle, ho_ImageSub16, ho_Region27;
-		Hobject  ho_ImageScaleMax1, ho_Region31, ho_RegionIntersection24;
+		Hobject  ho_ConnectedRegions39, ho_SelectedRegions35, ho_RegionDifference27;
+		Hobject  ho_RegionOpening30, ho_RegionUnion19, ho_RegionUnion20;
+		Hobject  ho_Region21, ho_RegionIntersection16, ho_RegionClosing9;
+		Hobject  ho_ConnectedRegions29, ho_SelectedRegions23, ho_ImageMax6;
+		Hobject  ho_ImageSub9, ho_Region25, ho_RegionClosing12, ho_RegionOpening22;
+		Hobject  ho_RegionIntersection18, ho_RegionFillUp11, ho_ConnectedRegions32;
+		Hobject  ho_Circle6, ho_BadPill, ho_ObjectSelected3, ho_Rectangle10;
+		Hobject  ho_RegionErosion11, ho_RegionUnion15, ho_ImageReduced19;
+		Hobject  ho_Lines1, ho_UnionContours1, ho_SelectedXLD1, ho_ImageSub13;
+		Hobject  ho_Regions3, ho_RegionIntersection19, ho_RegionFillUp12;
+		Hobject  ho_RegionOpening23, ho_ConnectedRegions34, ho_SelectedRegions31;
+		Hobject  ho_RegionTrans13, ho_Circle4, ho_RegionDifference22;
+		Hobject  ho_ConnectedRegions33, ho_SelectedRegions29, ho_SelectedRegions28;
+		Hobject  ho_RegionTrans12, ho_RegionArc, ho_RegionErosion6;
+		Hobject  ho_ImageReduced12, ho_RegionFillUp6, ho_RegionOpening15;
+		Hobject  ho_ConnectedRegions22, ho_SelectedRegions17, ho_Rectangle4;
+		Hobject  ho_Rectangle7, ho_RegionErosion2, ho_ImageReduced1;
+		Hobject  ho_Region1, ho_ConnectedRegions4, ho_SelectedRegions4;
+		Hobject  ho_RegionUnion3, ho_RegionRed, ho_ImageReduced9;
+		Hobject  ho_Region15, ho_RegionIntersection6, ho_RegionFillUp4;
+		Hobject  ho_RegionOpening9, ho_RegionErosion4, ho_Region3;
+		Hobject  ho_RegionYellow, ho_RegionDilation2, ho_RegionDilation3;
+		Hobject  ho_RegionCross, ho_ImageReduced2, ho_ImageMax1;
+		Hobject  ho_ImageSub3, ho_Regions2, ho_Region2, ho_RegionIntersection1;
+		Hobject  ho_RegionClosing1, ho_RegionOpening5, ho_ConnectedRegions2;
+		Hobject  ho_SelectedRegions1, ho_ImageReduced5, ho_ImageMax5;
+		Hobject  ho_ImageSub7, ho_Region6, ho_RegionErosion3, ho_RegionDifference8;
+		Hobject  ho_RegionDifference9, ho_RegionOpening8, ho_ConnectedRegions15;
+		Hobject  ho_SelectedRegions9, ho_ConnectedRegions7, ho_Circle1;
+		Hobject  ho_ImageReduced3, ho_ImageMax2, ho_ImageSub, ho_Region5;
+		Hobject  ho_Region8, ho_RegionIntersection3, ho_RegionDifference7;
+		Hobject  ho_ConnectedRegions14, ho_RegionOpening3, ho_SelectedRegions11;
+		Hobject  ho_ConnectedRegions10, ho_Circle2, ho_ImageMax3;
+		Hobject  ho_ImageSub4, ho_Region9, ho_Region20, ho_RegionErosion7;
+		Hobject  ho_RegionIntersection15, ho_RegionFillUp9, ho_RegionOpening19;
+		Hobject  ho_ConnectedRegions28, ho_RegionTrans9, ho_SelectedRegions22;
+		Hobject  ho_RegionUnion10, ho_RegionErosion8, ho_RegionDifference18;
+		Hobject  ho_RegionIntersection13, ho_ConnectedRegions24;
+		Hobject  ho_SelectedRegions19, ho_RegionUnion7, ho_RegionClosing7;
+		Hobject  ho_ConnectedRegions23, ho_SelectedRegions18, ho_ImageReduced13;
+		Hobject  ho_Regions1, ho_RegionClosing8, ho_RegionFillUp7;
+		Hobject  ho_RegionOpening17, ho_ConnectedRegions25, ho_SelectedRegions20;
+		Hobject  ho_RegionTrans8, ho_RegionUnion8, ho_RegionDifference17;
+		Hobject  ho_RegionIntersection14, ho_RegionFillUp8, ho_RegionOpening18;
+		Hobject  ho_ConnectedRegions26, ho_SelectedRegions21, ho_RegionUnion9;
+		Hobject  ho_ConnectedRegions27, ho_ConnectedRegions6, ho_Circle;
+		Hobject  ho_ImageSub16, ho_ImageScaleMax1, ho_Region31, ho_RegionIntersection24;
 		Hobject  ho_RegionFillUp15, ho_RegionOpening28, ho_ConnectedRegions40;
 		Hobject  ho_SelectedRegions36, ho_ImageSub14, ho_RegionDifference26;
 		Hobject  ho_RegionDifference25, ho_ImageReduced20, ho_ImageOpening1;
 		Hobject  ho_Lines2, ho_SelectedXLD2, ho_UnionContours2, ho_Region30;
 		Hobject  ho_RegionOpening26, ho_RegionClosing14, ho_ConnectedRegions37;
 		Hobject  ho_SelectedRegions30, ho_RegionIntersection22, ho_RegionUnion16;
+		Hobject  ho_ImageSub17, ho_RegionErosion10, ho_Region27;
+		Hobject  ho_RegionIntersection26, ho_RegionOpening32, ho_ConnectedRegions43;
+		Hobject  ho_SelectedRegions38, ho_RegionTrans16, ho_ImageSub18;
+		Hobject  ho_ImageMin1, ho_ImageSub19, ho_Region32, ho_RegionIntersection27;
+		Hobject  ho_RegionFillUp17, ho_RegionOpening33, ho_RegionClosing16;
+		Hobject  ho_ConnectedRegions44, ho_SelectedRegions39, ho_RegionTrans17;
+		Hobject  ho_RegionUnion21, ho_RegionDifference30, ho_RegionOpening34;
+		Hobject  ho_ImageMax9, ho_ImageSub20, ho_Region33, ho_RegionOpening35;
+		Hobject  ho_RegionErosion12;		
+
 		// Local control variables 
 		HTuple  hv_check_pill, hv_check_capsule, hv_ImageFiles;
 		HTuple  hv_Index, hv_BaseName, hv_Extension, hv_Directory;
 		HTuple  hv_AreaBand, hv_ExpDefaultCtrlDummyVar, hv_Row17;
 		HTuple  hv_Column17, hv_Phi5, hv_Length15, hv_Length25;
-		HTuple  hv_Number18, hv_Area4, hv_Row9, hv_Column9, hv_Radius4;
-		HTuple  hv_NumberPill, hv_Row14, hv_Column14, hv_Phi4, hv_Length14;
-		HTuple  hv_Length24, hv_Row15, hv_Column15, hv_Row24, hv_Column24;
-		HTuple  hv_Row11, hv_Column11, hv_Row21, hv_Column21, hv_Area1;
-		HTuple  hv_Row7, hv_Column7, hv_Mean, hv_Number1, hv_Index1;
-		HTuple  hv_Number5, hv_Index2, hv_Number6, hv_Row6, hv_Column6;
-		HTuple  hv_Phi2, hv_Length12, hv_Length22, hv_Row, hv_Column;
-		HTuple  hv_Phi, hv_Length1, hv_Length2, hv_Number3, hv_Row1;
-		HTuple  hv_Column1, hv_Phi1, hv_Length11, hv_Length21, hv_Value;
-		HTuple  hv_Value1, hv_ratio, hv_Number4, hv_Row5, hv_Column5;
-		HTuple  hv_Radius3, hv_Row26, hv_Column26, hv_Radius8, hv_Number12;
-		HTuple  hv_Number15, hv_Number17, hv_Row20, hv_Column20;
-		HTuple  hv_Radius7, hv_Area6, hv_Mean1, hv_Number13, hv_Index4;
-		HTuple  hv_Area5, hv_Number14, hv_Row16, hv_Column16, hv_Row25;
-		HTuple  hv_Column25, hv_Number9, hv_Row10, hv_Column10;
-		HTuple  hv_Radius5, hv_Number11, hv_Number10, hv_Row8, hv_Column8;
-		HTuple  hv_Phi3, hv_Length13, hv_Length23, hv_Area3, hv_Number;
-		HTuple  hv_Row3, hv_Column3, hv_Radius1, hv_Area, hv_Row4;
-		HTuple  hv_Column4, hv_Radius2, hv_Number8, hv_Row2, hv_Column2;
-		HTuple  hv_Radius, hv_Number16, hv_Number19, hv_Area7, hv_Row18;
-		HTuple  hv_Column18, hv_Value2;
+		HTuple  hv_Number18, hv_Row27, hv_Column27, hv_Radius9;
+		HTuple  hv_Row9, hv_Column9, hv_Radius4, hv_NumberPill;
+		HTuple  hv_Mean5, hv_Deviation3, hv_Mean6, hv_Index5, hv_Mean4;
+		HTuple  hv_Deviation, hv_Number20, hv_Row110, hv_Column110;
+		HTuple  hv_Row29, hv_Column29, hv_Row14, hv_Column14, hv_Phi4;
+		HTuple  hv_Length14, hv_Length24, hv_Row15, hv_Column15;
+		HTuple  hv_Row24, hv_Column24, hv_Row11, hv_Column11, hv_Row21;
+		HTuple  hv_Column21, hv_Area1, hv_Row7, hv_Column7, hv_Mean;
+		HTuple  hv_Number1, hv_Index1, hv_Number5, hv_Index2, hv_Number6;
+		HTuple  hv_Row6, hv_Column6, hv_Phi2, hv_Length12, hv_Length22;
+		HTuple  hv_Row, hv_Column, hv_Phi, hv_Length1, hv_Length2;
+		HTuple  hv_Number3, hv_Row1, hv_Column1, hv_Phi1, hv_Length11;
+		HTuple  hv_Length21, hv_Value, hv_Value1, hv_ratio, hv_Number4;
+		HTuple  hv_Row5, hv_Column5, hv_Radius3, hv_Row26, hv_Column26;
+		HTuple  hv_Radius8, hv_Number12, hv_Area8, hv_Row28, hv_Column28;
+		HTuple  hv_Number17, hv_Row20, hv_Column20, hv_Radius7;
+		HTuple  hv_Area6, hv_Mean1, hv_Number13, hv_Index4, hv_Area5;
+		HTuple  hv_Number14, hv_Row16, hv_Column16, hv_Row25, hv_Column25;
+		HTuple  hv_Number9, hv_Row10, hv_Column10, hv_Radius5, hv_Number11;
+		HTuple  hv_Number10, hv_Row8, hv_Column8, hv_Phi3, hv_Length13;
+		HTuple  hv_Length23, hv_Area3, hv_Number, hv_Row3, hv_Column3;
+		HTuple  hv_Radius1, hv_Area, hv_Row4, hv_Column4, hv_Radius2;
+		HTuple  hv_Number8, hv_Row2, hv_Column2, hv_Radius, hv_Number16;
+		HTuple  hv_Number19, hv_Area7, hv_Row18, hv_Column18, hv_Value2;
+		HTuple  hv_Number21;
 
 		HTuple  hv_Width, hv_Height;
 
@@ -738,7 +824,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		connection(ho_RegionFillUp2, &ho_ConnectedRegions);
 		select_shape_std(ho_ConnectedRegions, &ho_RegionBand, "max_area", 70);
 		area_center(ho_RegionBand, &hv_AreaBand, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-		if (0 != (hv_AreaBand < 870000))
+		if (0 != (hv_AreaBand < 470000))
 		{
 			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
@@ -750,7 +836,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 80, 10);
 			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "当前泡罩板面积为：" + hv_AreaBand);
-			return 1;  
+			return 1;
 		}
 		smallest_rectangle2(ho_RegionBand, &hv_Row17, &hv_Column17, &hv_Phi5, &hv_Length15,
 			&hv_Length25);
@@ -768,7 +854,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			//set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
 			//disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			
+
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_SelectedRegions24, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
@@ -777,61 +863,119 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			return 1;
 			// stop(); only in hdevelop
 		}
-		//*******铝模
-		if (0 != m_checkparam.b_CheckPill	)
-		{
-			threshold(ho_H, &ho_Region26, 230, 255);
-			opening_circle(ho_Region26, &ho_RegionOpening24, 1.5);
-			fill_up(ho_RegionOpening24, &ho_RegionFillUp); HTuple  hv_check_pill, hv_check_capsule, hv_ImageFiles;
-
-			connection(ho_RegionFillUp, &ho_ConnectedRegions35);
-			select_shape_std(ho_ConnectedRegions35, &ho_SelectedRegions32, "max_area",
-				70);
-			area_center(ho_SelectedRegions32, &hv_Area4, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-			if (0 != (hv_Area4 > 1000))
-			{
-
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-
-				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
-
-				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-
-				disp_obj(ho_SelectedRegions32, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "铝模接缝异常");
-				result = QString::fromLocal8Bit("铝模接缝异常");
-				return 1;
-				// stop(); only in hdevelop
-
-			}
-		}
-		//********************
+	
 
 		//********************药剂数量
 		erosion_circle(ho_RegionBand, &ho_RegionBand, 5.5);
-		sub_image(ho_V, ho_B, &ho_ImageSub10, 1, 0);
+		sub_image(ho_R, ho_B, &ho_ImageSub10, 1, 0);
 		reduce_domain(ho_ImageSub10, ho_RegionBand, &ho_ImageReduced);
-		threshold(ho_ImageReduced, &ho_Regions, 20, 140);
+		threshold(ho_ImageReduced, &ho_Regions, 20, 255);
 		intersection(ho_Regions, ho_RegionBand, &ho_RegionIntersection20);
 		fill_up(ho_RegionIntersection20, &ho_RegionFillUp13);
 		opening_circle(ho_RegionFillUp13, &ho_RegionOpening, 5.5);
 		closing_circle(ho_RegionOpening, &ho_RegionClosing13, 5.5);
 		connection(ho_RegionClosing13, &ho_ConnectedRegions1);
-		select_shape(ho_ConnectedRegions1, &ho_SelectedRegions, "area", "and", 3000,
-			99999);
+		inner_circle(ho_ConnectedRegions1, &hv_Row27, &hv_Column27, &hv_Radius9);
+		gen_circle(&ho_Circle8, hv_Row27, hv_Column27, hv_Radius9*1.1);
+
+
+
+		select_shape(ho_Circle8, &ho_SelectedRegions, "area", "and", 2000, 99999);
 		shape_trans(ho_SelectedRegions, &ho_RegionTrans14, "convex");
 		smallest_circle(ho_RegionTrans14, &hv_Row9, &hv_Column9, &hv_Radius4);
 		gen_circle(&ho_RegionPill, hv_Row9, hv_Column9, hv_Radius4);
 		count_obj(ho_RegionPill, &hv_NumberPill);
 
+
+
+
+		//***********片剂缺损
+		if (0 != m_checkparam.b_CheckPill)
+		{
+			smallest_rectangle2(ho_RegionPill, &hv_Row14, &hv_Column14, &hv_Phi4, &hv_Length14,
+				&hv_Length24);
+			gen_rectangle2(&ho_Rectangle8, hv_Row14, hv_Column14, hv_Phi4, hv_Length14 + 10,
+				hv_Length24 + 10);
+			sub_image(ho_B, ho_S, &ho_ImageSub13, 1, 0);
+			threshold(ho_ImageSub13, &ho_Regions3, 0, 0);
+			intersection(ho_Regions3, ho_ConnectedRegions1, &ho_RegionIntersection19);
+			fill_up(ho_RegionIntersection19, &ho_RegionFillUp12);
+			opening_circle(ho_RegionFillUp12, &ho_RegionOpening23, 1.5);
+			connection(ho_RegionOpening23, &ho_ConnectedRegions34);
+			select_shape(ho_ConnectedRegions34, &ho_SelectedRegions31, "area", "and", 2000,
+				99999);
+			shape_trans(ho_SelectedRegions31, &ho_RegionTrans13, "convex");
+			smallest_circle(ho_RegionTrans13, &hv_Row10, &hv_Column10, &hv_Radius5);
+			gen_circle(&ho_Circle4, hv_Row10, hv_Column10, hv_Radius5 - 3);
+			difference(ho_Circle4, ho_SelectedRegions31, &ho_RegionDifference22);
+			connection(ho_RegionDifference22, &ho_ConnectedRegions33);
+			select_shape(ho_ConnectedRegions33, &ho_SelectedRegions29, (HTuple("area").Append("circularity")),
+				"and", (HTuple(100).Append(0.09)), (HTuple(99999).Append(1)));
+			count_obj(ho_SelectedRegions29, &hv_Number11);
+			if (0 != (hv_Number11 > 0))
+			{
+
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(ho_SelectedRegions29, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "片剂缺损");
+				result = QString::fromLocal8Bit("片剂缺损");
+				// stop(); only in hdevelop
+				return 1;
+			}
+		}
+
+
+
+
+
+		//*************
+
+
+
+
+		gen_empty_obj(&ho_error_pill);
+		intensity(ho_RegionPill, ho_S, &hv_Mean5, &hv_Deviation3);
+		tuple_mean(hv_Mean5, &hv_Mean6);
+		{
+			HTuple end_val104 = hv_NumberPill;
+			HTuple step_val104 = 1;
+			for (hv_Index5 = 1; hv_Index5.Continue(end_val104, step_val104); hv_Index5 += step_val104)
+			{
+				select_obj(ho_RegionPill, &ho_ObjectSelected4, hv_Index5);
+				intensity(ho_ObjectSelected4, ho_S, &hv_Mean4, &hv_Deviation);
+				if (0 != (((hv_Mean4 - hv_Mean6).Abs()) > 20))
+				{
+					concat_obj(ho_error_pill, ho_ObjectSelected4, &ho_error_pill);
+				}
+			}
+		}
+		count_obj(ho_error_pill, &hv_Number20);
+		if (0 != (hv_Number20 > 0))
+		{
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+			smallest_rectangle1(ho_error_pill, &hv_Row110, &hv_Column110, &hv_Row29, &hv_Column29);
+			gen_rectangle1(&ho_Rectangle13, hv_Row110 - 10, hv_Column110 - 10, hv_Row29 + 10,
+				hv_Column29 + 10);
+			disp_obj(ho_Rectangle13, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "夹粉");
+			result = QString::fromLocal8Bit("夹粉");
+			return 1;
+			// stop(); only in hdevelop
+		}
+
 		//****片剂
 		if (0 != m_checkparam.b_CheckPill)
 		{
 
-			if (0 != (hv_NumberPill != 18))
+			if (0 != (hv_NumberPill != m_checkparam.i_Number_NumPill))
 			{
-
 				union1(ho_RegionPill, &ho_RegionUnion13);
 				dilation_circle(ho_RegionUnion13, &ho_RegionDilation6, 20.5);
 				smallest_rectangle2(ho_RegionUnion13, &hv_Row14, &hv_Column14, &hv_Phi4,
@@ -862,109 +1006,109 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//****
 
 		//****胶囊
-		if (0 != m_checkparam.b_CheckCapsule)
-		{
-			if (0 != (HTuple(hv_NumberPill != 10).And(hv_NumberPill != 0)))
-			{
-				gen_empty_obj(&ho_EmptyPill);
-				if (0 != (hv_NumberPill == 5))
-				{
-					union1(ho_RegionPill, &ho_RegionUnion5);
-					shape_trans(ho_RegionUnion5, &ho_RegionTrans3, "rectangle2");
-					difference(ho_RegionBand, ho_RegionTrans3, &ho_RegionDifference3);
-					inner_rectangle1(ho_RegionDifference3, &hv_Row11, &hv_Column11, &hv_Row21,
-						&hv_Column21);
-					gen_rectangle1(&ho_EmptyPill, hv_Row11, hv_Column11, hv_Row21, hv_Column21);
-				}
-				else
-				{
-					gen_empty_obj(&ho_TopPills);
-					gen_empty_obj(&ho_BottomPills);
-					sort_region(ho_RegionPill, &ho_SortedRegions, "first_point", "true", "row");
-					area_center(ho_SortedRegions, &hv_Area1, &hv_Row7, &hv_Column7);
-					tuple_mean(hv_Row7, &hv_Mean);
-					count_obj(ho_SortedRegions, &hv_Number1);
-					{
-						HTuple end_val115 = hv_Number1;
-						HTuple step_val115 = 1;
-						for (hv_Index1 = 1; hv_Index1.Continue(end_val115, step_val115); hv_Index1 += step_val115)
-						{
-							select_obj(ho_SortedRegions, &ho_ObjectSelected, hv_Index1);
-							if (0 != ((hv_Row7.Select(hv_Index1 - 1)) < hv_Mean))
-							{
-								concat_obj(ho_ObjectSelected, ho_TopPills, &ho_TopPills);
-							}
-							else
-							{
-								concat_obj(ho_ObjectSelected, ho_BottomPills, &ho_BottomPills);
-							}
-						}
-					}
-					union1(ho_TopPills, &ho_TopPills);
-					union1(ho_BottomPills, &ho_BottomPills);
-					concat_obj(ho_TopPills, ho_BottomPills, &ho_RegionPill);
-					count_obj(ho_RegionPill, &hv_Number5);
-					{
-						HTuple end_val127 = hv_Number5;
-						HTuple step_val127 = 1;
-						for (hv_Index2 = 1; hv_Index2.Continue(end_val127, step_val127); hv_Index2 += step_val127)
-						{
-							select_obj(ho_RegionPill, &ho_ObjectSelected1, hv_Index2);
-							dilation_circle(ho_ObjectSelected1, &ho_RegionDilation1, 15);
-							connection(ho_RegionDilation1, &ho_ConnectedRegions9);
-							count_obj(ho_ConnectedRegions9, &hv_Number6);
-							if (0 != (hv_Number6 != 5))
-							{
-								smallest_rectangle2(ho_ObjectSelected1, &hv_Row6, &hv_Column6, &hv_Phi2,
-									&hv_Length12, &hv_Length22);
-								gen_rectangle2(&ho_Rectangle2, hv_Row6, hv_Column6, hv_Phi2, hv_Length12 + 20,
-									hv_Length22 + 20);
-								difference(ho_Rectangle2, ho_RegionDilation1, &ho_RegionDifference2
-								);
-								shape_trans(ho_RegionDifference2, &ho_RegionTrans2, "inner_rectangle1");
-								concat_obj(ho_EmptyPill, ho_RegionTrans2, &ho_EmptyPill);
-							}
-						}
-					}
-					union1(ho_EmptyPill, &ho_EmptyPill);
-				}
+		//if (0 != m_checkparam.b_CheckCapsule)
+		//{
+		//	if (0 != (HTuple(hv_NumberPill != 10).And(hv_NumberPill != 0)))
+		//	{
+		//		gen_empty_obj(&ho_EmptyPill);
+		//		if (0 != (hv_NumberPill == 5))
+		//		{
+		//			union1(ho_RegionPill, &ho_RegionUnion5);
+		//			shape_trans(ho_RegionUnion5, &ho_RegionTrans3, "rectangle2");
+		//			difference(ho_RegionBand, ho_RegionTrans3, &ho_RegionDifference3);
+		//			inner_rectangle1(ho_RegionDifference3, &hv_Row11, &hv_Column11, &hv_Row21,
+		//				&hv_Column21);
+		//			gen_rectangle1(&ho_EmptyPill, hv_Row11, hv_Column11, hv_Row21, hv_Column21);
+		//		}
+		//		else
+		//		{
+		//			gen_empty_obj(&ho_TopPills);
+		//			gen_empty_obj(&ho_BottomPills);
+		//			sort_region(ho_RegionPill, &ho_SortedRegions, "first_point", "true", "row");
+		//			area_center(ho_SortedRegions, &hv_Area1, &hv_Row7, &hv_Column7);
+		//			tuple_mean(hv_Row7, &hv_Mean);
+		//			count_obj(ho_SortedRegions, &hv_Number1);
+		//			{
+		//				HTuple end_val115 = hv_Number1;
+		//				HTuple step_val115 = 1;
+		//				for (hv_Index1 = 1; hv_Index1.Continue(end_val115, step_val115); hv_Index1 += step_val115)
+		//				{
+		//					select_obj(ho_SortedRegions, &ho_ObjectSelected, hv_Index1);
+		//					if (0 != ((hv_Row7.Select(hv_Index1 - 1)) < hv_Mean))
+		//					{
+		//						concat_obj(ho_ObjectSelected, ho_TopPills, &ho_TopPills);
+		//					}
+		//					else
+		//					{
+		//						concat_obj(ho_ObjectSelected, ho_BottomPills, &ho_BottomPills);
+		//					}
+		//				}
+		//			}
+		//			union1(ho_TopPills, &ho_TopPills);
+		//			union1(ho_BottomPills, &ho_BottomPills);
+		//			concat_obj(ho_TopPills, ho_BottomPills, &ho_RegionPill);
+		//			count_obj(ho_RegionPill, &hv_Number5);
+		//			{
+		//				HTuple end_val127 = hv_Number5;
+		//				HTuple step_val127 = 1;
+		//				for (hv_Index2 = 1; hv_Index2.Continue(end_val127, step_val127); hv_Index2 += step_val127)
+		//				{
+		//					select_obj(ho_RegionPill, &ho_ObjectSelected1, hv_Index2);
+		//					dilation_circle(ho_ObjectSelected1, &ho_RegionDilation1, 15);
+		//					connection(ho_RegionDilation1, &ho_ConnectedRegions9);
+		//					count_obj(ho_ConnectedRegions9, &hv_Number6);
+		//					if (0 != (hv_Number6 != 5))
+		//					{
+		//						smallest_rectangle2(ho_ObjectSelected1, &hv_Row6, &hv_Column6, &hv_Phi2,
+		//							&hv_Length12, &hv_Length22);
+		//						gen_rectangle2(&ho_Rectangle2, hv_Row6, hv_Column6, hv_Phi2, hv_Length12 + 20,
+		//							hv_Length22 + 20);
+		//						difference(ho_Rectangle2, ho_RegionDilation1, &ho_RegionDifference2
+		//						);
+		//						shape_trans(ho_RegionDifference2, &ho_RegionTrans2, "inner_rectangle1");
+		//						concat_obj(ho_EmptyPill, ho_RegionTrans2, &ho_EmptyPill);
+		//					}
+		//				}
+		//			}
+		//			union1(ho_EmptyPill, &ho_EmptyPill);
+		//		}
 
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 
-				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+		//		set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
 
-				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+		//		set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 
-				disp_obj(ho_EmptyPill, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "胶囊个数错误");
-				result = QString::fromLocal8Bit("胶囊个数错误");
-				return 1;
-				//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
-				//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
-				// stop(); only in hdevelop
+		//		disp_obj(ho_EmptyPill, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+		//		write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "胶囊个数错误");
+		//		result = QString::fromLocal8Bit("胶囊个数错误");
+		//		return 1;
+		//		//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
+		//		//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+		//		// stop(); only in hdevelop
 
-			}
-			else if (0 != (hv_NumberPill == 0))
-			{
+		//	}
+		//	else if (0 != (hv_NumberPill == 0))
+		//	{
 
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 
-				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+		//		set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
 
-				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+		//		set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 
-				disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "无胶囊");
-				result = QString::fromLocal8Bit("无胶囊");
-				return 1;
-				//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
-				//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
-				// stop(); only in hdevelop
+		//		disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+		//		write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "无胶囊");
+		//		result = QString::fromLocal8Bit("无胶囊");
+		//		return 1;
+		//		//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
+		//		//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+		//		// stop(); only in hdevelop
 
-			}
-		}
+		//	}
+		//}
 		//**************************************
 
 
@@ -979,15 +1123,15 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		erosion_circle(ho_RegionDifference, &ho_RegionErosion, 10);
 		connection(ho_RegionErosion, &ho_ConnectedRegions16);
 		select_shape_std(ho_ConnectedRegions16, &ho_SelectedRegions10, "max_area", 70);
-		gray_dilation_rect(ho_R, &ho_ImageMax, 11, 11);
-		sub_image(ho_ImageMax, ho_R, &ho_ImageSub1, 1, 0);
+		gray_dilation_rect(ho_G, &ho_ImageMax, 11, 11);
+		sub_image(ho_ImageMax, ho_G, &ho_ImageSub1, 1, 0);
 		threshold(ho_ImageSub1, &ho_Region4, 15, 255);
 		//dyn_threshold (ImageMax, G, RegionDynThresh, 10, 'light')
 		opening_circle(ho_Region4, &ho_RegionOpening1, 1);
 		intersection(ho_RegionOpening1, ho_SelectedRegions10, &ho_RegionIntersection);
 		closing_circle(ho_RegionIntersection, &ho_RegionClosing, 5);
 		connection(ho_RegionClosing, &ho_ConnectedRegions3);
-		select_shape(ho_ConnectedRegions3, &ho_SelectedRegions2, "area", "and", 700,
+		select_shape(ho_ConnectedRegions3, &ho_SelectedRegions2, "area", "and", 300,
 			99999);
 		shape_trans(ho_SelectedRegions2, &ho_RegionTrans1, "convex");
 		union1(ho_RegionTrans1, &ho_RegionUnion1);
@@ -1073,24 +1217,48 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//***********泡罩阴影区域
 		sub_image(ho_G, ho_S, &ho_ImageSub12, 1, 0);
+		//threshold (ImageSub12, Region28, 0, 145)
+		//intersection (Region28, RegionBand, RegionIntersection17)
+		//difference (RegionIntersection17, Rectangle1, RegionDifference20)
+		//opening_circle (RegionDifference20, RegionOpening21, 2.5)
+		//closing_circle (RegionOpening21, RegionClosing10, 1.5)
+		//connection (RegionClosing10, ConnectedRegions38)
+		//select_shape (ConnectedRegions38, SelectedRegions34, 'area', 'and', 1500, 99999)
+		//smallest_circle (SelectedRegions34, Row19, Column19, Radius6)
+		//gen_circle (Circle5, Row19, Column19, Radius6)
+		//difference (Circle5, RegionPill, RegionShadow)
+		//*******************************
+		//dilation_circle (Rectangle1, RegionBatch, 5.5)
+		//union2 (Circle5, RegionBatch, RegionUnion14)
+		//shape_trans (RegionBand, RegionTrans10, 'convex')
+		//erosion_rectangle1 (RegionTrans10, RegionErosion9, 5, 1)
+		//difference (RegionErosion9, RegionUnion14, RegionDifference24)
+		difference(ho_ConnectedRegions1, ho_Circle8, &ho_RegionDifference28);
+		opening_circle(ho_RegionDifference28, &ho_RegionOpening31, 2.5);
 
 		gray_dilation_rect(ho_V, &ho_ImageMax8, 31, 31);
 		sub_image(ho_ImageMax8, ho_V, &ho_ImageSub15, 1, 0);
 		threshold(ho_ImageSub15, &ho_Regions5, 20, 255);
-		intersection(ho_Regions5, ho_RegionBand, &ho_RegionIntersection25);
+		difference(ho_Regions5, ho_RegionOpening31, &ho_RegionDifference29);
+		intersection(ho_RegionDifference29, ho_RegionBand, &ho_RegionIntersection25);
+		opening_circle(ho_RegionIntersection25, &ho_RegionOpening27, 2.5);
 
-		opening_circle(ho_RegionIntersection25, &ho_RegionOpening27, 1.5);
+
+
+
+
+
 		connection(ho_RegionOpening27, &ho_ConnectedRegions41);
-		select_shape(ho_ConnectedRegions41, &ho_SelectedRegions37, (HTuple("width").Append("height")),
-			"and", (HTuple(50).Append(50)), (HTuple(99999).Append(99999)));
+		select_shape(ho_ConnectedRegions41, &ho_SelectedRegions37, ((HTuple("width").Append("height")).Append("area")),
+			"and", ((HTuple(25).Append(25)).Append(1000)), ((HTuple(99999).Append(99999)).Append(99999)));
 		shape_trans(ho_SelectedRegions37, &ho_RegionTrans15, "convex");
-		closing_circle(ho_SelectedRegions37, &ho_RegionClosing15, 70.5);
-		fill_up(ho_RegionClosing15, &ho_RegionFillUp16);
-		opening_circle(ho_RegionFillUp16, &ho_RegionOpening29, 50.5);
-		union1(ho_RegionOpening29, &ho_RegionUnion17);
+		//closing_circle (SelectedRegions37, RegionClosing15, 70.5)
+		//fill_up (RegionClosing15, RegionFillUp16)
+		//opening_circle (RegionFillUp16, RegionOpening29, 30.5)
+		union1(ho_RegionTrans15, &ho_RegionUnion17);
 		connection(ho_RegionUnion17, &ho_ConnectedRegions42);
 		inner_circle(ho_ConnectedRegions42, &hv_Row26, &hv_Column26, &hv_Radius8);
-		gen_circle(&ho_Circle7, hv_Row26, hv_Column26, (hv_Radius8 / hv_Radius8) * 85);
+		gen_circle(&ho_Circle7, hv_Row26, hv_Column26, (hv_Radius8 / hv_Radius8) * 65);
 		union1(ho_Circle7, &ho_RegionUnion18);
 		dilation_circle(ho_Rectangle1, &ho_RegionBatch, 5.5);
 		//union2 (Circle5, RegionBatch, RegionUnion14)
@@ -1099,34 +1267,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		difference(ho_RegionErosion9, ho_RegionUnion18, &ho_RegionDifference24);
 		difference(ho_RegionUnion18, ho_RegionPill, &ho_RegionShadow);
 
-		//erosion_circle(ho_RegionDifference24, &ho_RegionErosion9, 10.5);
-
-		//opening_circle (RegionDifference15, RegionOpening16, 1.5)
-		//difference (RegionOpening16, RegionUnion2, RegionDifference16)
-
-
-
-
-
-
-		//opening_circle (Region18, RegionOpening13, 1.5)
-		//connection (RegionOpening13, ConnectedRegions19)
-		//select_shape (ConnectedRegions19, SelectedRegions16, 'area', 'and', 2000, 99999)
-		//shape_trans (SelectedRegions16, RegionTrans6, 'convex')
-		//erosion_circle (RegionTrans6, RegionErosion5, 2.5)
-
-		//dilation_circle (RegionPill, RegionDilation, 3)
-		//erosion_circle (RegionBand, RegionErosion1, 5)
-		//union2 (RegionTrans7, Rectangle1, RegionUnion4)
-		//difference (RegionErosion1, RegionUnion4, RegionLeft)
-		//reduce_domain (B, RegionLeft, ImageLeft)
-
-
 		//********药板裂纹/毛发
 		if (0 != m_checkparam.b_CheckPill)
 		{
 			reduce_domain(ho_R, ho_RegionDifference24, &ho_ImageReduced18);
-
 			gray_opening_rect(ho_ImageReduced18, &ho_ImageOpening, 7, 7);
 			lines_gauss(ho_ImageOpening, &ho_Lines3, 1.5, 2, 5, "dark", "true", "bar-shaped",
 				"true");
@@ -1158,24 +1302,34 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		if (0 != m_checkparam.b_CheckPill)
 		{
 
-			threshold(ho_ImageSub12, &ho_Region29, 0, 60);
-			intersection(ho_Region29, ho_RegionDifference24, &ho_RegionIntersection23);
-			fill_up(ho_RegionIntersection23, &ho_RegionFillUp10);
+			threshold(ho_ImageSub12, &ho_Region29, 0, 130);
+			difference(ho_RegionDifference24, ho_RegionBatch, &ho_RegionDifference30);
+			intersection(ho_Region29, ho_RegionDifference30, &ho_RegionIntersection23);
+			opening_circle(ho_RegionIntersection23, &ho_RegionOpening34, 3.5);
+			fill_up(ho_RegionOpening34, &ho_RegionFillUp10);
 			connection(ho_RegionFillUp10, &ho_ConnectedRegions39);
 			select_shape(ho_ConnectedRegions39, &ho_SelectedRegions35, (HTuple("area").Append("circularity")),
-				"and", (HTuple(20).Append(0.1)), (HTuple(99999).Append(1)));
+				"and", (HTuple(50).Append(0.2)), (HTuple(99999).Append(1)));
 
-			//gray_dilation_rect(ho_B, &ho_ImageMax7, 7, 7);
-			//sub_image(ho_ImageMax7, ho_B, &ho_ImageSub11, 1, 0);
-			//threshold(ho_ImageSub11, &ho_Regions4, 30, 255);
-			//intersection(ho_Regions4, ho_RegionErosion9, &ho_RegionIntersection21);
-			//fill_up(ho_RegionIntersection21, &ho_RegionFillUp14);
-			//opening_circle(ho_RegionFillUp14, &ho_RegionOpening25, 1.5);
-			//connection(ho_RegionOpening25, &ho_ConnectedRegions36);
-			//select_shape(ho_ConnectedRegions36, &ho_SelectedRegions33, (HTuple("area").Append("circularity")),
-			//	"and", (HTuple(40).Append(0.4)), (HTuple(99999).Append(1)));
-			count_obj(ho_SelectedRegions35, &hv_Number15);
-			if (0 != (hv_Number15 > 0))
+
+			difference(ho_ConnectedRegions1, ho_Circle8, &ho_RegionDifference27);
+			opening_circle(ho_RegionDifference27, &ho_RegionOpening30, 7.5);
+			union2(ho_SelectedRegions35, ho_RegionOpening30, &ho_RegionUnion19);
+			union1(ho_RegionUnion19, &ho_RegionUnion20);
+
+
+
+			//gray_dilation_rect (B, ImageMax7, 7, 7)
+			//sub_image (ImageMax7, B, ImageSub11, 1, 0)
+			//threshold (ImageSub11, Regions4, 30, 255)
+			//intersection (Regions4, RegionDifference24, RegionIntersection21)
+			//fill_up (RegionIntersection21, RegionFillUp14)
+			//opening_circle (RegionFillUp14, RegionOpening25, 1.5)
+			//connection (RegionOpening25, ConnectedRegions36)
+			//select_shape (ConnectedRegions36, SelectedRegions33, ['area','circularity'], 'and', [40,0.4], [99999,1])
+			//count_obj (RegionUnion19, Number15)
+			area_center(ho_RegionUnion20, &hv_Area8, &hv_Row28, &hv_Column28);
+			if (0 != (hv_Area8 > 200))
 			{
 
 				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
@@ -1197,12 +1351,17 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//*****************裂纹2
 		if (m_checkparam.b_CheckPill)
 		{
+			gray_dilation_rect(ho_G, &ho_ImageMax9, 11, 11);
+			sub_image(ho_ImageMax9, ho_G, &ho_ImageSub20, 1, 0);
+			threshold(ho_ImageSub20, &ho_Region33, 20, 255);
 			threshold(ho_G, &ho_Region21, 0, 155);
-			intersection(ho_Region21, ho_RegionDifference24, &ho_RegionIntersection16);
+			intersection(ho_Region33, ho_RegionDifference24, &ho_RegionIntersection16);
 			closing_circle(ho_RegionIntersection16, &ho_RegionClosing9, 2.5);
-			connection(ho_RegionClosing9, &ho_ConnectedRegions29);
+			opening_circle(ho_RegionClosing9, &ho_RegionOpening35, 1.5);
+
+			connection(ho_RegionOpening35, &ho_ConnectedRegions29);
 			select_shape(ho_ConnectedRegions29, &ho_SelectedRegions23, (HTuple("area").Append("circularity")),
-				"and", (HTuple(500).Append(0)), (HTuple(99999).Append(0.03)));
+				"and", (HTuple(250).Append(0)), (HTuple(99999).Append(0.1)));
 			count_obj(ho_SelectedRegions23, &hv_Number17);
 			if (0 != (hv_Number17 > 0))
 			{
@@ -1218,20 +1377,27 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				// stop(); only in hdevelop
 			}
 		}
-	
+
 
 
 
 		//*****片剂内部缺陷
+
 		union1(ho_RegionPill, &ho_RegionPill);
-		gray_dilation_rect(ho_G, &ho_ImageMax6, 7, 7);
-		sub_image(ho_ImageMax6, ho_G, &ho_ImageSub9, 1, 0);
-		threshold(ho_ImageSub9, &ho_Region25, 25, 255);
+		erosion_circle(ho_RegionPill, &ho_RegionErosion12, 5.5);
+
+
+		gray_erosion_rect(ho_R, &ho_ImageMax6, 7, 7);
+		sub_image(ho_R, ho_S, &ho_ImageSub9, 1, 0);
+		threshold(ho_ImageSub9, &ho_Region25, 30, 255);
 		closing_circle(ho_Region25, &ho_RegionClosing12, 2.5);
 		opening_circle(ho_RegionClosing12, &ho_RegionOpening22, 1.5);
-		intersection(ho_RegionPill, ho_RegionOpening22, &ho_RegionIntersection18);
+
+		intersection(ho_RegionErosion12, ho_RegionOpening22, &ho_RegionIntersection18);
 		fill_up(ho_RegionIntersection18, &ho_RegionFillUp11);
 		connection(ho_RegionFillUp11, &ho_ConnectedRegions32);
+		//smallest_circle(ho_ConnectedRegions32, &hv_Row20, &hv_Column20, &hv_Radius7);
+		//gen_circle(&ho_Circle6, hv_Row20, hv_Column20, hv_Radius7);
 
 
 
@@ -1285,7 +1451,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		{
 			erosion_circle(ho_RegionTrans14, &ho_RegionErosion11, 5.5);
 			union1(ho_RegionErosion11, &ho_RegionUnion15);
-			reduce_domain(ho_G, ho_RegionUnion15, &ho_ImageReduced19);
+			reduce_domain(ho_R, ho_RegionUnion15, &ho_ImageReduced19);
 			lines_gauss(ho_ImageReduced19, &ho_Lines1, 1.5, 1, 5, "dark", "true", "bar-shaped",
 				"true");
 			union_adjacent_contours_xld(ho_Lines1, &ho_UnionContours1, 10, 1, "attr_keep");
@@ -1312,51 +1478,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//*************
 
-		//***********片剂缺损
-		if (0 != m_checkparam.b_CheckPill)
-		{
-			smallest_rectangle2(ho_RegionPill, &hv_Row14, &hv_Column14, &hv_Phi4, &hv_Length14,
-				&hv_Length24);
-			gen_rectangle2(&ho_Rectangle8, hv_Row14, hv_Column14, hv_Phi4, hv_Length14 + 30,
-				hv_Length24 + 30);
-			sub_image(ho_B, ho_S, &ho_ImageSub13, 1, 0);
-			threshold(ho_ImageSub13, &ho_Regions3, 0, 90);
-			intersection(ho_Regions3, ho_Rectangle8, &ho_RegionIntersection19);
-			fill_up(ho_RegionIntersection19, &ho_RegionFillUp12);
-			opening_circle(ho_RegionFillUp12, &ho_RegionOpening23, 1.5);
-			connection(ho_RegionOpening23, &ho_ConnectedRegions34);
-			select_shape(ho_ConnectedRegions34, &ho_SelectedRegions31, "area", "and", 5000,
-				99999);
-			shape_trans(ho_SelectedRegions31, &ho_RegionTrans13, "convex");
-			smallest_circle(ho_SelectedRegions31, &hv_Row10, &hv_Column10, &hv_Radius5);
-			gen_circle(&ho_Circle4, hv_Row10, hv_Column10, hv_Radius5 - 3);
-			difference(ho_Circle4, ho_SelectedRegions31, &ho_RegionDifference22);
-			connection(ho_RegionDifference22, &ho_ConnectedRegions33);
-			select_shape(ho_ConnectedRegions33, &ho_SelectedRegions29, (HTuple("area").Append("circularity")), "and",
-				(HTuple(100).Append(0.09)), (HTuple(99999).Append(1)));
-			count_obj(ho_SelectedRegions29, &hv_Number11);
-			if (0 != (hv_Number11 > 0))
-			{
-
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-
-				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-				disp_obj(ho_SelectedRegions29, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "片剂缺损");
-				result = QString::fromLocal8Bit("片剂缺损");
-				// stop(); only in hdevelop
-				return 1;
-			}
-		}
-
-
-
-
-
-		//*************
-
+		
 
 
 
@@ -1365,9 +1487,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//*************脏污/黑点
 		if (0 != m_checkparam.b_CheckPill)
 		{
-
 			select_shape(ho_ConnectedRegions32, &ho_SelectedRegions28, (HTuple("area").Append("circularity")),
-				"and", (HTuple(25).Append(0.25)), (HTuple(99999).Append(1)));
+				"and", (HTuple(20).Append(0.25)), (HTuple(99999).Append(1)));
 			count_obj(ho_SelectedRegions28, &hv_Number10);
 			if (0 != (hv_Number10 != 0))
 			{
@@ -1387,6 +1508,51 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				// stop(); only in hdevelop
 			}
 		}
+		//压泡
+
+		sub_image(ho_S, ho_B, &ho_ImageSub17, 1, 0);
+		erosion_circle(ho_RegionPill, &ho_RegionErosion10, 10.5);
+
+
+		threshold(ho_ImageSub17, &ho_Region27, 0, 20);
+		intersection(ho_Region27, ho_RegionErosion10, &ho_RegionIntersection26);
+		opening_circle(ho_RegionIntersection26, &ho_RegionOpening32, 2.5);
+		connection(ho_RegionOpening32, &ho_ConnectedRegions43);
+		select_shape(ho_ConnectedRegions43, &ho_SelectedRegions38, "area", "and", 50,
+			99999);
+		shape_trans(ho_SelectedRegions38, &ho_RegionTrans16, "convex");
+
+
+
+
+		sub_image(ho_S, ho_G, &ho_ImageSub18, 1, 0);
+		gray_erosion_rect(ho_ImageSub18, &ho_ImageMin1, 11, 11);
+		sub_image(ho_ImageSub18, ho_ImageMin1, &ho_ImageSub19, 1, 0);
+		threshold(ho_ImageSub19, &ho_Region32, 90, 255);
+		intersection(ho_Region32, ho_RegionErosion10, &ho_RegionIntersection27);
+		fill_up(ho_RegionIntersection27, &ho_RegionFillUp17);
+		opening_circle(ho_RegionFillUp17, &ho_RegionOpening33, 1.5);
+		closing_circle(ho_RegionOpening33, &ho_RegionClosing16, 5.5);
+		connection(ho_RegionClosing16, &ho_ConnectedRegions44);
+		select_shape(ho_ConnectedRegions44, &ho_SelectedRegions39, "area", "and", 30,
+			99999);
+		shape_trans(ho_SelectedRegions39, &ho_RegionTrans17, "convex");
+
+		union2(ho_RegionTrans16, ho_RegionTrans17, &ho_RegionUnion21);
+		count_obj(ho_RegionUnion21, &hv_Number21);
+		if (0 != (hv_Number21 > 0))
+		{
+			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			disp_obj(ho_RegionUnion21, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "压泡");
+			result = QString::fromLocal8Bit("压泡");
+			return 1;
+			// stop(); only in hdevelop
+		}
+
 
 		//********
 
@@ -1399,27 +1565,27 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 
-		if (0 != m_checkparam.b_CheckCapsule)
-		{
-			//*****是否检测胶囊头尾部
-			gen_empty_obj(&ho_RegionArc);
-			erosion_circle(ho_RegionBand, &ho_RegionErosion6, 7.5);
-			reduce_domain(ho_B, ho_RegionErosion6, &ho_ImageReduced12);
-			threshold(ho_ImageReduced12, &ho_Region18, 0, 120);
-			fill_up(ho_Region18, &ho_RegionFillUp6);
-			opening_circle(ho_RegionFillUp6, &ho_RegionOpening15, 1.5);
-			connection(ho_RegionOpening15, &ho_ConnectedRegions22);
-			select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", 2000,
-				99999);
-			shape_trans(ho_SelectedRegions17, &ho_RegionTrans7, "convex");
-			//inner_rectangle1 (RegionTrans7, Row13, Column13, Row23, Column23)
-			//gen_rectangle1 (Rectangle6, Row13, Column13, Row23, Column23)
-			smallest_rectangle2(ho_RegionTrans7, &hv_Row8, &hv_Column8, &hv_Phi3, &hv_Length13,
-				&hv_Length23);
-			gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * 70,
-				(hv_Length23 / hv_Length23) * 70);
-			gen_rectangle2(&ho_Rectangle7, hv_Row8, hv_Column8, hv_Phi3, hv_Length13, hv_Length23);
-			difference(ho_Rectangle7, ho_Rectangle4, &ho_RegionDifference15);
+		//if (0 != m_checkparam.b_CheckCapsule)
+		//{
+		//	//*****是否检测胶囊头尾部
+		//	gen_empty_obj(&ho_RegionArc);
+		//	erosion_circle(ho_RegionBand, &ho_RegionErosion6, 7.5);
+		//	reduce_domain(ho_B, ho_RegionErosion6, &ho_ImageReduced12);
+		//	threshold(ho_ImageReduced12, &ho_Region18, 0, 120);
+		//	fill_up(ho_Region18, &ho_RegionFillUp6);
+		//	opening_circle(ho_RegionFillUp6, &ho_RegionOpening15, 1.5);
+		//	connection(ho_RegionOpening15, &ho_ConnectedRegions22);
+		//	select_shape(ho_ConnectedRegions22, &ho_SelectedRegions17, "area", "and", 2000,
+		//		99999);
+		//	shape_trans(ho_SelectedRegions17, &ho_RegionTrans7, "convex");
+		//	//inner_rectangle1 (RegionTrans7, Row13, Column13, Row23, Column23)
+		//	//gen_rectangle1 (Rectangle6, Row13, Column13, Row23, Column23)
+		//	smallest_rectangle2(ho_RegionTrans7, &hv_Row8, &hv_Column8, &hv_Phi3, &hv_Length13,
+		//		&hv_Length23);
+		//	gen_rectangle2(&ho_Rectangle4, hv_Row8, hv_Column8, hv_Phi3, (hv_Length13 / hv_Length13) * 70,
+		//		(hv_Length23 / hv_Length23) * 70);
+		//	gen_rectangle2(&ho_Rectangle7, hv_Row8, hv_Column8, hv_Phi3, hv_Length13, hv_Length23);
+		//	difference(ho_Rectangle7, ho_Rectangle4, &ho_RegionDifference15);
 
 
 
@@ -1428,131 +1594,131 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 
-			//*****
-			//***胶囊内部缺陷
-			union1(ho_RegionPill, &ho_RegionPill);
-			erosion_circle(ho_RegionPill, &ho_RegionErosion2, 12.5);
-			reduce_domain(ho_G, ho_RegionErosion2, &ho_ImageReduced1);
-			//****红色部分胶囊
-			threshold(ho_ImageReduced1, &ho_Region1, 0, 128);
-			connection(ho_Region1, &ho_ConnectedRegions4);
-			select_shape(ho_ConnectedRegions4, &ho_SelectedRegions4, "area", "and", 1500,
-				99999);
-			union1(ho_SelectedRegions4, &ho_RegionUnion3);
-			fill_up(ho_RegionUnion3, &ho_RegionRed);
+		//	//*****
+		//	//***胶囊内部缺陷
+		//	union1(ho_RegionPill, &ho_RegionPill);
+		//	erosion_circle(ho_RegionPill, &ho_RegionErosion2, 12.5);
+		//	reduce_domain(ho_G, ho_RegionErosion2, &ho_ImageReduced1);
+		//	//****红色部分胶囊
+		//	threshold(ho_ImageReduced1, &ho_Region1, 0, 128);
+		//	connection(ho_Region1, &ho_ConnectedRegions4);
+		//	select_shape(ho_ConnectedRegions4, &ho_SelectedRegions4, "area", "and", 1500,
+		//		99999);
+		//	union1(ho_SelectedRegions4, &ho_RegionUnion3);
+		//	fill_up(ho_RegionUnion3, &ho_RegionRed);
 
-			reduce_domain(ho_S, ho_RegionPill, &ho_ImageReduced9);
-			threshold(ho_ImageReduced9, &ho_Region15, 0, 160);
-			intersection(ho_Region15, ho_RegionRed, &ho_RegionIntersection6);
-			fill_up(ho_RegionIntersection6, &ho_RegionFillUp4);
-			opening_circle(ho_RegionFillUp4, &ho_RegionOpening9, 5);
-			erosion_circle(ho_RegionOpening9, &ho_RegionErosion4, 3.5);
-			//****黄色部分胶囊
-			threshold(ho_ImageReduced1, &ho_Region3, 0, 255);
-			difference(ho_Region3, ho_RegionRed, &ho_RegionYellow);
+		//	reduce_domain(ho_S, ho_RegionPill, &ho_ImageReduced9);
+		//	threshold(ho_ImageReduced9, &ho_Region15, 0, 160);
+		//	intersection(ho_Region15, ho_RegionRed, &ho_RegionIntersection6);
+		//	fill_up(ho_RegionIntersection6, &ho_RegionFillUp4);
+		//	opening_circle(ho_RegionFillUp4, &ho_RegionOpening9, 5);
+		//	erosion_circle(ho_RegionOpening9, &ho_RegionErosion4, 3.5);
+		//	//****黄色部分胶囊
+		//	threshold(ho_ImageReduced1, &ho_Region3, 0, 255);
+		//	difference(ho_Region3, ho_RegionRed, &ho_RegionYellow);
 
-			//***红黄分界区域
-			dilation_circle(ho_RegionRed, &ho_RegionDilation2, 3);
-			dilation_circle(ho_RegionYellow, &ho_RegionDilation3, 3);
-			intersection(ho_RegionDilation2, ho_RegionDilation3, &ho_RegionCross);
+		//	//***红黄分界区域
+		//	dilation_circle(ho_RegionRed, &ho_RegionDilation2, 3);
+		//	dilation_circle(ho_RegionYellow, &ho_RegionDilation3, 3);
+		//	intersection(ho_RegionDilation2, ho_RegionDilation3, &ho_RegionCross);
 
-			//****红色胶囊缺陷
-			reduce_domain(ho_V, ho_RegionErosion4, &ho_ImageReduced2);
-			gray_dilation_rect(ho_ImageReduced2, &ho_ImageMax1, 11, 11);
-			sub_image(ho_ImageMax1, ho_ImageReduced2, &ho_ImageSub3, 1, 0);
-			threshold(ho_ImageSub3, &ho_Regions2, 60, 255);
-			threshold(ho_ImageReduced2, &ho_Region2, 0, 100);
-			intersection(ho_Regions2, ho_Region2, &ho_RegionIntersection1);
-			closing_circle(ho_RegionIntersection1, &ho_RegionClosing1, 1);
-			opening_circle(ho_RegionClosing1, &ho_RegionOpening5, 1);
-			connection(ho_RegionOpening5, &ho_ConnectedRegions2);
-			select_shape(ho_ConnectedRegions2, &ho_SelectedRegions1, "area", "and", 20,
-				2000);
+		//	//****红色胶囊缺陷
+		//	reduce_domain(ho_V, ho_RegionErosion4, &ho_ImageReduced2);
+		//	gray_dilation_rect(ho_ImageReduced2, &ho_ImageMax1, 11, 11);
+		//	sub_image(ho_ImageMax1, ho_ImageReduced2, &ho_ImageSub3, 1, 0);
+		//	threshold(ho_ImageSub3, &ho_Regions2, 60, 255);
+		//	threshold(ho_ImageReduced2, &ho_Region2, 0, 100);
+		//	intersection(ho_Regions2, ho_Region2, &ho_RegionIntersection1);
+		//	closing_circle(ho_RegionIntersection1, &ho_RegionClosing1, 1);
+		//	opening_circle(ho_RegionClosing1, &ho_RegionOpening5, 1);
+		//	connection(ho_RegionOpening5, &ho_ConnectedRegions2);
+		//	select_shape(ho_ConnectedRegions2, &ho_SelectedRegions1, "area", "and", 20,
+		//		2000);
 
-			reduce_domain(ho_S, ho_RegionErosion4, &ho_ImageReduced5);
-			gray_dilation_rect(ho_ImageReduced5, &ho_ImageMax5, 5, 5);
-			sub_image(ho_ImageMax5, ho_ImageReduced5, &ho_ImageSub7, 1, 0);
-			//gray_erosion_rect (ImageReduced5, ImageMin, 5, 5)
-			//sub_image (ImageReduced5, ImageMin, ImageSub2, 1, 0)
-			threshold(ho_ImageSub7, &ho_Region6, 35, 255);
+		//	reduce_domain(ho_S, ho_RegionErosion4, &ho_ImageReduced5);
+		//	gray_dilation_rect(ho_ImageReduced5, &ho_ImageMax5, 5, 5);
+		//	sub_image(ho_ImageMax5, ho_ImageReduced5, &ho_ImageSub7, 1, 0);
+		//	//gray_erosion_rect (ImageReduced5, ImageMin, 5, 5)
+		//	//sub_image (ImageReduced5, ImageMin, ImageSub2, 1, 0)
+		//	threshold(ho_ImageSub7, &ho_Region6, 35, 255);
 
-			erosion_circle(ho_RegionErosion4, &ho_RegionErosion3, 3.5);
-			difference(ho_RegionOpening9, ho_RegionErosion3, &ho_RegionDifference8);
-			difference(ho_Region6, ho_RegionDifference8, &ho_RegionDifference9);
-			opening_circle(ho_RegionDifference9, &ho_RegionOpening8, 1.5);
-			connection(ho_RegionOpening8, &ho_ConnectedRegions15);
-			select_shape(ho_ConnectedRegions15, &ho_SelectedRegions9, "area", "and", 20,
-				99999);
+		//	erosion_circle(ho_RegionErosion4, &ho_RegionErosion3, 3.5);
+		//	difference(ho_RegionOpening9, ho_RegionErosion3, &ho_RegionDifference8);
+		//	difference(ho_Region6, ho_RegionDifference8, &ho_RegionDifference9);
+		//	opening_circle(ho_RegionDifference9, &ho_RegionOpening8, 1.5);
+		//	connection(ho_RegionOpening8, &ho_ConnectedRegions15);
+		//	select_shape(ho_ConnectedRegions15, &ho_SelectedRegions9, "area", "and", 20,
+		//		99999);
 
-			//threshold (ImageReduced5, Region7, 120, 255)
-			//intersection (Region6, Region7, RegionIntersection2)
-			//opening_circle (RegionIntersection2, RegionOpening4, 1)
-			//connection (RegionOpening4, ConnectedRegions5)
-			//select_shape (ConnectedRegions5, SelectedRegions6, 'area', 'and', 20, 2000)
+		//	//threshold (ImageReduced5, Region7, 120, 255)
+		//	//intersection (Region6, Region7, RegionIntersection2)
+		//	//opening_circle (RegionIntersection2, RegionOpening4, 1)
+		//	//connection (RegionOpening4, ConnectedRegions5)
+		//	//select_shape (ConnectedRegions5, SelectedRegions6, 'area', 'and', 20, 2000)
 
-			union2(ho_SelectedRegions1, ho_SelectedRegions9, &ho_RegionUnion2);
+		//	union2(ho_SelectedRegions1, ho_SelectedRegions9, &ho_RegionUnion2);
 
-			difference(ho_RegionUnion2, ho_RegionDifference15, &ho_RegionUnion2);
+		//	difference(ho_RegionUnion2, ho_RegionDifference15, &ho_RegionUnion2);
 
-			area_center(ho_RegionUnion2, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-			count_obj(ho_RegionUnion2, &hv_Number);
-			if (0 != (hv_Area3 > 0))
-			{
-				connection(ho_RegionUnion2, &ho_ConnectedRegions7);
-				smallest_circle(ho_ConnectedRegions7, &hv_Row3, &hv_Column3, &hv_Radius1);
-				gen_circle(&ho_Circle1, hv_Row3, hv_Column3, hv_Radius1);
+		//	area_center(ho_RegionUnion2, &hv_Area3, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+		//	count_obj(ho_RegionUnion2, &hv_Number);
+		//	if (0 != (hv_Area3 > 0))
+		//	{
+		//		connection(ho_RegionUnion2, &ho_ConnectedRegions7);
+		//		smallest_circle(ho_ConnectedRegions7, &hv_Row3, &hv_Column3, &hv_Radius1);
+		//		gen_circle(&ho_Circle1, hv_Row3, hv_Column3, hv_Radius1);
 
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 
-				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+		//		set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 
-				disp_obj(ho_Circle1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "胶囊内部缺陷");
-				result = QString::fromLocal8Bit("胶囊内部缺陷");
-				//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
-				//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
-				// stop(); only in hdevelop
-				return 1;
-			}
-			//***黄色胶囊缺陷
+		//		disp_obj(ho_Circle1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+		//		write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "胶囊内部缺陷");
+		//		result = QString::fromLocal8Bit("胶囊内部缺陷");
+		//		//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
+		//		//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+		//		// stop(); only in hdevelop
+		//		return 1;
+		//	}
+		//	//***黄色胶囊缺陷
 
-			reduce_domain(ho_ImageReduced1, ho_RegionYellow, &ho_ImageReduced3);
-			gray_dilation_rect(ho_ImageReduced3, &ho_ImageMax2, 5, 5);
-			sub_image(ho_ImageMax2, ho_ImageReduced3, &ho_ImageSub, 1, 0);
-			threshold(ho_ImageSub, &ho_Region5, 20, 255);
-			threshold(ho_ImageReduced3, &ho_Region8, 0, 185);
-			intersection(ho_Region5, ho_Region8, &ho_RegionIntersection3);
-			difference(ho_RegionIntersection3, ho_RegionCross, &ho_RegionDifference7);
-			connection(ho_RegionDifference7, &ho_ConnectedRegions14);
-			opening_circle(ho_RegionDifference7, &ho_RegionOpening3, 1.5);
-			select_shape(ho_RegionOpening3, &ho_SelectedRegions11, "area", "and", 20, 99999);
+		//	reduce_domain(ho_ImageReduced1, ho_RegionYellow, &ho_ImageReduced3);
+		//	gray_dilation_rect(ho_ImageReduced3, &ho_ImageMax2, 5, 5);
+		//	sub_image(ho_ImageMax2, ho_ImageReduced3, &ho_ImageSub, 1, 0);
+		//	threshold(ho_ImageSub, &ho_Region5, 20, 255);
+		//	threshold(ho_ImageReduced3, &ho_Region8, 0, 185);
+		//	intersection(ho_Region5, ho_Region8, &ho_RegionIntersection3);
+		//	difference(ho_RegionIntersection3, ho_RegionCross, &ho_RegionDifference7);
+		//	connection(ho_RegionDifference7, &ho_ConnectedRegions14);
+		//	opening_circle(ho_RegionDifference7, &ho_RegionOpening3, 1.5);
+		//	select_shape(ho_RegionOpening3, &ho_SelectedRegions11, "area", "and", 20, 99999);
 
-			difference(ho_SelectedRegions11, ho_RegionDifference15, &ho_SelectedRegions11
-			);
+		//	difference(ho_SelectedRegions11, ho_RegionDifference15, &ho_SelectedRegions11
+		//	);
 
 
-			area_center(ho_SelectedRegions11, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
-			if (0 != (hv_Area > 0))
-			{
-				connection(ho_RegionOpening3, &ho_ConnectedRegions10);
-				smallest_circle(ho_ConnectedRegions10, &hv_Row4, &hv_Column4, &hv_Radius2);
-				gen_circle(&ho_Circle2, hv_Row4, hv_Column4, hv_Radius2);
+		//	area_center(ho_SelectedRegions11, &hv_Area, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
+		//	if (0 != (hv_Area > 0))
+		//	{
+		//		connection(ho_RegionOpening3, &ho_ConnectedRegions10);
+		//		smallest_circle(ho_ConnectedRegions10, &hv_Row4, &hv_Column4, &hv_Radius2);
+		//		gen_circle(&ho_Circle2, hv_Row4, hv_Column4, hv_Radius2);
 
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 
-				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+		//		set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 
-				disp_obj(ho_Circle2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "胶囊内部缺陷");
-				result = QString::fromLocal8Bit("胶囊内部缺陷");
-				return 1;
-				//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
-				//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
-				// stop(); only in hdevelop
-			}
-		}
+		//		disp_obj(ho_Circle2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+		//		write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "胶囊内部缺陷");
+		//		result = QString::fromLocal8Bit("胶囊内部缺陷");
+		//		return 1;
+		//		//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
+		//		//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+		//		// stop(); only in hdevelop
+		//	}
+		//}
 
 		//***********阴影区域缺陷
 		sub_image(ho_V, ho_S, &ho_ImageSub16, 1, 0);
@@ -1560,10 +1726,10 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		threshold(ho_ImageScaleMax1, &ho_Region31, 0, 130);
 		intersection(ho_Region31, ho_RegionShadow, &ho_RegionIntersection24);
 		fill_up(ho_RegionIntersection24, &ho_RegionFillUp15);
-		opening_circle(ho_RegionFillUp15, &ho_RegionOpening28, 1.5);
+		opening_circle(ho_RegionFillUp15, &ho_RegionOpening28, 2.5);
 		/*closing_circle(ho_RegionIntersection24, &ho_RegionClosing15, 2.5);*/
 		connection(ho_RegionOpening28, &ho_ConnectedRegions40);
-		select_shape(ho_ConnectedRegions40, &ho_SelectedRegions36, "area", "and", 25,
+		select_shape(ho_ConnectedRegions40, &ho_SelectedRegions36, "area", "and", 30,
 			99999);
 		count_obj(ho_SelectedRegions36, &hv_Number16);
 		if (0 != (hv_Number16 > 0))
@@ -1580,9 +1746,9 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		}
 		//********************
-		// 
+		// 皱板
 
-		
+
 		sub_image(ho_V, ho_S, &ho_ImageSub14, 1, 0);
 		difference(ho_RegionBand, ho_RegionBatch, &ho_RegionDifference26);
 		difference(ho_RegionDifference26, ho_RegionUnion18, &ho_RegionDifference25);
@@ -1631,7 +1797,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			union1(ho_RegionIntersection22, &ho_RegionUnion16);
 			area_center(ho_RegionUnion16, &hv_Area7, &hv_Row18, &hv_Column18);
 			region_features(ho_RegionUnion16, "circularity", &hv_Value2);
-			if (0 != (HTuple(hv_Area7 > 10000).And(hv_Value2 > 0.2)))
+			if (0 != (HTuple(hv_Area7 > 10000).And(hv_Value2 > 0.15)))
 			{
 				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
@@ -1644,101 +1810,102 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				// stop(); only in hdevelop
 			}
 		}
-		if (0 != m_checkparam.b_CheckCapsule)
-		{
-			gray_dilation_rect(ho_R, &ho_ImageMax3, 7, 7);
-			sub_image(ho_ImageMax3, ho_R, &ho_ImageSub4, 1, 0);
-			threshold(ho_ImageSub4, &ho_Region9, 45, 255);
+		
+		//if (0 != m_checkparam.b_CheckCapsule)
+		//{
+		//	gray_dilation_rect(ho_R, &ho_ImageMax3, 7, 7);
+		//	sub_image(ho_ImageMax3, ho_R, &ho_ImageSub4, 1, 0);
+		//	threshold(ho_ImageSub4, &ho_Region9, 45, 255);
 
-			threshold(ho_G, &ho_Region20, 0, 170);
-			erosion_circle(ho_RegionBand, &ho_RegionErosion7, 15.5);
-			intersection(ho_Region20, ho_RegionErosion7, &ho_RegionIntersection15);
-			fill_up(ho_RegionIntersection15, &ho_RegionFillUp9);
-			opening_circle(ho_RegionFillUp9, &ho_RegionOpening19, 20.5);
-			connection(ho_RegionOpening19, &ho_ConnectedRegions28);
-			shape_trans(ho_ConnectedRegions28, &ho_RegionTrans9, "convex");
-			select_shape(ho_RegionTrans9, &ho_SelectedRegions22, "area", "and", 15000,
-				99999);
-			union1(ho_SelectedRegions22, &ho_RegionUnion10);
-			erosion_circle(ho_RegionUnion10, &ho_RegionErosion8, 5.5);
-			difference(ho_Region9, ho_RegionErosion8, &ho_RegionDifference18);
+		//	threshold(ho_G, &ho_Region20, 0, 170);
+		//	erosion_circle(ho_RegionBand, &ho_RegionErosion7, 15.5);
+		//	intersection(ho_Region20, ho_RegionErosion7, &ho_RegionIntersection15);
+		//	fill_up(ho_RegionIntersection15, &ho_RegionFillUp9);
+		//	opening_circle(ho_RegionFillUp9, &ho_RegionOpening19, 20.5);
+		//	connection(ho_RegionOpening19, &ho_ConnectedRegions28);
+		//	shape_trans(ho_ConnectedRegions28, &ho_RegionTrans9, "convex");
+		//	select_shape(ho_RegionTrans9, &ho_SelectedRegions22, "area", "and", 15000,
+		//		99999);
+		//	union1(ho_SelectedRegions22, &ho_RegionUnion10);
+		//	erosion_circle(ho_RegionUnion10, &ho_RegionErosion8, 5.5);
+		//	difference(ho_Region9, ho_RegionErosion8, &ho_RegionDifference18);
 
-			intersection(ho_RegionDifference18, ho_Rectangle4, &ho_RegionIntersection13
-			);
-			connection(ho_RegionIntersection13, &ho_ConnectedRegions24);
-			select_shape(ho_ConnectedRegions24, &ho_SelectedRegions19, (HTuple("width").Append("height")),
-				"and", (HTuple(5).Append(3)), (HTuple(99999).Append(99999)));
-			union1(ho_SelectedRegions19, &ho_RegionUnion7);
-			closing_circle(ho_RegionUnion7, &ho_RegionClosing7, 2.5);
-			connection(ho_RegionClosing7, &ho_ConnectedRegions23);
-			select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", 30,
-				99999);
-
-
-
-			reduce_domain(ho_R, ho_RegionErosion6, &ho_ImageReduced13);
-			threshold(ho_ImageReduced13, &ho_Regions1, 0, 190);
-			closing_circle(ho_Regions1, &ho_RegionClosing8, 1.5);
-			fill_up(ho_RegionClosing8, &ho_RegionFillUp7);
-			opening_circle(ho_RegionFillUp7, &ho_RegionOpening17, 3.5);
-			connection(ho_RegionOpening17, &ho_ConnectedRegions25);
-			select_shape(ho_ConnectedRegions25, &ho_SelectedRegions20, "area", "and", 1500,
-				99999);
-			shape_trans(ho_SelectedRegions20, &ho_RegionTrans8, "convex");
-			union2(ho_RegionTrans8, ho_Rectangle1, &ho_RegionUnion8);
-			difference(ho_RegionErosion6, ho_RegionUnion8, &ho_RegionDifference17);
-			intersection(ho_RegionDifference17, ho_Region9, &ho_RegionIntersection14);
-			fill_up(ho_RegionIntersection14, &ho_RegionFillUp8);
-			opening_circle(ho_RegionFillUp8, &ho_RegionOpening18, 1.5);
-			connection(ho_RegionOpening18, &ho_ConnectedRegions26);
-			select_shape(ho_ConnectedRegions26, &ho_SelectedRegions21, "area", "and", 30,
-				99999);
-			union2(ho_SelectedRegions18, ho_SelectedRegions21, &ho_RegionUnion9);
-			connection(ho_RegionUnion9, &ho_ConnectedRegions27);
-			count_obj(ho_ConnectedRegions27, &hv_Number8);
-
-
-			//difference (Region9, RegionDilation, RegionDifference6)
-			//fill_up (RegionDifference6, RegionFillUp3)
-			//closing_circle (RegionFillUp3, RegionClosing3, 1.5)
-			//connection (RegionClosing3, ConnectedRegions13)
-			//select_shape (ConnectedRegions13, SelectedRegions8, ['width','height','area'], 'and', [1,3,20], [100,100,9999])
-			//count_obj (SelectedRegions8, Number2)
-			//difference (RegionTrans6, RegionPill, RegionDifference13)
-			//dilation_circle (RegionDifference13, RegionDilation4, 5)
-			//intersection (RegionDilation4, SelectedRegions8, RegionIntersection12)
-			//opening_circle (RegionIntersection12, RegionOpening14, 1.5)
-			//difference (SelectedRegions8, RegionOpening14, RegionDifference14)
+		//	intersection(ho_RegionDifference18, ho_Rectangle4, &ho_RegionIntersection13
+		//	);
+		//	connection(ho_RegionIntersection13, &ho_ConnectedRegions24);
+		//	select_shape(ho_ConnectedRegions24, &ho_SelectedRegions19, (HTuple("width").Append("height")),
+		//		"and", (HTuple(5).Append(3)), (HTuple(99999).Append(99999)));
+		//	union1(ho_SelectedRegions19, &ho_RegionUnion7);
+		//	closing_circle(ho_RegionUnion7, &ho_RegionClosing7, 2.5);
+		//	connection(ho_RegionClosing7, &ho_ConnectedRegions23);
+		//	select_shape(ho_ConnectedRegions23, &ho_SelectedRegions18, "area", "and", 30,
+		//		99999);
 
 
 
+		//	reduce_domain(ho_R, ho_RegionErosion6, &ho_ImageReduced13);
+		//	threshold(ho_ImageReduced13, &ho_Regions1, 0, 190);
+		//	closing_circle(ho_Regions1, &ho_RegionClosing8, 1.5);
+		//	fill_up(ho_RegionClosing8, &ho_RegionFillUp7);
+		//	opening_circle(ho_RegionFillUp7, &ho_RegionOpening17, 3.5);
+		//	connection(ho_RegionOpening17, &ho_ConnectedRegions25);
+		//	select_shape(ho_ConnectedRegions25, &ho_SelectedRegions20, "area", "and", 1500,
+		//		99999);
+		//	shape_trans(ho_SelectedRegions20, &ho_RegionTrans8, "convex");
+		//	union2(ho_RegionTrans8, ho_Rectangle1, &ho_RegionUnion8);
+		//	difference(ho_RegionErosion6, ho_RegionUnion8, &ho_RegionDifference17);
+		//	intersection(ho_RegionDifference17, ho_Region9, &ho_RegionIntersection14);
+		//	fill_up(ho_RegionIntersection14, &ho_RegionFillUp8);
+		//	opening_circle(ho_RegionFillUp8, &ho_RegionOpening18, 1.5);
+		//	connection(ho_RegionOpening18, &ho_ConnectedRegions26);
+		//	select_shape(ho_ConnectedRegions26, &ho_SelectedRegions21, "area", "and", 30,
+		//		99999);
+		//	union2(ho_SelectedRegions18, ho_SelectedRegions21, &ho_RegionUnion9);
+		//	connection(ho_RegionUnion9, &ho_ConnectedRegions27);
+		//	count_obj(ho_ConnectedRegions27, &hv_Number8);
 
-			//fill_up (Region9, RegionFillUp1)
-			//threshold (ImageLeft, Region10, 0, 140)
-			//intersection (RegionFillUp1, Region10, RegionIntersection4)
-			//opening_circle (RegionIntersection4, RegionOpening2, 1)
-			//connection (RegionOpening2, ConnectedRegions6)
-			//select_shape (ConnectedRegions6, SelectedRegions3, 'area', 'and', 20, 99999)
-			//count_obj (SelectedRegions3, Number2)
-			if (0 != (hv_Number8 != 0))
-			{
-				smallest_circle(ho_ConnectedRegions27, &hv_Row2, &hv_Column2, &hv_Radius);
-				gen_circle(&ho_Circle, hv_Row2, hv_Column2, hv_Radius);
 
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//	//difference (Region9, RegionDilation, RegionDifference6)
+		//	//fill_up (RegionDifference6, RegionFillUp3)
+		//	//closing_circle (RegionFillUp3, RegionClosing3, 1.5)
+		//	//connection (RegionClosing3, ConnectedRegions13)
+		//	//select_shape (ConnectedRegions13, SelectedRegions8, ['width','height','area'], 'and', [1,3,20], [100,100,9999])
+		//	//count_obj (SelectedRegions8, Number2)
+		//	//difference (RegionTrans6, RegionPill, RegionDifference13)
+		//	//dilation_circle (RegionDifference13, RegionDilation4, 5)
+		//	//intersection (RegionDilation4, SelectedRegions8, RegionIntersection12)
+		//	//opening_circle (RegionIntersection12, RegionOpening14, 1.5)
+		//	//difference (SelectedRegions8, RegionOpening14, RegionDifference14)
 
-				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 
-				disp_obj(ho_Circle, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "药板缺陷");
-				result = QString::fromLocal8Bit("药板缺陷");
-				//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
-				//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
-				// stop(); only in hdevelop
-				return 1;
-			}
-		}
+
+
+		//	//fill_up (Region9, RegionFillUp1)
+		//	//threshold (ImageLeft, Region10, 0, 140)
+		//	//intersection (RegionFillUp1, Region10, RegionIntersection4)
+		//	//opening_circle (RegionIntersection4, RegionOpening2, 1)
+		//	//connection (RegionOpening2, ConnectedRegions6)
+		//	//select_shape (ConnectedRegions6, SelectedRegions3, 'area', 'and', 20, 99999)
+		//	//count_obj (SelectedRegions3, Number2)
+		//	if (0 != (hv_Number8 != 0))
+		//	{
+		//		smallest_circle(ho_ConnectedRegions27, &hv_Row2, &hv_Column2, &hv_Radius);
+		//		gen_circle(&ho_Circle, hv_Row2, hv_Column2, hv_Radius);
+
+		//		disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+		//		set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+
+		//		disp_obj(ho_Circle, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+		//		set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+		//		write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "药板缺陷");
+		//		result = QString::fromLocal8Bit("药板缺陷");
+		//		//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
+		//		//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+		//		// stop(); only in hdevelop
+		//		return 1;
+		//	}
+		//}
 
 		disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 		//set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");

@@ -70,7 +70,9 @@ public:
 	bool SaveYAMLFile(QString filepath);
 public slots:
 	void SliderValueChanged(int);
+	void ComboValueChanged(int);
 	void CheckValueChanged(int);
+	void LineValueChanged(QString);
 	void showCnDetail(QTreeWidgetItem*, int);
 	void textAreaChanged();
 };

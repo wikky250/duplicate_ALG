@@ -60,7 +60,7 @@ namespace YAML {
 	struct convert<CharacterType> {
 		static bool decode(const Node& node, CharacterType& cType) {
 			cType.type = node["type"].as<std::string>();
-			cType.value = node["value"].as<int>();
+			cType.value = node["value"].as<double>();
 			cType.Smallest = node["Smallest"].as<int>();
 			cType.Biggest = node["Biggest"].as<int>();
 			cType.CN_Discrib = node["CN_Discrib"].as<std::string>();
@@ -176,6 +176,7 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
                             QCheckBox::indicator:checked{background:url(./140.png)}");
 									}
 									this->setItemWidget(pItemError, 1, checkbox);
+
 									QObject::connect(checkbox, SIGNAL(stateChanged(int)), this, SLOT(CheckValueChanged(int)));
 								}
 							}
@@ -221,6 +222,7 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 									// 									le->setObjectName("le" + QString(name.c_str()) + "+" + key.c_str());
 									// 									le->setText(QString::number(ty.value));
 									// 									le->setEnabled(false);
+
 									pItem->setData(1, Qt::DisplayRole, ty.value);
 									pItem->setData(3, Qt::DisplayRole, ty.CN_Discrib.c_str());
 									this->setItemWidget(pItem, 2, control);
@@ -228,6 +230,31 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 
 									QObject::connect(control, SIGNAL(valueChanged(int)), this, SLOT(SliderValueChanged(int)));
 								}
+								if (ty.type == "Combo")
+								{
+									QComboBox *qcb = new QComboBox();
+									qcb->setObjectName(QString(name.c_str()) + "+" + key.c_str());
+									qcb->addItems(QStringList() << "R" << "G"<<"B"<<"H"<<"S"<<"V");
+									qcb->setCurrentIndex(ty.value);
+									pItem->setData(1, Qt::DisplayRole, ty.value);
+									pItem->setData(3, Qt::DisplayRole, ty.CN_Discrib.c_str());
+									this->setItemWidget(pItem, 2, qcb);
+									QObject::connect(qcb, SIGNAL(activated(int)), this, SLOT(ComboValueChanged(int)));
+								}
+								if (ty.type == "Edit")
+								{
+									QLineEdit *qte = new QLineEdit();
+									qte->setObjectName(QString(name.c_str()) + "+" + key.c_str());
+									qte->setText(QString::number(ty.value));
+									qte->setAlignment(Qt::AlignCenter);
+									//qte->setFixedHeight(size().height());
+									pItem->setData(1, Qt::DisplayRole, ty.value);
+									pItem->setData(3, Qt::DisplayRole, ty.CN_Discrib.c_str());
+									this->setItemWidget(pItem, 2, qte);
+									QObject::connect(qte, SIGNAL(textChanged(QString)), this, SLOT(LineValueChanged(QString)));
+
+								}
+								
 							}
 						}
 					}
@@ -277,6 +304,28 @@ bool QMyTreeWidget::SaveYAMLFile(QString filepath)
 	return false;
 }
 
+void QMyTreeWidget::ComboValueChanged(int i)
+{
+	QComboBox* sind = qobject_cast<QComboBox*>(QObject::sender());
+	QString objectname = sind->objectName();
+	QString errtype = objectname.left(objectname.indexOf("+"));
+	QString errname = objectname.mid(objectname.indexOf("+") + 1);
+	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i;
+	QTreeWidgetItem* cur = this->currentItem();
+	cur->setData(1, Qt::DisplayRole, i);
+	emit TempSave();
+}
+void QMyTreeWidget::LineValueChanged(QString i)
+{
+	QLineEdit* sind = qobject_cast<QLineEdit*>(QObject::sender());
+	QString objectname = sind->objectName();
+	QString errtype = objectname.left(objectname.indexOf("+"));
+	QString errname = objectname.mid(objectname.indexOf("+") + 1);
+	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i.toStdString();
+	QTreeWidgetItem* cur = this->currentItem();
+	cur->setData(1, Qt::DisplayRole, i);
+	emit TempSave();
+}
 void QMyTreeWidget::CheckValueChanged(int i)
 {
 	QCheckBox* sind = qobject_cast<QCheckBox*>(QObject::sender());
