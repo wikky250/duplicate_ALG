@@ -8,6 +8,7 @@
 #include <QTextEdit>
 #include <QTimer>
 #include <QSlider>
+#include <QLineEdit>
 
 class QMyTextEdit: public QTextEdit
 {

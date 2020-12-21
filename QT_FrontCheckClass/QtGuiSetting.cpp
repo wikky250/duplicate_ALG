@@ -290,7 +290,7 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 
 		CHECKPARAM _checkparam;
 		strcpy(_checkparam.c_CameraName, _CameraName);
-		NodeToParam(_checkparam, ui.treeWidget->_mparam[_CameraName]);
+		NodeToParam(_checkparam, ui.treeWidget->_mparam);
 		bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, nullptr, str);
 		bool b = ((CInterCHeck*)p_Parent)->RealCheck(str, &_checkparam, m_WND,&str);
 		m_bChanged = true;
@@ -471,8 +471,7 @@ void QtGuiSetting::SLOTShowImage(int pos, Mat img, int times)
 	ss.setHeight(ss.height() - zz * 2);
 	Mat imgsend;
 	if (img.channels() == 1)
-	{
-		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
+	{		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
 	}
 	else if (img.channels() == 3)
 	{
@@ -1080,7 +1079,7 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
 			CHECKPARAM _checkparam;
 
 			strcpy(_checkparam.c_CameraName, _CameraName);
-			LoadCheckParam(&_checkparam, &QString(AppPath + "/Temp.yaml"));
+			NodeToParam(_checkparam, ui.treeWidget->_mparam);
 			bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, &_checkparam, str);
 			bool b = ((CInterCHeck*)p_Parent)->RealCheck(str, &_checkparam, m_WND);
 		}

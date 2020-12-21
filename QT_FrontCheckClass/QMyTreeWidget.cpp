@@ -319,19 +319,25 @@ void QMyTreeWidget::ComboValueChanged(int i)
 	cur->setData(1, Qt::DisplayRole, i);
 	emit TempSave(objectname);
 }
-void QMyTreeWidget::LineValueChanged(QString i)
+void QMyTreeWidget::LineValueChanged(QString str)
 {
+
 	QLineEdit* sind = qobject_cast<QLineEdit*>(QObject::sender());
+	if (str=="")
+	{
+		sind->setText("0");
+		return;
+	}
 	QString objectname = sind->objectName();
 	QString errtype = objectname.left(objectname.indexOf("+"));
 	QString errname = objectname.mid(objectname.indexOf("+") + 1);
-	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i.toStdString();
-	if (sind->text().isEmpty())
-	{
-		sind->setText("");
-	}
+	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = str.toStdString();
+	//if (sind->text()=="")
+	//{
+	//	sind->setText("");
+	//}
 	QTreeWidgetItem* cur = this->currentItem();
-	cur->setData(1, Qt::DisplayRole, i);
+	cur->setData(1, Qt::DisplayRole, str);
 	emit TempSave(objectname);
 }
 
