@@ -244,6 +244,9 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 								if (ty.type == "Edit")
 								{
 									QLineEdit *qte = new QLineEdit();
+									QRegExp rx = QRegExp("[\40]*");
+									QRegExpValidator* validator = new QRegExpValidator(rx);
+									qte->setValidator(validator);
 									qte->setObjectName(QString(name.c_str()) + "+" + key.c_str());
 									qte->setText(QString::number(ty.value));
 									qte->setAlignment(Qt::AlignCenter);
@@ -252,7 +255,7 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 									pItem->setData(3, Qt::DisplayRole, ty.CN_Discrib.c_str());
 									this->setItemWidget(pItem, 2, qte);
 									QObject::connect(qte, SIGNAL(textChanged(QString)), this, SLOT(LineValueChanged(QString)));
-
+									QObject::connect(qte, SIGNAL(editingFinished()), this, SLOT(editFinished()));
 								}
 								
 							}
@@ -324,10 +327,26 @@ void QMyTreeWidget::LineValueChanged(QString i)
 	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i.toStdString();
 	if (sind->text().isEmpty())
 	{
+		sind->setText("");
+	}
+	
+	QTreeWidgetItem* cur = this->currentItem();
+	cur->setData(1, Qt::DisplayRole, i);
+	emit TempSave();
+}
+void QMyTreeWidget::editFinished()
+{
+	QLineEdit* sind = qobject_cast<QLineEdit*>(QObject::sender());
+	QString objectname = sind->objectName();
+	QString errtype = objectname.left(objectname.indexOf("+"));
+	QString errname = objectname.mid(objectname.indexOf("+") + 1);
+	bool empty = sind->text() == " ";
+	if (sind->text().isEmpty() || sind->text() == " ")
+	{
 		sind->setText(QString::number(0));
 	}
 	QTreeWidgetItem* cur = this->currentItem();
-	cur->setData(1, Qt::DisplayRole, i);
+	//cur->setData(1, Qt::DisplayRole, i);
 	emit TempSave();
 }
 void QMyTreeWidget::CheckValueChanged(int i)

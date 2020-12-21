@@ -75,4 +75,5 @@ public slots:
 	void LineValueChanged(QString);
 	void showCnDetail(QTreeWidgetItem*, int);
 	void textAreaChanged();
+	void editFinished();
 };
