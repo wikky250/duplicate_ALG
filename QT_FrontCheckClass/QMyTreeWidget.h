@@ -57,12 +57,12 @@ class QMyTreeWidget : public QTreeWidget
 signals:
 	void TempSave(QString);
 private:
-	YAML::Node _mparam;
 	YAML::Node _param;
 	QTextDocument *document = nullptr;
 	QTextEdit *editor = nullptr;
 	QMyTextEdit * detailtext = nullptr;
 public:
+	YAML::Node _mparam;
 	QMyTreeWidget(QWidget *parent);
 	~QMyTreeWidget();
 	bool ReadYAMLFile(QString filepath);
