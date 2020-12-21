@@ -322,6 +322,10 @@ void QMyTreeWidget::LineValueChanged(QString i)
 	QString errtype = objectname.left(objectname.indexOf("+"));
 	QString errname = objectname.mid(objectname.indexOf("+") + 1);
 	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i.toStdString();
+	if (sind->text().isEmpty())
+	{
+		sind->setText(QString::number(0));
+	}
 	QTreeWidgetItem* cur = this->currentItem();
 	cur->setData(1, Qt::DisplayRole, i);
 	emit TempSave();
