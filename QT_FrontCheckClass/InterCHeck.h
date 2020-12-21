@@ -97,7 +97,6 @@ public:
 	bool OtherBeforeCheck(Mat);
 	bool OtherAfterCheck();
 	int RealCheck(QString&, CHECKPARAM *, int);
-	bool LoadCheckParam(CHECKPARAM *checkparam,QString* str = nullptr);
 public slots:
 	void EndCheck();
 	bool SaveCheckParam();

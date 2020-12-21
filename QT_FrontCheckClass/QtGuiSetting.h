@@ -6,6 +6,8 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include "ui_QtGuiSetting.h"
+extern QString AppPath;
+bool LoadCheckParam(CHECKPARAM *checkparam, QString* str = nullptr);
 class QtGuiSetting : public QDialog
 {
 	Q_OBJECT
@@ -33,7 +35,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 		//算法相关
 public:
-	void SetParam(CHECKPARAM);
+	void SetParam(char*);
 	void SetModelMat(Mat img);
 private:
 	bool b_GetAuthority;
@@ -44,7 +46,6 @@ private:
 	//选择视频路径
 	QString m_sSelectFile;
 	//检测参数
-	CHECKPARAM _checkparam;
 	YAML::Node m_node;
 	//模板样品保存位置
 	QString m_strSaveFile;
