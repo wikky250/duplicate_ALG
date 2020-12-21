@@ -55,7 +55,7 @@ class QMyTreeWidget : public QTreeWidget
 {
 	Q_OBJECT
 signals:
-	void TempSave();
+	void TempSave(QString);
 private:
 	YAML::Node _mparam;
 	YAML::Node _param;

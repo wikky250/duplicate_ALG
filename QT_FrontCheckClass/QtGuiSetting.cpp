@@ -280,9 +280,15 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 		//ui.lw_ImageList->move(ui.tableWidget->pos().x() + ui.tableWidget->width() + 2, ui.tableWidget->pos().y());
 	}
 //	connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(onPopKeyboard(int, int)));
-	connect(ui.treeWidget, &QMyTreeWidget::TempSave, [=]
+	connect(ui.treeWidget, &QMyTreeWidget::TempSave, [=](QString str)
 	{
-		ui.treeWidget->SaveYAMLFile(qApp->applicationDirPath()+"/Temp.yaml");
+		ui.treeWidget->SaveYAMLFile(AppPath + "/Temp.yaml");
+
+		CHECKPARAM _checkparam;
+		strcpy(_checkparam.c_CameraName, _CameraName);
+		LoadCheckParam(&_checkparam, &QString(AppPath + "/Temp.yaml"));
+		bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, nullptr, str);
+		bool b = ((CInterCHeck*)p_Parent)->RealCheck(str, &_checkparam, m_WND,&str);
 		m_bChanged = true;
 	});
 }
@@ -920,6 +926,7 @@ void QtGuiSetting::hideKeyBoard()
 void QtGuiSetting::SetParam(char* c_CameraName)
 {
 	m_node = YAML::LoadFile(QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml").toStdString());
+	strcpy(_CameraName, c_CameraName);
 	ui.treeWidget->ReadYAMLFile(m_node,c_CameraName);
 }
 void QtGuiSetting::onCellChanged(int r, int c)
@@ -1067,6 +1074,8 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
 			int i_captotal = 0;
 			QString str;
 			CHECKPARAM _checkparam;
+
+			strcpy(_checkparam.c_CameraName, _CameraName);
 			LoadCheckParam(&_checkparam, &QString(AppPath + "/Temp.yaml"));
 			bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, &_checkparam, str);
 			bool b = ((CInterCHeck*)p_Parent)->RealCheck(str, &_checkparam, m_WND);

@@ -47,6 +47,7 @@ private:
 	QString m_sSelectFile;
 	//检测参数
 	YAML::Node m_node;
+	char _CameraName[20];
 	//模板样品保存位置
 	QString m_strSaveFile;
 	//模板样品保存位置

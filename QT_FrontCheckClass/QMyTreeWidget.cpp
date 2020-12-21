@@ -9,6 +9,30 @@
 #include <QHeaderView>
 #include <QFontDialog>
 #include <QScrollBar>
+#define SLIDERSTYLE "  \
+     QSlider::add-page:Horizontal\
+     {     \
+        background-color: rgb(87, 97, 106);\
+        height:4px;\
+     }\
+     QSlider::sub-page:Horizontal \
+    {\
+        background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(7,208,255, 255), stop:1 rgba(7,208,255, 255));\
+        height:4px;\
+     }\
+    QSlider::groove:Horizontal \
+    {\
+        background:transparent;\
+        height:6px;\
+    }\
+    QSlider::handle:Horizontal \
+    {\
+        height: 25px;\
+        width:35px;\
+        border-image: url(./btn.png);\
+        margin: -15 0px; \
+    }\
+    "
 QMyTreeWidget::QMyTreeWidget(QWidget *parent)
 	: QTreeWidget(parent)
 {
@@ -194,30 +218,7 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 									control->setMaximum(ty.Biggest);
 									control->setValue(ty.value);
 
-									control->setStyleSheet("  \
-     QSlider::add-page:Horizontal\
-     {     \
-        background-color: rgb(87, 97, 106);\
-        height:4px;\
-     }\
-     QSlider::sub-page:Horizontal \
-    {\
-        background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(7,208,255, 255), stop:1 rgba(7,208,255, 255));\
-        height:4px;\
-     }\
-    QSlider::groove:Horizontal \
-    {\
-        background:transparent;\
-        height:6px;\
-    }\
-    QSlider::handle:Horizontal \
-    {\
-        height: 25px;\
-        width:35px;\
-        border-image: url(./btn.png);\
-        margin: -15 0px; \
-    }\
-    ");
+									control->setStyleSheet(SLIDERSTYLE);
 									// 									QLineEdit* le = new QLineEdit();
 									// 									le->setObjectName("le" + QString(name.c_str()) + "+" + key.c_str());
 									// 									le->setText(QString::number(ty.value));
@@ -313,7 +314,7 @@ void QMyTreeWidget::ComboValueChanged(int i)
 	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i;
 	QTreeWidgetItem* cur = this->currentItem();
 	cur->setData(1, Qt::DisplayRole, i);
-	emit TempSave();
+	emit TempSave(objectname);
 }
 void QMyTreeWidget::LineValueChanged(QString i)
 {
@@ -324,7 +325,7 @@ void QMyTreeWidget::LineValueChanged(QString i)
 	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i.toStdString();
 	QTreeWidgetItem* cur = this->currentItem();
 	cur->setData(1, Qt::DisplayRole, i);
-	emit TempSave();
+	emit TempSave(objectname);
 }
 void QMyTreeWidget::CheckValueChanged(int i)
 {
@@ -392,7 +393,7 @@ void QMyTreeWidget::SliderValueChanged(int i)
 	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i;
 	QTreeWidgetItem* cur = this->currentItem();
 	cur->setData(1, Qt::DisplayRole, i);
-	emit TempSave();
+	emit TempSave(objectname);
 }
 
 QMyTreeWidget::~QMyTreeWidget()
