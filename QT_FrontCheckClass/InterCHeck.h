@@ -96,7 +96,7 @@ public:
 	virtual void SetCloseCallBack(CallbackClose callbackfun);
 	bool OtherBeforeCheck(Mat);
 	bool OtherAfterCheck();
-	int RealCheck(QString&, CHECKPARAM *, int);
+	int RealCheck(QString&, CHECKPARAM *, int,QString*pos = nullptr);
 public slots:
 	void EndCheck();
 	bool SaveCheckParam();

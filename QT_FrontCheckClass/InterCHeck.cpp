@@ -474,7 +474,7 @@ void calculate_lines_gauss_parameters(Halcon::HTuple hv_MaxLineWidth, Halcon::HT
 	return;
 }
 
-int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1)
+int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1,QString* pos)
 {
 	int i_error = 0, i_null = 0;
 	
