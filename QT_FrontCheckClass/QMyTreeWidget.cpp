@@ -321,7 +321,6 @@ void QMyTreeWidget::ComboValueChanged(int i)
 }
 void QMyTreeWidget::LineValueChanged(QString str)
 {
-
 	QLineEdit* sind = qobject_cast<QLineEdit*>(QObject::sender());
 	if (str=="")
 	{

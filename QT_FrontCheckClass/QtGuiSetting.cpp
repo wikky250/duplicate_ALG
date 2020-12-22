@@ -470,8 +470,7 @@ void QtGuiSetting::SLOTShowImage(int pos, Mat img, int times)
 	ss.setWidth(ss.width() - zz * 2);
 	ss.setHeight(ss.height() - zz * 2);
 	Mat imgsend;
-	if (img.channels() == 1)
-	{		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
+	if (img.channels() == 1)	{		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
 	}
 	else if (img.channels() == 3)
 	{
@@ -937,6 +936,14 @@ void QtGuiSetting::onCellChanged(int r, int c)
 }
 void QtGuiSetting::SetModelMat(Mat tempgray)
 {
+	if (tempgray.empty())
+	{
+		m_MOriginal=imread((qApp->applicationDirPath() + "/DefaultModel/StandTemp.bmp").toStdString());
+	}
+	else
+	{
+		tempgray.copyTo(m_MOriginal);
+	}
 }
 void QtGuiSetting::closeEvent(QCloseEvent *)
 {
