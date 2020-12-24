@@ -330,7 +330,7 @@ void QMyTreeWidget::LineValueChanged(QString str)
 	QString objectname = sind->objectName();
 	QString errtype = objectname.left(objectname.indexOf("+"));
 	QString errname = objectname.mid(objectname.indexOf("+") + 1);
-	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = str.toStdString();
+	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = str.toDouble();
 	//if (sind->text()=="")
 	//{
 	//	sind->setText("");
