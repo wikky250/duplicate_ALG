@@ -79,6 +79,9 @@ struct CHECKPARAM
 	int i_Number_NumPill = -1;
 	int i_MinGray_NumPill = -1;
 	int i_MinArea_NumPill = -1;
+	//powder
+	int i_Channel_Powder = -1;
+	int i_DifMean_Powder = -1;
 	//batch 
 	int i_PlusLength1_Batch = -1;
 	int i_PlusLength2_Batch = -1;
@@ -88,10 +91,13 @@ struct CHECKPARAM
 	double d_Closing_Batch = -1;
 	int i_MinArea_Batch = -1;
 	//shadow of bubble
-	int i_Channel_Shadow = -1;
+	int i_Channel1_Shadow = -1;
+	int i_Channel2_Shadow = -1;
+	int i_Channel3_Shadow = -1;
 	int i_MinGray_Shadow = -1;
 	int i_Width_Shadow = -1;
 	int i_Length_Shadow = -1;
+	int i_Area_Shadow = -1;
 	double d_Closing_Shadow = -1;
 	double d_Opening_Shadow = -1;
 	int i_Radius_Shadow = -1;
@@ -103,16 +109,17 @@ struct CHECKPARAM
 	int i_MinArea_BlackSpot = -1;
 	double d_Circularity_BlackSpot = -1;
 	int i_Channel_Dirty = -1;
-	int i_MinGray_Dirty = -1;
+	int i_MaxGray_Dirty = -1;
 	int i_MinArea_Dirty = -1;
 	double d_Circularity_Dirty = -1;
 	//another crack of band
 	int i_Channel_Fissure = -1;
-	int i_MaxGray_Fissure = -1;
+	int i_MinGray_Fissure = -1;
 	int i_MinArea_Fissure = -1;
 	double d_Circularity_Fissure = -1;
 	//inner defect of pill
-	int i_Channel_Iner = -1;
+	int i_Channel1_Iner = -1;
+	int i_Channel2_Iner = -1;
 	int i_MinGray_Iner = -1;
 	double d_Closing_Iner = -1;
 	double d_Opening_Iner = -1;
@@ -125,6 +132,18 @@ struct CHECKPARAM
 	int i_Channel_Break = -1;
 	int i_Length_Break = -1;
 	double d_Circularity_Break = -1;
+	//pressedbubble
+	int i_Channel1_PressedBubble = -1;
+	int i_Channel2_PressedBubble = -1;
+	int i_Channel3_PressedBubble = -1;
+	double d_Erosion_PressedBubble = -1;
+	int i_MaxGray_PressedBubble = -1;
+	double d_Opening1_PressedBubble = -1;
+	int i_MinArea1_PressedBubble = -1;
+	int i_MinGray_PressedBubble = -1;
+	double d_Opeing2_PressedBubble = -1;
+	double d_Closing_PressedBubble = -1;
+	int i_MinArea2_PressedBubble = -1;
 	//lack of pill
 	int i_RectMove_Lack = -1;
 	int i_Channel1_Lack = -1;
@@ -147,7 +166,8 @@ struct CHECKPARAM
 	int i_Channel2_Folds = -1;
 	int i_Length_Folds = -1;
 	double d_Circularity_Folds = -1;
-
+	//net unclear
+	int i_Channel_Unclear = -1;
 
 
 	//switch of detect 
