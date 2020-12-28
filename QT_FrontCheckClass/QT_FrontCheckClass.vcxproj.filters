@@ -1,22 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="CheckRelay.cpp" />
+    <ClCompile Include="InterCHeck.cpp" />
     <ClCompile Include="OutShowCheck.cpp" />
-    <ClCompile Include="QT_FrontCheckClass.cpp" />
-    <ClCompile Include="QtGuiSetting.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="QMyTreeWidget.cpp" />
-=======
-    <ClCompile Include="QMyTreeWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InterCHeck.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
->>>>>>> ff61316fb6997015f5341c9e555eab343b892193
+    <ClCompile Include="QtGuiSetting.cpp" />
+    <ClCompile Include="QT_FrontCheckClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpencvRelay.h" />
@@ -33,30 +23,12 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QtGuiSetting.h" />
+    <QtMoc Include="QMyTreeWidget.h" />
     <QtMoc Include="InterCHeck.h" />
     <QtMoc Include="OutShowCheck.h" />
     <QtMoc Include="QT_FrontCheckClass.h" />
-<<<<<<< HEAD
-    <QtMoc Include="QMyTreeWidget.h" />
-=======
-    <QtMoc Include="QMyTreeWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
->>>>>>> ff61316fb6997015f5341c9e555eab343b892193
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="QtGuiSetting.ui" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-      <ParseFiles>true</ParseFiles>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-      <ParseFiles>true</ParseFiles>
-    </Filter>
   </ItemGroup>
 </Project>

@@ -180,7 +180,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).dll</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;../../RelayFile/lib/yaml-cpp_lib/release;../../RelayFile/lib/opencv_x86/release;../../RelayFile/lib/basler;../../RelayFile/lib/Halcon_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;../../RelayFile/lib/yaml_x86;../../RelayFile/lib/opencv_x86/release;../../RelayFile/lib/basler;../../RelayFile/lib/Halcon_x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>

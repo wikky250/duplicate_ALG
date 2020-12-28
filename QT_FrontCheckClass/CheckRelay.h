@@ -120,7 +120,7 @@ struct CHECKPARAM
 	//inner defect of pill
 	int i_Channel1_Iner = -1;
 	int i_Channel2_Iner = -1;
-	int i_MinGray_Iner = -1;
+	int i_MaxGray_Iner = -1;
 	double d_Closing_Iner = -1;
 	double d_Opening_Iner = -1;
 	//half pill
@@ -173,6 +173,26 @@ struct CHECKPARAM
 	//switch of detect 
 	bool b_CheckPill = -1;
 	bool b_CheckCapsule = -1;
+	bool b_Band = -1;
+	bool b_BandDefect = -1;
+	bool b_Al = -1;
+	bool b_NumPill = -1;
+	bool b_Powder = -1;
+	bool b_Batch = -1;
+	bool b_Shadow = -1;
+	bool b_Crack = -1;
+	bool b_BlackSpot = -1;
+	bool b_Dirty = -1;
+	bool b_Fissure = -1;
+	bool b_Iner = -1;
+	bool b_Half = -1;
+	bool b_Break = -1;
+	bool b_Lack = -1;
+	bool b_PillDirty = -1;
+	bool b_ShadowDefect = -1;
+	bool b_PressedBubble = -1;
+	bool b_Folds = -1;
+	bool b_Unclear = -1;
 
 
 	////the number of Capsules

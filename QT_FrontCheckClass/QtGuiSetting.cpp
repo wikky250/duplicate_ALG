@@ -12,96 +12,127 @@ void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
 	((QtGuiSetting*)ui)->emit SignShowImage(pos, img, times);
 }
+template <typename T>
+T getValue(YAML::Node _param, QString c_CameraName, QString errortype, QString errorparam, QString defaultvalue)
+{
+	T val;
+	try
+	{
+		val = _param[c_CameraName.toStdString()][errortype.toStdString()][errorparam.toStdString()]["value"].as<T>();
+	}
+	catch (YAML::Exception e)
+	{
+		return defaultvalue.toDouble();
+	}
+	return val;
+}
 bool NodeToParam(CHECKPARAM &checkparam, YAML::Node &_param)
 {
-	checkparam.i_Channel_Band = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板通道").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_Band = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板最小灰度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_Band = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板最小面积").toStdString()]["value"].as<double>();
-	checkparam.i_PlusLength_Rectangle = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("最小外接矩形增量").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_BandDefect = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_泡罩板缺陷").toStdString()][QString::fromLocal8Bit("泡罩板缺陷最小面积").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Al = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_铝模缺陷").toStdString()][QString::fromLocal8Bit("铝模通道").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_Al = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_铝模缺陷").toStdString()][QString::fromLocal8Bit("铝模最小灰度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_Al = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_铝模缺陷").toStdString()][QString::fromLocal8Bit("铝模缺陷最小面积").toStdString()]["value"].as<double>();
-	checkparam.i_Channel1_NumPill = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("片剂数量通道1").toStdString()]["value"].as<double>();
-	checkparam.i_Channel2_NumPill = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("片剂数量通道2").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_NumPill = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_NumPill = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<double>();
-	checkparam.i_Number_NumPill = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂数量").toStdString()][QString::fromLocal8Bit("片剂个数").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Powder = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_夹粉").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<double>();
-	checkparam.i_DifMean_Powder = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_夹粉").toStdString()][QString::fromLocal8Bit("灰度均值差值").toStdString()]["value"].as<double>();
-	checkparam.i_PlusLength1_Batch = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小外接矩形增量1").toStdString()]["value"].as<double>();
-	checkparam.i_PlusLength2_Batch = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小外接矩形增量2").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Batch = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("批号通道").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_Batch = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<double>();
-	checkparam.d_Opening_Batch = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("开运算参数").toStdString()]["value"].as<double>();
-	checkparam.d_Closing_Batch = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("闭运算参数").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_Batch = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_批号").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<double>();
-	checkparam.i_Channel1_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("阴影通道1").toStdString()]["value"].as<double>();
-	checkparam.i_Channel2_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("阴影通道2").toStdString()]["value"].as<double>();
-	checkparam.i_Channel3_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("阴影通道3").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<double>();
-	checkparam.i_Width_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("筛选最小宽度").toStdString()]["value"].as<double>();
-	checkparam.i_Length_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("筛选最小长度").toStdString()]["value"].as<double>();
-	checkparam.i_Area_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("筛选最小面积").toStdString()]["value"].as<double>();
-	checkparam.d_Closing_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("闭运算参数").toStdString()]["value"].as<double>();
-	checkparam.d_Opening_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("开运算参数").toStdString()]["value"].as<double>();
-	checkparam.i_Radius_Shadow = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域").toStdString()][QString::fromLocal8Bit("最小内接圆半径").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Crack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板裂纹/毛发").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<double>();
-	checkparam.i_Length_Crack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板裂纹/毛发").toStdString()][QString::fromLocal8Bit("筛选最小长度").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_Crack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板裂纹/毛发").toStdString()][QString::fromLocal8Bit("筛选最大圆度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_BlackSpot = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选黑点最小面积").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_BlackSpot = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选黑点最小圆度").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Dirty = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<double>();
-	checkparam.i_MaxGray_Dirty = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("最大灰度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_Dirty = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选脏污最小面积").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_Dirty = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_药板脏污/黑点").toStdString()][QString::fromLocal8Bit("筛选脏污最小圆度").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Fissure = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_Fissure = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_Fissure = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("筛选最小面积").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_Fissure = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂纹2").toStdString()][QString::fromLocal8Bit("筛选最大圆度").toStdString()]["value"].as<double>();
-	checkparam.i_Channel1_Iner = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<double>();
-	checkparam.i_Channel2_Iner = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_Iner = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<double>();
-	checkparam.d_Closing_Iner = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("闭运算参数").toStdString()]["value"].as<double>();
-	checkparam.d_Opening_Iner = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂内部缺陷").toStdString()][QString::fromLocal8Bit("开运算参数").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_Half = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_半片").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<double>();
-	checkparam.i_RectMove1_Half = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_半片").toStdString()][QString::fromLocal8Bit("仿射矩形增量1").toStdString()]["value"].as<double>();
-	checkparam.i_RectMove2_Half = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_半片").toStdString()][QString::fromLocal8Bit("仿射矩形增量2").toStdString()]["value"].as<double>();
-	checkparam.d_Erosion_Break = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("圆腐蚀参数").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Break = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<double>();
-	checkparam.i_Length_Break = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("筛选裂片最小长度").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_Break = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_裂片").toStdString()][QString::fromLocal8Bit("筛选裂片最大圆度").toStdString()]["value"].as<double>();
-	checkparam.i_RectMove_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("仿射矩形增量").toStdString()]["value"].as<double>();
-	checkparam.i_Channel1_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<double>();
-	checkparam.i_Channel2_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<double>();
-	checkparam.i_MaxGray_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("最大灰度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea1_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("筛选圆最小面积").toStdString()]["value"].as<double>();
-
-	checkparam.i_RadiusMove_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("最小内接圆半径增量").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea2_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("筛选缺陷最小面积").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_Lack = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂缺损").toStdString()][QString::fromLocal8Bit("筛选缺陷最小圆度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_PillDirty = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂脏污/黑点").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_PillDirty = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_片剂脏污/黑点").toStdString()][QString::fromLocal8Bit("最小圆度").toStdString()]["value"].as<double>();
-	checkparam.i_Channel1_ShadowDefect = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<double>();
-	checkparam.i_Channel2_ShadowDefect = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<double>();
-	checkparam.i_MaxGray_ShadowDefect = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("最大灰度").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea_ShadowDefect = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_阴影区域缺陷").toStdString()][QString::fromLocal8Bit("最小面积").toStdString()]["value"].as<double>();
-	checkparam.i_Channel1_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<double>();
-	checkparam.i_Channel2_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<double>();
-	checkparam.i_Channel3_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("颜色通道3").toStdString()]["value"].as<double>();
-	checkparam.d_Erosion_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("圆腐蚀参数").toStdString()]["value"].as<double>();
-	checkparam.i_MaxGray_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("最大灰度").toStdString()]["value"].as<double>();
-	checkparam.d_Opening1_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("开运算参数1").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea1_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("最小面积1").toStdString()]["value"].as<double>();
-	checkparam.i_MinGray_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("最小灰度").toStdString()]["value"].as<double>();
-	checkparam.d_Opeing2_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("开运算参数2").toStdString()]["value"].as<double>();
-	checkparam.d_Closing_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("闭运算参数").toStdString()]["value"].as<double>();
-	checkparam.i_MinArea2_PressedBubble = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_压泡").toStdString()][QString::fromLocal8Bit("最小面积2").toStdString()]["value"].as<double>();
-	checkparam.i_Channel1_Folds = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("颜色通道1").toStdString()]["value"].as<double>();
-	checkparam.i_Channel2_Folds = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("颜色通道2").toStdString()]["value"].as<double>();
-	checkparam.i_Length_Folds = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("最小长度").toStdString()]["value"].as<double>();
-	checkparam.d_Circularity_Folds = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_皱板").toStdString()][QString::fromLocal8Bit("最大圆度").toStdString()]["value"].as<double>();
-	checkparam.i_Channel_Unclear = _param[checkparam.c_CameraName][QString::fromLocal8Bit("Error_网纹不清").toStdString()][QString::fromLocal8Bit("颜色通道").toStdString()]["value"].as<double>();
+	checkparam.b_Band = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel_Band = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板通道"), "0");
+	checkparam.i_MinGray_Band = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板最小灰度"), "100");
+	checkparam.i_MinArea_Band = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板最小面积"), "470000");
+	checkparam.i_PlusLength_Rectangle = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("最小外接矩形增量"), "10");
+	checkparam.i_MinArea_BandDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板缺陷最小面积"), "1600");
+	checkparam.b_Al = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel_Al = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("铝模通道"), "3");
+	checkparam.i_MinGray_Al = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("铝模最小灰度"), "230");
+	checkparam.i_MinArea_Al = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("铝模缺陷最小面积"), "1000");
+	checkparam.b_NumPill = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel1_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("片剂数量通道1"), "0");
+	checkparam.i_Channel2_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("片剂数量通道2"), "2");
+	checkparam.i_MinGray_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("最小灰度"), "20");
+	checkparam.i_MinArea_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("最小面积"), "2000");
+	checkparam.i_Number_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("片剂个数"), "12");
+	checkparam.b_Powder = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_夹粉"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel_Powder = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_夹粉"), QString::fromLocal8Bit("颜色通道"), "4");
+	checkparam.i_DifMean_Powder = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_夹粉"), QString::fromLocal8Bit("灰度均值差值"), "30");
+	checkparam.b_Batch = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_PlusLength1_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小外接矩形增量1"), "30");
+	checkparam.i_PlusLength2_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小外接矩形增量2"), "1000");
+	checkparam.i_Channel_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("批号通道"), "1");
+	checkparam.i_MinGray_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小灰度"), "15");
+	checkparam.d_Opening_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("开运算参数"), "1.5");
+	checkparam.d_Closing_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("闭运算参数"), "5.5");
+	checkparam.i_MinArea_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小面积"), "100");
+	checkparam.b_Shadow = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel1_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("阴影通道1"), "0");
+	checkparam.i_Channel2_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("阴影通道2"), "1");
+	checkparam.i_Channel3_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("阴影通道3"), "4");
+	checkparam.i_MinGray_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("最小灰度"), "25");
+	checkparam.i_Width_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("筛选最小宽度"), "25");
+	checkparam.i_Length_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("筛选最小长度"), "25");
+	checkparam.i_Area_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("筛选最小面积"), "2000");
+	checkparam.d_Closing_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("闭运算参数"), "70.5");
+	checkparam.d_Opening_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("开运算参数"), "2.5");
+	checkparam.i_Radius_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("最小内接圆半径"), "70");
+	checkparam.b_Crack = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("颜色通道"), "0"); 
+	checkparam.i_Length_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("筛选最小长度"), "35");
+	checkparam.d_Circularity_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("筛选最大圆度"), "0.1");
+	checkparam.b_BlackSpot = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_MinArea_BlackSpot = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选黑点最小面积"), "10");
+	checkparam.d_Circularity_BlackSpot = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选黑点最小圆度"), "0.2");
+	checkparam.i_Channel_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("颜色通道"), "2");
+	checkparam.i_MaxGray_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("最大灰度"), "130");
+	checkparam.i_MinArea_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选脏污最小面积"), "10");
+	checkparam.d_Circularity_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选脏污最小圆度"), "0.4");
+	checkparam.b_Fissure = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("颜色通道"), "1");
+	checkparam.i_MinGray_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("最小灰度"), "20");
+	checkparam.i_MinArea_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("筛选最小面积"), "250");
+	checkparam.d_Circularity_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("筛选最大圆度"), "0.1");
+	checkparam.b_Iner = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel1_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("颜色通道1"), "1");
+	checkparam.i_Channel2_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("颜色通道2"), "4");
+	checkparam.i_MaxGray_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("最大灰度"), "50");
+	checkparam.d_Closing_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("闭运算参数"), "2.5");
+	checkparam.d_Opening_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("开运算参数"), "0.5");
+	checkparam.b_Half = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_MinArea_Half = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("最小面积"), "5000");
+	checkparam.i_RectMove1_Half = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("仿射矩形增量1"), "30");
+	checkparam.i_RectMove2_Half = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("仿射矩形增量2"), "30");
+	checkparam.b_Break = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.d_Erosion_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("圆腐蚀参数"), "5.5");
+	checkparam.i_Channel_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("颜色通道"), "0");
+	checkparam.i_Length_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("筛选裂片最小长度"), "20");
+	checkparam.d_Circularity_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("筛选裂片最大圆度"), "0.2");
+	checkparam.b_Lack = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_RectMove_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("仿射矩形增量"), "10");
+	checkparam.i_Channel1_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("颜色通道1"), "2");
+	checkparam.i_Channel2_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("颜色通道2"), "4");
+	checkparam.i_MaxGray_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("最大灰度"), "150");
+	checkparam.i_MinArea1_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("筛选圆最小面积"), "2000");
+	checkparam.i_RadiusMove_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("最小内接圆半径增量"), "3");
+	checkparam.i_MinArea2_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("筛选缺陷最小面积"), "100");
+	checkparam.d_Circularity_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("筛选缺陷最小圆度"), "0.09");
+	checkparam.b_PillDirty = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂脏污/黑点"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_MinArea_PillDirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂脏污/黑点"), QString::fromLocal8Bit("最小面积"), "10");
+	checkparam.d_Circularity_PillDirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂脏污/黑点"), QString::fromLocal8Bit("最小圆度"), "0.25");
+	checkparam.b_BandDefect = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel1_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("颜色通道1"), "5");
+	checkparam.i_Channel2_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("颜色通道2"), "4");
+	checkparam.i_MaxGray_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("最大灰度"), "150");
+	checkparam.i_MinArea_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("最小面积"), "10");
+	checkparam.b_PressedBubble = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel1_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("颜色通道1"), "4");
+	checkparam.i_Channel2_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("颜色通道2"), "2");
+	checkparam.i_Channel3_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("颜色通道3"), "1");
+	checkparam.d_Erosion_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("圆腐蚀参数"), "10.5");
+	checkparam.i_MaxGray_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最大灰度"), "20");
+	checkparam.d_Opening1_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("开运算参数1"), "2.5");
+	checkparam.i_MinArea1_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最小面积1"), "50");
+	checkparam.i_MinGray_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最小灰度"), "90");
+	checkparam.d_Opeing2_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("开运算参数2"), "1.5");
+	checkparam.d_Closing_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("闭运算参数"), "5.5");
+	checkparam.i_MinArea2_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最小面积2"), "30");
+	checkparam.b_Folds = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel1_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("颜色通道1"), "5");
+	checkparam.i_Channel2_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("颜色通道2"), "4");
+	checkparam.i_Length_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("最小长度"), "35");
+	checkparam.d_Circularity_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("最大圆度"), "0.02");
+	checkparam.b_Unclear = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("网纹不清"), "1");
+	checkparam.i_Channel_Unclear = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("颜色通道"), "1");
 	return true;
 }
 bool LoadCheckParam(CHECKPARAM *checkparam, QString* str)
@@ -948,6 +979,7 @@ void QtGuiSetting::SetParam(char* c_CameraName)
 {
 	m_node = YAML::LoadFile(QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml").toStdString());
 	strcpy(_CameraName, c_CameraName);
+	ui.treeWidget->clear();
 	ui.treeWidget->ReadYAMLFile(m_node,c_CameraName);
 }
 void QtGuiSetting::onCellChanged(int r, int c)

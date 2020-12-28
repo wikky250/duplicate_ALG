@@ -574,7 +574,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_ConnectedRegions44, ho_SelectedRegions39, ho_RegionTrans17;
 		Hobject  ho_RegionUnion21, ho_RegionDifference30, ho_RegionOpening34;
 		Hobject  ho_ImageMax9, ho_ImageSub20, ho_Region33, ho_RegionOpening35;
-		Hobject  ho_RegionErosion12;		
+		Hobject  ho_RegionErosion12, ho_RegionDifference31,ho_RegionClosing17,ho_ConnectedRegions45;
 
 		// Local control variables 
 		HTuple  hv_check_pill, hv_check_capsule, hv_ImageFiles;
@@ -777,9 +777,9 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		connection(ho_RegionClosing13, &ho_ConnectedRegions1);
 		inner_circle(ho_ConnectedRegions1, &hv_Row27, &hv_Column27, &hv_Radius9);
 		gen_circle(&ho_Circle8, hv_Row27, hv_Column27, hv_Radius9*1.1);
-
-
-
+		
+		
+		
 		select_shape(ho_Circle8, &ho_SelectedRegions, "area", "and", _param.i_MinArea_NumPill, 99999);
 		if (QString::fromLocal8Bit("Error_片剂数量+最小面积") == _pos)
 		{
@@ -814,7 +814,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 		//***********片剂缺损
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_Lack)
 		{
 			smallest_rectangle2(ho_RegionPill, &hv_Row14, &hv_Column14, &hv_Phi4, &hv_Length14,
 				&hv_Length24);
@@ -917,59 +917,62 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 		//*************
 
-
-
-
-		gen_empty_obj(&ho_error_pill);
-		intensity(ho_RegionPill, ho_ImageChannel[_param.i_Channel_Powder], &hv_Mean5, &hv_Deviation3);
-		if (QString::fromLocal8Bit("Error_夹粉+颜色通道") == _pos)
+		if (_param.b_Powder)
 		{
-			disp_obj(ho_ImageChannel[_param.i_Channel_Powder], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		tuple_mean(hv_Mean5, &hv_Mean6);
-		{
-			HTuple end_val104 = hv_NumberPill;
-			HTuple step_val104 = 1;
-			for (hv_Index5 = 1; hv_Index5.Continue(end_val104, step_val104); hv_Index5 += step_val104)
+			gen_empty_obj(&ho_error_pill);
+			intensity(ho_RegionPill, ho_ImageChannel[_param.i_Channel_Powder], &hv_Mean5, &hv_Deviation3);
+			if (QString::fromLocal8Bit("Error_夹粉+颜色通道") == _pos)
 			{
-				select_obj(ho_RegionPill, &ho_ObjectSelected4, hv_Index5);
-				intensity(ho_ObjectSelected4, ho_ImageChannel[_param.i_Channel_Powder], &hv_Mean4, &hv_Deviation);
-				if (0 != (((hv_Mean4 - hv_Mean6).Abs()) > _param.i_DifMean_Powder))
+				disp_obj(ho_ImageChannel[_param.i_Channel_Powder], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			tuple_mean(hv_Mean5, &hv_Mean6);
+			{
+				HTuple end_val104 = hv_NumberPill;
+				HTuple step_val104 = 1;
+				for (hv_Index5 = 1; hv_Index5.Continue(end_val104, step_val104); hv_Index5 += step_val104)
 				{
-					concat_obj(ho_error_pill, ho_ObjectSelected4, &ho_error_pill);
+					select_obj(ho_RegionPill, &ho_ObjectSelected4, hv_Index5);
+					intensity(ho_ObjectSelected4, ho_ImageChannel[_param.i_Channel_Powder], &hv_Mean4, &hv_Deviation);
+					if (0 != (((hv_Mean4 - hv_Mean6).Abs()) > _param.i_DifMean_Powder))
+					{
+						concat_obj(ho_error_pill, ho_ObjectSelected4, &ho_error_pill);
+					}
 				}
 			}
+			count_obj(ho_error_pill, &hv_Number20);
+			if (QString::fromLocal8Bit("Error_夹粉+灰度均值差值") == _pos)
+			{
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_error_pill, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (0 != (hv_Number20 > 0))
+			{
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+				smallest_rectangle1(ho_error_pill, &hv_Row110, &hv_Column110, &hv_Row29, &hv_Column29);
+				gen_rectangle1(&ho_Rectangle13, hv_Row110 - 10, hv_Column110 - 10, hv_Row29 + 10,
+					hv_Column29 + 10);
+				disp_obj(ho_Rectangle13, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "夹粉");
+				result = QString::fromLocal8Bit("夹粉");
+				return 1;
+				// stop(); only in hdevelop
+			}
 		}
-		count_obj(ho_error_pill, &hv_Number20);
-		if (QString::fromLocal8Bit("Error_夹粉+灰度均值差值") == _pos)
-		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_error_pill, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (0 != (hv_Number20 > 0))
-		{
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
-			smallest_rectangle1(ho_error_pill, &hv_Row110, &hv_Column110, &hv_Row29, &hv_Column29);
-			gen_rectangle1(&ho_Rectangle13, hv_Row110 - 10, hv_Column110 - 10, hv_Row29 + 10,
-				hv_Column29 + 10);
-			disp_obj(ho_Rectangle13, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "夹粉");
-			result = QString::fromLocal8Bit("夹粉");
-			return 1;
-			// stop(); only in hdevelop
-		}
+
+
+		
 
 		//****片剂
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_NumPill)
 		{
 
 			if (0 != (hv_NumberPill != _param.i_Number_NumPill))
@@ -1111,143 +1114,94 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 		//******************检测批号
-		shape_trans(ho_RegionPill, &ho_RegionTrans, "convex");
-		union1(ho_RegionTrans, &ho_RegionUnion);
-		smallest_rectangle2(ho_RegionUnion, &hv_Row, &hv_Column, &hv_Phi, &hv_Length1,
-			&hv_Length2);
-		gen_rectangle2(&ho_Rectangle, hv_Row, hv_Column, hv_Phi, hv_Length1 + _param.i_PlusLength1_Batch, hv_Length2 + _param.i_PlusLength2_Batch);
-		if (QString::fromLocal8Bit("Error_批号+最小外接矩形增量1") == _pos)
+		if (_param.b_Batch)
 		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Rectangle, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_批号+最小外接矩形增量2") == _pos)
-		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Rectangle, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		difference(ho_RegionBand, ho_Rectangle, &ho_RegionDifference);
-		erosion_circle(ho_RegionDifference, &ho_RegionErosion, 10);
-		connection(ho_RegionErosion, &ho_ConnectedRegions16);
-		select_shape_std(ho_ConnectedRegions16, &ho_SelectedRegions10, "max_area", 70);
-		gray_dilation_rect(ho_ImageChannel[_param.i_Channel_Batch], &ho_ImageMax, 11, 11);
-		sub_image(ho_ImageMax, ho_ImageChannel[_param.i_Channel_Batch], &ho_ImageSub1, 1, 0);
-		if (QString::fromLocal8Bit("Error_批号+批号通道") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel_Batch], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		threshold(ho_ImageSub1, &ho_Region4, _param.i_MinGray_Batch, 255);
-		if (QString::fromLocal8Bit("Error_批号+最小灰度") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Region4, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		//dyn_threshold (ImageMax, G, RegionDynThresh, 10, 'light')
-		opening_circle(ho_Region4, &ho_RegionOpening1, _param.d_Opening_Batch);
-		if (QString::fromLocal8Bit("Error_批号+开运算参数") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionOpening1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		intersection(ho_RegionOpening1, ho_SelectedRegions10, &ho_RegionIntersection);
-		closing_circle(ho_RegionIntersection, &ho_RegionClosing, _param.d_Closing_Batch);
-		if (QString::fromLocal8Bit("Error_批号+闭运算参数") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionClosing, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		connection(ho_RegionClosing, &ho_ConnectedRegions3);
-		select_shape(ho_ConnectedRegions3, &ho_SelectedRegions2, "area", "and", _param.i_MinArea_Batch,
-			99999);
-		if (QString::fromLocal8Bit("Error_批号+最小面积") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedRegions2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		shape_trans(ho_SelectedRegions2, &ho_RegionTrans1, "convex");
-		union1(ho_RegionTrans1, &ho_RegionUnion1);
-		count_obj(ho_RegionUnion1, &hv_Number3);
-		if (0 != (hv_Number3 == 0))
-		{
-
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "无批号");
-			result = QString::fromLocal8Bit("无批号");
-			return 1;
-			// stop(); only in hdevelop
-			//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
-			//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
-		}
-		else
-		{
-			smallest_rectangle2(ho_RegionUnion1, &hv_Row1, &hv_Column1, &hv_Phi1, &hv_Length11,
-				&hv_Length21);
-			gen_rectangle2(&ho_Rectangle1, hv_Row1, hv_Column1, hv_Phi1, hv_Length11, hv_Length21);
-			region_features(ho_Rectangle1, "ra", &hv_Value);
-			region_features(ho_RegionBand, "rb", &hv_Value1);
-			hv_ratio = hv_Value / hv_Value1;
-			if (0 != (hv_ratio < 0.3))
+			shape_trans(ho_RegionPill, &ho_RegionTrans, "convex");
+			union1(ho_RegionTrans, &ho_RegionUnion);
+			smallest_rectangle2(ho_RegionUnion, &hv_Row, &hv_Column, &hv_Phi, &hv_Length1,
+				&hv_Length2);
+			gen_rectangle2(&ho_Rectangle, hv_Row, hv_Column, hv_Phi, hv_Length1 + _param.i_PlusLength1_Batch, hv_Length2 + _param.i_PlusLength2_Batch);
+			if (QString::fromLocal8Bit("Error_批号+最小外接矩形增量1") == _pos)
 			{
-
-				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
 				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-
-				disp_obj(ho_Rectangle1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "批号印刷不清晰");
-				result = QString::fromLocal8Bit("批号印刷不清晰");
-				return 1;
-				// stop(); only in hdevelop
-				//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
-				//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Rectangle, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
 			}
-			intersection(ho_Rectangle1, ho_RegionBand, &ho_RegionIntersection9);
-			reduce_domain(ho_ImageSub1, ho_RegionIntersection9, &ho_ImageReduced4);
-			threshold(ho_ImageReduced4, &ho_Region11, 55, 255);
-			opening_circle(ho_Region11, &ho_RegionOpening6, 1.5);
-			connection(ho_RegionOpening6, &ho_ConnectedRegions8);
-			select_shape(ho_ConnectedRegions8, &ho_SelectedRegions5, "area", "and", 50,
+			if (QString::fromLocal8Bit("Error_批号+最小外接矩形增量2") == _pos)
+			{
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Rectangle, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			difference(ho_RegionBand, ho_Rectangle, &ho_RegionDifference);
+			erosion_circle(ho_RegionDifference, &ho_RegionErosion, 10);
+			connection(ho_RegionErosion, &ho_ConnectedRegions16);
+			select_shape_std(ho_ConnectedRegions16, &ho_SelectedRegions10, "max_area", 70);
+			gray_dilation_rect(ho_ImageChannel[_param.i_Channel_Batch], &ho_ImageMax, 15, 15);
+			sub_image(ho_ImageMax, ho_ImageChannel[_param.i_Channel_Batch], &ho_ImageSub1, 1, 0);
+			if (QString::fromLocal8Bit("Error_批号+批号通道") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel_Batch], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			threshold(ho_ImageSub1, &ho_Region4, _param.i_MinGray_Batch, 255);
+			if (QString::fromLocal8Bit("Error_批号+最小灰度") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Region4, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			//dyn_threshold (ImageMax, G, RegionDynThresh, 10, 'light')
+			opening_circle(ho_Region4, &ho_RegionOpening1, _param.d_Opening_Batch);
+			if (QString::fromLocal8Bit("Error_批号+开运算参数") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionOpening1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			intersection(ho_RegionOpening1, ho_RegionErosion, &ho_RegionIntersection);
+			closing_circle(ho_RegionIntersection, &ho_RegionClosing, _param.d_Closing_Batch);
+			if (QString::fromLocal8Bit("Error_批号+闭运算参数") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionClosing, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			connection(ho_RegionClosing, &ho_ConnectedRegions3);
+			select_shape(ho_ConnectedRegions3, &ho_SelectedRegions2, "area", "and", _param.i_MinArea_Batch,
 				99999);
-			count_obj(ho_SelectedRegions5, &hv_Number4);
-			if (0 != (hv_Number4 != 0))
+			if (QString::fromLocal8Bit("Error_批号+最小面积") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedRegions2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			shape_trans(ho_SelectedRegions2, &ho_RegionTrans1, "convex");
+			union1(ho_RegionTrans1, &ho_RegionUnion1);
+			count_obj(ho_RegionUnion1, &hv_Number3);
+			if (0 != (hv_Number3 == 0))
 			{
 
 				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 
 				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-				smallest_circle(ho_SelectedRegions5, &hv_Row5, &hv_Column5, &hv_Radius3);
-				gen_circle(&ho_Circle3, hv_Row5, hv_Column5, hv_Radius3);
-
-				disp_obj(ho_Circle3, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-
 				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "批号缺损");
-				result = QString::fromLocal8Bit("批号缺损");
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "无批号");
+				result = QString::fromLocal8Bit("无批号");
 				return 1;
 				// stop(); only in hdevelop
 				//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
@@ -1255,131 +1209,191 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			}
 			else
 			{
+				closing_rectangle1(ho_RegionUnion1, &ho_RegionClosing17, 1, 1000);
+				connection(ho_RegionClosing17, &ho_ConnectedRegions45);
+				smallest_rectangle2(ho_ConnectedRegions45, &hv_Row1, &hv_Column1, &hv_Phi1, &hv_Length11,
+					&hv_Length21);
+				gen_rectangle2(&ho_Rectangle1, hv_Row1, hv_Column1, hv_Phi1, hv_Length11, hv_Length21);
+				region_features(ho_Rectangle1, "ra", &hv_Value);
+				region_features(ho_RegionBand, "rb", &hv_Value1);
+				hv_ratio = hv_Value / hv_Value1;
+				if (0 != (hv_ratio < 0.2))
+				{
 
-				//disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-				//set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
-				//disp_obj(ho_Rectangle1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+					disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+					set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+
+					disp_obj(ho_Rectangle1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+					set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+					write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "批号印刷不清晰");
+					result = QString::fromLocal8Bit("批号印刷不清晰");
+					return 1;
+					// stop(); only in hdevelop
+					//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
+					//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+				}
+				intersection(ho_Rectangle1, ho_RegionBand, &ho_RegionIntersection9);
+				reduce_domain(ho_ImageSub1, ho_RegionIntersection9, &ho_ImageReduced4);
+				threshold(ho_ImageReduced4, &ho_Region11, 55, 255);
+				opening_circle(ho_Region11, &ho_RegionOpening6, 1.5);
+				connection(ho_RegionOpening6, &ho_ConnectedRegions8);
+				select_shape(ho_ConnectedRegions8, &ho_SelectedRegions5, "area", "and", 50,
+					99999);
+				count_obj(ho_SelectedRegions5, &hv_Number4);
+				if (0 != (hv_Number4 != 0))
+				{
+
+					disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+					set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+					smallest_circle(ho_SelectedRegions5, &hv_Row5, &hv_Column5, &hv_Radius3);
+					gen_circle(&ho_Circle3, hv_Row5, hv_Column5, hv_Radius3);
+
+					disp_obj(ho_Circle3, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+
+					set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+					write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "批号缺损");
+					result = QString::fromLocal8Bit("批号缺损");
+					return 1;
+					// stop(); only in hdevelop
+					//write_image (Image, 'bmp', 0, 'D:/work/红黄胶囊/23428868/NG图/原图_'+Index)
+					//dump_window (Wnd == -1 ? m_ShowLabel[0] : Wnd, 'bmp', 'D:/work/红黄胶囊/23428868/NG图/缺陷图_'+Index)
+				}
+				else
+				{
+
+					//disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+					//set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "margin");
+					//disp_obj(ho_Rectangle1, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				}
+
 			}
-
 		}
+		
 
 
 		//***药板缺陷
 
 
 		//***********泡罩阴影区域
-		sub_image(ho_ImageChannel[_param.i_Channel2_Shadow], ho_ImageChannel[_param.i_Channel3_Shadow], &ho_ImageSub12, 1, 0);
-		if (QString::fromLocal8Bit("Error_阴影区域+阴影通道2") == _pos)
+		if (_param.b_Shadow)
 		{
-			disp_obj(ho_ImageChannel[_param.i_Channel2_Shadow], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_阴影区域+阴影通道3") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel3_Shadow], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		//threshold (ImageSub12, Region28, 0, 145)
-		//intersection (Region28, RegionBand, RegionIntersection17)
-		//difference (RegionIntersection17, Rectangle1, RegionDifference20)
-		//opening_circle (RegionDifference20, RegionOpening21, 2.5)
-		//closing_circle (RegionOpening21, RegionClosing10, 1.5)
-		//connection (RegionClosing10, ConnectedRegions38)
-		//select_shape (ConnectedRegions38, SelectedRegions34, 'area', 'and', 1500, 99999)
-		//smallest_circle (SelectedRegions34, Row19, Column19, Radius6)
-		//gen_circle (Circle5, Row19, Column19, Radius6)
-		//difference (Circle5, RegionPill, RegionShadow)
-		//*******************************
-		//dilation_circle (Rectangle1, RegionBatch, 5.5)
-		//union2 (Circle5, RegionBatch, RegionUnion14)
-		//shape_trans (RegionBand, RegionTrans10, 'convex')
-		//erosion_rectangle1 (RegionTrans10, RegionErosion9, 5, 1)
-		//difference (RegionErosion9, RegionUnion14, RegionDifference24)
-		difference(ho_ConnectedRegions1, ho_Circle8, &ho_RegionDifference28);
-		opening_circle(ho_RegionDifference28, &ho_RegionOpening31, 2.5);
+			sub_image(ho_ImageChannel[_param.i_Channel2_Shadow], ho_ImageChannel[_param.i_Channel3_Shadow], &ho_ImageSub12, 1, 0);
+			if (QString::fromLocal8Bit("Error_阴影区域+阴影通道2") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel2_Shadow], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_阴影区域+阴影通道3") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel3_Shadow], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			//threshold (ImageSub12, Region28, 0, 145)
+			//intersection (Region28, RegionBand, RegionIntersection17)
+			//difference (RegionIntersection17, Rectangle1, RegionDifference20)
+			//opening_circle (RegionDifference20, RegionOpening21, 2.5)
+			//closing_circle (RegionOpening21, RegionClosing10, 1.5)
+			//connection (RegionClosing10, ConnectedRegions38)
+			//select_shape (ConnectedRegions38, SelectedRegions34, 'area', 'and', 1500, 99999)
+			//smallest_circle (SelectedRegions34, Row19, Column19, Radius6)
+			//gen_circle (Circle5, Row19, Column19, Radius6)
+			//difference (Circle5, RegionPill, RegionShadow)
+			//*******************************
+			//dilation_circle (Rectangle1, RegionBatch, 5.5)
+			//union2 (Circle5, RegionBatch, RegionUnion14)
+			//shape_trans (RegionBand, RegionTrans10, 'convex')
+			//erosion_rectangle1 (RegionTrans10, RegionErosion9, 5, 1)
+			//difference (RegionErosion9, RegionUnion14, RegionDifference24)
+			difference(ho_ConnectedRegions1, ho_Circle8, &ho_RegionDifference28);
+			opening_circle(ho_RegionDifference28, &ho_RegionOpening31, 2.5);
 
-		gray_dilation_rect(ho_ImageChannel[_param.i_Channel1_Shadow], &ho_ImageMax8, 31, 31);
-		if (QString::fromLocal8Bit("Error_阴影区域+阴影通道1") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel1_Shadow], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
+			gray_dilation_rect(ho_ImageChannel[_param.i_Channel1_Shadow], &ho_ImageMax8, 31, 31);
+			if (QString::fromLocal8Bit("Error_阴影区域+阴影通道1") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel1_Shadow], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			sub_image(ho_ImageMax8, ho_ImageChannel[_param.i_Channel1_Shadow], &ho_ImageSub15, 1, 0);
+			threshold(ho_ImageSub15, &ho_Regions5, _param.i_MinGray_Shadow, 255);
+			if (QString::fromLocal8Bit("Error_阴影区域+最小灰度") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Regions5, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			difference(ho_Regions5, ho_RegionOpening31, &ho_RegionDifference29);
+			intersection(ho_RegionDifference29, ho_RegionBand, &ho_RegionIntersection25);
+			opening_circle(ho_RegionIntersection25, &ho_RegionOpening27, _param.d_Opening_Shadow);
+			if (QString::fromLocal8Bit("Error_阴影区域+开运算参数") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionOpening27, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			connection(ho_RegionOpening27, &ho_ConnectedRegions41);
+			select_shape(ho_ConnectedRegions41, &ho_SelectedRegions37, ((HTuple("width").Append("height")).Append("area")),
+				"and", ((HTuple(_param.i_Width_Shadow).Append(_param.i_Length_Shadow)).Append(_param.i_Area_Shadow)), ((HTuple(99999).Append(99999)).Append(99999)));
+			if (QString::fromLocal8Bit("Error_阴影区域+筛选最小宽度") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedRegions37, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_阴影区域+筛选最小长度") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedRegions37, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_阴影区域+筛选最小面积") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedRegions37, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			shape_trans(ho_SelectedRegions37, &ho_RegionTrans15, "convex");
+			//closing_circle (SelectedRegions37, RegionClosing15, 70.5)
+			//fill_up (RegionClosing15, RegionFillUp16)
+			//opening_circle (RegionFillUp16, RegionOpening29, 30.5)
+			union1(ho_RegionTrans15, &ho_RegionUnion17);
+			connection(ho_RegionUnion17, &ho_ConnectedRegions42);
+			inner_circle(ho_ConnectedRegions42, &hv_Row26, &hv_Column26, &hv_Radius8);
+			gen_circle(&ho_Circle7, hv_Row26, hv_Column26, (hv_Radius8 / hv_Radius8) * _param.i_Radius_Shadow);
+			if (QString::fromLocal8Bit("Error_阴影区域+最小内接圆半径") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Circle7, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			union1(ho_Circle7, &ho_RegionUnion18);
+			dilation_circle(ho_Rectangle1, &ho_RegionBatch, 5.5);
+			//union2 (Circle5, RegionBatch, RegionUnion14)
+			shape_trans(ho_RegionBand, &ho_RegionTrans10, "convex");
+			erosion_rectangle1(ho_RegionTrans10, &ho_RegionErosion9, 5, 1);
+			difference(ho_RegionErosion9, ho_RegionUnion18, &ho_RegionDifference24);
+			difference(ho_RegionUnion18, ho_RegionPill, &ho_RegionShadow);
 		}
-		sub_image(ho_ImageMax8, ho_ImageChannel[_param.i_Channel1_Shadow], &ho_ImageSub15, 1, 0);
-		threshold(ho_ImageSub15, &ho_Regions5, _param.i_MinGray_Shadow, 255);
-		if (QString::fromLocal8Bit("Error_阴影区域+最小灰度") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Regions5, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		difference(ho_Regions5, ho_RegionOpening31, &ho_RegionDifference29);
-		intersection(ho_RegionDifference29, ho_RegionBand, &ho_RegionIntersection25);
-		opening_circle(ho_RegionIntersection25, &ho_RegionOpening27, _param.d_Opening_Shadow);
-		if (QString::fromLocal8Bit("Error_阴影区域+开运算参数") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionOpening27, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		connection(ho_RegionOpening27, &ho_ConnectedRegions41);
-		select_shape(ho_ConnectedRegions41, &ho_SelectedRegions37, ((HTuple("width").Append("height")).Append("area")),
-			"and", ((HTuple(_param.i_Width_Shadow).Append(_param.i_Length_Shadow)).Append(_param.i_Area_Shadow)), ((HTuple(99999).Append(99999)).Append(99999)));
-		if (QString::fromLocal8Bit("Error_阴影区域+筛选最小宽度") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedRegions37, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_阴影区域+筛选最小长度") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedRegions37, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_阴影区域+筛选最小面积") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedRegions37, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		shape_trans(ho_SelectedRegions37, &ho_RegionTrans15, "convex");
-		//closing_circle (SelectedRegions37, RegionClosing15, 70.5)
-		//fill_up (RegionClosing15, RegionFillUp16)
-		//opening_circle (RegionFillUp16, RegionOpening29, 30.5)
-		union1(ho_RegionTrans15, &ho_RegionUnion17);
-		connection(ho_RegionUnion17, &ho_ConnectedRegions42);
-		inner_circle(ho_ConnectedRegions42, &hv_Row26, &hv_Column26, &hv_Radius8);
-		gen_circle(&ho_Circle7, hv_Row26, hv_Column26, (hv_Radius8 / hv_Radius8) * _param.i_Radius_Shadow);
-		if (QString::fromLocal8Bit("Error_阴影区域+最小内接圆半径") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Circle7, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		union1(ho_Circle7, &ho_RegionUnion18);
-		dilation_circle(ho_Rectangle1, &ho_RegionBatch, 5.5);
-		//union2 (Circle5, RegionBatch, RegionUnion14)
-		shape_trans(ho_RegionBand, &ho_RegionTrans10, "convex");
-		erosion_rectangle1(ho_RegionTrans10, &ho_RegionErosion9, 5, 1);
-		difference(ho_RegionErosion9, ho_RegionUnion18, &ho_RegionDifference24);
-		difference(ho_RegionUnion18, ho_RegionPill, &ho_RegionShadow);
+		
 
 		//********药板裂纹/毛发
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_Crack)
 		{
-			reduce_domain(ho_ImageChannel[_param.i_Channel_Crack], ho_RegionDifference24, &ho_ImageReduced18);
+			difference(ho_RegionDifference24, ho_RegionDifference, &ho_RegionDifference31);
+			reduce_domain(ho_ImageChannel[_param.i_Channel_Crack], ho_RegionDifference31, &ho_ImageReduced18);
 			if (QString::fromLocal8Bit("Error_药板裂纹/毛发+颜色通道") == _pos)
 			{
 				disp_obj(ho_ImageChannel[_param.i_Channel_Crack], Wnd == -1 ? m_ShowLabel[0] : Wnd);
@@ -1431,13 +1445,13 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//*****************
 
 		//********药板脏污/黑点
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_Dirty)
 		{
 
 			threshold(ho_ImageSub12, &ho_Region29, 0, _param.i_MaxGray_Dirty);
 			difference(ho_RegionDifference24, ho_RegionBatch, &ho_RegionDifference30);
 			intersection(ho_Region29, ho_RegionDifference30, &ho_RegionIntersection23);
-			opening_circle(ho_RegionIntersection23, &ho_RegionOpening34, 3.5);
+			opening_circle(ho_RegionIntersection23, &ho_RegionOpening34, 1.5);
 			fill_up(ho_RegionOpening34, &ho_RegionFillUp10);
 			connection(ho_RegionFillUp10, &ho_ConnectedRegions39);
 			select_shape(ho_ConnectedRegions39, &ho_SelectedRegions35, (HTuple("area").Append("circularity")),
@@ -1498,7 +1512,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		}
 		//*****************
 		//*****************裂纹2
-		if (_param.b_CheckPill)
+		if (_param.b_Fissure)
 		{
 			gray_dilation_rect(ho_ImageChannel[_param.i_Channel_Fissure], &ho_ImageMax9, 11, 11);
 			if (QString::fromLocal8Bit("Error_裂纹2+颜色通道") == _pos)
@@ -1563,57 +1577,60 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 		//*****片剂内部缺陷
+		if (_param.b_Iner)
+		{
+			union1(ho_RegionPill, &ho_RegionPill);
+			erosion_circle(ho_RegionPill, &ho_RegionErosion12, 5.5);
 
-		union1(ho_RegionPill, &ho_RegionPill);
-		erosion_circle(ho_RegionPill, &ho_RegionErosion12, 5.5);
+
+			sub_image(ho_ImageChannel[_param.i_Channel1_Iner], ho_ImageChannel[_param.i_Channel2_Iner], &ho_ImageSub9, 1, 0);
+			if (QString::fromLocal8Bit("Error_片剂内部缺陷+颜色通道1") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel1_Iner], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_片剂内部缺陷+颜色通道2") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel2_Iner], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			threshold(ho_ImageSub9, &ho_Region25, 0, _param.i_MaxGray_Iner);
+			if (QString::fromLocal8Bit("Error_片剂内部缺陷+最小灰度") == _pos)
+			{
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Region25, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			closing_circle(ho_Region25, &ho_RegionClosing12, _param.d_Closing_Iner);
+			if (QString::fromLocal8Bit("Error_片剂内部缺陷+闭运算参数") == _pos)
+			{
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionClosing12, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			opening_circle(ho_RegionClosing12, &ho_RegionOpening22, _param.d_Opening_Iner);
+			if (QString::fromLocal8Bit("Error_片剂内部缺陷+开运算参数") == _pos)
+			{
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionOpening22, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			intersection(ho_RegionErosion12, ho_RegionOpening22, &ho_RegionIntersection18);
+			fill_up(ho_RegionIntersection18, &ho_RegionFillUp11);
+			connection(ho_RegionFillUp11, &ho_ConnectedRegions32);
+			//smallest_circle(ho_ConnectedRegions32, &hv_Row20, &hv_Column20, &hv_Radius7);
+			//gen_circle(&ho_Circle6, hv_Row20, hv_Column20, hv_Radius7);
+		}
 		
-		gray_erosion_rect(ho_ImageChannel[_param.i_Channel1_Iner], &ho_ImageMax6, 7, 7);
-		if (QString::fromLocal8Bit("Error_片剂内部缺陷+颜色通道1") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel1_Iner], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_片剂内部缺陷+颜色通道2") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel2_Iner], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		sub_image(ho_ImageChannel[_param.i_Channel1_Iner], ho_ImageChannel[_param.i_Channel2_Iner], &ho_ImageSub9, 1, 0);
-		threshold(ho_ImageSub9, &ho_Region25, _param.i_MinGray_Iner, 255);
-		if (QString::fromLocal8Bit("Error_片剂内部缺陷+最小灰度") == _pos)
-		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Region25, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		closing_circle(ho_Region25, &ho_RegionClosing12, _param.d_Closing_Iner);
-		if (QString::fromLocal8Bit("Error_片剂内部缺陷+闭运算参数") == _pos)
-		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionClosing12, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		opening_circle(ho_RegionClosing12, &ho_RegionOpening22, _param.d_Opening_Iner);
-		if (QString::fromLocal8Bit("Error_片剂内部缺陷+开运算参数") == _pos)
-		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionOpening22, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		intersection(ho_RegionErosion12, ho_RegionOpening22, &ho_RegionIntersection18);
-		fill_up(ho_RegionIntersection18, &ho_RegionFillUp11);
-		connection(ho_RegionFillUp11, &ho_ConnectedRegions32);
-		//smallest_circle(ho_ConnectedRegions32, &hv_Row20, &hv_Column20, &hv_Radius7);
-		//gen_circle(&ho_Circle6, hv_Row20, hv_Column20, hv_Radius7);
 
 
 
@@ -1622,7 +1639,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 		//**********半片
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_Half)
 		{
 			gen_empty_obj(&ho_BadPill);
 			area_center(ho_SelectedRegions, &hv_Area6, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
@@ -1690,7 +1707,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//***************
 
 		//***********裂片
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_Break)
 		{
 			erosion_circle(ho_RegionTrans14, &ho_RegionErosion11, _param.d_Erosion_Break);
 			if (QString::fromLocal8Bit("Error_裂片+圆腐蚀参数") == _pos)
@@ -1758,7 +1775,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 
 
 		//*************脏污/黑点
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_PillDirty)
 		{
 			select_shape(ho_ConnectedRegions32, &ho_SelectedRegions28, (HTuple("area").Append("circularity")),
 				"and", (HTuple(_param.i_MinArea_PillDirty).Append(_param.d_Circularity_PillDirty)), (HTuple(99999).Append(1)));
@@ -1796,127 +1813,131 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			}
 		}
 		//压泡
+		if (_param.b_PressedBubble)
+		{
+			sub_image(ho_ImageChannel[_param.i_Channel1_PressedBubble], ho_ImageChannel[_param.i_Channel2_PressedBubble], &ho_ImageSub17, 1, 0);
+			if (QString::fromLocal8Bit("Error_压泡+颜色通道1") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel1_PressedBubble], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_压泡+颜色通道2") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel2_PressedBubble], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_压泡+颜色通道3") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel3_PressedBubble], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			erosion_circle(ho_RegionPill, &ho_RegionErosion10, _param.d_Erosion_PressedBubble);
+			if (QString::fromLocal8Bit("Error_压泡+圆腐蚀参数") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionErosion10, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
 
-		sub_image(ho_ImageChannel[_param.i_Channel1_PressedBubble], ho_ImageChannel[_param.i_Channel2_PressedBubble], &ho_ImageSub17, 1, 0);
-		if (QString::fromLocal8Bit("Error_压泡+颜色通道1") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel1_PressedBubble], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_压泡+颜色通道2") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel2_PressedBubble], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_压泡+颜色通道3") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel3_PressedBubble], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		erosion_circle(ho_RegionPill, &ho_RegionErosion10, _param.d_Erosion_PressedBubble);
-		if (QString::fromLocal8Bit("Error_压泡+圆腐蚀参数") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionErosion10, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-
-		threshold(ho_ImageSub17, &ho_Region27, 0, _param.i_MaxGray_PressedBubble);
-		if (QString::fromLocal8Bit("Error_压泡+最大灰度") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Region27, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		intersection(ho_Region27, ho_RegionErosion10, &ho_RegionIntersection26);
-		opening_circle(ho_RegionIntersection26, &ho_RegionOpening32, _param.d_Opening1_PressedBubble);
-		if (QString::fromLocal8Bit("Error_压泡+开运算参数1") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionOpening32, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		connection(ho_RegionOpening32, &ho_ConnectedRegions43);
-		select_shape(ho_ConnectedRegions43, &ho_SelectedRegions38, "area", "and", _param.i_MinArea1_PressedBubble,
-			99999);
-		if (QString::fromLocal8Bit("Error_压泡+最小面积1") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedRegions38, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		shape_trans(ho_SelectedRegions38, &ho_RegionTrans16, "convex");
+			threshold(ho_ImageSub17, &ho_Region27, 0, _param.i_MaxGray_PressedBubble);
+			if (QString::fromLocal8Bit("Error_压泡+最大灰度") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Region27, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			intersection(ho_Region27, ho_RegionErosion10, &ho_RegionIntersection26);
+			opening_circle(ho_RegionIntersection26, &ho_RegionOpening32, _param.d_Opening1_PressedBubble);
+			if (QString::fromLocal8Bit("Error_压泡+开运算参数1") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionOpening32, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			connection(ho_RegionOpening32, &ho_ConnectedRegions43);
+			select_shape(ho_ConnectedRegions43, &ho_SelectedRegions38, "area", "and", _param.i_MinArea1_PressedBubble,
+				99999);
+			if (QString::fromLocal8Bit("Error_压泡+最小面积1") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedRegions38, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			shape_trans(ho_SelectedRegions38, &ho_RegionTrans16, "convex");
 
 
 
 
-		sub_image(ho_ImageChannel[_param.i_Channel1_PressedBubble], ho_ImageChannel[_param.i_Channel3_PressedBubble], &ho_ImageSub18, 1, 0);
-		gray_erosion_rect(ho_ImageSub18, &ho_ImageMin1, 11, 11);
-		sub_image(ho_ImageSub18, ho_ImageMin1, &ho_ImageSub19, 1, 0);
-		threshold(ho_ImageSub19, &ho_Region32, _param.i_MinGray_PressedBubble, 255);
-		if (QString::fromLocal8Bit("Error_压泡+最小灰度") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Region32, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		intersection(ho_Region32, ho_RegionErosion10, &ho_RegionIntersection27);
-		fill_up(ho_RegionIntersection27, &ho_RegionFillUp17);
-		opening_circle(ho_RegionFillUp17, &ho_RegionOpening33, _param.d_Opeing2_PressedBubble);
-		if (QString::fromLocal8Bit("Error_压泡+开运算参数2") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionOpening33, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		closing_circle(ho_RegionOpening33, &ho_RegionClosing16, _param.d_Closing_Batch);
-		if (QString::fromLocal8Bit("Error_压泡+闭运算参数") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionClosing16, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		connection(ho_RegionClosing16, &ho_ConnectedRegions44);
-		select_shape(ho_ConnectedRegions44, &ho_SelectedRegions39, "area", "and", _param.i_MinArea2_PressedBubble,
-			99999);
-		if (QString::fromLocal8Bit("Error_压泡+最小面积2") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedRegions39, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		shape_trans(ho_SelectedRegions39, &ho_RegionTrans17, "convex");
+			sub_image(ho_ImageChannel[_param.i_Channel1_PressedBubble], ho_ImageChannel[_param.i_Channel3_PressedBubble], &ho_ImageSub18, 1, 0);
+			gray_erosion_rect(ho_ImageSub18, &ho_ImageMin1, 11, 11);
+			sub_image(ho_ImageSub18, ho_ImageMin1, &ho_ImageSub19, 1, 0);
+			threshold(ho_ImageSub19, &ho_Region32, _param.i_MinGray_PressedBubble, 255);
+			if (QString::fromLocal8Bit("Error_压泡+最小灰度") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Region32, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			intersection(ho_Region32, ho_RegionErosion10, &ho_RegionIntersection27);
+			fill_up(ho_RegionIntersection27, &ho_RegionFillUp17);
+			opening_circle(ho_RegionFillUp17, &ho_RegionOpening33, _param.d_Opeing2_PressedBubble);
+			if (QString::fromLocal8Bit("Error_压泡+开运算参数2") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionOpening33, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			closing_circle(ho_RegionOpening33, &ho_RegionClosing16, _param.d_Closing_Batch);
+			if (QString::fromLocal8Bit("Error_压泡+闭运算参数") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionClosing16, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			connection(ho_RegionClosing16, &ho_ConnectedRegions44);
+			select_shape(ho_ConnectedRegions44, &ho_SelectedRegions39, "area", "and", _param.i_MinArea2_PressedBubble,
+				99999);
+			if (QString::fromLocal8Bit("Error_压泡+最小面积2") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedRegions39, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			shape_trans(ho_SelectedRegions39, &ho_RegionTrans17, "convex");
 
-		union2(ho_RegionTrans16, ho_RegionTrans17, &ho_RegionUnion21);
-		count_obj(ho_RegionUnion21, &hv_Number21);
-		if (0 != (hv_Number21 > 0))
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_RegionUnion21, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "压泡");
-			result = QString::fromLocal8Bit("压泡");
-			return 1;
-			// stop(); only in hdevelop
+			union2(ho_RegionTrans16, ho_RegionTrans17, &ho_RegionUnion21);
+			count_obj(ho_RegionUnion21, &hv_Number21);
+			if (0 != (hv_Number21 > 0))
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_RegionUnion21, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "压泡");
+				result = QString::fromLocal8Bit("压泡");
+				return 1;
+				// stop(); only in hdevelop
+			}
+
 		}
+		
 
 
 		//********
@@ -2086,115 +2107,122 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//}
 
 		//***********阴影区域缺陷
-		sub_image(ho_ImageChannel[_param.i_Channel1_ShadowDefect], ho_ImageChannel[_param.i_Channel2_ShadowDefect], &ho_ImageSub16, 1, 0);
-		if (QString::fromLocal8Bit("Error_阴影区域缺陷+颜色通道1") == _pos)
+		if (_param.b_ShadowDefect)
 		{
-			disp_obj(ho_ImageChannel[_param.i_Channel1_ShadowDefect], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_阴影区域缺陷+颜色通道2") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel2_ShadowDefect], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		scale_image_max(ho_ImageSub16, &ho_ImageScaleMax1);
-		threshold(ho_ImageScaleMax1, &ho_Region31, 0, _param.i_MaxGray_ShadowDefect);
-		if (QString::fromLocal8Bit("Error_阴影区域缺陷+最大灰度") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_Region31, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		intersection(ho_Region31, ho_RegionShadow, &ho_RegionIntersection24);
-		fill_up(ho_RegionIntersection24, &ho_RegionFillUp15);
-		opening_circle(ho_RegionFillUp15, &ho_RegionOpening28, 2.5);
-		/*closing_circle(ho_RegionIntersection24, &ho_RegionClosing15, 2.5);*/
-		connection(ho_RegionOpening28, &ho_ConnectedRegions40);
-		select_shape(ho_ConnectedRegions40, &ho_SelectedRegions36, "area", "and", _param.i_MinArea_ShadowDefect,
-			99999);
-		if (QString::fromLocal8Bit("Error_阴影区域缺陷+最小面积") == _pos)
-		{
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedRegions36, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		count_obj(ho_SelectedRegions36, &hv_Number16);
-		if (0 != (hv_Number16 > 0))
-		{
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(ho_SelectedRegions36, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "异物/脏污");
-			result = QString::fromLocal8Bit("异物/脏污");
-			return 1;
-			// stop(); only in hdevelop
+			sub_image(ho_ImageChannel[_param.i_Channel1_ShadowDefect], ho_ImageChannel[_param.i_Channel2_ShadowDefect], &ho_ImageSub16, 1, 0);
+			if (QString::fromLocal8Bit("Error_阴影区域缺陷+颜色通道1") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel1_ShadowDefect], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_阴影区域缺陷+颜色通道2") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel2_ShadowDefect], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			scale_image_max(ho_ImageSub16, &ho_ImageScaleMax1);
+			threshold(ho_ImageScaleMax1, &ho_Region31, 0, _param.i_MaxGray_ShadowDefect);
+			if (QString::fromLocal8Bit("Error_阴影区域缺陷+最大灰度") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_Region31, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			intersection(ho_Region31, ho_RegionShadow, &ho_RegionIntersection24);
+			fill_up(ho_RegionIntersection24, &ho_RegionFillUp15);
+			opening_circle(ho_RegionFillUp15, &ho_RegionOpening28, 2.5);
+			/*closing_circle(ho_RegionIntersection24, &ho_RegionClosing15, 2.5);*/
+			connection(ho_RegionOpening28, &ho_ConnectedRegions40);
+			select_shape(ho_ConnectedRegions40, &ho_SelectedRegions36, "area", "and", _param.i_MinArea_ShadowDefect,
+				99999);
+			if (QString::fromLocal8Bit("Error_阴影区域缺陷+最小面积") == _pos)
+			{
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedRegions36, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			count_obj(ho_SelectedRegions36, &hv_Number16);
+			if (0 != (hv_Number16 > 0))
+			{
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(ho_SelectedRegions36, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "异物/脏污");
+				result = QString::fromLocal8Bit("异物/脏污");
+				return 1;
+				// stop(); only in hdevelop
 
+			}
 		}
+		
 		//********************
 		// 皱板
 
-
-		sub_image(ho_ImageChannel[_param.i_Channel1_Folds], ho_ImageChannel[_param.i_Channel2_Folds], &ho_ImageSub14, 1, 0);
-		if (QString::fromLocal8Bit("Error_皱板+颜色通道1") == _pos)
+		if (_param.b_Folds)
 		{
-			disp_obj(ho_ImageChannel[_param.i_Channel1_Folds], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
+			sub_image(ho_ImageChannel[_param.i_Channel1_Folds], ho_ImageChannel[_param.i_Channel2_Folds], &ho_ImageSub14, 1, 0);
+			if (QString::fromLocal8Bit("Error_皱板+颜色通道1") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel1_Folds], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_皱板+颜色通道2") == _pos)
+			{
+				disp_obj(ho_ImageChannel[_param.i_Channel2_Folds], Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			difference(ho_RegionBand, ho_RegionBatch, &ho_RegionDifference26);
+			difference(ho_RegionDifference26, ho_RegionUnion18, &ho_RegionDifference25);
+			reduce_domain(ho_ImageSub14, ho_RegionDifference25, &ho_ImageReduced20);
+			gray_opening_rect(ho_ImageReduced20, &ho_ImageOpening1, 7, 7);
+			lines_gauss(ho_ImageOpening1, &ho_Lines2, 1.5, 3, 4, "dark", "true", "bar-shaped",
+				"true");
+			select_shape_xld(ho_Lines2, &ho_SelectedXLD2, (HTuple("contlength").Append("circularity")),
+				"and", (HTuple(_param.i_Length_Folds).Append(0)), (HTuple(99999).Append(_param.d_Circularity_Folds)));
+			if (QString::fromLocal8Bit("Error_皱板+最小长度") == _pos)
+			{
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedXLD2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			if (QString::fromLocal8Bit("Error_皱板+最大圆度") == _pos)
+			{
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
+				set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				disp_obj(ho_SelectedXLD2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				return 0;
+			}
+			count_obj(ho_SelectedXLD2, &hv_Number19);
+			if (0 != (hv_Number19 > 0))
+			{
+				union_adjacent_contours_xld(ho_SelectedXLD2, &ho_UnionContours2, 10, 1, "attr_keep");
+				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
+				set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
+				disp_obj(ho_UnionContours2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
+				set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
+				write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "皱板");
+				result = QString::fromLocal8Bit("皱板");
+				return 1;
+				// stop(); only in hdevelop
+			}
 		}
-		if (QString::fromLocal8Bit("Error_皱板+颜色通道2") == _pos)
-		{
-			disp_obj(ho_ImageChannel[_param.i_Channel2_Folds], Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		difference(ho_RegionBand, ho_RegionBatch, &ho_RegionDifference26);
-		difference(ho_RegionDifference26, ho_RegionUnion18, &ho_RegionDifference25);
-		reduce_domain(ho_ImageSub14, ho_RegionDifference25, &ho_ImageReduced20);
-		gray_opening_rect(ho_ImageReduced20, &ho_ImageOpening1, 7, 7);
-		lines_gauss(ho_ImageOpening1, &ho_Lines2, 1.5, 3, 4, "dark", "true", "bar-shaped",
-			"true");
-		select_shape_xld(ho_Lines2, &ho_SelectedXLD2, (HTuple("contlength").Append("circularity")),
-			"and", (HTuple(_param.i_Length_Folds).Append(0)), (HTuple(99999).Append(_param.d_Circularity_Folds)));
-		if (QString::fromLocal8Bit("Error_皱板+最小长度") == _pos)
-		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedXLD2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		if (QString::fromLocal8Bit("Error_皱板+最大圆度") == _pos)
-		{
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 3);
-			set_draw(Wnd == -1 ? m_ShowLabel[0] : Wnd, "fill");
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			disp_obj(ho_SelectedXLD2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			return 0;
-		}
-		count_obj(ho_SelectedXLD2, &hv_Number19);
-		if (0 != (hv_Number19 > 0))
-		{
-			union_adjacent_contours_xld(ho_SelectedXLD2, &ho_UnionContours2, 10, 1, "attr_keep");
-			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
-			set_line_width(Wnd == -1 ? m_ShowLabel[0] : Wnd, 2);
-			disp_obj(ho_UnionContours2, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
-			write_string(Wnd == -1 ? m_ShowLabel[0] : Wnd, "皱板");
-			result = QString::fromLocal8Bit("皱板");
-			return 1;
-			// stop(); only in hdevelop
-		}
+		
 
 
 		//网纹不清
-		if (0 != _param.b_CheckPill)
+		if (0 != _param.b_Unclear)
 		{
 			threshold(ho_ImageSub14, &ho_Region27, 170, 255);
 			opening_circle(ho_Region27, &ho_RegionOpening26, 1.5);
@@ -2347,20 +2375,20 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 		set_color(m_ShowLabel[total_check%circle_times], "red");
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
-		write_string(m_ShowLabel[total_check%circle_times], e.message);
+		write_string(m_ShowLabel[total_check%circle_times], "其他缺陷");
 	}
 	catch (Exception e)
 	{
 		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 		set_color(m_ShowLabel[total_check%circle_times], "red");
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
-		write_string(m_ShowLabel[total_check%circle_times], e.what());
+		write_string(m_ShowLabel[total_check%circle_times], "其他缺陷");
 	}
 	catch (...)
 	{
 		disp_obj(m_hoLiveImage, m_ShowLabel[total_check%circle_times]);
 		set_color(m_ShowLabel[total_check%circle_times], "red");
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
-		write_string(m_ShowLabel[total_check%circle_times], "Other Error without catch");
+		write_string(m_ShowLabel[total_check%circle_times], "其他缺陷");
 	}
 }

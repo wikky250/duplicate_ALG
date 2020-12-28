@@ -3,7 +3,12 @@
 #include <QTreeWidget>
 #include <QObject>
 #include "yaml-cpp/yaml.h"
+#if DEBUG
 #pragma comment(lib,"yaml-cppd.lib")
+#else
+#pragma comment(lib,"yaml-cpp.lib")
+
+#endif
 
 #include <QTextEdit>
 #include <QTimer>

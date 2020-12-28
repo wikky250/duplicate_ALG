@@ -3,7 +3,12 @@
 #include "QtGuiSetting.h"
 //#include "InspectProcessor.h"
 #include "yaml-cpp/yaml.h"
+#if DEBUG
 #pragma comment(lib,"yaml-cppd.lib")
+#else
+#pragma comment(lib,"yaml-cpp.lib")
+
+#endif
 class CInterCHeck :public QObject,
 	public CBaseCheckAlg
 {
