@@ -131,8 +131,8 @@ bool NodeToParam(CHECKPARAM &checkparam, YAML::Node &_param)
 	checkparam.i_Channel2_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("颜色通道2"), "4");
 	checkparam.i_Length_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("最小长度"), "35");
 	checkparam.d_Circularity_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("最大圆度"), "0.02");
-	checkparam.b_Unclear = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("网纹不清"), "1");
-	checkparam.i_Channel_Unclear = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("颜色通道"), "1");
+	checkparam.b_Unclear = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_网纹不清"), QString::fromLocal8Bit("Checkable"), "1");
+	checkparam.i_Channel_Unclear = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_网纹不清"), QString::fromLocal8Bit("颜色通道"), "1");
 	return true;
 }
 bool LoadCheckParam(CHECKPARAM *checkparam, QString* str)
@@ -301,7 +301,6 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	ui.ShowLabel->setMouseTracking(true);
 //	ui.tableWidget->setMouseTracking(true);
 	ui.lw_ImageList->viewport()->installEventFilter(this);
-
 	bool b = ui.lw_ImageList->hasMouseTracking();
 	setMouseTracking(true);
 	m_bButton = false;

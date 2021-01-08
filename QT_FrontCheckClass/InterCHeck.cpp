@@ -575,6 +575,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		Hobject  ho_RegionUnion21, ho_RegionDifference30, ho_RegionOpening34;
 		Hobject  ho_ImageMax9, ho_ImageSub20, ho_Region33, ho_RegionOpening35;
 		Hobject  ho_RegionErosion12, ho_RegionDifference31,ho_RegionClosing17,ho_ConnectedRegions45;
+		Hobject  ho_RegionOpening36;
 
 		// Local control variables 
 		HTuple  hv_check_pill, hv_check_capsule, hv_ImageFiles;
@@ -656,7 +657,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			return 0;
 		}
 		fill_up(ho_Region, &ho_RegionFillUp2);
-		connection(ho_RegionFillUp2, &ho_ConnectedRegions);
+		opening_rectangle1(ho_RegionFillUp2, &ho_RegionOpening36, 1, 10);
+		connection(ho_RegionOpening36, &ho_ConnectedRegions);
 		select_shape_std(ho_ConnectedRegions, &ho_RegionBand, "max_area", 70);
 		area_center(ho_RegionBand, &hv_AreaBand, &hv_ExpDefaultCtrlDummyVar, &hv_ExpDefaultCtrlDummyVar);
 		if (QString::fromLocal8Bit("Error_泡罩板缺陷+泡罩板最小面积") == _pos)
@@ -735,7 +737,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			//set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "green");
 			//disp_obj(ho_RegionBand, Wnd == -1 ? m_ShowLabel[0] : Wnd);
-
 			set_color(Wnd == -1 ? m_ShowLabel[0] : Wnd, "red");
 			disp_obj(ho_SelectedRegions24, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 			set_tposition(Wnd == -1 ? m_ShowLabel[0] : Wnd, 30, 30);
@@ -744,8 +745,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 			return 1;
 			// stop(); only in hdevelop
 		}
-	
-	
 		//********************药剂数量
 		erosion_circle(ho_RegionBand, &ho_RegionBand, 5.5);
 		sub_image(ho_ImageChannel[_param.i_Channel1_NumPill], ho_ImageChannel[_param.i_Channel2_NumPill], &ho_ImageSub10, 1, 0);
@@ -828,7 +827,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 				disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 				disp_obj(ho_Rectangle8, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 				return 0;
-			}
+			}	
 			sub_image(ho_ImageChannel[_param.i_Channel1_Lack], ho_ImageChannel[_param.i_Channel2_Lack], &ho_ImageSub13, 1, 0);
 			if (QString::fromLocal8Bit("Error_片剂缺损+颜色通道1") == _pos)
 			{
@@ -2367,8 +2366,6 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		//disp_obj(m_hoLiveImage, Wnd == -1 ? m_ShowLabel[0] : Wnd);
 		result = "Good";
 		return 0;
-
-
 	}
 	catch (HException &e)
 	{
@@ -2376,6 +2373,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		set_color(m_ShowLabel[total_check%circle_times], "red");
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
 		write_string(m_ShowLabel[total_check%circle_times], "其他缺陷");
+		result = QString::fromLocal8Bit("其他缺陷") ;
 	}
 	catch (Exception e)
 	{
@@ -2383,6 +2381,8 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		set_color(m_ShowLabel[total_check%circle_times], "red");
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
 		write_string(m_ShowLabel[total_check%circle_times], "其他缺陷");
+		result = QString::fromLocal8Bit("其他缺陷");
+
 	}
 	catch (...)
 	{
@@ -2390,5 +2390,7 @@ int CInterCHeck::RealCheck(QString &result, CHECKPARAM *checkparam, int Wnd = -1
 		set_color(m_ShowLabel[total_check%circle_times], "red");
 		set_tposition(m_ShowLabel[total_check%circle_times], 100, 20);
 		write_string(m_ShowLabel[total_check%circle_times], "其他缺陷");
+		result = QString::fromLocal8Bit("其他缺陷");
+
 	}
 }

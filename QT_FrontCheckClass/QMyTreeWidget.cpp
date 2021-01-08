@@ -256,9 +256,7 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 									pItem->setData(3, Qt::DisplayRole, ty.CN_Discrib.c_str());
 									this->setItemWidget(pItem, 2, qte);
 									QObject::connect(qte, SIGNAL(textChanged(QString)), this, SLOT(LineValueChanged(QString)));
-								
 								}
-								
 							}
 						}
 					}
