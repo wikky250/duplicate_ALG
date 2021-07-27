@@ -36,9 +36,11 @@
 QMyTreeWidget::QMyTreeWidget(QWidget* parent)
 	: QTreeWidget(parent)
 {
-	this->setHeaderHidden(true);
+	this->setHeaderHidden(false);
 	this->setColumnCount(4);
 	this->header()->hideSection(3);
+	//this->setColumnWidth(0, 100);
+	//this->setColumnWidth(1, 100);
 	this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	QObject::connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showCnDetail(QTreeWidgetItem*, int)));
 
@@ -169,9 +171,9 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params, char* cameraname)
                             QCheckBox::indicator:unchecked{background:url(./240.png)}\
                             QCheckBox::indicator:checked{background:url(./540.png)}");
 
-									/*               QCheckBox::indicator:unchecked{background:url(:/Qt_Test/240.png)}\
-												   QCheckBox::indicator:checked{background:url(:/Qt_Test/140.png)}");
-					   */
+								//	/*               QCheckBox::indicator:unchecked{background:url(:/Qt_Test/240.png)}\
+								//				   QCheckBox::indicator:checked{background:url(:/Qt_Test/140.png)}");
+					   //*/
 									ERRORSetting ty = it->second.as<ERRORSetting>();
 									if (it->second["value"].as<int>() == 0)
 										checkbox->setChecked(false);
