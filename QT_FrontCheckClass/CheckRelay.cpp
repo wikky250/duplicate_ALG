@@ -1,7 +1,7 @@
 #pragma once
 #include "CheckRelay.h"
 #ifdef WIN32
-int gettimeofday(struct timeval *tp, void *tzp)
+int gettimeofday(struct timeval* tp, void* tzp)
 {
 	time_t clock;
 	struct tm tm;

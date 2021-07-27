@@ -385,8 +385,8 @@ int OffLine_Demo::LoadAlgorithmDLL()
 				if (dynamicDLL.load())
 				{
 					LOADDLLANDRELEASE *libiary = new LOADDLLANDRELEASE();
-					libiary->LoadDLL = (pExport)dynamicDLL.resolve("_CreateExportObj@4");
-					libiary->UnLoadDLL = (pDeleteExport)dynamicDLL.resolve("_DestroyExportObj@4");
+					libiary->LoadDLL = (pExport)dynamicDLL.resolve("CreateExportObj");
+					libiary->UnLoadDLL = (pDeleteExport)dynamicDLL.resolve("DestroyExportObj");
 
 					//
 					strcpy(libiary->dllName, (absolute_file_path.mid(3, absolute_file_path.size() - 8)).toStdString().c_str());
@@ -558,7 +558,14 @@ void OffLine_Demo::SLOTShowImage(int pos, Mat img, int checktimes)
 	ss.setWidth(ss.width() - zz * 2);
 	ss.setHeight(ss.height() - zz * 2);
 	Mat imgsend;
-	cv::cvtColor(img, imgsend, COLOR_BGR2RGB);
+	if (img.channels()==1)
+	{
+		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
+	}
+	else
+	{
+		cv::cvtColor(img, imgsend, COLOR_BGR2RGB);
+	}
 	cv::resize(imgsend, imgsend, Size(ss.width(), ss.height()));
 	QImage disImage = QImage((const unsigned char*)(imgsend.data), imgsend.cols, imgsend.rows, imgsend.step, QImage::Format_RGB888);
 	label->setPixmap(QPixmap::fromImage(disImage));
@@ -707,7 +714,7 @@ void OffLine_Demo::onSelectImageList(QListWidgetItem *item, QListWidgetItem *it)
 	// 	if (sSelectItem == "..")
 	// 	{
 	// 		QString newPath = m_sImageListPath.left(m_sImageListPath.lastIndexOf("/"));
-	// 		//exe所在的根目录
+	// 		//exe所在的根目录opencv_core34
 	// 		if (newPath.length() > 2)
 	// 		{
 	// 			// only allow user to access the data in dataPath

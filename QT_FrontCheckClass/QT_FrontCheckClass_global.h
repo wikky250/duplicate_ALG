@@ -6,6 +6,6 @@
 # else
 #  define QT_FrontCheckClass_EXPORT Q_DECL_IMPORT
 # endif
-#else 
+#else
 # define QT_FrontCheckClass_EXPORT
 #endif

@@ -6,7 +6,7 @@
 #include<QMessageBox>
 #include<QCheckBox>
 #include<QMyTreeWidget.h>;
-typedef void*   UI_MONITOR;
+typedef void* UI_MONITOR;
 QString AppPath;
 void ShowCallBack(UI_MONITOR ui, int pos, Mat img, int times)
 {
@@ -26,7 +26,7 @@ T getValue(YAML::Node _param, QString c_CameraName, QString errortype, QString e
 	}
 	return val;
 }
-bool NodeToParam(CHECKPARAM &checkparam, YAML::Node &_param)
+bool NodeToParam(CHECKPARAM& checkparam, YAML::Node& _param)
 {
 	checkparam.b_Band = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("Checkable"), "1");
 	checkparam.i_Channel_Band = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板通道"), "0");
@@ -67,7 +67,7 @@ bool NodeToParam(CHECKPARAM &checkparam, YAML::Node &_param)
 	checkparam.d_Opening_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("开运算参数"), "2.5");
 	checkparam.i_Radius_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("最小内接圆半径"), "70");
 	checkparam.b_Crack = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("颜色通道"), "0"); 
+	checkparam.i_Channel_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("颜色通道"), "0");
 	checkparam.i_Length_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("筛选最小长度"), "35");
 	checkparam.d_Circularity_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("筛选最大圆度"), "0.1");
 	checkparam.b_BlackSpot = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("Checkable"), "1");
@@ -135,7 +135,7 @@ bool NodeToParam(CHECKPARAM &checkparam, YAML::Node &_param)
 	checkparam.i_Channel_Unclear = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_网纹不清"), QString::fromLocal8Bit("颜色通道"), "1");
 	return true;
 }
-bool LoadCheckParam(CHECKPARAM *checkparam, QString* str)
+bool LoadCheckParam(CHECKPARAM* checkparam, QString* str)
 {
 	YAML::Node _param;
 	if (nullptr == str)
@@ -156,8 +156,6 @@ bool LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 	}
 	NodeToParam(*checkparam, _param);
 
-
-
 	// 	//读取检测参数配置
 	// 	//////////////////////////////////////////////////////////////////////////
 	// 	//checkparam->i_BandArea = configIniRead.value("/" + cameraname + "/BandArea", "865000").toInt();
@@ -168,7 +166,7 @@ bool LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 	// 	//checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1.5").toDouble();
 	// 	//checkparam->i_PillRadius = configIniRead.value("/" + cameraname + "/PillRadius", "85").toInt();
 	// 	//checkparam->i_BandException2_Radius = configIniRead.value("/" + cameraname + "/BandException2_Radius", "0").toInt();
-	// 	
+	//
 	// 	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "0").toInt();
 	// 	checkparam->i_MinGray_Band = configIniRead.value("/" + cameraname + "/MinGray_Band", "100").toInt();
 	// 	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "680000").toInt();
@@ -261,14 +259,9 @@ bool LoadCheckParam(CHECKPARAM *checkparam, QString* str)
 	// 	checkparam->d_OR_Plate_2 = configIniRead.value("/" + cameraname + "/OR_Plate_2", "1.5").toDouble();
 	// 	checkparam->i_MinArea_Plate_2 = configIniRead.value("/" + cameraname + "/MinArea_Middle_2", "30").toInt();
 
-
-
-
-
-
 	return false;
 }
-QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
+QtGuiSetting::QtGuiSetting(QWidget* parent, void* AlgPointer)
 	: QDialog(parent)
 {
 	//QString str = QString::number(0.5);
@@ -285,29 +278,29 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	m_timerReadList = nullptr;
 	clickedtimer = nullptr;
 	ui.setupUi(this);
-// 	ui.tableWidget->setColumnCount(2);
-// 	QStringList LIST;
-// 	LIST << QString::fromLocal8Bit("项目") << QString::fromLocal8Bit("参数");
-// 	ui.tableWidget->setHorizontalHeaderLabels(LIST);
-// 	ui.tableWidget->setColumnWidth(1, 40);
-// 	ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-// 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
-// 	ui.tableWidget->viewport()->installEventFilter(this);
-// 	ui.tableWidget->verticalHeader()->setDefaultSectionSize(35);//默认行高20
+	// 	ui.tableWidget->setColumnCount(2);
+	// 	QStringList LIST;
+	// 	LIST << QString::fromLocal8Bit("项目") << QString::fromLocal8Bit("参数");
+	// 	ui.tableWidget->setHorizontalHeaderLabels(LIST);
+	// 	ui.tableWidget->setColumnWidth(1, 40);
+	// 	ui.tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	// 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
+	// 	ui.tableWidget->viewport()->installEventFilter(this);
+	// 	ui.tableWidget->verticalHeader()->setDefaultSectionSize(35);//默认行高20
 	pp = parent;
-	HTuple hv_WindowID;
-	open_window(ui.ShowLabel->y(), ui.ShowLabel->x(), ui.ShowLabel->width(), ui.ShowLabel->height(), (long)((QWidget*)ui.ShowLabel->parent())->winId(), "", "", &hv_WindowID);
-	m_WND = hv_WindowID[0];
+	//HTuple hv_WindowID;
+	//open_window(ui.ShowLabel->y(), ui.ShowLabel->x(), ui.ShowLabel->width(), ui.ShowLabel->height(), (long)((QWidget*)ui.ShowLabel->parent())->winId(), "", "", &hv_WindowID);
+	//m_WND = hv_WindowID[0];
 	ui.ShowLabel->setMouseTracking(true);
-//	ui.tableWidget->setMouseTracking(true);
+	//	ui.tableWidget->setMouseTracking(true);
 	ui.lw_ImageList->viewport()->installEventFilter(this);
 	bool b = ui.lw_ImageList->hasMouseTracking();
 	setMouseTracking(true);
 	m_bButton = false;
 	m_SAppPath = qApp->applicationDirPath();//exe文件夹
 	m_sImageListPath = m_SAppPath;
-	initImageLS(m_sImageListPath);
-	connect(ui.lw_ImageList, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onClickedImage(QListWidgetItem *)));
+	//initImageLS(m_sImageListPath);
+	connect(ui.lw_ImageList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onClickedImage(QListWidgetItem*)));
 	//connect(ui.lw_ImageList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *)));
 	connect(ui.pB_ContinueTest, SIGNAL(toggled(bool)), this, SLOT(onContinueTest(bool)));
 	connect(ui.pB_Save, SIGNAL(clicked()), this, SLOT(onSaveParam()));
@@ -320,10 +313,8 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 	connect(this, SIGNAL(SignShowImage(int, Mat, int)), this, SLOT(SLOTShowImage(int, Mat, int)));
 	connect(ui.pB_Calibration, SIGNAL(clicked()), this, SLOT(onAutoDetest()));
 	p_Parent = AlgPointer;
-	((CInterCHeck*)p_Parent)->StartCheck("", nullptr, m_MOriginal.cols, m_MOriginal.rows);
-	((CInterCHeck*)p_Parent)->SetShowCallBack(this, ShowCallBack);
-//	QObject::connect(ui.tableWidget, SIGNAL(cellChanged(int, int)), this, SLOT(onCellChanged(int, int)));
-	QDesktopWidget *dwsktopwidget = QApplication::desktop();
+	((CInterCHeck*)p_Parent)->StartCheck("", nullptr, m_MOriginal.cols, m_MOriginal.rows, m_MOriginal.channels());
+	QDesktopWidget* dwsktopwidget = QApplication::desktop();
 	QRect deskrect = dwsktopwidget->availableGeometry();
 	QRect screenrect = dwsktopwidget->screenGeometry();
 	if (deskrect.height() < 1100)
@@ -332,29 +323,27 @@ QtGuiSetting::QtGuiSetting(QWidget *parent, void* AlgPointer)
 		ui.groupBox->move(ui.ShowLabel->pos().x() + ui.ShowLabel->width() + 2, ui.ShowLabel->pos().y());
 		//ui.lw_ImageList->move(ui.tableWidget->pos().x() + ui.tableWidget->width() + 2, ui.tableWidget->pos().y());
 	}
-//	connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(onPopKeyboard(int, int)));
-	connect(ui.treeWidget, &QMyTreeWidget::TempSave, [=](QString str)
-	{
-		ui.treeWidget->SaveYAMLFile(AppPath + "/Temp.yaml");
+	//	connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(onPopKeyboard(int, int)));
+		//connect(ui.treeWidget, &QMyTreeWidget::TempSave, [=](QString str)
+		//{
+		//	ui.treeWidget->SaveYAMLFile(AppPath + "/Temp.yaml");
 
-		CHECKPARAM _checkparam;
-		strcpy(_checkparam.c_CameraName, _CameraName);
-		NodeToParam(_checkparam, ui.treeWidget->_mparam);
-		bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, nullptr, str);
-		bool b = ((CInterCHeck*)p_Parent)->RealCheck(str, &_checkparam, m_WND,&str);
-		m_bChanged = true;
-	});
+		//	CHECKPARAM _checkparam;
+		//	strcpy(_checkparam.c_CameraName, _CameraName);
+		//	NodeToParam(_checkparam, ui.treeWidget->_mparam);
+		//	bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, nullptr, str);
+		//	m_bChanged = true;
+		//});
 }
-void QtGuiSetting::mouseReleaseEvent(QMouseEvent *p)
+void QtGuiSetting::mouseReleaseEvent(QMouseEvent* p)
 {
 	setCursor(Qt::ArrowCursor);
 	m_bButton = false;
 	hideKeyBoard();
 
-
 	return;
 }
-bool QtGuiSetting::eventFilter(QObject * watched, QEvent * event)
+bool QtGuiSetting::eventFilter(QObject* watched, QEvent* event)
 {
 	if (watched == ui.lw_ImageList->viewport())
 	{
@@ -372,7 +361,7 @@ bool QtGuiSetting::eventFilter(QObject * watched, QEvent * event)
 	}
 	return QWidget::eventFilter(watched, event);
 }
-void QtGuiSetting::resizeEvent(QResizeEvent * event)
+void QtGuiSetting::resizeEvent(QResizeEvent* event)
 {
 	try
 	{
@@ -387,11 +376,11 @@ void QtGuiSetting::resizeEvent(QResizeEvent * event)
 		{
 			return;
 		}
-		Hobject ho_Image = Mat2Hobject(m_MOriginal);
-		HTuple hv_Width, hv_Height;
-		get_image_size(ho_Image, &hv_Width, &hv_Height);
-		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
-		disp_obj(ho_Image, m_WND);
+		//Hobject ho_Image = Mat2Hobject(m_MOriginal);
+		//HTuple hv_Width, hv_Height;
+		//get_image_size(ho_Image, &hv_Width, &hv_Height);
+		//set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
+		//disp_obj(ho_Image, m_WND);
 	}
 	catch (...)
 	{
@@ -444,25 +433,25 @@ void QtGuiSetting::initImageLS(QString str)
 			ui.lw_ImageList->addItem(mfi.fileName());
 	}
 }
-void QtGuiSetting::mousePressEvent(QMouseEvent *p)
+void QtGuiSetting::mousePressEvent(QMouseEvent* p)
 {
 	if (ui.ShowLabel->geometry().contains(this->mapFromGlobal(QCursor::pos())) && p->button() == Qt::LeftButton)
 	{
 		hideKeyBoard();
-		HTuple hv_Width, hv_Height;
-		if (m_MOriginal.empty())
-		{
-			return;
-		}
-		Hobject ho_Image = Mat2Hobject(m_MOriginal);
-		get_image_size(ho_Image, &hv_Width, &hv_Height);
-		set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
-		disp_obj(ho_Image, m_WND);
+		//HTuple hv_Width, hv_Height;
+		//if (m_MOriginal.empty())
+		//{
+		//	return;
+		//}
+		//Hobject ho_Image = Mat2Hobject(m_MOriginal);
+		//get_image_size(ho_Image, &hv_Width, &hv_Height);
+		//set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
+		//disp_obj(ho_Image, m_WND);
 		return;
 	}
 	return;
 }
-void QtGuiSetting::mouseMoveEvent(QMouseEvent *p)
+void QtGuiSetting::mouseMoveEvent(QMouseEvent* p)
 {
 	// 	QPoint poi = QCursor::pos();
 	// 	if (ui.ShowLabel->geometry().contains(this->mapFromGlobal(poi)) && b_GetAuthority)
@@ -519,7 +508,8 @@ void QtGuiSetting::SLOTShowImage(int pos, Mat img, int times)
 	ss.setWidth(ss.width() - zz * 2);
 	ss.setHeight(ss.height() - zz * 2);
 	Mat imgsend;
-	if (img.channels() == 1)	{		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
+	if (img.channels() == 1) {
+		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
 	}
 	else if (img.channels() == 3)
 	{
@@ -591,94 +581,94 @@ void QtGuiSetting::onSaveParam()
 		}
 	}
 }
-Hobject QtGuiSetting::Mat2Hobject(Mat& image)
-{
-	Hobject Hobj = Hobject();
-	int hgt = image.rows;
-	int wid = image.cols;
-	int i;
-	//	CV_8UC3
-	if (image.empty())
-		return Hobject();
-	if (image.type() == CV_8UC3)
-	{
-		split(image, imgchannel);
-		Mat imgB = imgchannel[0];
-		Mat imgG = imgchannel[1];
-		Mat imgR = imgchannel[2];
-		if (dataR == NULL)
-		{
-			dataR = new uchar[hgt*wid];
-		}
-		if (dataG == NULL)
-		{
-			dataG = new uchar[hgt*wid];
-		}
-		if (dataB == NULL)
-		{
-			dataB = new uchar[hgt*wid];
-		}
-		for (i = 0; i < hgt; i++)
-		{
-			memcpy(dataR + wid * i, imgR.data + imgR.step*i, wid);
-			memcpy(dataG + wid * i, imgG.data + imgG.step*i, wid);
-			memcpy(dataB + wid * i, imgB.data + imgB.step*i, wid);
-		}
-		gen_image3(&Hobj, "byte", wid, hgt, (Hlong)dataR, (Hlong)dataG, (Hlong)dataB);
-	}
-	//	CV_8UCU1
-	else if (image.type() == CV_8UC1)
-	{
-		uchar* data = new uchar[hgt*wid];
-		for (i = 0; i < hgt; i++)
-			memcpy(data + wid * i, image.data + image.step*i, wid);
-		gen_image1(&Hobj, "byte", wid, hgt, (Hlong)data);
-		delete[] data;
-		data = NULL;
-	}
-	return Hobj;
-}
-Mat QtGuiSetting::Hobject2Mat(Hobject Hobj)
-{
-	HTuple htCh = HTuple();
-	HTuple cType;
-	Mat Image;
-	convert_image_type(Hobj, &Hobj, "byte");
-	count_channels(Hobj, &htCh);
-	HTuple wid;
-	HTuple hgt;
-	int W, H;
-	if (htCh[0].I() == 1)
-	{
-		HTuple ptr;
-		get_image_pointer1(Hobj, &ptr, &cType, &wid, &hgt);
-		W = (Hlong)wid[0].I();
-		H = (Hlong)hgt[0].I();
-		Image.create(H, W, CV_8UC1);
-		uchar* pdata = (uchar*)ptr[0].I();
-		memcpy(Image.data, pdata, W*H);
-	}
-	else if (htCh[0].I() == 3)
-	{
-		HTuple ptrR, ptrG, ptrB;
-		get_image_pointer3(Hobj, &ptrR, &ptrG, &ptrB, &cType, &wid, &hgt);
-		W = (Hlong)wid[0].I();
-		H = (Hlong)hgt[0].I();
-		Image.create(H, W, CV_8UC3);
-		vector<Mat> vecM(3);
-		vecM[2].create(H, W, CV_8UC1);
-		vecM[1].create(H, W, CV_8UC1);
-		vecM[0].create(H, W, CV_8UC1);
-		uchar* pr = (uchar*)ptrR[0].I();
-		uchar* pg = (uchar*)ptrG[0].I();
-		uchar* pb = (uchar*)ptrB[0].I();
-		memcpy(vecM[2].data, pr, W*H);
-		memcpy(vecM[1].data, pg, W*H);
-		memcpy(vecM[0].data, pb, W*H);
-		merge(vecM, Image);
-	}
-	return Image;
-}
+//Hobject QtGuiSetting::Mat2Hobject(Mat& image)
+//{
+//	Hobject Hobj = Hobject();
+//	int hgt = image.rows;
+//	int wid = image.cols;
+//	int i;
+//	//	CV_8UC3
+//	if (image.empty())
+//		return Hobject();
+//	if (image.type() == CV_8UC3)
+//	{
+//		split(image, imgchannel);
+//		Mat imgB = imgchannel[0];
+//		Mat imgG = imgchannel[1];
+//		Mat imgR = imgchannel[2];
+//		if (dataR == NULL)
+//		{
+//			dataR = new uchar[hgt*wid];
+//		}
+//		if (dataG == NULL)
+//		{
+//			dataG = new uchar[hgt*wid];
+//		}
+//		if (dataB == NULL)
+//		{
+//			dataB = new uchar[hgt*wid];
+//		}
+//		for (i = 0; i < hgt; i++)
+//		{
+//			memcpy(dataR + wid * i, imgR.data + imgR.step*i, wid);
+//			memcpy(dataG + wid * i, imgG.data + imgG.step*i, wid);
+//			memcpy(dataB + wid * i, imgB.data + imgB.step*i, wid);
+//		}
+//		gen_image3(&Hobj, "byte", wid, hgt, (Hlong)dataR, (Hlong)dataG, (Hlong)dataB);
+//	}
+//	//	CV_8UCU1
+//	else if (image.type() == CV_8UC1)
+//	{
+//		uchar* data = new uchar[hgt*wid];
+//		for (i = 0; i < hgt; i++)
+//			memcpy(data + wid * i, image.data + image.step*i, wid);
+//		gen_image1(&Hobj, "byte", wid, hgt, (Hlong)data);
+//		delete[] data;
+//		data = NULL;
+//	}
+//	return Hobj;
+//}
+//Mat QtGuiSetting::Hobject2Mat(Hobject Hobj)
+//{
+//	HTuple htCh = HTuple();
+//	HTuple cType;
+//	Mat Image;
+//	convert_image_type(Hobj, &Hobj, "byte");
+//	count_channels(Hobj, &htCh);
+//	HTuple wid;
+//	HTuple hgt;
+//	int W, H;
+//	if (htCh[0].I() == 1)
+//	{
+//		HTuple ptr;
+//		get_image_pointer1(Hobj, &ptr, &cType, &wid, &hgt);
+//		W = (Hlong)wid[0].I();
+//		H = (Hlong)hgt[0].I();
+//		Image.create(H, W, CV_8UC1);
+//		uchar* pdata = (uchar*)ptr[0].I();
+//		memcpy(Image.data, pdata, W*H);
+//	}
+//	else if (htCh[0].I() == 3)
+//	{
+//		HTuple ptrR, ptrG, ptrB;
+//		get_image_pointer3(Hobj, &ptrR, &ptrG, &ptrB, &cType, &wid, &hgt);
+//		W = (Hlong)wid[0].I();
+//		H = (Hlong)hgt[0].I();
+//		Image.create(H, W, CV_8UC3);
+//		vector<Mat> vecM(3);
+//		vecM[2].create(H, W, CV_8UC1);
+//		vecM[1].create(H, W, CV_8UC1);
+//		vecM[0].create(H, W, CV_8UC1);
+//		uchar* pr = (uchar*)ptrR[0].I();
+//		uchar* pg = (uchar*)ptrG[0].I();
+//		uchar* pb = (uchar*)ptrB[0].I();
+//		memcpy(vecM[2].data, pr, W*H);
+//		memcpy(vecM[1].data, pg, W*H);
+//		memcpy(vecM[0].data, pb, W*H);
+//		merge(vecM, Image);
+//	}
+//	return Image;
+//}
 void QtGuiSetting::onAutoDetest()
 {
 }
@@ -686,49 +676,49 @@ void QtGuiSetting::onAutoDetest()
 void QtGuiSetting::onSelectImageChannel(int channels)
 {
 	QComboBox* obj = qobject_cast<QComboBox*>(sender());//判断是哪个按钮触发了槽函数
-	// Local iconic variables 
-	Hobject  ho_Image1, ho_Image2, ho_Image3;
-	Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
-	Hobject  ho_ImageSub2, ho_EmptyRegion_Out, ho_EmptyRegion_OCR;
-	Hobject  ho_EmptyRegion_Top, ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP;
-	Hobject  ho_EmptyRegion_Intensity, ho_ImageMax2, ho_Regions;
-	Hobject  ho_Regions_Leak, ho_Region, ho_RegionOpening2, ho_RegionOpening;
-	Hobject  ho_ConnectedRegions2, ho_SelectedRegions1, ho_RegionOpening_CAPOOT;
-	Hobject  ho_ImageReduced, ho_ImageMax, ho_ImageSub, ho_Region1;
-	Hobject  ho_RegionClosing, ho_Regions_Convex, ho_Regionx;
-	Hobject  ho_Region_1st, ho_Regionsx, ho_Regions_2nd, ho_Region_OCR;
-	Hobject  ho_Rectangle, ho_RegionIntersection5, ho_ConnectedRegions;
-	Hobject  ho_SelectedRegions, ho_RegionOpening8, ho_RegionTrans2;
-	Hobject  ho_RegionIntersection, ho_RegionErosion, ho_RegionIntersection4;
-	Hobject  ho_Regions_LeakTOPError, ho_RegionErosion3, ho_RegionIntersection3;
-	Hobject  ho_RegionOpening5, ho_Rectangle2, ho_RegionIntersection7;
-	Hobject  ho_ConnectedRegions4, ho_SelectedRegions5, ho_RegionOpening9;
-	Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
-	Hobject  ho_RegionErosion1, ho_RegionIntersection2, ho_Regions_LeakTOPError2;
-	Hobject  ho_RegionErosion6, ho_RegionIntersection9, ho_RegionOpening10;
-	// Local control variables 
-	HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
-	HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
-	HTuple  hv_Indices, hv_C_s, hv_R_s, hv_R_sEnd, hv_Area9;
-	HTuple  hv_Row13, hv_Column13, hv_Row1, hv_Column1, hv_Row2;
-	HTuple  hv_Column2, hv_Height_CAP, hv_Row14, hv_Column14;
-	HTuple  hv_Row23, hv_Column23, hv_H1, hv_Row15, hv_Column15;
-	HTuple  hv_Row24, hv_Column24, hv_H2, hv_h, hv_Area8, hv_Row10;
-	HTuple  hv_Column10, hv_Row11, hv_Column11, hv_Row21, hv_Column21;
-	HTuple  hv_Mean, hv_Deviation, hv_Area5, hv_Row7, hv_Column7;
-	HTuple  hv_Row12, hv_Column12, hv_Row22, hv_Column22, hv_Mean2;
-	HTuple  hv_Deviation2, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
-	HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
-	HTuple  hv_Area, hv_Row, hv_Column, hv_Max1, hv_Max;
-	if (m_MOriginal.empty())
-	{
-		return;
-	}
-	Hobject ho_Image = Mat2Hobject(m_MOriginal);
-	decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
-	trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
-	get_image_size(ho_Image, &hv_Width, &hv_Height);
-	set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
+	// Local iconic variables
+// 	Hobject  ho_Image1, ho_Image2, ho_Image3;
+// 	Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
+// 	Hobject  ho_ImageSub2, ho_EmptyRegion_Out, ho_EmptyRegion_OCR;
+// 	Hobject  ho_EmptyRegion_Top, ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP;
+// 	Hobject  ho_EmptyRegion_Intensity, ho_ImageMax2, ho_Regions;
+// 	Hobject  ho_Regions_Leak, ho_Region, ho_RegionOpening2, ho_RegionOpening;
+// 	Hobject  ho_ConnectedRegions2, ho_SelectedRegions1, ho_RegionOpening_CAPOOT;
+// 	Hobject  ho_ImageReduced, ho_ImageMax, ho_ImageSub, ho_Region1;
+// 	Hobject  ho_RegionClosing, ho_Regions_Convex, ho_Regionx;
+// 	Hobject  ho_Region_1st, ho_Regionsx, ho_Regions_2nd, ho_Region_OCR;
+// 	Hobject  ho_Rectangle, ho_RegionIntersection5, ho_ConnectedRegions;
+// 	Hobject  ho_SelectedRegions, ho_RegionOpening8, ho_RegionTrans2;
+// 	Hobject  ho_RegionIntersection, ho_RegionErosion, ho_RegionIntersection4;
+// 	Hobject  ho_Regions_LeakTOPError, ho_RegionErosion3, ho_RegionIntersection3;
+// 	Hobject  ho_RegionOpening5, ho_Rectangle2, ho_RegionIntersection7;
+// 	Hobject  ho_ConnectedRegions4, ho_SelectedRegions5, ho_RegionOpening9;
+// 	Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
+// 	Hobject  ho_RegionErosion1, ho_RegionIntersection2, ho_Regions_LeakTOPError2;
+// 	Hobject  ho_RegionErosion6, ho_RegionIntersection9, ho_RegionOpening10;
+// 	// Local control variables
+// 	HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
+// 	HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
+// 	HTuple  hv_Indices, hv_C_s, hv_R_s, hv_R_sEnd, hv_Area9;
+// 	HTuple  hv_Row13, hv_Column13, hv_Row1, hv_Column1, hv_Row2;
+// 	HTuple  hv_Column2, hv_Height_CAP, hv_Row14, hv_Column14;
+// 	HTuple  hv_Row23, hv_Column23, hv_H1, hv_Row15, hv_Column15;
+// 	HTuple  hv_Row24, hv_Column24, hv_H2, hv_h, hv_Area8, hv_Row10;
+// 	HTuple  hv_Column10, hv_Row11, hv_Column11, hv_Row21, hv_Column21;
+// 	HTuple  hv_Mean, hv_Deviation, hv_Area5, hv_Row7, hv_Column7;
+// 	HTuple  hv_Row12, hv_Column12, hv_Row22, hv_Column22, hv_Mean2;
+// 	HTuple  hv_Deviation2, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
+// 	HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
+// 	HTuple  hv_Area, hv_Row, hv_Column, hv_Max1, hv_Max;
+// 	if (m_MOriginal.empty())
+// 	{
+// 		return;
+// 	}
+// 	Hobject ho_Image = Mat2Hobject(m_MOriginal);
+// 	decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
+// 	trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
+// 	get_image_size(ho_Image, &hv_Width, &hv_Height);
+// 	set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
 	if (obj->objectName() == "BandChannel")
 	{
 		//_checkparam.i_BandChannel = channels;
@@ -744,22 +734,22 @@ void QtGuiSetting::onSelectImageChannel(int channels)
 	switch (channels)
 	{
 	case 0:
-		disp_obj(ho_Image1, m_WND);
+		//		disp_obj(ho_Image1, m_WND);
 		break;
 	case 1:
-		disp_obj(ho_Image2, m_WND);
+		//		disp_obj(ho_Image2, m_WND);
 		break;
 	case 2:
-		disp_obj(ho_Image3, m_WND);
+		//disp_obj(ho_Image3, m_WND);
 		break;
 	case 3:
-		disp_obj(ho_ImageResult1, m_WND);
+		//disp_obj(ho_ImageResult1, m_WND);
 		break;
 	case 4:
-		disp_obj(ho_ImageResult2, m_WND);
+		//disp_obj(ho_ImageResult2, m_WND);
 		break;
 	case 5:
-		disp_obj(ho_ImageResult3, m_WND);
+		//disp_obj(ho_ImageResult3, m_WND);
 		break;
 	default:
 		break;
@@ -768,50 +758,50 @@ void QtGuiSetting::onSelectImageChannel(int channels)
 }
 void QtGuiSetting::onPopKeyboard(int, int)
 {
-// 	if (nullptr == dlg_keyboard)
-// 	{
-// 		//QMessageBox::warning(nullptr, "", "123");
-// 		dlg_keyboard = new QDialog(this);
-// 		dlg_keyboard->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
-// 		dlg_keyboard->resize(QSize(100, 50));
-// 		QPushButton* pb = nullptr;
-// 		int w = 50;
-// 		for (int i = 0; i < 2; i++)
-// 		{
-// 			pb = new QPushButton(dlg_keyboard);
-// 			if (i == 0) { pb->setObjectName("-1"); pb->setText("-1"); };
-// 	/*		if (i == 1) { pb->setObjectName("-0.5"); pb->setText("-0.5"); };
-// 			if (i == 2) { pb->setObjectName("0.5");  pb->setText("+0.5"); };*/
-// 			if (i == 1) { pb->setObjectName("1");  pb->setText("+1"); };
-// 			pb->resize(50, 50);
-// 			pb->move(50 * i, 0);
-// 			pb->setCheckable(true);
-// 			//connect(pb, SIGNAL(toggled(bool)), this, SLOT(onbtnchange(bool)));
-// 			connect(pb, SIGNAL(pressed()), this, SLOT(onbtnpressed()));
-// 			connect(pb, SIGNAL(released()), this, SLOT(onbtnreleased()));
-// 
-// 		}
-// 	}
-// 	QPoint p = this->cursor().pos();
-// 
-// //	QPoint q = ui.tableWidget->mapToGlobal(QPoint(0, 0));
-// 	dlg_keyboard->show();
-// 	//QMessageBox::warning(nullptr, "", QString::number(q.x() + ui.tableWidget->width()) +","+ QString::number(p.y()));
-// //	dlg_keyboard->move(QPoint(q.x() + ui.tableWidget->width(), p.y()));
-// 
-// 	//QPoint p = this->cursor().pos();
-// 	//QPoint q = (ui.tableWidget->pos());
-// 	//dlg_keyboard->show();
-// 	//dlg_keyboard->move(p.x(), p.y());
-// 	//dlg_keyboard->move(mapToParent( QPoint(q.x() + /*3 * */ui.tableWidget->width(), p.y())));
-// 	//dlg->move(QPoint(100, 100));
+	// 	if (nullptr == dlg_keyboard)
+	// 	{
+	// 		//QMessageBox::warning(nullptr, "", "123");
+	// 		dlg_keyboard = new QDialog(this);
+	// 		dlg_keyboard->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+	// 		dlg_keyboard->resize(QSize(100, 50));
+	// 		QPushButton* pb = nullptr;
+	// 		int w = 50;
+	// 		for (int i = 0; i < 2; i++)
+	// 		{
+	// 			pb = new QPushButton(dlg_keyboard);
+	// 			if (i == 0) { pb->setObjectName("-1"); pb->setText("-1"); };
+	// 	/*		if (i == 1) { pb->setObjectName("-0.5"); pb->setText("-0.5"); };
+	// 			if (i == 2) { pb->setObjectName("0.5");  pb->setText("+0.5"); };*/
+	// 			if (i == 1) { pb->setObjectName("1");  pb->setText("+1"); };
+	// 			pb->resize(50, 50);
+	// 			pb->move(50 * i, 0);
+	// 			pb->setCheckable(true);
+	// 			//connect(pb, SIGNAL(toggled(bool)), this, SLOT(onbtnchange(bool)));
+	// 			connect(pb, SIGNAL(pressed()), this, SLOT(onbtnpressed()));
+	// 			connect(pb, SIGNAL(released()), this, SLOT(onbtnreleased()));
+	//
+	// 		}
+	// 	}
+	// 	QPoint p = this->cursor().pos();
+	//
+	// //	QPoint q = ui.tableWidget->mapToGlobal(QPoint(0, 0));
+	// 	dlg_keyboard->show();
+	// 	//QMessageBox::warning(nullptr, "", QString::number(q.x() + ui.tableWidget->width()) +","+ QString::number(p.y()));
+	// //	dlg_keyboard->move(QPoint(q.x() + ui.tableWidget->width(), p.y()));
+	//
+	// 	//QPoint p = this->cursor().pos();
+	// 	//QPoint q = (ui.tableWidget->pos());
+	// 	//dlg_keyboard->show();
+	// 	//dlg_keyboard->move(p.x(), p.y());
+	// 	//dlg_keyboard->move(mapToParent( QPoint(q.x() + /*3 * */ui.tableWidget->width(), p.y())));
+	// 	//dlg->move(QPoint(100, 100));
 }
 void QtGuiSetting::onbtnpressed()
 {
 	QPushButton* btn = qobject_cast<QPushButton*>(sender());
 	double d = btn->objectName().toDouble();
 	bool b_checked = btn->isChecked();
-	if (nullptr==m_timerChanger)
+	if (nullptr == m_timerChanger)
 	{
 		m_timerChanger = new QTimer();
 		connect(m_timerChanger, SIGNAL(timeout()), this, SLOT(ontimechanger()));
@@ -822,13 +812,12 @@ void QtGuiSetting::onbtnpressed()
 		/*QTableWidgetItem *item = ui.tableWidget->currentItem();
 		item->setText(QString::number(item->text().toInt() + 1));*/
 		m_ba1 = true;
-
 	}
 	if (0.5 == d)
 	{
-	/*	QTableWidgetItem *item = ui.tableWidget->currentItem();
-		item->setText(QString::number(item->text().toDouble() + 0.5));*/
-		//m_ba05 = true;
+		/*	QTableWidgetItem *item = ui.tableWidget->currentItem();
+			item->setText(QString::number(item->text().toDouble() + 0.5));*/
+			//m_ba05 = true;
 	}
 	if (-0.5 == d)
 	{
@@ -842,11 +831,11 @@ void QtGuiSetting::onbtnpressed()
 			item->setText(QString::number(item->text().toInt() - 1));*/
 		m_bm1 = true;
 	}
-	
+
 	//if (b_checked)
 	//{
 	//	btn->setChecked(false);
-		
+
 	//}
 }
 void QtGuiSetting::onbtnreleased()
@@ -856,26 +845,25 @@ void QtGuiSetting::onbtnreleased()
 	bool b_checked = btn->isChecked();
 	{
 		btn->setChecked(false);
-	if (b_checked)
-	 
-		if (nullptr!=m_timerChanger)
-		{
-			m_timerChanger->stop();
-			delete m_timerChanger;
-			m_timerChanger = nullptr;
-		}
+		if (b_checked)
+
+			if (nullptr != m_timerChanger)
+			{
+				m_timerChanger->stop();
+				delete m_timerChanger;
+				m_timerChanger = nullptr;
+			}
 		m_itimechange = 0;
 		m_itimestep = 5;
 		m_bm1 = false;
 		m_bm05 = false;
 		m_ba05 = false;
 		m_ba1 = false;
-	
+
 		/*if (1 == d)
 		{
 			QTableWidgetItem *item = ui.tableWidget->currentItem();
 			item->setText(QString::number(item->text().toInt() + 1));
-
 		}
 		if (0.5 == d)
 		{
@@ -897,71 +885,71 @@ void QtGuiSetting::onbtnreleased()
 
 void QtGuiSetting::ontimechanger()
 {
-// 	try
-// 	{
-// 		if (m_itimechange%m_itimestep == 0)
-// 		{
-// 			if (m_ba1)
-// 			{
-// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
-// 				if (0>item->text().toDouble())
-// 				{
-// 					item->setText("0");
-// 				}
-// 				if (m_itimechange < 24)
-// 				{
-// 					/*item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange++%m_itimestep-1)));*/
-// 				}
-// 				else
-// 				{
-// 					m_itimestep = 2;
-// 					//ui.tableWidget->blockSignals(true);
-// 				}
-// 				item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange / 55)));
-// 
-// 				//else if (m_itimechange < 100)
-// 				//{
-// 				//	//m_itimestep = 2;
-// 				//	item->setText(QString::number(item->text().toDouble() + 10));
-// 				//}
-// 			}
-// 			if (m_ba05)
-// 			{
-// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
-// 				item->setText(QString::number(item->text().toDouble() + 0.5));
-// 			}
-// 			if (m_bm05)
-// 			{
-// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
-// 				item->setText(QString::number(item->text().toDouble() - 0.5));
-// 			}
-// 			if (m_bm1)
-// 			{
-// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
-// 				if (m_itimechange < 24)
-// 				{
-// 					/*item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange++%m_itimestep-1)));*/
-// 				}
-// 				else
-// 				{
-// 					m_itimestep = 2;
-// 					//ui.tableWidget->blockSignals(true);
-// 
-// 				}
-// 				item->setText(QString::number(item->text().toDouble() - pow(10, m_itimechange / 55)));
-// 			
-// 			}
-// 		}
-// 	}
-// 	catch (Exception e)
-// 	{
-// 		QMessageBox::warning(nullptr, "", e.what());
-// 	}
-// 		
-// 
-// 	
-// 	m_itimechange++;
-// 	ui.tableWidget->blockSignals(false);
+	// 	try
+	// 	{
+	// 		if (m_itimechange%m_itimestep == 0)
+	// 		{
+	// 			if (m_ba1)
+	// 			{
+	// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
+	// 				if (0>item->text().toDouble())
+	// 				{
+	// 					item->setText("0");
+	// 				}
+	// 				if (m_itimechange < 24)
+	// 				{
+	// 					/*item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange++%m_itimestep-1)));*/
+	// 				}
+	// 				else
+	// 				{
+	// 					m_itimestep = 2;
+	// 					//ui.tableWidget->blockSignals(true);
+	// 				}
+	// 				item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange / 55)));
+	//
+	// 				//else if (m_itimechange < 100)
+	// 				//{
+	// 				//	//m_itimestep = 2;
+	// 				//	item->setText(QString::number(item->text().toDouble() + 10));
+	// 				//}
+	// 			}
+	// 			if (m_ba05)
+	// 			{
+	// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
+	// 				item->setText(QString::number(item->text().toDouble() + 0.5));
+	// 			}
+	// 			if (m_bm05)
+	// 			{
+	// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
+	// 				item->setText(QString::number(item->text().toDouble() - 0.5));
+	// 			}
+	// 			if (m_bm1)
+	// 			{
+	// 				QTableWidgetItem *item = ui.tableWidget->currentItem();
+	// 				if (m_itimechange < 24)
+	// 				{
+	// 					/*item->setText(QString::number(item->text().toDouble() + pow(10, m_itimechange++%m_itimestep-1)));*/
+	// 				}
+	// 				else
+	// 				{
+	// 					m_itimestep = 2;
+	// 					//ui.tableWidget->blockSignals(true);
+	//
+	// 				}
+	// 				item->setText(QString::number(item->text().toDouble() - pow(10, m_itimechange / 55)));
+	//
+	// 			}
+	// 		}
+	// 	}
+	// 	catch (Exception e)
+	// 	{
+	// 		QMessageBox::warning(nullptr, "", e.what());
+	// 	}
+	//
+	//
+	//
+	// 	m_itimechange++;
+	// 	ui.tableWidget->blockSignals(false);
 }
 
 void QtGuiSetting::hideKeyBoard()
@@ -979,7 +967,7 @@ void QtGuiSetting::SetParam(char* c_CameraName)
 	m_node = YAML::LoadFile(QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml").toStdString());
 	strcpy(_CameraName, c_CameraName);
 	ui.treeWidget->clear();
-	ui.treeWidget->ReadYAMLFile(m_node,c_CameraName);
+	ui.treeWidget->ReadYAMLFile(m_node, c_CameraName);
 }
 void QtGuiSetting::onCellChanged(int r, int c)
 {
@@ -988,16 +976,16 @@ void QtGuiSetting::SetModelMat(Mat tempgray)
 {
 	if (tempgray.empty())
 	{
-		m_MOriginal=imread((qApp->applicationDirPath() + "/DefaultModel/StandTemp.bmp").toStdString());
+		m_MOriginal = imread((qApp->applicationDirPath() + "/DefaultModel/StandTemp.bmp").toStdString());
 	}
 	else
 	{
 		tempgray.copyTo(m_MOriginal);
 	}
 }
-void QtGuiSetting::closeEvent(QCloseEvent *)
+void QtGuiSetting::closeEvent(QCloseEvent*)
 {
-	close_window(HTuple(m_WND));
+	//close_window(HTuple(m_WND));
 	onSaveParam();
 }
 void QtGuiSetting::onBtnGetImage()
@@ -1035,12 +1023,12 @@ void QtGuiSetting::onShowImage(Mat* tempgray)
 void QtGuiSetting::onShowFps(int i)
 {
 }
-extern bool compColx(const Rect &a, const Rect &b);
-extern bool compColy(const Rect &a, const Rect &b);
+extern bool compColx(const Rect& a, const Rect& b);
+extern bool compColy(const Rect& a, const Rect& b);
 void QtGuiSetting::onSelectTrainFile()
 {
 }
-void QtGuiSetting::onClickedImage(QListWidgetItem *item)
+void QtGuiSetting::onClickedImage(QListWidgetItem* item)
 {
 	if (nullptr == clickedtimer)
 	{
@@ -1067,7 +1055,7 @@ void QtGuiSetting::onSingleClicked()
 		clickedtimer = nullptr;
 	}
 	QString pathselect;
-	QListWidgetItem *item = ui.lw_ImageList->currentItem();
+	QListWidgetItem* item = ui.lw_ImageList->currentItem();
 	QString sSelectItem = item->text();
 	pathselect = m_sImageListPath + "/" + sSelectItem;
 	m_currentImagePath = pathselect;
@@ -1080,26 +1068,26 @@ void QtGuiSetting::onSingleClicked()
 		m_MOriginal = imread(m_currentImagePath.toStdString().c_str());
 		if (m_MOriginal.rows > 0)
 		{
-			HTuple hv_W, hv_H;
-			Hobject ho_Image = Mat2Hobject(m_MOriginal);
-			get_image_size(ho_Image, &hv_W, &hv_H);
-			set_part(m_WND, 0, 0, hv_H - 1, hv_W - 1);
-			disp_obj(ho_Image, m_WND);
+			//HTuple hv_W, hv_H;
+			//Hobject ho_Image = Mat2Hobject(m_MOriginal);
+			//get_image_size(ho_Image, &hv_W, &hv_H);
+			//set_part(m_WND, 0, 0, hv_H - 1, hv_W - 1);
+			//disp_obj(ho_Image, m_WND);
 		}
 	}
 }
-void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
+void QtGuiSetting::onSelectImageList(QListWidgetItem* item)
 {
 	//&&m_timerReadList==nullptr 防止进入深一层目录
 	QString sSelectItem = item->text();
-	if (sSelectItem == "."&&m_timerReadList == nullptr)
+	if (sSelectItem == "." && m_timerReadList == nullptr)
 	{
 		QString newPath = m_sImageListPath.left(m_sImageListPath.indexOf("/") + 1);
 		m_sImageListPath = newPath;
 		initImageLS(m_sImageListPath);
 		return;
 	}
-	if (sSelectItem == ".."&&m_timerReadList == nullptr)
+	if (sSelectItem == ".." && m_timerReadList == nullptr)
 	{
 		QString newPath = m_sImageListPath.left(m_sImageListPath.lastIndexOf("/"));
 		//exe所在的根目录
@@ -1130,15 +1118,14 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem *item)
 		m_MOriginal = imread(std::string(m_currentImagePath.toLocal8Bit()));
 		if (m_MOriginal.rows > 0)
 		{
-			uint m_iResult;	//单次检测结果，最大不超过八个 
+			uint m_iResult;	//单次检测结果，最大不超过八个
 			int i_captotal = 0;
-			QString str;
+			ResultStruct str;
 			CHECKPARAM _checkparam;
 
 			strcpy(_checkparam.c_CameraName, _CameraName);
 			NodeToParam(_checkparam, ui.treeWidget->_mparam);
 			bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, &_checkparam, str);
-			bool b = ((CInterCHeck*)p_Parent)->RealCheck(str, &_checkparam, m_WND);
 		}
 	}
 }

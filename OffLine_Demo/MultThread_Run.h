@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "AllRelayHead.h"
 #include <QObject>
+#include <windows.h>　
+#include <fstream>
+using namespace std;
 class MultInit_Run : public QObject
 {
 	Q_OBJECT
@@ -45,7 +48,6 @@ public:
 
 };
 #endif
-
 class MultDecodeThread_Run : public QObject
 {
 	Q_OBJECT
@@ -55,6 +57,7 @@ signals:
 	void RESULTERRORCOUNT(int);
 private:
 	int m_iSelfIndex;
+	ofstream outfile;
 	uint m_iResult;	//单次检测结果，最大不超过八个
 	int i_captotal = 0;
 	int m_iSaveOKorNG;
@@ -63,6 +66,7 @@ private:
 	int index_pos;
 	QString okdir_str;
 	QString ngdir_str;
+	LARGE_INTEGER t1, t2, tc;
 public:
 	MultDecodeThread_Run(QObject *parent);
 	~MultDecodeThread_Run();

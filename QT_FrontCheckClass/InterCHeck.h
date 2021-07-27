@@ -38,10 +38,7 @@ private:
 	bool m_bchangedparam;
 	//日志logger
 	std::shared_ptr<spd::logger> daily_logger;
-	uchar* dataR = NULL;
-	uchar* dataG = NULL;
-	uchar* dataB = NULL;
-	Mat imgchannel[3];
+	Mat imgchannel;
 private:
 #pragma region 算法相关参数
 private:
@@ -51,59 +48,47 @@ private:
 	int total_check;
 	int total_NGSave;
 	int total_OKSave;
-	Mat MatToShow, LastImage;
+	Mat m_oriImage, m_LastImage, m_MatToShow;
 	Mat grey, temp;
-	//H9::InspectProcessor proc;
+	Mat m_chanBGR[3];
+	Mat m_chanHSV[3];
 	Mat m_SaveImg;
+	cv::Mat m_maskBand;
+	cv::Mat m_tempCap1st, m_tempCap2nd;
+	Mat m_element;
+
 	vector<vector<float>> m_CenterModel;
-	vector<HTuple> m_ShowLabel;
-	Hobject ho_ImageChannel[6];
-	Hobject m_hoLiveImage;
-	Hobject ho_MotionImages;
-	int ComputerBestLabes(std::vector<float> data, double &dsts);
-	Hobject Mat2Hobject(Mat & image);
-	Mat Hobject2Mat(Hobject Hobj);
+	vector<Vec4i>hierarchy;
+	vector<vector<Point>>contours;
+	vector<vector<Point>>contours_Draw;
+	int ComputerBestLabes(std::vector<float> data, double& dsts);
+	int* ColValue = nullptr;
+	int* ColOffset = nullptr;
+	int IM_BoxBlur_C(unsigned char* Src, unsigned char* Dest, int Width, int Height, int Stride, int Radius);
 #pragma endregion 算法相关参数
 public:
 	CInterCHeck(bool b_test);
 	~CInterCHeck();
 	UI_MONITOR ui;
-	CallbackText textCallback;
-	CallbackImage imageCallBack;
-	CallbackClose CloseCallBack;
 public:
 	virtual void Release();
 	virtual char* GetCameraName(void);
 	virtual char* GetAlgName(void);
 	virtual char* GetAlgVersion(void);
-	virtual int ShowParamDlg(QWidget *parent, bool b_showornot);
+	virtual int ShowParamDlg(QWidget* parent, bool b_showornot);
 	virtual int SetParam(int _typeofcamera, char* _cameraName);
-	virtual int ReturnParam(int *_typeofcamera, char& _cameraName);
-	//virtual int ParamDlg(RECT re);
-	virtual int InitWindow(int pos, HANDLE _LEDhandle, void* _auhandle);
-	//virtual int ReturnWindow(CWnd **hwnd, RECT &rect, CWnd **hwnd2, RECT &rect2);
-	virtual int GetCheckPosNo();
-	virtual void StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger,int w ,int h);
+	virtual int ReturnParam(int* _typeofcamera, char& _cameraName);
+	virtual void StartCheck(QString camerasign, std::shared_ptr<spd::logger> _daily_logger, int w, int h, int c);
 	virtual void StopCheck();
 	virtual QString GetResult();
-	virtual int Check(Mat imgpackage, void *checkparam, QString &str);
-	virtual void ShowResult(QVector<double*> &result);
+	virtual int Check(Mat& imgpackage, void* checkparam, ResultStruct& str);
+	virtual void ShowResult(QVector<double*>& result);
 	virtual void BeatStart(void);
 	virtual void BeatEnd(void);
 	virtual void* GetEncryptHandle();
 	virtual void EnableShow(bool);
 	virtual void TESTSETSHOW(void*);
-	typedef void(*CallbackText)(UI_MONITOR ui, char* i_result);
-	virtual void SetResultCallBack(UI_MONITOR ui, CallbackText callbackfun);
-	typedef void(*CallbackImage)(UI_MONITOR ui, int pos, Mat img, int times);
-	virtual void SetShowCallBack(UI_MONITOR ui, CallbackImage callbackfun);
-	typedef void(*CallbackClose)();
-	virtual void SetCloseCallBack(CallbackClose callbackfun);
-	bool OtherBeforeCheck(Mat);
-	bool OtherAfterCheck();
-	int RealCheck(QString&, CHECKPARAM *, int,QString*pos = nullptr);
 public slots:
 	void EndCheck();
 	bool SaveCheckParam();
 };
-

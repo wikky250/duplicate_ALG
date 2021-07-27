@@ -33,10 +33,9 @@
         margin: -15 0px; \
     }\
     "
-QMyTreeWidget::QMyTreeWidget(QWidget *parent)
+QMyTreeWidget::QMyTreeWidget(QWidget* parent)
 	: QTreeWidget(parent)
 {
-
 	this->setHeaderHidden(true);
 	this->setColumnCount(4);
 	this->header()->hideSection(3);
@@ -93,7 +92,6 @@ namespace YAML {
 	};
 	template<>
 	struct convert<ERRORSetting> {
-
 		static bool decode(const Node& node, ERRORSetting& cType) {
 			cType.ability = node["ability"].as<int>();
 			cType.value = node["value"].as<int>();
@@ -103,21 +101,16 @@ namespace YAML {
 }
 bool QMyTreeWidget::ReadYAMLFile(QString filepath)
 {
-
-
-
-
 	// 	YAML::Node  _param = YAML::LoadFile(filepath.toStdString());
-	// 
-	// 	
-	// 
-	// 
+	//
+	//
+	//
+	//
 	// 	int banthread = _param[QString::fromLocal8Bit("Error_“©∞Â»±œ›").toStdString().c_str()][QString::fromLocal8Bit("“©∞Â„–÷µ").toStdString().c_str()]["value"].as<int>();
-	// 
-	// 
-	// 
+	//
+	//
+	//
 	// 	return  false;
-
 
 	this->clear();
 	QFileInfo file(filepath);
@@ -130,7 +123,7 @@ bool QMyTreeWidget::ReadYAMLFile(QString filepath)
 	return false;
 }
 
-bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
+bool QMyTreeWidget::ReadYAMLFile(YAML::Node params, char* cameraname)
 {
 	_mparam = params;
 	if (nullptr == cameraname)
@@ -153,14 +146,13 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 			std::string name = it->first.as<std::string>();
 			if (_param[name].IsDefined())
 			{
-				if (name.find("Error_") != std::string::npos)
+				if (name.find("Para_") != std::string::npos)
 				{
 					QTreeWidgetItem* pItemError = new QTreeWidgetItem(QStringList() << name.c_str());
 					this->addTopLevelItem(pItemError);
 					//if (_param[name].IsSequence())
 					{
 						YAML::Node commands = _param[name];
-
 
 						for (YAML::const_iterator it = commands.begin(); it != commands.end(); ++it)
 						{
@@ -206,13 +198,12 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 							}
 							else
 							{
-								QTreeWidgetItem *pItem = new QTreeWidgetItem(QStringList() << key.c_str());
+								QTreeWidgetItem* pItem = new QTreeWidgetItem(QStringList() << key.c_str());
 								pItemError->addChild(pItem);
 								CharacterType ty = it->second.as<CharacterType>();
 								if (ty.type == "Scale")
 								{
-
-									QMySlider * control = new QMySlider(Qt::Horizontal);
+									QMySlider* control = new QMySlider(Qt::Horizontal);
 									control->setObjectName(QString(name.c_str()) + "+" + key.c_str());
 									control->setMinimum(ty.Smallest);
 									control->setMaximum(ty.Biggest);
@@ -228,14 +219,13 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 									pItem->setData(3, Qt::DisplayRole, ty.CN_Discrib.c_str());
 									this->setItemWidget(pItem, 2, control);
 
-
 									QObject::connect(control, SIGNAL(valueChanged(int)), this, SLOT(SliderValueChanged(int)));
 								}
 								if (ty.type == "Combo")
 								{
-									QComboBox *qcb = new QComboBox();
+									QComboBox* qcb = new QComboBox();
 									qcb->setObjectName(QString(name.c_str()) + "+" + key.c_str());
-									qcb->addItems(QStringList() << "R" << "G"<<"B"<<"H"<<"S"<<"V");
+									qcb->addItems(QStringList() << "R" << "G" << "B" << "H" << "S" << "V");
 									qcb->setCurrentIndex(ty.value);
 									pItem->setData(1, Qt::DisplayRole, ty.value);
 									pItem->setData(3, Qt::DisplayRole, ty.CN_Discrib.c_str());
@@ -244,7 +234,7 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 								}
 								if (ty.type == "Edit")
 								{
-									QLineEdit *qte = new QLineEdit();
+									QLineEdit* qte = new QLineEdit();
 									QRegExp rx = QRegExp("[\40]*");
 									QRegExpValidator* validator = new QRegExpValidator(rx);
 									qte->setValidator(validator);
@@ -281,7 +271,6 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params,char* cameraname)
 
 bool QMyTreeWidget::SaveYAMLFile(QString filepath)
 {
-
 	std::ofstream fout(filepath.toStdString().c_str());
 
 	fout << _mparam;
@@ -320,7 +309,7 @@ void QMyTreeWidget::ComboValueChanged(int i)
 void QMyTreeWidget::LineValueChanged(QString str)
 {
 	QLineEdit* sind = qobject_cast<QLineEdit*>(QObject::sender());
-	if (str=="")
+	if (str == "")
 	{
 		sind->setText("0");
 		return;
@@ -347,7 +336,7 @@ void QMyTreeWidget::CheckValueChanged(int i)
 	_param[errtype.toStdString().c_str()][errname.toStdString().c_str()]["value"] = i;
 }
 
-void QMyTreeWidget::showCnDetail(QTreeWidgetItem * pItem, int i)
+void QMyTreeWidget::showCnDetail(QTreeWidgetItem* pItem, int i)
 {
 	if (i != 2)
 	{
@@ -357,7 +346,7 @@ void QMyTreeWidget::showCnDetail(QTreeWidgetItem * pItem, int i)
 			return;
 		}
 		QPoint pt = cursor().pos();
-		if (detailtext!=nullptr)
+		if (detailtext != nullptr)
 		{
 			delete detailtext;
 			detailtext = nullptr;
@@ -375,7 +364,7 @@ void QMyTreeWidget::showCnDetail(QTreeWidgetItem * pItem, int i)
 		QString str = pItem->data(3, Qt::DisplayRole).toString();
 		detailtext->setText(str);
 		int w = str.length();
-		detailtext->setFixedWidth(w/8==0?w * 30:200);
+		detailtext->setFixedWidth(w / 8 == 0 ? w * 30 : 200);
 	}
 }
 void QMyTreeWidget::textAreaChanged()
@@ -387,7 +376,7 @@ void QMyTreeWidget::textAreaChanged()
 		editor = qobject_cast<QTextEdit*>(document->parent()->parent());
 		if (editor)
 		{
-			int newheight = document->size().rheight()+2;
+			int newheight = document->size().rheight() + 2;
 			if (newheight != editor->height())
 			{
 				editor->setFixedHeight(newheight);

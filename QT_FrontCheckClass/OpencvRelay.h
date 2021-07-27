@@ -7,15 +7,15 @@
 #include "QTLiveUSBkey.h"
 namespace spd = spdlog;
 #ifdef DEBUG
-#pragma comment(lib,"opencv_core347d.lib")
-#pragma comment(lib,"opencv_highgui347d.lib")
-#pragma comment(lib,"opencv_imgcodecs347d.lib")
-#pragma comment(lib,"opencv_imgproc347d.lib")
+#pragma comment(lib,"opencv_core3410d.lib")
+#pragma comment(lib,"opencv_highgui3410d.lib")
+#pragma comment(lib,"opencv_imgcodecs3410d.lib")
+#pragma comment(lib,"opencv_imgproc3410d.lib")
 #else
-#pragma comment(lib,"opencv_core347.lib")
-#pragma comment(lib,"opencv_highgui347.lib")
-#pragma comment(lib,"opencv_imgcodecs347.lib")
-#pragma comment(lib,"opencv_imgproc347.lib")
+#pragma comment(lib,"opencv_core3410.lib")
+#pragma comment(lib,"opencv_highgui3410.lib")
+#pragma comment(lib,"opencv_imgcodecs3410.lib")
+#pragma comment(lib,"opencv_imgproc3410.lib")
 #endif
 using namespace cv;
 #pragma endregion

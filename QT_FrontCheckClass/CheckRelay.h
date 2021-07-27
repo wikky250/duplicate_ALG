@@ -12,9 +12,9 @@
 #include <QDate>
 #pragma endregion QT
 #ifndef __APPLE__
-#include "cpp/HalconCpp.h"
-#pragma comment(lib,"halconcpp10.lib")
-using namespace Halcon;
+// #include "cpp/HalconCpp.h"
+// #pragma comment(lib,"halconcpp10.lib")
+// using namespace Halcon;
 #endif
 struct ListStruct
 {
@@ -33,11 +33,10 @@ bool sortScore(ListStruct a, ListStruct b);
 #  include <sys/time.h>
 #endif
 #ifdef WIN32
-int gettimeofday(struct timeval *tp, void *tzp);
+int gettimeofday(struct timeval* tp, void* tzp);
 #endif
 #pragma endregion TimeCount
 using namespace std;
-
 
 struct CHECKPARAM
 {
@@ -60,7 +59,6 @@ struct CHECKPARAM
 	//int i_PillThread1 = -1;
 	//////////////////////////////////////////////////////////////////////////
 
-
 	///////////the kinds of errors////////////////////////////////////////////////
 	//the size of band
 	int i_Channel_Band = -1;
@@ -69,7 +67,7 @@ struct CHECKPARAM
 	//defect of band
 	int i_PlusLength_Rectangle = -1;
 	int i_MinArea_BandDefect = -1;
-	//defect of Al	
+	//defect of Al
 	int i_Channel_Al = -1;
 	int i_MinGray_Al = -1;
 	int i_MinArea_Al = -1;
@@ -82,7 +80,7 @@ struct CHECKPARAM
 	//powder
 	int i_Channel_Powder = -1;
 	int i_DifMean_Powder = -1;
-	//batch 
+	//batch
 	int i_PlusLength1_Batch = -1;
 	int i_PlusLength2_Batch = -1;
 	int i_Channel_Batch = -1;
@@ -169,8 +167,7 @@ struct CHECKPARAM
 	//net unclear
 	int i_Channel_Unclear = -1;
 
-
-	//switch of detect 
+	//switch of detect
 	bool b_CheckPill = -1;
 	bool b_CheckCapsule = -1;
 	bool b_Band = -1;
@@ -193,7 +190,6 @@ struct CHECKPARAM
 	bool b_PressedBubble = -1;
 	bool b_Folds = -1;
 	bool b_Unclear = -1;
-
 
 	////the number of Capsules
 	//int i_CapsulesChannel = -1;
@@ -243,7 +239,7 @@ struct CHECKPARAM
 	//double d_OR_RedDefect = -1;
 	//int i_MinArea_RedDefect = -1;
 	//int i_MaxArea_RedDefect = -1;
-	////the defect of yellow region 
+	////the defect of yellow region
 	////int i_Channel_RegionYellow = -1;
 	////int i_Channel_YellowDefect = -1;
 	//int i_MaskHeight_RegionYellow = -1;
@@ -293,7 +289,6 @@ struct CHECKPARAM
 	//int i_MinArea_Plate_1 = -1;
 	//double d_OR_Plate_2 = -1;
 	//int i_MinArea_Plate_2 = -1;
-
 
 	//////////////////////////////////////////////////////////////////////
 

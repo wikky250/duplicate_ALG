@@ -123,7 +123,7 @@ int MultGetThread_Run::ThreadGetImage(int indexcam = 1, bool = false)//È¡Í¼º¯Êý
 	QFileInfo  di(QString::fromLocal8Bit(g_vectorCamera[0]->file_path));
 	if (di.isFile())
 	{
-		m_MatGetOnece = imread(g_vectorCamera[0]->file_path);
+		m_MatGetOnece = imread(g_vectorCamera[0]->file_path,0);
 		emit GETONEIMAGEMAT(m_MatGetOnece);
 	}
 	return -1;
@@ -148,10 +148,13 @@ MultDecodeThread_Run::MultDecodeThread_Run(QObject *parent)
 	: QObject(parent)
 {
 	_CheckClass = nullptr;
+	outfile.open("data.txt");
+	QueryPerformanceFrequency(&tc);
 }
 
 MultDecodeThread_Run::~MultDecodeThread_Run()
 {
+	outfile.close();
 }
 
 int MultDecodeThread_Run::ThreadDecodeImage(int indexcam = -1, bool b = false)
@@ -166,7 +169,12 @@ int MultDecodeThread_Run::ThreadDecodeImage(int indexcam = -1, bool b = false)
 int MultDecodeThread_Run::ThreadDecodeImageMat(Mat img)
 {
 	QString str;
+
+	QueryPerformanceCounter(&t1);
 	int results = _CheckClass->Check(img, nullptr, str);
+	QueryPerformanceCounter(&t2);
+	double tim = ((double)(t2.QuadPart - t1.QuadPart)/ (double)tc.QuadPart)*1000.0;
+	outfile << tim << "\n";
 	emit RESULTERRORCOUNT(results);
 	emit OUTRESULTSUMMARY(str, index_pos, timecheck);
 	timecheck++;

@@ -1,34 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CheckRelay.cpp" />
-    <ClCompile Include="InterCHeck.cpp" />
-    <ClCompile Include="OutShowCheck.cpp" />
-    <ClCompile Include="QMyTreeWidget.cpp" />
-    <ClCompile Include="QtGuiSetting.cpp" />
-    <ClCompile Include="QT_FrontCheckClass.cpp" />
+    <ClCompile Include="InterCHeck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutShowCheck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMyTreeWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QT_FrontCheckClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QtGuiSetting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckRelay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OpencvRelay.h" />
-    <ClInclude Include="pillCheck.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="CheckRelay.h" />
-    <ClInclude Include="QT_FrontCheckClass_global.h" />
+    <ClInclude Include="pillCheck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpencvRelay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckRelay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QT_FrontCheckClass_global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MORClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="QT_FrontCheckClass.rc" />
+    <QtMoc Include="QMyTreeWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QT_FrontCheckClass.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="OutShowCheck.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="InterCHeck.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="QtGuiSetting.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\NewUI_Demo\dr.ico" />
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{ce914426-eaca-45ee-b4db-859aa8bc283d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{1168439d-2625-402d-a05d-329cd847bb47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{e22172a2-bc19-478b-b7cf-3bba84422075}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="QtGuiSetting.h" />
-    <QtMoc Include="QMyTreeWidget.h" />
-    <QtMoc Include="InterCHeck.h" />
-    <QtMoc Include="OutShowCheck.h" />
-    <QtMoc Include="QT_FrontCheckClass.h" />
+    <Image Include="..\NewUI_Demo\dr.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="QtGuiSetting.ui" />
+    <ResourceCompile Include="QT_FrontCheckClass.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="QtGuiSetting.ui">
+      <Filter>Resource Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

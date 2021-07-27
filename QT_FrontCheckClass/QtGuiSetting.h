@@ -7,29 +7,29 @@
 #include <QTimer>
 #include "ui_QtGuiSetting.h"
 extern QString AppPath;
-bool LoadCheckParam(CHECKPARAM *checkparam, QString* str = nullptr);
+bool LoadCheckParam(CHECKPARAM* checkparam, QString* str = nullptr);
 class QtGuiSetting : public QDialog
 {
 	Q_OBJECT
 signals:
 	void StartGetsss(QString str);
-	void StartGetSample(QLabel *lab, QString str);
+	void StartGetSample(QLabel* lab, QString str);
 	void UpdatetoTest(CHECKPARAM*);
-	void StartSave(QString *str);
+	void StartSave(QString* str);
 	void ShouldSaveParam();
 	void CloseGetSample();
 	void SignShowImage(int, Mat, int);
-	
+
 private:
 	uchar* dataR = NULL;
 	uchar* dataG = NULL;
 	uchar* dataB = NULL;
 	Mat imgchannel[3];
-	Hobject Mat2Hobject(Mat & image);
-	Mat Hobject2Mat(Hobject Hobj);
-	int m_WND =-1;
+	//Hobject Mat2Hobject(Mat & image);
+	//Mat Hobject2Mat(Hobject Hobj);
+	int m_WND = -1;
 public:
-	QtGuiSetting(QWidget *parent = Q_NULLPTR,void* AlgPointer = nullptr);
+	QtGuiSetting(QWidget* parent = Q_NULLPTR, void* AlgPointer = nullptr);
 	int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str);//全是中文
 	~QtGuiSetting();
 	//////////////////////////////////////////////////////////////////////////
@@ -74,10 +74,10 @@ private:
 	QString m_SAppPath;
 	QString m_sImageListPath;
 	QString m_currentImagePath; //the current Item of the current Image checking
-	QTimer *m_timerReadList;
-	QTimer *clickedtimer;
-	QDialog *dlg_keyboard = nullptr;
-	QTimer *m_timerChanger = nullptr;
+	QTimer* m_timerReadList;
+	QTimer* clickedtimer;
+	QDialog* dlg_keyboard = nullptr;
+	QTimer* m_timerChanger = nullptr;
 	int m_itimechange = 0;
 	int m_itimestep = 5;
 	int m_ichagetimes = 0;
@@ -86,28 +86,21 @@ private:
 	bool containImages(QDir&);
 	void initImageLS(QString str);
 public slots:
-	//void onBandChanged(int);
-	//void onCapsulesChanged(int);
-	//void onBatchChanged(int);
-	//void onCapDefectChanged(int);
-	//void onRedChanged(int);
-	//void onYellowChanged(int);
-	//void onBandDefectChanged(int);
-	void closeEvent(QCloseEvent *);
-	void mousePressEvent(QMouseEvent *);
-	void mouseReleaseEvent(QMouseEvent * p);
-	void mouseMoveEvent(QMouseEvent * p);
-	bool eventFilter(QObject *watched, QEvent *event);
-	void resizeEvent(QResizeEvent *event);
+	void closeEvent(QCloseEvent*);
+	void mousePressEvent(QMouseEvent*);
+	void mouseReleaseEvent(QMouseEvent* p);
+	void mouseMoveEvent(QMouseEvent* p);
+	bool eventFilter(QObject* watched, QEvent* event);
+	void resizeEvent(QResizeEvent* event);
 	void onBtnGetImage();
 	void onBtnGetSample();
-	void onShowImage(Mat *img);
+	void onShowImage(Mat* img);
 	void onShowFps(int i);
 	void onCellChanged(int, int);
 	void onSelectTrainFile();
-	void onClickedImage(QListWidgetItem *);
+	void onClickedImage(QListWidgetItem*);
 	void onSingleClicked();
-	void onSelectImageList(QListWidgetItem *);
+	void onSelectImageList(QListWidgetItem*);
 	void SLOTShowImage(int, Mat img, int);
 	//
 	void onContinueTest(bool);
@@ -119,7 +112,7 @@ public slots:
 	void onSelectImageChannel(int);
 
 	void onPopKeyboard(int, int);
-	void onbtnpressed( );
+	void onbtnpressed();
 	void onbtnreleased();
 	void ontimechanger();
 	void hideKeyBoard();
