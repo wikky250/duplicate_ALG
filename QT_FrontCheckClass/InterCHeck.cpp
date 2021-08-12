@@ -73,7 +73,6 @@ int CInterCHeck::SetParam(int _typeofcamera, char* _cameraName)
 {
 	m_checkparam.i_TypeOfCamera = _typeofcamera;
 	strcpy(m_checkparam.c_CameraName, _cameraName);
-	LoadCheckParam(&m_checkparam);
 	return 0;
 }
 int CInterCHeck::ReturnParam(int* _typeofcamera, char& _cameraName)
@@ -94,8 +93,25 @@ void CInterCHeck::StartCheck(QString camerasign, std::shared_ptr<spd::logger> _d
 	optin.insert(pair<string, string>("detectors", (AppPath + "/DefaultModel/detectors.yaml").toLocal8Bit()));
 
 	int Radius = 11;
-	ColValue = (int*)malloc((w + Radius + Radius) * (1) * sizeof(int));
-	ColOffset = (int*)malloc((h + Radius + Radius) * sizeof(int));
+	if (nullptr == ColValue)
+	{
+		ColValue = (int*)malloc((w + Radius + Radius) * (1) * sizeof(int));
+	}
+	else
+	{
+		delete ColValue;
+		ColValue = (int*)malloc((w + Radius + Radius) * (1) * sizeof(int));
+	}
+	if (nullptr == ColOffset)
+	{
+		ColOffset = (int*)malloc((h + Radius + Radius) * sizeof(int));
+	}
+	else
+	{
+		delete ColOffset;
+		ColOffset = (int*)malloc((h + Radius + Radius) * sizeof(int));
+	}
+	LoadCheckParam(&m_checkparam);
 }
 void CInterCHeck::StopCheck()
 {
@@ -202,10 +218,15 @@ int otsu(Mat src_image)
 }
 int CInterCHeck::Check(Mat& imgpackage, void* checkparam, ResultStruct& str)
 {
+	if (checkparam != nullptr)
+	{
+		m_tcheckparam = *(CHECKPARAM*)checkparam;
+	}
+	else
+		m_tcheckparam = m_checkparam;
 	bool _bresult = TRUE;
 	ResultStruct st;
 	st._bResultNGOK = true;
-	str = st;
 	contours.clear();
 	contours_Draw.clear();
 	try
@@ -215,6 +236,7 @@ int CInterCHeck::Check(Mat& imgpackage, void* checkparam, ResultStruct& str)
 			m_maskBand = cv::Mat(imgpackage.size(), CV_8UC1);
 			m_element = getStructuringElement(MORPH_RECT, Size(11, 11)); // 5、高级形态学变化，闭操作
 		}
+		imgpackage.copyTo(m_LastImage);
 		m_maskBand = 0;
 		imgpackage.copyTo(m_oriImage);
 		imgpackage.copyTo(m_MatToShow);
@@ -222,7 +244,7 @@ int CInterCHeck::Check(Mat& imgpackage, void* checkparam, ResultStruct& str)
 		cv::cvtColor(m_oriImage, m_oriImage, CV_BGR2HSV);
 		cv::split(m_oriImage, m_chanHSV);
 		cv::Mat temp;
-		cv::threshold(m_chanBGR[2], temp, 80, 255, cv::THRESH_BINARY);
+		cv::threshold(m_chanBGR[2], temp, m_tcheckparam.i_Gray_Pill, 255, cv::THRESH_BINARY);
 		contours.clear();
 		cv::findContours(temp.clone(), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 		int n = -1, n_index = 0;
@@ -249,6 +271,16 @@ int CInterCHeck::Check(Mat& imgpackage, void* checkparam, ResultStruct& str)
 		contours_Draw.clear();
 		m_MatToShow.copyTo(imgpackage);
 		total_check++;
+		if(total_check%5==0)
+		{
+			strcpy(st.error_describe, "Good");
+			st._bResultNGOK = true;
+		}
+		else
+		{
+			strcpy(st.error_describe, "Error1");
+			st._bResultNGOK = false;
+		}
 	}
 	catch (cv::Exception& e)
 	{
@@ -256,6 +288,7 @@ int CInterCHeck::Check(Mat& imgpackage, void* checkparam, ResultStruct& str)
 	catch (...)
 	{
 	}
+	str = st;
 	return -1;
 }
 void CInterCHeck::ShowResult(QVector<double*>& result)

@@ -35,6 +35,7 @@ private:
 	//QTLiveUSBkey *QtUsbKey;
 	//检测参数
 	CHECKPARAM m_checkparam;
+	CHECKPARAM m_tcheckparam;
 	bool m_bchangedparam;
 	//日志logger
 	std::shared_ptr<spd::logger> daily_logger;

@@ -25,6 +25,7 @@ typedef void* UI_MONITOR;
 struct ResultStruct
 {
 	bool _bResultNGOK = false;
+	char error_describe[20];
 };
 class CBaseCheckAlg :public QObject
 {

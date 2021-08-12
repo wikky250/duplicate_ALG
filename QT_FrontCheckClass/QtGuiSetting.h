@@ -29,7 +29,7 @@ private:
 	//Mat Hobject2Mat(Hobject Hobj);
 	int m_WND = -1;
 public:
-	QtGuiSetting(QWidget* parent = Q_NULLPTR, void* AlgPointer = nullptr);
+	QtGuiSetting(QDialog* parent = Q_NULLPTR, void* AlgPointer = nullptr);
 	int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const char* contentStr, const char* button1Str, const char* button2Str);//全是中文
 	~QtGuiSetting();
 	//////////////////////////////////////////////////////////////////////////
@@ -85,6 +85,7 @@ private:
 	bool isImage(QFileInfo& info);
 	bool containImages(QDir&);
 	void initImageLS(QString str);
+	void ShowImagetoLabel(Mat img);
 public slots:
 	void closeEvent(QCloseEvent*);
 	void mousePressEvent(QMouseEvent*);
@@ -94,7 +95,6 @@ public slots:
 	void resizeEvent(QResizeEvent* event);
 	void onBtnGetImage();
 	void onBtnGetSample();
-	void onShowImage(Mat* img);
 	void onShowFps(int i);
 	void onCellChanged(int, int);
 	void onSelectTrainFile();

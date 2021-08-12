@@ -28,111 +28,11 @@ T getValue(YAML::Node _param, QString c_CameraName, QString errortype, QString e
 }
 bool NodeToParam(CHECKPARAM& checkparam, YAML::Node& _param)
 {
-	checkparam.b_Band = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel_Band = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板通道"), "0");
-	checkparam.i_MinGray_Band = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板最小灰度"), "100");
-	checkparam.i_MinArea_Band = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板最小面积"), "470000");
-	checkparam.i_PlusLength_Rectangle = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("最小外接矩形增量"), "10");
-	checkparam.i_MinArea_BandDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_泡罩板缺陷"), QString::fromLocal8Bit("泡罩板缺陷最小面积"), "1600");
-	checkparam.b_Al = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel_Al = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("铝模通道"), "3");
-	checkparam.i_MinGray_Al = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("铝模最小灰度"), "230");
-	checkparam.i_MinArea_Al = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_铝模缺陷"), QString::fromLocal8Bit("铝模缺陷最小面积"), "1000");
-	checkparam.b_NumPill = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel1_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("片剂数量通道1"), "0");
-	checkparam.i_Channel2_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("片剂数量通道2"), "2");
-	checkparam.i_MinGray_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("最小灰度"), "20");
-	checkparam.i_MinArea_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("最小面积"), "2000");
-	checkparam.i_Number_NumPill = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂数量"), QString::fromLocal8Bit("片剂个数"), "12");
-	checkparam.b_Powder = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_夹粉"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel_Powder = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_夹粉"), QString::fromLocal8Bit("颜色通道"), "4");
-	checkparam.i_DifMean_Powder = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_夹粉"), QString::fromLocal8Bit("灰度均值差值"), "30");
-	checkparam.b_Batch = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_PlusLength1_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小外接矩形增量1"), "30");
-	checkparam.i_PlusLength2_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小外接矩形增量2"), "1000");
-	checkparam.i_Channel_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("批号通道"), "1");
-	checkparam.i_MinGray_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小灰度"), "15");
-	checkparam.d_Opening_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("开运算参数"), "1.5");
-	checkparam.d_Closing_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("闭运算参数"), "5.5");
-	checkparam.i_MinArea_Batch = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_批号"), QString::fromLocal8Bit("最小面积"), "100");
-	checkparam.b_Shadow = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel1_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("阴影通道1"), "0");
-	checkparam.i_Channel2_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("阴影通道2"), "1");
-	checkparam.i_Channel3_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("阴影通道3"), "4");
-	checkparam.i_MinGray_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("最小灰度"), "25");
-	checkparam.i_Width_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("筛选最小宽度"), "25");
-	checkparam.i_Length_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("筛选最小长度"), "25");
-	checkparam.i_Area_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("筛选最小面积"), "2000");
-	checkparam.d_Closing_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("闭运算参数"), "70.5");
-	checkparam.d_Opening_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("开运算参数"), "2.5");
-	checkparam.i_Radius_Shadow = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域"), QString::fromLocal8Bit("最小内接圆半径"), "70");
-	checkparam.b_Crack = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("颜色通道"), "0");
-	checkparam.i_Length_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("筛选最小长度"), "35");
-	checkparam.d_Circularity_Crack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板裂纹/毛发"), QString::fromLocal8Bit("筛选最大圆度"), "0.1");
-	checkparam.b_BlackSpot = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_MinArea_BlackSpot = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选黑点最小面积"), "10");
-	checkparam.d_Circularity_BlackSpot = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选黑点最小圆度"), "0.2");
-	checkparam.i_Channel_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("颜色通道"), "2");
-	checkparam.i_MaxGray_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("最大灰度"), "130");
-	checkparam.i_MinArea_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选脏污最小面积"), "10");
-	checkparam.d_Circularity_Dirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_药板脏污/黑点"), QString::fromLocal8Bit("筛选脏污最小圆度"), "0.4");
-	checkparam.b_Fissure = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("颜色通道"), "1");
-	checkparam.i_MinGray_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("最小灰度"), "20");
-	checkparam.i_MinArea_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("筛选最小面积"), "250");
-	checkparam.d_Circularity_Fissure = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂纹2"), QString::fromLocal8Bit("筛选最大圆度"), "0.1");
-	checkparam.b_Iner = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel1_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("颜色通道1"), "1");
-	checkparam.i_Channel2_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("颜色通道2"), "4");
-	checkparam.i_MaxGray_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("最大灰度"), "50");
-	checkparam.d_Closing_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("闭运算参数"), "2.5");
-	checkparam.d_Opening_Iner = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂内部缺陷"), QString::fromLocal8Bit("开运算参数"), "0.5");
-	checkparam.b_Half = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_MinArea_Half = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("最小面积"), "5000");
-	checkparam.i_RectMove1_Half = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("仿射矩形增量1"), "30");
-	checkparam.i_RectMove2_Half = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_半片"), QString::fromLocal8Bit("仿射矩形增量2"), "30");
-	checkparam.b_Break = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.d_Erosion_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("圆腐蚀参数"), "5.5");
-	checkparam.i_Channel_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("颜色通道"), "0");
-	checkparam.i_Length_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("筛选裂片最小长度"), "20");
-	checkparam.d_Circularity_Break = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_裂片"), QString::fromLocal8Bit("筛选裂片最大圆度"), "0.2");
-	checkparam.b_Lack = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_RectMove_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("仿射矩形增量"), "10");
-	checkparam.i_Channel1_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("颜色通道1"), "2");
-	checkparam.i_Channel2_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("颜色通道2"), "4");
-	checkparam.i_MaxGray_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("最大灰度"), "150");
-	checkparam.i_MinArea1_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("筛选圆最小面积"), "2000");
-	checkparam.i_RadiusMove_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("最小内接圆半径增量"), "3");
-	checkparam.i_MinArea2_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("筛选缺陷最小面积"), "100");
-	checkparam.d_Circularity_Lack = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂缺损"), QString::fromLocal8Bit("筛选缺陷最小圆度"), "0.09");
-	checkparam.b_PillDirty = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂脏污/黑点"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_MinArea_PillDirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂脏污/黑点"), QString::fromLocal8Bit("最小面积"), "10");
-	checkparam.d_Circularity_PillDirty = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_片剂脏污/黑点"), QString::fromLocal8Bit("最小圆度"), "0.25");
-	checkparam.b_BandDefect = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel1_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("颜色通道1"), "5");
-	checkparam.i_Channel2_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("颜色通道2"), "4");
-	checkparam.i_MaxGray_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("最大灰度"), "150");
-	checkparam.i_MinArea_ShadowDefect = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_阴影区域缺陷"), QString::fromLocal8Bit("最小面积"), "10");
-	checkparam.b_PressedBubble = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel1_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("颜色通道1"), "4");
-	checkparam.i_Channel2_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("颜色通道2"), "2");
-	checkparam.i_Channel3_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("颜色通道3"), "1");
-	checkparam.d_Erosion_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("圆腐蚀参数"), "10.5");
-	checkparam.i_MaxGray_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最大灰度"), "20");
-	checkparam.d_Opening1_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("开运算参数1"), "2.5");
-	checkparam.i_MinArea1_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最小面积1"), "50");
-	checkparam.i_MinGray_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最小灰度"), "90");
-	checkparam.d_Opeing2_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("开运算参数2"), "1.5");
-	checkparam.d_Closing_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("闭运算参数"), "5.5");
-	checkparam.i_MinArea2_PressedBubble = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_压泡"), QString::fromLocal8Bit("最小面积2"), "30");
-	checkparam.b_Folds = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel1_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("颜色通道1"), "5");
-	checkparam.i_Channel2_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("颜色通道2"), "4");
-	checkparam.i_Length_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("最小长度"), "35");
-	checkparam.d_Circularity_Folds = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_皱板"), QString::fromLocal8Bit("最大圆度"), "0.02");
-	checkparam.b_Unclear = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_网纹不清"), QString::fromLocal8Bit("Checkable"), "1");
-	checkparam.i_Channel_Unclear = getValue<double>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Error_网纹不清"), QString::fromLocal8Bit("颜色通道"), "1");
+	checkparam.i_DiffArea = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Param_药板面积"), QString::fromLocal8Bit("差异面积"), "1500");
+	checkparam.i_SubArea = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Param_药板面积"), QString::fromLocal8Bit("缺损面积"), "10000");
+	checkparam.i_Channel_Pill = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Param_泡罩轮廓"), QString::fromLocal8Bit("泡罩颜色通道"), "0");
+	checkparam.i_Gray_Pill = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Param_泡罩轮廓"), QString::fromLocal8Bit("泡罩灰度阈值"), "150");
+	checkparam.i_Area_Pill = getValue<int>(_param, checkparam.c_CameraName, QString::fromLocal8Bit("Param_泡罩轮廓"), QString::fromLocal8Bit("泡罩面积阈值"), "15000");
 	return true;
 }
 bool LoadCheckParam(CHECKPARAM* checkparam, QString* str)
@@ -156,112 +56,10 @@ bool LoadCheckParam(CHECKPARAM* checkparam, QString* str)
 	}
 	NodeToParam(*checkparam, _param);
 
-	// 	//读取检测参数配置
-	// 	//////////////////////////////////////////////////////////////////////////
-	// 	//checkparam->i_BandArea = configIniRead.value("/" + cameraname + "/BandArea", "865000").toInt();
-	// 	//checkparam->i_BandException1_Area = configIniRead.value("/" + cameraname + "/BandException1_Area", "300").toInt();
-	// 	//checkparam->i_BandException2_Value = configIniRead.value("/" + cameraname + "/BandException2_Value", "110").toInt();
-	// 	//checkparam->i_BandException3_Area = configIniRead.value("/" + cameraname + "/BandException3_Area", "50").toInt();
-	// 	//checkparam->i_InterException_Area = configIniRead.value("/" + cameraname + "/InterException_Area", "50").toInt();
-	// 	//checkparam->d_InterException_Open = configIniRead.value("/" + cameraname + "/InterException_Open", "1.5").toDouble();
-	// 	//checkparam->i_PillRadius = configIniRead.value("/" + cameraname + "/PillRadius", "85").toInt();
-	// 	//checkparam->i_BandException2_Radius = configIniRead.value("/" + cameraname + "/BandException2_Radius", "0").toInt();
-	//
-	// 	checkparam->i_BandChannel = configIniRead.value("/" + cameraname + "/BandChannel", "0").toInt();
-	// 	checkparam->i_MinGray_Band = configIniRead.value("/" + cameraname + "/MinGray_Band", "100").toInt();
-	// 	checkparam->i_MinArea_Band = configIniRead.value("/" + cameraname + "/MinArea_Band", "680000").toInt();
-	// 	checkparam->i_CapsulesChannel = configIniRead.value("/" + cameraname + "/CapsulesChannel", "4").toInt();
-	// 	checkparam->i_MinGray_Capsules = configIniRead.value("/" + cameraname + "/MinGray_Capsules", "70").toInt();
-	// 	checkparam->d_OR_Capsules = configIniRead.value("/" + cameraname + "/OR_Capsules", "2.5").toDouble();
-	// 	checkparam->i_MinArea_Capsules = configIniRead.value("/" + cameraname + "/MinArea_Capsules", "10000").toInt();
-	// 	checkparam->i_MaxArea_Capsules = configIniRead.value("/" + cameraname + "/MaxArea_Capsules", "99999").toInt();
-	// 	checkparam->i_Number_Capsules = configIniRead.value("/" + cameraname + "/Number_Capsules", "10").toInt();
-	// 	checkparam->i_BatchChannel = configIniRead.value("/" + cameraname + "/BatchChannel", "0").toInt();
-	// 	checkparam->i_LengthAdd_1 = configIniRead.value("/" + cameraname + "/LengthAdd_1", "30").toInt();
-	// 	checkparam->i_LengthAdd_2 = configIniRead.value("/" + cameraname + "/LengthAdd_2", "1000").toInt();
-	// 	checkparam->d_ER_Batch = configIniRead.value("/" + cameraname + "/ER_Batch", "10").toDouble();
-	// 	checkparam->i_MaskHeight_Batch = configIniRead.value("/" + cameraname + "/MaksHeight_Batch", "11").toInt();
-	// 	checkparam->i_MaskWidth_Batch = configIniRead.value("/" + cameraname + "/MaksWidth_Batch", "11").toInt();
-	// 	checkparam->i_MinGray_Batch = configIniRead.value("/" + cameraname + "/MinGray_Batch", "15").toInt();
-	// 	checkparam->d_OR_Batch = configIniRead.value("/" + cameraname + "/OR_Batch", "1").toDouble();
-	// 	checkparam->d_CR_Batch = configIniRead.value("/" + cameraname + "/CR_Batch", "5").toDouble();
-	// 	checkparam->i_MinArea_Batch = configIniRead.value("/" + cameraname + "/MinArea_Batch", "150").toInt();
-	// 	checkparam->i_MaxArea_Batch = configIniRead.value("/" + cameraname + "/MaxArea_Batch", "99999").toInt();
-	// 	//checkparam->i_MinArea_BatchDefect = configIniRead.value("/" + cameraname + "/MinArea_BatchDefect", "50").toInt();
-	// 	//checkparam->i_MaxArea_BatchDefect = configIniRead.value("/" + cameraname + "/MaxArea_BatchDefect", "99999").toInt();
-	// 	checkparam->i_Channel_CapsulesDefect = configIniRead.value("/" + cameraname + "/Channel_CapsulesDefect", "1").toInt();
-	// 	checkparam->d_ER_RegionCapsules = configIniRead.value("/" + cameraname + "/ER_RegionCapsules", "12.5").toDouble();
-	// 	checkparam->i_MaxGray_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxGray_CapsulesRed", "128").toInt();
-	// 	checkparam->i_MinArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MinArea_CapsulesRed", "1500").toInt();
-	// 	checkparam->i_MaxArea_CapsulesRed = configIniRead.value("/" + cameraname + "/MaxArea_CapsulesRed", "99999").toInt();
-	// 	checkparam->d_DR_CapsulesRed = configIniRead.value("/" + cameraname + "/DR_CapsulesRed", "3").toDouble();
-	// 	checkparam->d_DR_CapsulesYellow = configIniRead.value("/" + cameraname + "/DR_CapsulesYellow", "3").toDouble();
-	// 	checkparam->i_Channel_RegionRed = configIniRead.value("/" + cameraname + "/Channel_RegionRed", "4").toInt();
-	// 	checkparam->i_MaskHeight_RegionRed = configIniRead.value("/" + cameraname + "/MaksHeight_RegionRed", "11").toInt();
-	// 	checkparam->i_MaskWidth_RegionRed = configIniRead.value("/" + cameraname + "/MaksWidth_RegionRed", "11").toInt();
-	// 	checkparam->i_MinGray_RegionRed = configIniRead.value("/" + cameraname + "/MinGray_RegionRed", "60").toInt();
-	// 	checkparam->i_MaxGray_RegionRed = configIniRead.value("/" + cameraname + "/MaxGray_RegionRed", "100").toInt();
-	// 	checkparam->d_CR_RegionRed = configIniRead.value("/" + cameraname + "/CR_RegionRed", "1").toDouble();
-	// 	checkparam->d_OR_RegionRed = configIniRead.value("/" + cameraname + "/OR_RegionRed", "1").toDouble();
-	// 	checkparam->i_MinArea_RegionRed = configIniRead.value("/" + cameraname + "/MinArea_RegionRed", "20").toInt();
-	// 	checkparam->i_MaxArea_RegionRed = configIniRead.value("/" + cameraname + "/MaxArea_RegionRed", "2000").toInt();
-	// 	checkparam->i_Channel_RedDefect1 = configIniRead.value("/" + cameraname + "/Channel_RedDefect1", "5").toInt();
-	// 	checkparam->i_Channel_RedDefect2 = configIniRead.value("/" + cameraname + "/Channel_RedDefect2", "4").toInt();
-	// 	checkparam->i_MaskHeight_RedDefect = configIniRead.value("/" + cameraname + "/MaksHeight_RedDefect", "5").toInt();
-	// 	checkparam->i_MaskWidth_RedDefect = configIniRead.value("/" + cameraname + "/MaksWidth_RedDefect", "5").toInt();
-	// 	checkparam->i_MinGray_RedDefect = configIniRead.value("/" + cameraname + "/MinGray_RedDefect", "35").toInt();
-	// 	checkparam->d_ER_RedDefect = configIniRead.value("/" + cameraname + "/ER_RedDefect", "3.5").toDouble();
-	// 	checkparam->d_OR_RedDefect = configIniRead.value("/" + cameraname + "/OR_RedDefect", "1.5").toDouble();
-	// 	checkparam->i_MinArea_RedDefect = configIniRead.value("/" + cameraname + "/MinArea_RedDefect", "20").toInt();
-	// 	checkparam->i_MaxArea_RedDefect = configIniRead.value("/" + cameraname + "/MaxArea_RedDefect", "99999").toInt();
-	// 	checkparam->i_MaskHeight_RegionYellow = configIniRead.value("/" + cameraname + "/MaskHeight_RegionYellow", "5").toInt();
-	// 	checkparam->i_MaskWidth_RegionYellow = configIniRead.value("/" + cameraname + "/MaskWidth_RegionYellow", "5").toInt();
-	// 	checkparam->i_MinGray_RegionYellow = configIniRead.value("/" + cameraname + "/MinGray_RegionYellow", "20").toInt();
-	// 	checkparam->i_MaxGray_RegionYellow = configIniRead.value("/" + cameraname + "/MaxGray_RegionYellow", "185").toInt();
-	// 	checkparam->d_OR_RegionYellow = configIniRead.value("/" + cameraname + "/OR_RegionYellow", "1.5").toDouble();
-	// 	checkparam->i_MinArea_RegionYellow = configIniRead.value("/" + cameraname + "/MinArea_RegionYellow", "20").toInt();
-	// 	checkparam->i_MaxArea_RegionYellow = configIniRead.value("/" + cameraname + "/MaxArea_RegionYellow", "99999").toInt();
-	// 	checkparam->i_Channel_BandDefect = configIniRead.value("/" + cameraname + "/Channel_BandDefect", "2").toInt();
-	// 	checkparam->d_DR_BandDefect = configIniRead.value("/" + cameraname + "/DR_BandDefect", "3").toDouble();
-	// 	checkparam->d_ER_BandDefect = configIniRead.value("/" + cameraname + "/ER_BandDefect", "5").toDouble();
-	// 	checkparam->i_MaskHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaskHeight_BandDefect", "3").toInt();
-	// 	checkparam->i_MaskWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaskWidth_BandDefect", "3").toInt();
-	// 	checkparam->i_MinGray_BandDefect = configIniRead.value("/" + cameraname + "/MinGray_BandDefect", "45").toInt();
-	// 	checkparam->d_CR_BandDefect = configIniRead.value("/" + cameraname + "/CR_BandDefect", "1.5").toDouble();
-	// 	checkparam->i_MinWidth_BandDefect = configIniRead.value("/" + cameraname + "/MinWidth_BandDefect", "1").toInt();
-	// 	checkparam->i_MaxWidth_BandDefect = configIniRead.value("/" + cameraname + "/MaxWidth_BandDefect", "100").toInt();
-	// 	checkparam->i_MinHeight_BandDefect = configIniRead.value("/" + cameraname + "/MinHeight_BandDefect", "3").toInt();
-	// 	checkparam->i_MaxHeight_BandDefect = configIniRead.value("/" + cameraname + "/MaxHeight_BandDefect", "100").toInt();
-	// 	checkparam->i_MinArea_BandDefect = configIniRead.value("/" + cameraname + "/MinArea_BandDefect", "10").toInt();
-	// 	checkparam->i_MaxArea_BandDefect = configIniRead.value("/" + cameraname + "/MaxArea_BandDefect", "9999").toInt();
-	// 	checkparam->b_IsOpen = configIniRead.value("/" + cameraname + "/IsOpen", "false").toBool();
-	// 	checkparam->i_Channel_InCapsules = configIniRead.value("/" + cameraname + "/Channel_InCapsules", "2").toInt();
-	// 	checkparam->d_ER_InCapsules = configIniRead.value("/" + cameraname + "/ER_InCapsules", "7.5").toDouble();
-	// 	checkparam->i_MaxGray_InCapsules = configIniRead.value("/" + cameraname + "/MaxGray_InCapsules", "120").toInt();
-	// 	checkparam->d_OR_InCapsules = configIniRead.value("/" + cameraname + "/OR_InCapsules", ".5").toDouble();
-	// 	checkparam->i_MinArea_InCapsules = configIniRead.value("/" + cameraname + "/MinArea_InCapsules", "2000").toInt();
-	// 	checkparam->i_MaxArea_InCapsules = configIniRead.value("/" + cameraname + "/MaxArea_InCapsules", "99999").toInt();
-	// 	checkparam->i_LengthPlus_1 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
-	// 	checkparam->i_LengthPlus_2 = configIniRead.value("/" + cameraname + "/LengthPlus_1", "70").toInt();
-	// 	checkparam->i_Channel_Middle = configIniRead.value("/" + cameraname + "/Channel_Middle", "0").toInt();
-	// 	checkparam->i_MaskHeight_Middle = configIniRead.value("/" + cameraname + "/MaskHeight_Middle", "7").toInt();
-	// 	checkparam->i_MaskWidth_Middle = configIniRead.value("/" + cameraname + "/MaskWidth_Middle", "7").toInt();
-	// 	checkparam->i_MinGray_Middle = configIniRead.value("/" + cameraname + "/MinGray_Middle", "45").toInt();
-	// 	checkparam->i_MinWidth_Middle = configIniRead.value("/" + cameraname + "/MinWidth_Middle", "5").toInt();
-	// 	checkparam->i_MinHeight_Middle = configIniRead.value("/" + cameraname + "/MinHeight_Middle", "3").toInt();
-	// 	checkparam->d_CR_Middle = configIniRead.value("/" + cameraname + "/CR_Middle", "2.5").toDouble();
-	// 	checkparam->i_MinArea_Middle = configIniRead.value("/" + cameraname + "/MinArea_Middle", "30").toInt();
-	// 	checkparam->i_Channel_Plate = configIniRead.value("/" + cameraname + "/Channel_Plate", "0").toInt();
-	// 	checkparam->i_MaxGray_Plate = configIniRead.value("/" + cameraname + "/MaxGray_Plate", "190").toInt();
-	// 	checkparam->d_CR_Plate = configIniRead.value("/" + cameraname + "/CR_Plate", "1.5").toDouble();
-	// 	checkparam->d_OR_Plate_1 = configIniRead.value("/" + cameraname + "/OR_Plate_1", "3.5").toDouble();
-	// 	checkparam->i_MinArea_Plate_1 = configIniRead.value("/" + cameraname + "/MinArea_Middle_1", "1500").toInt();
-	// 	checkparam->d_OR_Plate_2 = configIniRead.value("/" + cameraname + "/OR_Plate_2", "1.5").toDouble();
-	// 	checkparam->i_MinArea_Plate_2 = configIniRead.value("/" + cameraname + "/MinArea_Middle_2", "30").toInt();
 
 	return false;
 }
-QtGuiSetting::QtGuiSetting(QWidget* parent, void* AlgPointer)
+QtGuiSetting::QtGuiSetting(QDialog* parent, void* AlgPointer)
 	: QDialog(parent)
 {
 	//QString str = QString::number(0.5);
@@ -278,6 +76,8 @@ QtGuiSetting::QtGuiSetting(QWidget* parent, void* AlgPointer)
 	m_timerReadList = nullptr;
 	clickedtimer = nullptr;
 	ui.setupUi(this);
+	setWindowFlags(Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+	setWindowState(Qt::WindowMaximized);
 	// 	ui.tableWidget->setColumnCount(2);
 	// 	QStringList LIST;
 	// 	LIST << QString::fromLocal8Bit("项目") << QString::fromLocal8Bit("参数");
@@ -299,7 +99,7 @@ QtGuiSetting::QtGuiSetting(QWidget* parent, void* AlgPointer)
 	m_bButton = false;
 	m_SAppPath = qApp->applicationDirPath();//exe文件夹
 	m_sImageListPath = m_SAppPath;
-	//initImageLS(m_sImageListPath);
+	initImageLS(m_sImageListPath);
 	connect(ui.lw_ImageList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onClickedImage(QListWidgetItem*)));
 	//connect(ui.lw_ImageList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *)));
 	connect(ui.pB_ContinueTest, SIGNAL(toggled(bool)), this, SLOT(onContinueTest(bool)));
@@ -314,26 +114,28 @@ QtGuiSetting::QtGuiSetting(QWidget* parent, void* AlgPointer)
 	connect(ui.pB_Calibration, SIGNAL(clicked()), this, SLOT(onAutoDetest()));
 	p_Parent = AlgPointer;
 	((CInterCHeck*)p_Parent)->StartCheck("", nullptr, m_MOriginal.cols, m_MOriginal.rows, m_MOriginal.channels());
-	QDesktopWidget* dwsktopwidget = QApplication::desktop();
-	QRect deskrect = dwsktopwidget->availableGeometry();
-	QRect screenrect = dwsktopwidget->screenGeometry();
-	if (deskrect.height() < 1100)
-	{
-		this->resize(768 * 2 + 5, 1366 / 2);
-		ui.groupBox->move(ui.ShowLabel->pos().x() + ui.ShowLabel->width() + 2, ui.ShowLabel->pos().y());
-		//ui.lw_ImageList->move(ui.tableWidget->pos().x() + ui.tableWidget->width() + 2, ui.tableWidget->pos().y());
-	}
+	//QDesktopWidget* dwsktopwidget = QApplication::desktop();
+	//QRect deskrect = dwsktopwidget->availableGeometry();
+	//QRect screenrect = dwsktopwidget->screenGeometry();
+	//if (deskrect.height() < 1100)
+	//{
+	//	this->resize(768 * 2 + 5, 1366 / 2);
+	//	//ui.groupBox->move(ui.ShowLabel->pos().x() + ui.ShowLabel->width() + 2, ui.ShowLabel->pos().y());
+	//	//ui.lw_ImageList->move(ui.tableWidget->pos().x() + ui.tableWidget->width() + 2, ui.tableWidget->pos().y());
+	//}
 	//	connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(onPopKeyboard(int, int)));
-		//connect(ui.treeWidget, &QMyTreeWidget::TempSave, [=](QString str)
-		//{
-		//	ui.treeWidget->SaveYAMLFile(AppPath + "/Temp.yaml");
-
-		//	CHECKPARAM _checkparam;
-		//	strcpy(_checkparam.c_CameraName, _CameraName);
-		//	NodeToParam(_checkparam, ui.treeWidget->_mparam);
-		//	bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, nullptr, str);
-		//	m_bChanged = true;
-		//});
+	connect(ui.treeWidget, &QMyTreeWidget::TempSave, [=](QString str)
+	{
+		CHECKPARAM _checkparam;
+		strcpy(_checkparam.c_CameraName, _CameraName);
+		NodeToParam(_checkparam, ui.treeWidget->_mparam);
+		ResultStruct st;
+		Mat imgtemp = m_MOriginal.clone();
+		bool results = ((CInterCHeck*)p_Parent)->Check(imgtemp, &_checkparam, st);
+		ShowImagetoLabel(imgtemp);
+		m_bChanged = true;
+		ui.pB_Save->setEnabled(true);
+	});
 }
 void QtGuiSetting::mouseReleaseEvent(QMouseEvent* p)
 {
@@ -371,7 +173,7 @@ void QtGuiSetting::resizeEvent(QResizeEvent* event)
 		// 			return;
 		// 		}
 		// 		cvtColor(m_MOriginal, tempgray, COLOR_BGR2RGB);
-		// 		onShowImage(&tempgray);
+		// 		ShowImagetoLabel(&tempgray);
 		if (m_MOriginal.empty())
 		{
 			return;
@@ -490,7 +292,7 @@ void QtGuiSetting::mouseMoveEvent(QMouseEvent* p)
 	// 			cvtColor(m_MOriginal, img2show, COLOR_BGR2RGB);
 	// 			m_RectOpencv = cv::Rect(m_RectToDraw.x()*scale_x, m_RectToDraw.y()*scale_y, m_RectToDraw.width()*scale_x, m_RectToDraw.height()*scale_y);
 	// 			cv::rectangle(img2show, m_RectOpencv, cv::Scalar(255, 0, 0), 5, 8, 0);
-	// 			onShowImage(&img2show);
+	// 			ShowImagetoLabel(&img2show);
 	// 			m_bChanged = true;
 	// 		}
 	// 	}
@@ -574,6 +376,8 @@ void QtGuiSetting::onSaveParam()
 		if (QMessageBox::Save == QMessageBox::question(this, QString::fromLocal8Bit("参数已修改"), QString::fromLocal8Bit("是否保存？"), QMessageBox::Save, QMessageBox::No))
 		{
 			QFile::remove(QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml"));
+
+			ui.treeWidget->SaveYAMLFile(AppPath + "/Temp.yaml");
 			QFile::copy(QString(qApp->applicationDirPath() + "/Temp.yaml"), QString(qApp->applicationDirPath() + "/DefaultModel/CheckParam.yaml"));
 			emit ShouldSaveParam();
 			m_bChanged = false;
@@ -581,94 +385,6 @@ void QtGuiSetting::onSaveParam()
 		}
 	}
 }
-//Hobject QtGuiSetting::Mat2Hobject(Mat& image)
-//{
-//	Hobject Hobj = Hobject();
-//	int hgt = image.rows;
-//	int wid = image.cols;
-//	int i;
-//	//	CV_8UC3
-//	if (image.empty())
-//		return Hobject();
-//	if (image.type() == CV_8UC3)
-//	{
-//		split(image, imgchannel);
-//		Mat imgB = imgchannel[0];
-//		Mat imgG = imgchannel[1];
-//		Mat imgR = imgchannel[2];
-//		if (dataR == NULL)
-//		{
-//			dataR = new uchar[hgt*wid];
-//		}
-//		if (dataG == NULL)
-//		{
-//			dataG = new uchar[hgt*wid];
-//		}
-//		if (dataB == NULL)
-//		{
-//			dataB = new uchar[hgt*wid];
-//		}
-//		for (i = 0; i < hgt; i++)
-//		{
-//			memcpy(dataR + wid * i, imgR.data + imgR.step*i, wid);
-//			memcpy(dataG + wid * i, imgG.data + imgG.step*i, wid);
-//			memcpy(dataB + wid * i, imgB.data + imgB.step*i, wid);
-//		}
-//		gen_image3(&Hobj, "byte", wid, hgt, (Hlong)dataR, (Hlong)dataG, (Hlong)dataB);
-//	}
-//	//	CV_8UCU1
-//	else if (image.type() == CV_8UC1)
-//	{
-//		uchar* data = new uchar[hgt*wid];
-//		for (i = 0; i < hgt; i++)
-//			memcpy(data + wid * i, image.data + image.step*i, wid);
-//		gen_image1(&Hobj, "byte", wid, hgt, (Hlong)data);
-//		delete[] data;
-//		data = NULL;
-//	}
-//	return Hobj;
-//}
-//Mat QtGuiSetting::Hobject2Mat(Hobject Hobj)
-//{
-//	HTuple htCh = HTuple();
-//	HTuple cType;
-//	Mat Image;
-//	convert_image_type(Hobj, &Hobj, "byte");
-//	count_channels(Hobj, &htCh);
-//	HTuple wid;
-//	HTuple hgt;
-//	int W, H;
-//	if (htCh[0].I() == 1)
-//	{
-//		HTuple ptr;
-//		get_image_pointer1(Hobj, &ptr, &cType, &wid, &hgt);
-//		W = (Hlong)wid[0].I();
-//		H = (Hlong)hgt[0].I();
-//		Image.create(H, W, CV_8UC1);
-//		uchar* pdata = (uchar*)ptr[0].I();
-//		memcpy(Image.data, pdata, W*H);
-//	}
-//	else if (htCh[0].I() == 3)
-//	{
-//		HTuple ptrR, ptrG, ptrB;
-//		get_image_pointer3(Hobj, &ptrR, &ptrG, &ptrB, &cType, &wid, &hgt);
-//		W = (Hlong)wid[0].I();
-//		H = (Hlong)hgt[0].I();
-//		Image.create(H, W, CV_8UC3);
-//		vector<Mat> vecM(3);
-//		vecM[2].create(H, W, CV_8UC1);
-//		vecM[1].create(H, W, CV_8UC1);
-//		vecM[0].create(H, W, CV_8UC1);
-//		uchar* pr = (uchar*)ptrR[0].I();
-//		uchar* pg = (uchar*)ptrG[0].I();
-//		uchar* pb = (uchar*)ptrB[0].I();
-//		memcpy(vecM[2].data, pr, W*H);
-//		memcpy(vecM[1].data, pg, W*H);
-//		memcpy(vecM[0].data, pb, W*H);
-//		merge(vecM, Image);
-//	}
-//	return Image;
-//}
 void QtGuiSetting::onAutoDetest()
 {
 }
@@ -676,49 +392,6 @@ void QtGuiSetting::onAutoDetest()
 void QtGuiSetting::onSelectImageChannel(int channels)
 {
 	QComboBox* obj = qobject_cast<QComboBox*>(sender());//判断是哪个按钮触发了槽函数
-	// Local iconic variables
-// 	Hobject  ho_Image1, ho_Image2, ho_Image3;
-// 	Hobject  ho_ImageResult1, ho_ImageResult2, ho_ImageResult3;
-// 	Hobject  ho_ImageSub2, ho_EmptyRegion_Out, ho_EmptyRegion_OCR;
-// 	Hobject  ho_EmptyRegion_Top, ho_EmptyRegion_Inner, ho_EmptyRegion_TopUP;
-// 	Hobject  ho_EmptyRegion_Intensity, ho_ImageMax2, ho_Regions;
-// 	Hobject  ho_Regions_Leak, ho_Region, ho_RegionOpening2, ho_RegionOpening;
-// 	Hobject  ho_ConnectedRegions2, ho_SelectedRegions1, ho_RegionOpening_CAPOOT;
-// 	Hobject  ho_ImageReduced, ho_ImageMax, ho_ImageSub, ho_Region1;
-// 	Hobject  ho_RegionClosing, ho_Regions_Convex, ho_Regionx;
-// 	Hobject  ho_Region_1st, ho_Regionsx, ho_Regions_2nd, ho_Region_OCR;
-// 	Hobject  ho_Rectangle, ho_RegionIntersection5, ho_ConnectedRegions;
-// 	Hobject  ho_SelectedRegions, ho_RegionOpening8, ho_RegionTrans2;
-// 	Hobject  ho_RegionIntersection, ho_RegionErosion, ho_RegionIntersection4;
-// 	Hobject  ho_Regions_LeakTOPError, ho_RegionErosion3, ho_RegionIntersection3;
-// 	Hobject  ho_RegionOpening5, ho_Rectangle2, ho_RegionIntersection7;
-// 	Hobject  ho_ConnectedRegions4, ho_SelectedRegions5, ho_RegionOpening9;
-// 	Hobject  ho_RegionTrans3, ho_Rectangle1, ho_RegionIntersection8;
-// 	Hobject  ho_RegionErosion1, ho_RegionIntersection2, ho_Regions_LeakTOPError2;
-// 	Hobject  ho_RegionErosion6, ho_RegionIntersection9, ho_RegionOpening10;
-// 	// Local control variables
-// 	HTuple  hv_ImageFiles, hv_Index, hv_Pointer, hv_Type;
-// 	HTuple  hv_Width, hv_Height, hv_Tuple_Error, hv_Co_Index;
-// 	HTuple  hv_Indices, hv_C_s, hv_R_s, hv_R_sEnd, hv_Area9;
-// 	HTuple  hv_Row13, hv_Column13, hv_Row1, hv_Column1, hv_Row2;
-// 	HTuple  hv_Column2, hv_Height_CAP, hv_Row14, hv_Column14;
-// 	HTuple  hv_Row23, hv_Column23, hv_H1, hv_Row15, hv_Column15;
-// 	HTuple  hv_Row24, hv_Column24, hv_H2, hv_h, hv_Area8, hv_Row10;
-// 	HTuple  hv_Column10, hv_Row11, hv_Column11, hv_Row21, hv_Column21;
-// 	HTuple  hv_Mean, hv_Deviation, hv_Area5, hv_Row7, hv_Column7;
-// 	HTuple  hv_Row12, hv_Column12, hv_Row22, hv_Column22, hv_Mean2;
-// 	HTuple  hv_Deviation2, hv_Area7, hv_Row9, hv_Column9, hv_Area2;
-// 	HTuple  hv_Row4, hv_Column4, hv_Area3, hv_Row5, hv_Column5;
-// 	HTuple  hv_Area, hv_Row, hv_Column, hv_Max1, hv_Max;
-// 	if (m_MOriginal.empty())
-// 	{
-// 		return;
-// 	}
-// 	Hobject ho_Image = Mat2Hobject(m_MOriginal);
-// 	decompose3(ho_Image, &ho_Image1, &ho_Image2, &ho_Image3);
-// 	trans_from_rgb(ho_Image1, ho_Image2, ho_Image3, &ho_ImageResult1, &ho_ImageResult2, &ho_ImageResult3, "hsv");
-// 	get_image_size(ho_Image, &hv_Width, &hv_Height);
-// 	set_part(m_WND, 0, 0, hv_Height - 1, hv_Width - 1);
 	if (obj->objectName() == "BandChannel")
 	{
 		//_checkparam.i_BandChannel = channels;
@@ -982,6 +655,7 @@ void QtGuiSetting::SetModelMat(Mat tempgray)
 	{
 		tempgray.copyTo(m_MOriginal);
 	}
+	ShowImagetoLabel(m_MOriginal);
 }
 void QtGuiSetting::closeEvent(QCloseEvent*)
 {
@@ -1000,12 +674,12 @@ void QtGuiSetting::onBtnGetSample()
 {
 	return;
 }
-void QtGuiSetting::onShowImage(Mat* tempgray)
+void QtGuiSetting::ShowImagetoLabel(Mat tempgray)
 {
 	try
 	{
 		Mat temp;
-		tempgray->copyTo(temp);
+		cv::cvtColor(tempgray, temp, cv::COLOR_BGR2RGB);
 		int zz = ui.ShowLabel->frameWidth();
 		QSize ss = ui.ShowLabel->size();
 		ss.setWidth(ss.width() - zz * 2);
@@ -1125,7 +799,9 @@ void QtGuiSetting::onSelectImageList(QListWidgetItem* item)
 
 			strcpy(_checkparam.c_CameraName, _CameraName);
 			NodeToParam(_checkparam, ui.treeWidget->_mparam);
-			bool results = ((CInterCHeck*)p_Parent)->Check(m_MOriginal, &_checkparam, str);
+			cv::Mat img = m_MOriginal.clone();
+			bool results = ((CInterCHeck*)p_Parent)->Check(img, &_checkparam, str);
+			ShowImagetoLabel(img);
 		}
 	}
 }
@@ -1135,7 +811,7 @@ int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const
 	{
 		QMessageBox msg(icon, QString::fromLocal8Bit(titleStr), QString::fromLocal8Bit(contentStr), QMessageBox::Ok);
 		msg.setButtonText(QMessageBox::Ok, QString::fromLocal8Bit(button1Str));
-		msg.setWindowIcon(QIcon("./dr.ico"));
+		msg.setWindowIcon(QIcon("./Logo_Icon.ico"));
 		return msg.exec();
 	}
 	else
@@ -1143,7 +819,7 @@ int QtGuiSetting::showMsgBox(QMessageBox::Icon icon, const char* titleStr, const
 		QMessageBox msg(icon, QString::fromLocal8Bit(titleStr), QString::fromLocal8Bit(contentStr), QMessageBox::Yes | QMessageBox::No);
 		msg.setButtonText(QMessageBox::Yes, QString::fromLocal8Bit(button1Str));
 		msg.setButtonText(QMessageBox::No, QString::fromLocal8Bit(button2Str));
-		msg.setWindowIcon(QIcon("./dr.ico"));
+		msg.setWindowIcon(QIcon("./Logo_Icon.ico"));
 		return msg.exec();
 	}
 }

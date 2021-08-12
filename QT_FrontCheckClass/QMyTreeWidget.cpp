@@ -36,11 +36,10 @@
 QMyTreeWidget::QMyTreeWidget(QWidget* parent)
 	: QTreeWidget(parent)
 {
+	this->clear();
 	this->setHeaderHidden(false);
 	this->setColumnCount(4);
 	this->header()->hideSection(3);
-	//this->setColumnWidth(0, 100);
-	//this->setColumnWidth(1, 100);
 	this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	QObject::connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(showCnDetail(QTreeWidgetItem*, int)));
 
@@ -148,7 +147,7 @@ bool QMyTreeWidget::ReadYAMLFile(YAML::Node params, char* cameraname)
 			std::string name = it->first.as<std::string>();
 			if (_param[name].IsDefined())
 			{
-				if (name.find("Para_") != std::string::npos)
+				if (name.find("Param_") != std::string::npos)
 				{
 					QTreeWidgetItem* pItemError = new QTreeWidgetItem(QStringList() << name.c_str());
 					this->addTopLevelItem(pItemError);
@@ -362,11 +361,22 @@ void QMyTreeWidget::showCnDetail(QTreeWidgetItem* pItem, int i)
 		detailtext->setWindowFlag(Qt::FramelessWindowHint);
 		detailtext->show();
 
-		connect(detailtext->document(), SIGNAL(contentsChanged()), this, SLOT(textAreaChanged()));
+		//connect(detailtext->document(), SIGNAL(contentsChanged()), this, SLOT(textAreaChanged()));
 		QString str = pItem->data(3, Qt::DisplayRole).toString();
 		detailtext->setText(str);
+		//detailtext->setFixedSize(1000, 100);
+
 		int w = str.length();
-		detailtext->setFixedWidth(w / 8 == 0 ? w * 30 : 200);
+		QFontMetrics fm = detailtext->fontMetrics();
+		int width = fm.boundingRect(str).width() + 20;
+		if (width>400)
+		{
+			detailtext->resize(300, (fm.boundingRect(str).height() + 20)*(width/300+1));
+		}
+		else
+		{
+			detailtext->resize(width, fm.boundingRect(str).height() + 20);
+		}
 	}
 }
 void QMyTreeWidget::textAreaChanged()
