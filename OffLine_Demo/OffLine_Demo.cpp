@@ -9,8 +9,6 @@ int g_IUserLevel;
 QString AppPath;
 //程序终止符
 HANDLE g_bShutDown = CreateEventW(nullptr, true, true, NULL);//默认，false自动复位|true手动复位，初始值，名称
-//注册相机队列
-QVector<CAMERASTRUCT*> g_vectorCamera;				//相机参数列表
 //图像缓冲列表
 QVector<CCycleBuffer*>	g_ImgBuffer;
 //获取图像信号灯
@@ -62,29 +60,7 @@ OffLine_Demo::OffLine_Demo(QWidget *parent)
 	m_sImageListPath = AppPath;
 	initImageLS(m_sImageListPath);
 
-	char dest[100], dest2[100];//太小会溢出
 
-	g_IUserLevel = 0;
-	strcpy(dest2, "您的用户权限为： ");
-	switch (g_IUserLevel)
-	{
-	case 0:strcpy(dest, "管理员"); break;
-	case 1:strcpy(dest, "工程师"); break;
-	case 2:strcpy(dest, "操作员"); break;
-	case 3:strcpy(dest, "质检员"); break;
-	default:break;
-
-	}
-
-	strcat(dest2, dest);
-
-
-
-
-	m_bAllInited = false;//初始化完成：ini 相机
-	Camera_Func = nullptr;//包含bool GetAllCamera();int ReadConfig();
-	m_bStarting = false;//是否在检测标识符
-	m_SLabelStatue = "";//标记是否在检测
 	connect(this, SIGNAL(INITCHECKCLASSSIGNAL()), this, SLOT(InitCheckClassSLOT())); //信号在InitCheckClass()中
 	times_listImg = nullptr;
 	current_time = QDateTime::currentDateTime();
@@ -542,26 +518,79 @@ bool OffLine_Demo::InitPicList()
 	}
 	return false;
 }
+void resizeByNN(uchar* input, uchar* output, int height_in, int width_in, int channels, int height_out, int width_out) {
+	uchar* data_source = input;
+	uchar* data_half = output;
+
+	int bpl_source = width_in * 3;
+	int bpl_dst = width_out * 3;
+
+	int pos = 0;
+	int sep = 0;
+	uchar* sr = nullptr;
+	uchar* hr = nullptr;
+	float step = 0.0;
+	float step_x = float(width_in) / float(width_out);
+	float step_y = float(height_in) / float(height_out);
+
+	for (int i = 0; i < height_out; i++) {
+		for (int j = 0; j < width_out; j++) {
+			sep = int(step_y * i);
+			step = int(j * step_x);
+			sr = data_source + sep * bpl_source;
+			hr = data_half + i * bpl_dst + j * channels;
+			pos = step * channels;
+			memcpy(hr, sr + pos, channels);
+		}
+	}
+	return;
+}
 
 void OffLine_Demo::SLOTShowImage(int pos, Mat img, int checktimes)
 {
-	QLabel * label = this->findChild<QLabel *>("LabelShow" + QString::number(pos) + "_" + QString::number(checktimes%g_PhotoTimes));
-	int zz = label->frameWidth();
-	QSize ss = label->size();
-	ss.setWidth(ss.width() - zz * 2);
-	ss.setHeight(ss.height() - zz * 2);
-	Mat imgsend;
-	if (img.channels()==1)
+	IMAGE_SIMPLEINGREDIENT it = *g_ShowBUfferImage[camIndex][checktimes % CAMREACATCHBUFFER];
+
+	char* d;
+	if (0 == m_SystemParam.m_bOri)
+		d = it._cImageData;
+	else
+		d = it._cImageShowData;
+	if (checktimes % 20 == 0)
 	{
-		cv::cvtColor(img, imgsend, COLOR_GRAY2BGR);
+		imgtoshow = cv::Mat(it.h, it.w, CV_8UC3);
+		memcpy(imgtoshow.data, d, it.w * it.h * 3);
+		QLabel* label = this->findChild<QLabel*>("LabelShow" + QString::number(camIndex) + "_" + QString::number(checktimes % m_SystemParam.g_PhotoTimes));
+		cv::Mat imgsend;
+		int zz = label->frameWidth();
+		QSize ss = label->size();
+		m_tempshow = cv::Mat(ss.height() - zz * 2, ss.width() - zz * 2, CV_8UC3);
 	}
 	else
 	{
-		cv::cvtColor(img, imgsend, COLOR_BGR2RGB);
+		memcpy(imgtoshow.data, d, imgtoshow.cols * imgtoshow.rows * 3);
 	}
-	cv::resize(imgsend, imgsend, Size(ss.width(), ss.height()));
-	QImage disImage = QImage((const unsigned char*)(imgsend.data), imgsend.cols, imgsend.rows, imgsend.step, QImage::Format_RGB888);
+
+	resizeByNN(imgtoshow.data, m_tempshow.data, imgtoshow.rows, imgtoshow.cols, imgtoshow.channels(), m_tempshow.rows, m_tempshow.cols);
+
+	cv::cvtColor(m_tempshow, m_tempRGB, cv::COLOR_BGR2RGB);
+
+	if (1 == m_SystemParam.m_bOri)
+	{
+		char te[10];
+		char te_time[10];
+		_itoa(it._iIndexofImg, te, 10);
+		_itoa(it._msspend, te_time, 10);
+		putText(m_tempRGB, te, cv::Point(100, 300), cv::FONT_HERSHEY_PLAIN, 10, cv::Scalar(0, 255, 0), 2);
+		putText(m_tempRGB, te_time, cv::Point(700, 300), cv::FONT_HERSHEY_PLAIN, 10, cv::Scalar(0, 255, 0), 2);
+	}
+	disImage = QImage((const unsigned char*)(m_tempRGB.data), m_tempRGB.cols, m_tempRGB.rows, m_tempRGB.step, QImage::Format_RGB888);
+	QLabel* label = this->findChild<QLabel*>("LabelShow" + QString::number(camIndex) + "_" + QString::number(checktimes % m_SystemParam.g_PhotoTimes));
 	label->setPixmap(QPixmap::fromImage(disImage));
+	label->show();
+	QListWidgetItem* imageItem = new QListWidgetItem;
+	imageItem->setIcon(QIcon(QPixmap::fromImage(disImage)));
+
+	QThread::msleep(1);
 }
 
 bool OffLine_Demo::OpenConnect()

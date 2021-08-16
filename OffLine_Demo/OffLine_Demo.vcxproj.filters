@@ -28,39 +28,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MultThread_Run.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InitFunction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QtCameraSet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Inputdialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OffLine_Demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MultThread_Run.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="InitFunction.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="QtCameraSet.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Inputdialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="OffLine_Demo.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="QT_FrontCheckClass.h">
+    <QtMoc Include="..\QBaseCameraClass.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -80,9 +56,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpencvRelay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QT_FrontCheckClass_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

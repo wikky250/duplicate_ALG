@@ -135,12 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="InitFunction.cpp" />
-    <ClCompile Include="Inputdialog.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MultThread_Run.cpp" />
     <ClCompile Include="OffLine_Demo.cpp" />
-    <ClCompile Include="QtCameraSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Inputdialog.ui" />
@@ -148,15 +144,10 @@
     <QtUic Include="QtCameraSet.ui" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="..\QBaseCameraClass.h" />
     <ClInclude Include="AllRelayHead.h" />
     <ClInclude Include="OpencvRelay.h" />
-    <ClInclude Include="QT_FrontCheckClass_global.h" />
-    <QtMoc Include="QT_FrontCheckClass.h" />
-    <QtMoc Include="Inputdialog.h" />
     <QtMoc Include="OffLine_Demo.h" />
-    <QtMoc Include="InitFunction.h" />
-    <QtMoc Include="QtCameraSet.h" />
-    <QtMoc Include="MultThread_Run.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="dr.ico" />

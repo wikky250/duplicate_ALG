@@ -3,8 +3,6 @@
 #include "AllRelayHead.h"
 #include <QtWidgets/QMainWindow>
 #include "ui_OffLine_Demo.h"
-//相机初始化和之后配置模块
-#include "InitFunction.h"
 //相机运行模块
 #include "MultThread_Run.h"
 //相机设置模块
@@ -103,6 +101,10 @@ private:
 	bool m_bAllInited;
 	//标记是否在检测
 	QString m_SLabelStatue;
+	cv::Mat imgtoshow;
+	cv::Mat m_tempshow;
+	cv::Mat m_tempRGB;
+	QImage disImage;
 
 	QString m_IniResultPath;//ini result 路径，按下开始的时候
 	QTimer *times_listImg;
@@ -117,8 +119,8 @@ public slots:
 	void SLOTShowImage(int pos, Mat img, int checktimes);
 	//显示统计结果
 	bool SlotShowResult(QStringList);
-	void onSelectImageList(QListWidgetItem *, QListWidgetItem *);
-	void onDoubleImageList(QListWidgetItem *);
+	void onSelectImageList(QListWidgetItem*, QListWidgetItem*);
+	void onDoubleImageList(QListWidgetItem*);
 	void ImgAutoDown();
 	void SetEvertDlg();
 	void RESULTERRORCOUNTSLOT(int);
