@@ -453,14 +453,7 @@ bool OffLine_Demo::InitCheckClassSLOT()
 			if (NULL != _CheckClass)
 			{
 
-				_CheckClass->InitWindow(i, i == 0 ? g_auhandle : NULL, this);
-				//this->findChild<QLabel *>("label" + QString::number(i))->setText(QString(g_vectorCamera[i]->c_CameraSign) + "---" + g_vectorCamera[i]->c_CameraOtherSign);
-				//设置算法库参数
 				_CheckClass->SetParam(-1, "LocalFile");
-				_CheckClass->SetShowCallBack(this, ShowCallBack);
-				//_CheckClass->SetResultCallBack(this,ResultCallBack);
-				_CheckClass->SetCloseCallBack(CloseCallBack);
-
 				g_CheckClass.push_back(_CheckClass);
 			}
 		}
@@ -850,11 +843,6 @@ void OffLine_Demo::SetEvertDlg()
 	{
 		for (int ii = 0;ii < g_PhotoTimes;ii++)
 		{
-			QLabel *lb = this->findChild<QLabel *>(QString::fromUtf8("LabelShow") + QString::number(i) + "_" + QString::number(ii));
-			if (lb != nullptr)
-			{
-				g_CheckClass[i]->TESTSETSHOW(lb);
-			}
 		}
 		g_CheckClass[i]->StartCheck(g_vectorCamera[i]->c_CameraName, daily_logger, 0, 0);
 	}

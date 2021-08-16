@@ -177,6 +177,7 @@ int MultDecodeThread_Run::ThreadDecodeImageMat(Mat img)
 	outfile << tim << "\n";
 	emit RESULTERRORCOUNT(results);
 	emit OUTRESULTSUMMARY(str, index_pos, timecheck);
+	emit SignShowImage(0, img, 0);
 	timecheck++;
 	return 0;
 }

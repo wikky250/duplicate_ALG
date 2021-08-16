@@ -59,7 +59,7 @@ int CInterCHeck::ShowParamDlg(QWidget* parent, bool b_showornot)
 	setdlg->SetParam(m_checkparam.c_CameraName);
 	setdlg->SetModelMat(m_LastImage);
 	m_bchangedparam = false;
-	QObject::connect(setdlg, SIGNAL(ShouldSaveParam()), this, SLOT(SaveCheckParam()));
+	QObject::connect(setdlg, SIGNAL(ShouldSaveParam(bool)), this, SLOT(SaveCheckParam()));
 	setdlg->exec();
 	delete setdlg;
 	setdlg = nullptr;

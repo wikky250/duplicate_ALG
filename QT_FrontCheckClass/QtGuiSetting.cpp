@@ -103,7 +103,7 @@ QtGuiSetting::QtGuiSetting(QDialog* parent, void* AlgPointer)
 	connect(ui.lw_ImageList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(onClickedImage(QListWidgetItem*)));
 	//connect(ui.lw_ImageList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(onSelectImageList(QListWidgetItem *)));
 	connect(ui.pB_ContinueTest, SIGNAL(toggled(bool)), this, SLOT(onContinueTest(bool)));
-	connect(ui.pB_Save, SIGNAL(clicked()), this, SLOT(onSaveParam()));
+	connect(ui.pB_Save, SIGNAL(clicked()), this, SLOT(onSaveParam(bool)));
 	connect(ui.pB_Exit, &QPushButton::clicked, [=]() {
 		if (QMessageBox::Yes == showMsgBox(QMessageBox::Question, "退出确认", "确认退出算法设置页面吗？", "确认", "取消"))
 		{

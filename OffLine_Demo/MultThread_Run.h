@@ -55,6 +55,7 @@ signals:
 	void SAVESIGNAL(Mat, QString);
 	void OUTRESULTSUMMARY(QString, int, int);
 	void RESULTERRORCOUNT(int);
+	void SignShowImage(int, Mat, int);
 private:
 	int m_iSelfIndex;
 	ofstream outfile;
